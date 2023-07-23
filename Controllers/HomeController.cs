@@ -16,6 +16,7 @@ namespace 碳盤查平台.Controllers
         public IActionResult Index()
         {
             return View();
+            //Test Git Clone
         }
 
         public IActionResult Privacy()

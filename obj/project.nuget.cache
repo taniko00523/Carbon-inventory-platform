@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "oV+obi4qR+9zSyJ4O6sgezgq2WxAhXGGq9vHXS5of/UwhXJuQ+eChgXZNu6KMHp9ug+EkuoY0J8WFy5zQ5MhUA==",
+  "dgSpecHash": "297c/Ulvrg/Lks3JqjzpOambC6mPNiH4Wk5oUD+vNDwzUtXVBe5Gl8KddyYYOIU+OXXgmXoL+2hj/AGeYd3iJg==",
   "success": true,
-  "projectFilePath": "D:\\C#\\CarbonInventoryPlatform\\碳盤查平台\\碳盤查平台.csproj",
+  "projectFilePath": "D:\\C#\\Carbon-Inventory-Platform\\碳盤查平台.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jsj00\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
