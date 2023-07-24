@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\C#\\Carbon-Inventory-Platform\\碳盤查平台.csproj": {}
+    "D:\\C#\\Carbon-inventory-platform\\碳盤查平台.csproj": {}
   },
   "projects": {
-    "D:\\C#\\Carbon-Inventory-Platform\\碳盤查平台.csproj": {
+    "D:\\C#\\Carbon-inventory-platform\\碳盤查平台.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\C#\\Carbon-Inventory-Platform\\碳盤查平台.csproj",
+        "projectUniqueName": "D:\\C#\\Carbon-inventory-platform\\碳盤查平台.csproj",
         "projectName": "碳盤查平台",
-        "projectPath": "D:\\C#\\Carbon-Inventory-Platform\\碳盤查平台.csproj",
+        "projectPath": "D:\\C#\\Carbon-inventory-platform\\碳盤查平台.csproj",
         "packagesPath": "C:\\Users\\jsj00\\.nuget\\packages\\",
-        "outputPath": "D:\\C#\\Carbon-Inventory-Platform\\obj\\",
+        "outputPath": "D:\\C#\\Carbon-inventory-platform\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jsj00\\AppData\\Roaming\\NuGet\\NuGet.Config",
