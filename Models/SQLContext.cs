@@ -9,5 +9,7 @@ namespace 碳盤查平台.Models
 
         }
         public virtual DbSet<Company> Company { get; set; }
+        public virtual DbSet<Area> Areas { get; set; }
+        public virtual DbSet<Device> Devices { get; set; }
     }
 }

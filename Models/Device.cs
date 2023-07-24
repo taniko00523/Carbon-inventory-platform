@@ -4,7 +4,7 @@ namespace 碳盤查平台.Models
 {
     public class Device
     {
-        [Display(Name ="ID")]
+        [Display(Name = "ID")]
         public int Id { get; set; }
 
         [Display(Name = "廠區代號")]
@@ -33,7 +33,7 @@ namespace 碳盤查平台.Models
         [Display(Name = "原燃物料邊號")]
         public string MaterialNo { get; set; }
 
-        
+
 
     }
 }

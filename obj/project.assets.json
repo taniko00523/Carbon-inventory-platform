@@ -11237,19 +11237,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\jsj00\\.nuget\\packages\\": {}
+    "C:\\Users\\myshi\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\C#\\Carbon-Inventory-Platform\\碳盤查平台.csproj",
+      "projectUniqueName": "C:\\碳盤查平台\\碳盤查平台.csproj",
       "projectName": "碳盤查平台",
-      "projectPath": "D:\\C#\\Carbon-Inventory-Platform\\碳盤查平台.csproj",
-      "packagesPath": "C:\\Users\\jsj00\\.nuget\\packages\\",
-      "outputPath": "D:\\C#\\Carbon-Inventory-Platform\\obj\\",
+      "projectPath": "C:\\碳盤查平台\\碳盤查平台.csproj",
+      "packagesPath": "C:\\Users\\myshi\\.nuget\\packages\\",
+      "outputPath": "C:\\碳盤查平台\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\jsj00\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\myshi\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -11257,7 +11257,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\sdk\\7.0.306\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+        "C:\\Program Files\\dotnet\\sdk\\7.0.304\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -11316,7 +11316,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
       }
     }
   }
