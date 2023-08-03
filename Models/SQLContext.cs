@@ -8,8 +8,10 @@ namespace 碳盤查平台.Models
         {
 
         }
-        public virtual DbSet<Company> Company { get; set; }
+        public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Area> Areas { get; set; }
         public virtual DbSet<Device> Devices { get; set; }
+        public virtual DbSet<Material> Materials { get; set; }
+        public virtual DbSet<Data> Datas { get; set; }
     }
 }

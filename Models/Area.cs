@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace 碳盤查平台.Models
 {
@@ -6,12 +7,9 @@ namespace 碳盤查平台.Models
     {
         [Display(Name = "ID")]
         public int Id { get; set; }
-
+       
         [Display(Name = "公司代號")]
-        public int CompanyNO { get; set; }
-
-        [Display(Name = "廠區代號")]
-        public int AreaNo { get; set; }
+        public int CompanyId { get; set; }
 
         [MaxLength(20)]
         [Display(Name = "廠區名稱")]
@@ -51,8 +49,9 @@ namespace 碳盤查平台.Models
         [Display(Name = "刪除時間")]
         public int DeleteTime { get; set; }
 
-
-
-
+        //Navigation導覽屬性
+        [ForeignKey("CompanyId")]
+        public virtual Company Company { get; set; }
+        public ICollection<Device> Devices { get; set; }
     }
 }

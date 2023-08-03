@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using 碳盤查平台.Models;
 
@@ -10,9 +11,11 @@ using 碳盤查平台.Models;
 namespace 碳盤查平台.Migrations
 {
     [DbContext(typeof(SQLContext))]
-    partial class SQLContextModelSnapshot : ModelSnapshot
+    [Migration("20230803082503_AreaFix2.1")]
+    partial class AreaFix21
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,6 +36,9 @@ namespace 碳盤查平台.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("AreaNo")
+                        .HasColumnType("int");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -90,6 +96,10 @@ namespace 碳盤查平台.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CompanyNo")
+                        .HasMaxLength(20)
+                        .HasColumnType("int");
+
                     b.Property<int>("CreateTime")
                         .HasColumnType("int");
 
@@ -124,56 +134,7 @@ namespace 碳盤查平台.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies");
-                });
-
-            modelBuilder.Entity("碳盤查平台.Models.Data", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Correction")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreateTime")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DeleteTime")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Dept")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ModifiedTime")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Num")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Source")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("Unit")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<byte>("isDeleted")
-                        .HasColumnType("tinyint");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Datas");
+                    b.ToTable("Company");
                 });
 
             modelBuilder.Entity("碳盤查平台.Models.Device", b =>
@@ -184,7 +145,7 @@ namespace 碳盤查平台.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AreaId")
+                    b.Property<int>("AreaNo")
                         .HasColumnType("int");
 
                     b.Property<string>("AssetNo")
@@ -201,17 +162,24 @@ namespace 碳盤查平台.Migrations
                     b.Property<int>("CreateTime")
                         .HasColumnType("int");
 
-                    b.Property<int>("DataId")
+                    b.Property<int>("DeleteTime")
                         .HasColumnType("int");
 
-                    b.Property<int>("DeleteTime")
+                    b.Property<int>("DeviceNo")
                         .HasColumnType("int");
 
                     b.Property<byte>("HFCS")
                         .HasColumnType("tinyint");
 
-                    b.Property<int>("MaterialId")
-                        .HasColumnType("int");
+                    b.Property<string>("Material")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("MaterialNo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("ModifiedTime")
                         .HasColumnType("int");
@@ -243,103 +211,18 @@ namespace 碳盤查平台.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AreaId");
-
-                    b.HasIndex("DataId")
-                        .IsUnique();
-
-                    b.HasIndex("MaterialId")
-                        .IsUnique();
-
                     b.ToTable("Devices");
-                });
-
-            modelBuilder.Entity("碳盤查平台.Models.Material", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<float>("CEF")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Source")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Unit")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Materials");
                 });
 
             modelBuilder.Entity("碳盤查平台.Models.Area", b =>
                 {
                     b.HasOne("碳盤查平台.Models.Company", "Company")
-                        .WithMany("Areas")
+                        .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("碳盤查平台.Models.Device", b =>
-                {
-                    b.HasOne("碳盤查平台.Models.Area", "Area")
-                        .WithMany("Devices")
-                        .HasForeignKey("AreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("碳盤查平台.Models.Data", "Data")
-                        .WithOne("Device")
-                        .HasForeignKey("碳盤查平台.Models.Device", "DataId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("碳盤查平台.Models.Material", "Material")
-                        .WithOne("Device")
-                        .HasForeignKey("碳盤查平台.Models.Device", "MaterialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Area");
-
-                    b.Navigation("Data");
-
-                    b.Navigation("Material");
-                });
-
-            modelBuilder.Entity("碳盤查平台.Models.Area", b =>
-                {
-                    b.Navigation("Devices");
-                });
-
-            modelBuilder.Entity("碳盤查平台.Models.Company", b =>
-                {
-                    b.Navigation("Areas");
-                });
-
-            modelBuilder.Entity("碳盤查平台.Models.Data", b =>
-                {
-                    b.Navigation("Device")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("碳盤查平台.Models.Material", b =>
-                {
-                    b.Navigation("Device")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

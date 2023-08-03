@@ -5,12 +5,7 @@ namespace 碳盤查平台.Models
     public class Company
     {
         [Display(Name ="ID")]
-        [DisplayFormat(DataFormatString = "{0:0000}", ApplyFormatInEditMode = false)]
         public int Id { get; set; }
-
-        [MaxLength(20)]
-        [Display(Name="公司代號")]
-        public string CompanyNo { get; set; }
 
         [MaxLength(20)]
         [Display(Name="公司名稱")]
@@ -39,6 +34,9 @@ namespace 碳盤查平台.Models
 
         [Display(Name = "刪除時間")]
         public int DeleteTime { get; set; }
+
+        //Navigation Property
+        public ICollection<Area> Areas { get; set; }
 
 
     }
