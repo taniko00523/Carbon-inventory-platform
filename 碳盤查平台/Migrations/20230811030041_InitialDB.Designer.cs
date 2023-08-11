@@ -12,7 +12,7 @@ using 碳盤查平台.Models;
 namespace 碳盤查平台.Migrations
 {
     [DbContext(typeof(SQLContext))]
-    [Migration("20230804060501_InitialDB")]
+    [Migration("20230811030041_InitialDB")]
     partial class InitialDB
     {
         /// <inheritdoc />
@@ -105,6 +105,50 @@ namespace 碳盤查平台.Migrations
                     b.HasIndex("GroupsId");
 
                     b.ToTable("Authorization");
+                });
+
+            modelBuilder.Entity("碳盤查平台.Models.CH4", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<float>("CEF")
+                        .HasColumnType("real");
+
+                    b.Property<float>("UncertaintyLowerLimit")
+                        .HasColumnType("real");
+
+                    b.Property<float>("UncertaintyUpperLimit")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CH4s");
+                });
+
+            modelBuilder.Entity("碳盤查平台.Models.CO2", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<float>("CEF")
+                        .HasColumnType("real");
+
+                    b.Property<float>("UncertaintyLowerLimit")
+                        .HasColumnType("real");
+
+                    b.Property<float>("UncertaintyUpperLimit")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CO2s");
                 });
 
             modelBuilder.Entity("碳盤查平台.Models.Company", b =>
@@ -370,24 +414,69 @@ namespace 碳盤查平台.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("CEF")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Source")
+                    b.Property<int>("CH4Id")
                         .HasColumnType("int");
 
-                    b.Property<string>("Unit")
+                    b.Property<int>("CO2Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmissionPattern")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("N2OId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("Scope")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("CH4Id")
+                        .IsUnique();
+
+                    b.HasIndex("CO2Id")
+                        .IsUnique();
+
+                    b.HasIndex("N2OId")
+                        .IsUnique();
+
                     b.ToTable("Materials");
+                });
+
+            modelBuilder.Entity("碳盤查平台.Models.N2O", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<float>("CEF")
+                        .HasColumnType("real");
+
+                    b.Property<float>("UncertaintyLowerLimit")
+                        .HasColumnType("real");
+
+                    b.Property<float>("UncertaintyUpperLimit")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("N2Os");
                 });
 
             modelBuilder.Entity("碳盤查平台.Models.Staff", b =>
@@ -582,6 +671,33 @@ namespace 碳盤查平台.Migrations
                         .HasForeignKey("FuntionId");
                 });
 
+            modelBuilder.Entity("碳盤查平台.Models.Material", b =>
+                {
+                    b.HasOne("碳盤查平台.Models.CH4", "CH4")
+                        .WithOne("Material")
+                        .HasForeignKey("碳盤查平台.Models.Material", "CH4Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("碳盤查平台.Models.CO2", "CO2")
+                        .WithOne("Material")
+                        .HasForeignKey("碳盤查平台.Models.Material", "CO2Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("碳盤查平台.Models.N2O", "N2O")
+                        .WithOne("Material")
+                        .HasForeignKey("碳盤查平台.Models.Material", "N2OId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CH4");
+
+                    b.Navigation("CO2");
+
+                    b.Navigation("N2O");
+                });
+
             modelBuilder.Entity("碳盤查平台.Models.Staff", b =>
                 {
                     b.HasOne("碳盤查平台.Models.Area", "Area")
@@ -622,6 +738,18 @@ namespace 碳盤查平台.Migrations
                     b.Navigation("Funtions");
                 });
 
+            modelBuilder.Entity("碳盤查平台.Models.CH4", b =>
+                {
+                    b.Navigation("Material")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("碳盤查平台.Models.CO2", b =>
+                {
+                    b.Navigation("Material")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("碳盤查平台.Models.Company", b =>
                 {
                     b.Navigation("Areas");
@@ -647,6 +775,12 @@ namespace 碳盤查平台.Migrations
             modelBuilder.Entity("碳盤查平台.Models.Material", b =>
                 {
                     b.Navigation("Device")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("碳盤查平台.Models.N2O", b =>
+                {
+                    b.Navigation("Material")
                         .IsRequired();
                 });
 

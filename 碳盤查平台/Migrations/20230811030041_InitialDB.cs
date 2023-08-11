@@ -12,6 +12,36 @@ namespace 碳盤查平台.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "CH4s",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CEF = table.Column<float>(type: "real", nullable: false),
+                    UncertaintyLowerLimit = table.Column<float>(type: "real", nullable: false),
+                    UncertaintyUpperLimit = table.Column<float>(type: "real", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CH4s", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CO2s",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CEF = table.Column<float>(type: "real", nullable: false),
+                    UncertaintyLowerLimit = table.Column<float>(type: "real", nullable: false),
+                    UncertaintyUpperLimit = table.Column<float>(type: "real", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CO2s", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Companies",
                 columns: table => new
                 {
@@ -54,19 +84,18 @@ namespace 碳盤查平台.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Materials",
+                name: "N2Os",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CEF = table.Column<float>(type: "real", nullable: false),
-                    Unit = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Source = table.Column<int>(type: "int", nullable: false)
+                    UncertaintyLowerLimit = table.Column<float>(type: "real", nullable: false),
+                    UncertaintyUpperLimit = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Materials", x => x.Id);
+                    table.PrimaryKey("PK_N2Os", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,6 +124,71 @@ namespace 碳盤查平台.Migrations
                         name: "FK_Areas_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Materials",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Scope = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    EmissionPattern = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    CH4Id = table.Column<int>(type: "int", nullable: false),
+                    CO2Id = table.Column<int>(type: "int", nullable: false),
+                    N2OId = table.Column<int>(type: "int", nullable: false),
+                    Unit = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Materials", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Materials_CH4s_CH4Id",
+                        column: x => x.CH4Id,
+                        principalTable: "CH4s",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Materials_CO2s_CO2Id",
+                        column: x => x.CO2Id,
+                        principalTable: "CO2s",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Materials_N2Os_N2OId",
+                        column: x => x.N2OId,
+                        principalTable: "N2Os",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Staffs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AreaId = table.Column<int>(type: "int", nullable: false),
+                    StaffNo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Remark = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isDeleted = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeleteTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Staffs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Staffs_Areas_AreaId",
+                        column: x => x.AreaId,
+                        principalTable: "Areas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -142,34 +236,6 @@ namespace 碳盤查平台.Migrations
                         name: "FK_Devices_Materials_MaterialId",
                         column: x => x.MaterialId,
                         principalTable: "Materials",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Staffs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AreaId = table.Column<int>(type: "int", nullable: false),
-                    StaffNo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Remark = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    isDeleted = table.Column<byte>(type: "tinyint", nullable: false),
-                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeleteTime = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Staffs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Staffs_Areas_AreaId",
-                        column: x => x.AreaId,
-                        principalTable: "Areas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -315,6 +381,24 @@ namespace 碳盤查平台.Migrations
                 column: "FuntionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Materials_CH4Id",
+                table: "Materials",
+                column: "CH4Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Materials_CO2Id",
+                table: "Materials",
+                column: "CO2Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Materials_N2OId",
+                table: "Materials",
+                column: "N2OId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Staffs_AreaId",
                 table: "Staffs",
                 column: "AreaId");
@@ -361,6 +445,15 @@ namespace 碳盤查平台.Migrations
 
             migrationBuilder.DropTable(
                 name: "Staffs");
+
+            migrationBuilder.DropTable(
+                name: "CH4s");
+
+            migrationBuilder.DropTable(
+                name: "CO2s");
+
+            migrationBuilder.DropTable(
+                name: "N2Os");
 
             migrationBuilder.DropTable(
                 name: "Areas");
