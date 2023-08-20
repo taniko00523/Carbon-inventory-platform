@@ -1,4 +1,4 @@
-namespace 碳盤查平台.Models
+namespace Carbon_inventory_platform.Models
 {
     public class ErrorViewModel
     {

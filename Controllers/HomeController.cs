@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Carbon_inventory_platform.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using 碳盤查平台.Models;
 
-namespace 碳盤查平台.Controllers
+namespace Carbon_inventory_platform.Controllers
 {
     public class HomeController : Controller
     {
@@ -16,7 +16,6 @@ namespace 碳盤查平台.Controllers
         public IActionResult Index()
         {
             return View();
-            
         }
 
         public IActionResult Privacy()

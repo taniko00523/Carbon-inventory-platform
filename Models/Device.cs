@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace 碳盤查平台.Models
+namespace Carbon_inventory_platform.Models
 {
     public class Device
     {
@@ -23,7 +23,7 @@ namespace 碳盤查平台.Models
         [Display(Name = "製程")]
         public string Provess { get; set; }
 
-        [Display(Name ="活動數據編號")] //不顯示
+        [Display(Name = "活動數據編號")] //不顯示
         public int DataId { get; set; }
 
         [Display(Name = "原燃物料編號")] //不顯示
@@ -54,19 +54,19 @@ namespace 碳盤查平台.Models
         public byte isDeleted { get; set; }
 
         [Display(Name = "建立時間")]
-        public int CreateTime { get; set; }
+        public DateTime? CreateTime { get; set; }
 
         [Display(Name = "修改時間")]
-        public int ModifiedTime { get; set; }
+        public DateTime? ModifiedTime { get; set; }
 
         [Display(Name = "刪除時間")]
-        public int DeleteTime { get; set; }
+         public DateTime? DeleteTime { get; set; }
 
         //Navigation Property
         [ForeignKey("AreaId")]
         public virtual Area Area { get; set; }
         [ForeignKey("MaterialId")]
         public virtual Material Material { get; set; }
-        public virtual Data Data { get; set; }
+        public virtual ActivityData Data { get; set; }
     }
 }

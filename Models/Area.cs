@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace 碳盤查平台.Models
+namespace Carbon_inventory_platform.Models
 {
     public class Area
     {
         [Display(Name = "ID")]
         public int Id { get; set; }
-       
+
         [Display(Name = "公司代號")]
         public int CompanyId { get; set; }
 
@@ -15,11 +15,11 @@ namespace 碳盤查平台.Models
         [Display(Name = "廠區名稱")]
         public string Name { get; set; }
 
-        [Display(Name ="郵遞區號")]
+        [Display(Name = "郵遞區號")]
         public int PostalCode { get; set; }
 
-        [MaxLength (10)]
-        [Display(Name ="縣市別")]
+        [MaxLength(10)]
+        [Display(Name = "縣市別")]
         public string City { get; set; }
 
         [MaxLength(10)]
@@ -35,19 +35,19 @@ namespace 碳盤查平台.Models
 
         [MaxLength(10)]
         [Display(Name = "產業別")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         [Display(Name = "是否刪除")]
         public byte isDeleted { get; set; }
 
         [Display(Name = "建立時間")]
-        public int CreateTime { get; set; }
+        public DateTime? CreateTime { get; set; }
 
         [Display(Name = "修改時間")]
-        public int ModifiedTime { get; set; }
+        public DateTime? ModifiedTime { get; set; }
 
         [Display(Name = "刪除時間")]
-        public int DeleteTime { get; set; }
+        public DateTime? DeleteTime { get; set; }
 
         //Navigation導覽屬性
         [ForeignKey("CompanyId")]

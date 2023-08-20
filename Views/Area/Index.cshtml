@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Carbon_inventory_platform.Models.Area>
+@{
+    ViewData["Title"] = "廠區資料維護";
+}
+<div class="row">
+    <div class="col">
+        <h1>廠區資料維護</h1>
+        <a class="btn btn-primary" asp-action="Create">創建</a>
+    </div>
+    <div class="col-6"></div>
+    <div class="col">
+        <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+<div class="text-center">
+    <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Id)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Name)</th>
+                        <th scope="col">地址</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Year)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Type)</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var items in Model)
+                    {
+                        <tr>
+                            <th scope="row">@items.Id</th>
+                            <td>@items.Name</td>
+                            <td>@items.PostalCode @items.City @items.District @items.Address</td>
+                            <td>@items.Year</td>
+                            <td>@items.Type</td>
+                            <td>
+                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@items.Id">編輯</a>
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@items.Id">刪除</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+    </div>
+</div>

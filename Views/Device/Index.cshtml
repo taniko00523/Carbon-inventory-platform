@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Carbon_inventory_platform.Models.Device>
+@{
+    ViewData["Title"] = "設備資料維護";
+}
+
+<div class="text-center">
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Id)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Name)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.AssetNo)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Provess)</th>
+                    <th scope="col">活動數據</th>
+                    <th scope="col">原燃物料</th>
+                    <th scope="col">CO2</th>
+                    <th scope="col">CH4</th>
+                    <th scope="col">N2O</th>
+                    <th scope="col">HFC</th>
+                    <th scope="col">PFC</th>
+                    <th scope="col">SF6</th>
+                    <th scope="col">NF3</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var items in Model)
+                {
+                    <tr>
+                        <th scope="row">@items.Id</th>
+                        <td>@items.Name</td>
+                        <td>@items.AssetNo</td>
+                        <td>@items.Provess</td>
+                        <td>@items.DataId</td>
+                        <td>@items.MaterialId</td>
+                        <td>
+                            @if (items.CO2 == 1)
+                            {
+                                <text>Y</text>
+                            }
+                        </td>
+                        <td>@if (items.CH4 == 1)
+                            {
+                                <text>Y</text>
+                            }</td>
+                        <td>@if (items.N2O == 1)
+                            {
+                                <text>Y</text>
+                            }</td>
+                        <td>
+                            @if (items.HFCS == 1)
+                            {
+                                <text>Y</text>
+                            }
+                        </td>
+                        <td>@if (items.PFCS == 1)
+                            {
+                                <text>Y</text>
+                            }</td>
+                        <td>@if (items.SF6 == 1)
+                            {
+                                <text>Y</text>
+                            }</td>
+                        <td>@if (items.NF3 == 1)
+                            {
+                                <text>Y</text>
+                            }</td>
+                        <td>
+                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@items.Id">編輯</a>
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@items.Id">刪除</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
