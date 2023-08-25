@@ -22,18 +22,31 @@ namespace Carbon_inventory_platform.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AreaDevice", b =>
+                {
+                    b.Property<Guid>("AreaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AreasId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AreaId", "AreasId");
+
+                    b.HasIndex("AreasId");
+
+                    b.ToTable("AreaDevice");
+                });
+
             modelBuilder.Entity("Carbon_inventory_platform.Models.ActivityData", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Correction")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreateTime")
+                    b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeleteTime")
@@ -73,11 +86,9 @@ namespace Carbon_inventory_platform.Data.Migrations
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -89,10 +100,10 @@ namespace Carbon_inventory_platform.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("CreateTime")
+                    b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeleteTime")
@@ -131,34 +142,11 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.ToTable("Areas");
                 });
 
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Authorization", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("FumtionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GroupsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupsId");
-
-                    b.ToTable("Authorization");
-                });
-
             modelBuilder.Entity("Carbon_inventory_platform.Models.CH4", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<float>("CEF")
                         .HasColumnType("real");
@@ -176,11 +164,9 @@ namespace Carbon_inventory_platform.Data.Migrations
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.CO2", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<float>("CEF")
                         .HasColumnType("real");
@@ -198,13 +184,11 @@ namespace Carbon_inventory_platform.Data.Migrations
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Company", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("CreateTime")
+                    b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeleteTime")
@@ -243,17 +227,17 @@ namespace Carbon_inventory_platform.Data.Migrations
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Device", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("ActivityDataId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AreaId")
                         .HasColumnType("int");
 
                     b.Property<string>("AssetNo")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
@@ -263,11 +247,8 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<byte>("CO2")
                         .HasColumnType("tinyint");
 
-                    b.Property<DateTime?>("CreateTime")
+                    b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("DataId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeleteTime")
                         .HasColumnType("datetime2");
@@ -275,8 +256,8 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<byte>("HFCS")
                         .HasColumnType("tinyint");
 
-                    b.Property<int>("MaterialId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("MaterialId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
@@ -308,113 +289,30 @@ namespace Carbon_inventory_platform.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AreaId");
+                    b.HasIndex("ActivityDataId");
 
-                    b.HasIndex("DataId")
-                        .IsUnique();
-
-                    b.HasIndex("MaterialId")
-                        .IsUnique();
+                    b.HasIndex("MaterialId");
 
                     b.ToTable("Devices");
                 });
 
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Funtion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("AuthorizationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CMainFunction")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CSubFunction")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("Device")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("MainFunction")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MainFunctionNo")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SubFunction")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SubFunctionNo")
-                        .HasColumnType("int");
-
-                    b.Property<byte>("isOption")
-                        .HasColumnType("tinyint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorizationId");
-
-                    b.ToTable("Funtions");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Groups", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeleteTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("FuntionId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("isDefault")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte>("isDeleted")
-                        .HasColumnType("tinyint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FuntionId");
-
-                    b.ToTable("Groups");
-                });
-
             modelBuilder.Entity("Carbon_inventory_platform.Models.Material", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CH4Id")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("CH4Id1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("CO2Id")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("CO2Id1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EmissionPattern")
                         .IsRequired()
@@ -423,6 +321,9 @@ namespace Carbon_inventory_platform.Data.Migrations
 
                     b.Property<int>("N2OId")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("N2OId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -441,25 +342,20 @@ namespace Carbon_inventory_platform.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CH4Id")
-                        .IsUnique();
+                    b.HasIndex("CH4Id1");
 
-                    b.HasIndex("CO2Id")
-                        .IsUnique();
+                    b.HasIndex("CO2Id1");
 
-                    b.HasIndex("N2OId")
-                        .IsUnique();
+                    b.HasIndex("N2OId1");
 
                     b.ToTable("Materials");
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.N2O", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<float>("CEF")
                         .HasColumnType("real");
@@ -473,135 +369,6 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("N2Os");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Staff", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AreaId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeleteTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("ModifiedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Remark")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StaffNo")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<byte>("isDeleted")
-                        .HasColumnType("tinyint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AreaId");
-
-                    b.ToTable("Staffs");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Accounts")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<DateTime?>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeleteTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("GroupsId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Remark")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime>("TokenCreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("TokenUpdateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte>("isDeleted")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte>("isEnable")
-                        .HasColumnType("tinyint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupsId")
-                        .IsUnique();
-
-                    b.HasIndex("StaffId")
-                        .IsUnique();
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -806,10 +573,25 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("AreaDevice", b =>
+                {
+                    b.HasOne("Carbon_inventory_platform.Models.Device", null)
+                        .WithMany()
+                        .HasForeignKey("AreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Carbon_inventory_platform.Models.Area", null)
+                        .WithMany()
+                        .HasForeignKey("AreasId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
                 {
                     b.HasOne("Carbon_inventory_platform.Models.Company", "Company")
-                        .WithMany()
+                        .WithMany("Areas")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -817,75 +599,42 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Authorization", b =>
-                {
-                    b.HasOne("Carbon_inventory_platform.Models.Groups", "Groups")
-                        .WithMany()
-                        .HasForeignKey("GroupsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Groups");
-                });
-
             modelBuilder.Entity("Carbon_inventory_platform.Models.Device", b =>
                 {
-                    b.HasOne("Carbon_inventory_platform.Models.Area", "Area")
-                        .WithMany("Devices")
-                        .HasForeignKey("AreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Carbon_inventory_platform.Models.ActivityData", "Data")
-                        .WithOne("Device")
-                        .HasForeignKey("Carbon_inventory_platform.Models.Device", "DataId")
+                    b.HasOne("Carbon_inventory_platform.Models.ActivityData", "ActivityData")
+                        .WithMany()
+                        .HasForeignKey("ActivityDataId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Carbon_inventory_platform.Models.Material", "Material")
-                        .WithOne("Device")
-                        .HasForeignKey("Carbon_inventory_platform.Models.Device", "MaterialId")
+                        .WithMany("Devices")
+                        .HasForeignKey("MaterialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Area");
-
-                    b.Navigation("Data");
+                    b.Navigation("ActivityData");
 
                     b.Navigation("Material");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Funtion", b =>
-                {
-                    b.HasOne("Carbon_inventory_platform.Models.Authorization", null)
-                        .WithMany("Funtions")
-                        .HasForeignKey("AuthorizationId");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Groups", b =>
-                {
-                    b.HasOne("Carbon_inventory_platform.Models.Funtion", null)
-                        .WithMany("Groups")
-                        .HasForeignKey("FuntionId");
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Material", b =>
                 {
                     b.HasOne("Carbon_inventory_platform.Models.CH4", "CH4")
-                        .WithOne("Material")
-                        .HasForeignKey("Carbon_inventory_platform.Models.Material", "CH4Id")
+                        .WithMany()
+                        .HasForeignKey("CH4Id1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Carbon_inventory_platform.Models.CO2", "CO2")
-                        .WithOne("Material")
-                        .HasForeignKey("Carbon_inventory_platform.Models.Material", "CO2Id")
+                        .WithMany()
+                        .HasForeignKey("CO2Id1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Carbon_inventory_platform.Models.N2O", "N2O")
-                        .WithOne("Material")
-                        .HasForeignKey("Carbon_inventory_platform.Models.Material", "N2OId")
+                        .WithMany()
+                        .HasForeignKey("N2OId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -894,36 +643,6 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Navigation("CO2");
 
                     b.Navigation("N2O");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Staff", b =>
-                {
-                    b.HasOne("Carbon_inventory_platform.Models.Area", "Area")
-                        .WithMany()
-                        .HasForeignKey("AreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Area");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.User", b =>
-                {
-                    b.HasOne("Carbon_inventory_platform.Models.Groups", "Groups")
-                        .WithOne("User")
-                        .HasForeignKey("Carbon_inventory_platform.Models.User", "GroupsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Carbon_inventory_platform.Models.Staff", "Staff")
-                        .WithOne("User")
-                        .HasForeignKey("Carbon_inventory_platform.Models.User", "StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Groups");
-
-                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -977,61 +696,14 @@ namespace Carbon_inventory_platform.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Carbon_inventory_platform.Models.ActivityData", b =>
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Company", b =>
                 {
-                    b.Navigation("Device")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
-                {
-                    b.Navigation("Devices");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Authorization", b =>
-                {
-                    b.Navigation("Funtions");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.CH4", b =>
-                {
-                    b.Navigation("Material")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.CO2", b =>
-                {
-                    b.Navigation("Material")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Funtion", b =>
-                {
-                    b.Navigation("Groups");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Groups", b =>
-                {
-                    b.Navigation("User")
-                        .IsRequired();
+                    b.Navigation("Areas");
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Material", b =>
                 {
-                    b.Navigation("Device")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.N2O", b =>
-                {
-                    b.Navigation("Material")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Staff", b =>
-                {
-                    b.Navigation("User")
-                        .IsRequired();
+                    b.Navigation("Devices");
                 });
 #pragma warning restore 612, 618
         }

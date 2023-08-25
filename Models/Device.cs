@@ -6,28 +6,28 @@ namespace Carbon_inventory_platform.Models
     public class Device
     {
         [Display(Name = "ID")]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Display(Name = "廠區代號")]
         public int AreaId { get; set; }
 
         [MaxLength(20)]
-        [Display(Name = "財產邊號")]
-        public string AssetNo { get; set; }
+        [Display(Name = "財產編號")]
+        public string? AssetNo { get; set; }
 
         [MaxLength(20)]
         [Display(Name = "排放源名稱")]
-        public string Name { get; set; }
+        public string Name { get; set; } = ""; //需修改
 
         [MaxLength(20)]
         [Display(Name = "製程")]
-        public string Provess { get; set; }
+        public string Provess { get; set; } = ""; //需修改
 
         [Display(Name = "活動數據編號")] //不顯示
-        public int DataId { get; set; }
+        public Guid ActivityDataId { get; set; }
 
         [Display(Name = "原燃物料編號")] //不顯示
-        public int MaterialId { get; set; }
+        public Guid MaterialId { get; set; }
 
         [Display(Name = "排放CO2")]
         public byte CO2 { get; set; }
@@ -51,10 +51,10 @@ namespace Carbon_inventory_platform.Models
         public byte NF3 { get; set; }
 
         [Display(Name = "是否刪除")]
-        public byte isDeleted { get; set; }
+        public byte isDeleted { get; set; } = 0;
 
         [Display(Name = "建立時間")]
-        public DateTime? CreateTime { get; set; }
+        public DateTime CreateTime { get; set; }
 
         [Display(Name = "修改時間")]
         public DateTime? ModifiedTime { get; set; }
@@ -64,9 +64,9 @@ namespace Carbon_inventory_platform.Models
 
         //Navigation Property
         [ForeignKey("AreaId")]
-        public virtual Area Area { get; set; }
+        public ICollection<Area> Areas { get; set; } = null!;
         [ForeignKey("MaterialId")]
-        public virtual Material Material { get; set; }
-        public virtual ActivityData Data { get; set; }
+        public Material? Material { get; set; } //可以為Null 
+        public ActivityData? ActivityData { get; set; }
     }
 }

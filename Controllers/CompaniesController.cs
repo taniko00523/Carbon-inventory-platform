@@ -22,13 +22,15 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Companies
         public async Task<IActionResult> Index()
         {
-              return _context.Companies != null ? 
-                          View(await _context.Companies.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Companies'  is null.");
+              return _context.Companies != null ? //如果有抓到資料表Null
+                          View(await _context.Companies
+                          .Where(x=>x.isDeleted==0) //抓出資料表裡面沒被刪除的
+                          .ToListAsync()) :
+                          Problem("沒有找到資料"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
         }
 
         // GET: Companies/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null || _context.Companies == null)
             {
@@ -56,11 +58,12 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Owner,Email,Phone,isDeleted,CreateTime,ModifiedTime,DeleteTime")] Company company)
+        public async Task<IActionResult> Create([Bind("Name,Owner,Email,Phone,CreateTime")] Company company)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(company);
+                company.Id = Guid.NewGuid();
+                _context.Companies.Add(company);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -68,7 +71,7 @@ namespace Carbon_inventory_platform.Controllers
         }
 
         // GET: Companies/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null || _context.Companies == null)
             {
@@ -88,7 +91,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Owner,Email,Phone,isDeleted,CreateTime,ModifiedTime,DeleteTime")] Company company)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Owner,Email,Phone")] Company company)
         {
             if (id != company.Id)
             {
@@ -99,7 +102,16 @@ namespace Carbon_inventory_platform.Controllers
             {
                 try
                 {
-                    _context.Update(company);
+                    var toUpdate = await _context.Companies.FindAsync(id);
+                    if (toUpdate != null)
+                    {
+                        toUpdate.Name = company.Name;
+                        toUpdate.Owner = company.Owner;
+                        toUpdate.Email = company.Email;
+                        toUpdate.Phone = company.Phone;
+                        toUpdate.isDeleted = 0;
+                        toUpdate.ModifiedTime = DateTime.Now;
+                    }
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -119,7 +131,7 @@ namespace Carbon_inventory_platform.Controllers
         }
 
         // GET: Companies/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null || _context.Companies == null)
             {
@@ -139,23 +151,23 @@ namespace Carbon_inventory_platform.Controllers
         // POST: Companies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             if (_context.Companies == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Companies'  is null.");
+                return Problem("沒有找到資料");
             }
-            var company = await _context.Companies.FindAsync(id);
-            if (company != null)
+            var toDelete = await _context.Companies.FindAsync(id);
+            if (toDelete != null)
             {
-                _context.Companies.Remove(company);
+                toDelete.isDeleted = 1;
+                toDelete.DeleteTime = DateTime.Now;
             }
-            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CompanyExists(int id)
+        private bool CompanyExists(Guid id)
         {
           return (_context.Companies?.Any(e => e.Id == id)).GetValueOrDefault();
         }

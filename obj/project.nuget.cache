@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "9oM2RBaWH4H3kihYzExREeRTx5X9hI2m1BKuDmi8gZOgK5WtRz2QgmxMfq/Ma/LxcksPiGoxRdeS7ax4J+0Low==",
+  "dgSpecHash": "U1NyyM/+IG8bnZijlt6AqptzyiUDF3Fa5tFnK7OJwX1aAGlrNRLpsiCd8hZKE5yKBYmIbmoUiA4TJkB3p/q+Dw==",
   "success": true,
-  "projectFilePath": "C:\\C#\\Carbon_inventory_platform\\Carbon_inventory_platform.csproj",
+  "projectFilePath": "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jsj00\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
+    "C:\\Users\\jsj00\\.nuget\\packages\\dapper\\2.0.151\\dapper.2.0.151.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\humanizer.core.af\\2.14.1\\humanizer.core.af.2.14.1.nupkg.sha512",

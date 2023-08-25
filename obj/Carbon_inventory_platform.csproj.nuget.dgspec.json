@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\C#\\Carbon_inventory_platform\\Carbon_inventory_platform.csproj": {}
+    "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {}
   },
   "projects": {
-    "C:\\C#\\Carbon_inventory_platform\\Carbon_inventory_platform.csproj": {
+    "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\C#\\Carbon_inventory_platform\\Carbon_inventory_platform.csproj",
+        "projectUniqueName": "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
         "projectName": "Carbon_inventory_platform",
-        "projectPath": "C:\\C#\\Carbon_inventory_platform\\Carbon_inventory_platform.csproj",
+        "projectPath": "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
         "packagesPath": "C:\\Users\\jsj00\\.nuget\\packages\\",
-        "outputPath": "C:\\C#\\Carbon_inventory_platform\\obj\\",
+        "outputPath": "C:\\Carbon-inventory-platform\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jsj00\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.151, )"
+            },
             "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",
               "version": "[7.0.10, )"
