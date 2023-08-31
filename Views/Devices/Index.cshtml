@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Areas)
+                所在廠區
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AssetNo)
@@ -46,10 +46,10 @@
                 @Html.DisplayNameFor(model => model.NF3)
             </th> 
             <th>
-                @Html.DisplayNameFor(model => model.Material)
+                使用物料
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ActivityData)
+                活動數據
             </th>
             <th></th>
         </tr>
@@ -57,9 +57,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Areas)
-                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AreaId)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AssetNo)
             </td>
@@ -127,7 +127,6 @@
             <td>
                     <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> |
                     <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a> |
-                    <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">內容</a> |
                     <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
             </td>
         </tr>

@@ -1,12 +1,12 @@
 ﻿@model Carbon_inventory_platform.Models.Device
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "新增";
 }
 
-<h1>Create</h1>
+<h1>新增</h1>
 
-<h4>Device</h4>
+<h4>設備資料維護</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -32,58 +32,16 @@
                 <input asp-for="Provess" class="form-control" />
                 <span asp-validation-for="Provess" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="ActivityDataId" class="control-label"></label>
-                <select asp-for="ActivityDataId" class ="form-control" asp-items="ViewBag.ActivityDataId"></select>
-            </div>*@
             <div class="form-group">
                 <label asp-for="MaterialId" class="control-label"></label>
                 <select asp-for="MaterialId" class ="form-control" asp-items="ViewBag.MaterialId"></select>
             </div>
-            @* <div class="form-group">
-                <label asp-for="CO2" class="control-label"></label>
-                <input asp-for="CO2" class="form-control" />
-                <span asp-validation-for="CO2" class="text-danger"></span>
-            </div>
             <div class="form-group">
-                <label asp-for="CH4" class="control-label"></label>
-                <input asp-for="CH4" class="form-control" />
-                <span asp-validation-for="CH4" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="N2O" class="control-label"></label>
-                <input asp-for="N2O" class="form-control" />
-                <span asp-validation-for="N2O" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HFCS" class="control-label"></label>
-                <input asp-for="HFCS" class="form-control" />
-                <span asp-validation-for="HFCS" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PFCS" class="control-label"></label>
-                <input asp-for="PFCS" class="form-control" />
-                <span asp-validation-for="PFCS" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SF6" class="control-label"></label>
-                <input asp-for="SF6" class="form-control" />
-                <span asp-validation-for="SF6" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NF3" class="control-label"></label>
-                <input asp-for="NF3" class="form-control" />
-                <span asp-validation-for="NF3" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="新增" class="btn btn-primary" />
+                <a class="btn btn-secondary" asp-action="Index">返回</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

@@ -7,7 +7,8 @@
 <div class="row">
     <div class="col">
         <h1>公司資料維護</h1>
-        <a class="btn btn-primary" asp-action="Create">創建</a>
+        @* <a class="btn btn-primary" asp-action="Create">創建</a> *@
+        @* 客戶資訊無法自己新增 *@
     </div>
     <div class="col-6"></div>
     <div class="col">
@@ -53,9 +54,7 @@
                 @Html.DisplayFor(modelItem => item.Phone)
             </td>
             <td>
-                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a> |
-                <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">內容</a> |
-                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a> 
             </td>
         </tr>
 }

@@ -1,12 +1,12 @@
 ﻿@model Carbon_inventory_platform.Models.Area
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "修改";
 }
 
-<h1>Edit</h1>
+<h1>修改</h1>
 
-<h4>Area</h4>
+<h4>廠區資料</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -54,15 +54,14 @@
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="儲存" class="btn btn-primary" />|
+                <a class="btn btn-secondary" asp-action="Index">返回</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
