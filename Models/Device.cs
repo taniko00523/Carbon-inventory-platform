@@ -30,25 +30,25 @@ namespace Carbon_inventory_platform.Models
         public int MaterialId { get; set; }
 
         [Display(Name = "排放CO2")]
-        public byte CO2 { get; set; } = 0;
+        public Boolean CO2 { get; set; } = false;
 
         [Display(Name = "排放CH4")]
-        public byte CH4 { get; set; } = 0;
+        public Boolean CH4 { get; set; } = false;
 
         [Display(Name = "排放N2O")]
-        public byte N2O { get; set; } = 0;
+        public Boolean N2O { get; set; } = false;
 
         [Display(Name = "排放HFCS")]
-        public byte HFCS { get; set; } = 0;
+        public Boolean HFCS { get; set; } = false;
 
         [Display(Name = "排放PFCS")]
-        public byte PFCS { get; set; } = 0;
+        public Boolean PFCS { get; set; } = false;
 
         [Display(Name = "排放SF6")]
-        public byte SF6 { get; set; } = 0;
+        public Boolean SF6 { get; set; } = false;
 
         [Display(Name = "排放NF3")]
-        public byte NF3 { get; set; } = 0;
+        public Boolean NF3 { get; set; } = false;
 
         [Display(Name = "是否刪除")]
         public byte isDeleted { get; set; } = 0;

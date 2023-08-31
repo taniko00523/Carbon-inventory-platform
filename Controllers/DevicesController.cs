@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
+using NuGet.ContentModel;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -55,7 +57,7 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Devices/Create
         public IActionResult Create()
         {
-            ViewData["AreasId"] = new SelectList(_context.Areas, "Id", "Name");
+            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
             ViewData["ActivityDataId"] = new SelectList(_context.ActivityDatas, "Id", "Name");
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name");
             return View();
@@ -66,33 +68,48 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AreaId,AssetNo,Name,Provess,MaterialId,CO2,CH4,N2O,HFCS,PFCS,SF6,NF3")] Device device)
+        public async Task<IActionResult> Create([Bind("Id,AreaId,AssetNo,Name,Provess,MaterialId")] Device device)
         {
             if (ModelState.IsValid)
             {
-                var toCreate = new Device()
+                var toCreate = new Device();
+                if(toCreate != null)
                 {
-                    Id = Guid.NewGuid(),
-                    AreaId = device.AreaId,
-                    AssetNo = device.AssetNo,
-                    Name = device.Name,
-                    Provess = device.Provess,
-                    MaterialId = device.MaterialId,
-                    CO2 = device.CO2,
-                    CH4 = device.CH4,
-                    N2O = device.N2O,
-                    HFCS = device.HFCS,
-                    PFCS = device.PFCS,
-                    SF6 = device.SF6,
-                    NF3 = device.NF3,
-                    isDeleted = 0,
-                    CreateTime = DateTime.Now
-                };
-                _context.Add(device);
+                    toCreate.Id = Guid.NewGuid();
+                    toCreate.AreaId = device.AreaId;
+                    toCreate.AssetNo = device.AssetNo;
+                    toCreate.Name = device.Name;
+                    toCreate.Provess = device.Provess;
+                    toCreate.MaterialId = device.MaterialId;
+                    toCreate.isDeleted = 0;
+                    toCreate.CreateTime = DateTime.Now;
+                    //不需要一創建就需要填寫排放氣體 否則客戶會無法填寫
+                    //排放氣體應該留到Edit讓盤查員填寫
+                }
+                
+                if (_context.Materials
+                    .Where(x=>x.Id==device.MaterialId)
+                    .Select(x=>x.CO2Id) != null)//如果物料的CO2有排放係數(CEF) 則自動帶出 //修正資料庫如果沒有排放係數即外來鍵Null 
+                {
+                    toCreate.CO2 = true;
+                }
+                if (_context.Materials
+                    .Where(x => x.Id == device.MaterialId)
+                    .Select(x => x.CH4Id) != null)//如果物料的CH4有排放係數(CEF) 則自動帶出 //修正資料庫如果沒有排放係數即外來鍵Null 
+                {
+                    toCreate.CH4 = true;
+                }
+                if (_context.Materials
+                    .Where(x => x.Id == device.MaterialId)
+                    .Select(x => x.N2OId) != null)//如果物料的N2O有排放係數(CEF) 則自動帶出 //修正資料庫如果沒有排放係數即外來鍵Null 
+                {
+                    toCreate.N2O = true;
+                }
+                _context.Add(toCreate);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AreasId"] = new SelectList(_context.Areas, "Id", "Name");
+            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
             ViewData["ActivityDataId"] = new SelectList(_context.ActivityDatas, "Id", "Name", device.ActivityDataId);
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name", device.MaterialId);
             return View(device);
@@ -111,7 +128,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return NotFound();
             }
-            ViewData["AreasId"] = new SelectList(_context.Areas, "Id", "Name");
+            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
             ViewData["ActivityDataId"] = new SelectList(_context.ActivityDatas, "Id", "Name", device.ActivityDataId);
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name", device.MaterialId);
             return View(device);
@@ -167,7 +184,7 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AreasId"] = new SelectList(_context.Areas, "Id", "Name");
+            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
             ViewData["ActivityDataId"] = new SelectList(_context.ActivityDatas, "Id", "Name", device.ActivityDataId);
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name", device.MaterialId);
             return View(device);

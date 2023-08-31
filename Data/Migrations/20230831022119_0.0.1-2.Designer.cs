@@ -4,6 +4,7 @@ using Carbon_inventory_platform.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_inventory_platform.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230831022119_0.0.1-2")]
+    partial class _0012
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1019,11 +1022,11 @@ namespace Carbon_inventory_platform.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<bool>("CH4")
-                        .HasColumnType("bit");
+                    b.Property<byte>("CH4")
+                        .HasColumnType("tinyint");
 
-                    b.Property<bool>("CO2")
-                        .HasColumnType("bit");
+                    b.Property<byte>("CO2")
+                        .HasColumnType("tinyint");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
@@ -1031,8 +1034,8 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<DateTime?>("DeleteTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("HFCS")
-                        .HasColumnType("bit");
+                    b.Property<byte>("HFCS")
+                        .HasColumnType("tinyint");
 
                     b.Property<int>("MaterialId")
                         .HasColumnType("int");
@@ -1040,27 +1043,27 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("N2O")
-                        .HasColumnType("bit");
+                    b.Property<byte>("N2O")
+                        .HasColumnType("tinyint");
 
-                    b.Property<bool>("NF3")
-                        .HasColumnType("bit");
+                    b.Property<byte>("NF3")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<bool>("PFCS")
-                        .HasColumnType("bit");
+                    b.Property<byte>("PFCS")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("Provess")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<bool>("SF6")
-                        .HasColumnType("bit");
+                    b.Property<byte>("SF6")
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("isDeleted")
                         .HasColumnType("tinyint");

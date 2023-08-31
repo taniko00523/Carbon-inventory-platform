@@ -20,13 +20,13 @@ namespace Carbon_inventory_platform.Models
         public string EmissionPattern { get; set; } = "";
 
         [Display(Name = "CH4排放係數編號")]
-        public int CH4Id { get; set; }
+        public int? CH4Id { get; set; }
 
         [Display(Name = "CO2排放係數編號")]
-        public int CO2Id { get; set; }
+        public int? CO2Id { get; set; }
 
         [Display(Name = "N2O排放係數編號")]
-        public int N2OId { get; set; }
+        public int? N2OId { get; set; }
 
         [MaxLength(10)]
         [Display(Name = "單位")]
