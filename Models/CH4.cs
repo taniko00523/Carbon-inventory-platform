@@ -5,7 +5,7 @@ namespace Carbon_inventory_platform.Models
     public class CH4
     {
         [Display(Name = "ID")]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "排放係數")]
         public float CEF { get; set; }

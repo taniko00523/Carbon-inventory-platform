@@ -26,6 +26,7 @@ namespace Carbon_inventory_platform.Controllers
             return _context.Areas != null ? //如果有抓到資料表Null
                           View(await _context.Areas
                           .Where(x=>x.isDeleted==0) //抓出資料表裡面沒被刪除的
+                          .Include(x=> x.Company)
                           .ToListAsync()) : //非同步方法
                           Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
         }
@@ -52,7 +53,7 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Areas/Create
         public IActionResult Create()
         {
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id");
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name");
             return View();
         }
 
@@ -82,7 +83,7 @@ namespace Carbon_inventory_platform.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", area.CompanyId);
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", area.CompanyId);
             return View(area);
         }
 
@@ -99,7 +100,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return NotFound();
             }
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", area.CompanyId);
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", area.CompanyId);
             return View(area);
         }
 
@@ -148,7 +149,7 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", area.CompanyId);
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", area.CompanyId);
             return View(area);
         }
 

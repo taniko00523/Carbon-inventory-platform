@@ -37,7 +37,6 @@ namespace Carbon_inventory_platform.Models
 
         //Navigation Property
         public ICollection<Area> Areas { get; set; } = null!;
-        //在關聯各端點的實體類型上，導覽屬性為選擇性的屬性。 如果您在關聯其中一個端點的實體類型上定義導覽屬性，就不必在關聯另一個端點的實體類型上定義導覽屬性。
 
         public Company()
         {

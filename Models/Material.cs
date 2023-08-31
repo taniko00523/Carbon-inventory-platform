@@ -5,7 +5,7 @@ namespace Carbon_inventory_platform.Models
     public class Material
     {
         [Display(Name = "ID")]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [MaxLength(20)]
         [Display(Name = "原燃物料或產品")]

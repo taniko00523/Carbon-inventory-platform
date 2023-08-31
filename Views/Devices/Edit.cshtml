@@ -1,0 +1,94 @@
+﻿@model Carbon_inventory_platform.Models.Device
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>修改</h1>
+
+<h4>Device</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="AreaId" class="control-label"></label>
+                <select asp-for="AreaId" class="form-control" asp-items="ViewBag.AreasId"></select>
+                <span asp-validation-for="AreaId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AssetNo" class="control-label"></label>
+                <input asp-for="AssetNo" class="form-control" />
+                <span asp-validation-for="AssetNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Provess" class="control-label"></label>
+                <input asp-for="Provess" class="form-control" />
+                <span asp-validation-for="Provess" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActivityDataId" class="control-label"></label>
+                <select asp-for="ActivityDataId" class="form-control" asp-items="ViewBag.ActivityDataId"></select>
+                <span asp-validation-for="ActivityDataId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaterialId" class="control-label"></label>
+                <select asp-for="MaterialId" class="form-control" asp-items="ViewBag.MaterialId"></select>
+                <span asp-validation-for="MaterialId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CO2" class="control-label"></label>
+                <input asp-for="CO2" class="form-control" />
+                <span asp-validation-for="CO2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CH4" class="control-label"></label>
+                <input asp-for="CH4" class="form-control" />
+                <span asp-validation-for="CH4" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="N2O" class="control-label"></label>
+                <input asp-for="N2O" class="form-control" />
+                <span asp-validation-for="N2O" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HFCS" class="control-label"></label>
+                <input asp-for="HFCS" class="form-control" />
+                <span asp-validation-for="HFCS" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PFCS" class="control-label"></label>
+                <input asp-for="PFCS" class="form-control" />
+                <span asp-validation-for="PFCS" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SF6" class="control-label"></label>
+                <input asp-for="SF6" class="form-control" />
+                <span asp-validation-for="SF6" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NF3" class="control-label"></label>
+                <input asp-for="NF3" class="form-control" />
+                <span asp-validation-for="NF3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
