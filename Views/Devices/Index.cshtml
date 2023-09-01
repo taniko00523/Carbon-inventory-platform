@@ -114,7 +114,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Material.Name)
             </td>
-            <td>
+            @* <td>
                     @if (item.ActivityData != null)
                     {
                         <p>@item.ActivityData.Num @item.ActivityData.Unit</p>
@@ -123,7 +123,7 @@
                     {
                         <p>未填寫</p>
                     }
-            </td>
+            </td> *@
             <td>
                     <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> |
                     <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a> |

@@ -4,6 +4,7 @@ using Carbon_inventory_platform.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_inventory_platform.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230901064606_0.0.1-5")]
+    partial class _0015
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -924,7 +927,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         new
                         {
                             Id = 36,
+                            CH4CEF = 0f,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 0f,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
                             EmissionPattern = "固定",
+                            N2OCEF = 0f,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
                             Name = "事業廢棄物",
                             Scope = "範疇1",
                             Unit = "",
@@ -933,7 +945,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         new
                         {
                             Id = 37,
+                            CH4CEF = 0f,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 0f,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
                             EmissionPattern = "固定",
+                            N2OCEF = 0f,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
                             Name = "其他非化石燃料",
                             Scope = "範疇1",
                             Unit = "",
@@ -942,7 +963,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         new
                         {
                             Id = 38,
+                            CH4CEF = 0f,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 0f,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
                             EmissionPattern = "固定",
+                            N2OCEF = 0f,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
                             Name = "木頭－固態",
                             Scope = "範疇1",
                             Unit = "",
@@ -951,7 +981,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         new
                         {
                             Id = 39,
+                            CH4CEF = 0f,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 0f,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
                             EmissionPattern = "固定",
+                            N2OCEF = 0f,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
                             Name = "黑液",
                             Scope = "範疇1",
                             Unit = "",
@@ -960,7 +999,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         new
                         {
                             Id = 40,
+                            CH4CEF = 0f,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 0f,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
                             EmissionPattern = "固定",
+                            N2OCEF = 0f,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
                             Name = "木炭",
                             Scope = "範疇1",
                             Unit = "",
@@ -969,7 +1017,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         new
                         {
                             Id = 41,
+                            CH4CEF = 0f,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 0f,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
                             EmissionPattern = "固定",
+                            N2OCEF = 0f,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
                             Name = "其他固體生質燃料",
                             Scope = "範疇1",
                             Unit = "",
@@ -978,7 +1035,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         new
                         {
                             Id = 42,
+                            CH4CEF = 0f,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 0f,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
                             EmissionPattern = "固定",
+                            N2OCEF = 0f,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
                             Name = "生質汽油",
                             Scope = "範疇1",
                             Unit = "",
@@ -987,7 +1053,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         new
                         {
                             Id = 43,
+                            CH4CEF = 0f,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 0f,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
                             EmissionPattern = "固定",
+                            N2OCEF = 0f,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
                             Name = "生質柴油",
                             Scope = "範疇1",
                             Unit = "",
@@ -996,7 +1071,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         new
                         {
                             Id = 44,
+                            CH4CEF = 0f,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 0f,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
                             EmissionPattern = "固定",
+                            N2OCEF = 0f,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
                             Name = "其他液態生質燃料",
                             Scope = "範疇1",
                             Unit = "",
@@ -1005,7 +1089,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         new
                         {
                             Id = 45,
+                            CH4CEF = 0f,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 0f,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
                             EmissionPattern = "固定",
+                            N2OCEF = 0f,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
                             Name = "掩埋場沼氣",
                             Scope = "範疇1",
                             Unit = "",
@@ -1014,7 +1107,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         new
                         {
                             Id = 46,
+                            CH4CEF = 0f,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 0f,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
                             EmissionPattern = "固定",
+                            N2OCEF = 0f,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
                             Name = "污泥沼氣",
                             Scope = "範疇1",
                             Unit = "",
@@ -1023,7 +1125,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         new
                         {
                             Id = 47,
+                            CH4CEF = 0f,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 0f,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
                             EmissionPattern = "固定",
+                            N2OCEF = 0f,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
                             Name = "其他氣態生質燃料",
                             Scope = "範疇1",
                             Unit = "",

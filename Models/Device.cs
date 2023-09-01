@@ -23,9 +23,6 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "製程")]
         public string Provess { get; set; } = ""; //需修改
 
-        [Display(Name = "活動數據")] 
-        public Guid? ActivityDataId { get; set; }
-
         [Display(Name = "原燃物料")] 
         public int MaterialId { get; set; }
 
@@ -49,6 +46,26 @@ namespace Carbon_inventory_platform.Models
 
         [Display(Name = "排放NF3")]
         public Boolean NF3 { get; set; } = false;
+        [Display(Name = "活動數據")]
+        public float Num { get; set; }
+
+        [MaxLength(20)]
+        [Display(Name = "單位")]
+        public string Unit { get; set; } = "";
+
+        [MaxLength(20)]
+        [Display(Name = "數據來源名稱")]
+        public string Source { get; set; } = "";
+
+        [MaxLength(20)]
+        [Display(Name = "保存單位")]
+        public string Dept { get; set; } = "";
+
+        [Display(Name = "活動數據等級")]
+        public int Level { get; set; }
+
+        [Display(Name = "儀器校正等級")]
+        public int Correction { get; set; }
 
         [Display(Name = "是否刪除")]
         public byte isDeleted { get; set; } = 0;
@@ -67,8 +84,7 @@ namespace Carbon_inventory_platform.Models
         public ICollection<Area> Areas { get; set; } = null!;
         [ForeignKey("MaterialId")]
         public Material? Material { get; set; } //可以為Null 
-        public ActivityData? ActivityData { get; set; }
-
+        
         public Device()
         {
             Id = Guid.NewGuid();

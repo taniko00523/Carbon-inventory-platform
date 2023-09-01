@@ -21,20 +21,19 @@ namespace Carbon_inventory_platform.Controllers
             _context = context;
         }
 
-        // GET: Devices
+        //GET: Devices
         public async Task<IActionResult> Index()
         {
             return _context.Devices != null ? //如果有抓到資料表Null
                           View(await _context.Devices
                           .Where(x => x.isDeleted == 0) //抓出資料表裡面沒被刪除的
                           .Include(x => x.Areas)
-                          .Include (x => x.Material)
-                          .Include (x => x.ActivityData)
+                          .Include(x => x.Material)
                           .ToListAsync()) : //非同步方法
                           Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
         }
 
-        // GET: Devices/Details/5
+        //GET: Devices/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null || _context.Devices == null)
@@ -44,7 +43,6 @@ namespace Carbon_inventory_platform.Controllers
 
             var device = await _context.Devices
                 .Include(d => d.Areas)
-                .Include(d => d.ActivityData)
                 .Include(d => d.Material)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (device == null)
@@ -58,7 +56,6 @@ namespace Carbon_inventory_platform.Controllers
         public IActionResult Create()
         {
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
-            ViewData["ActivityDataId"] = new SelectList(_context.ActivityDatas, "Id", "Name");
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name");
             return View();
         }
@@ -85,32 +82,32 @@ namespace Carbon_inventory_platform.Controllers
                     toCreate.CreateTime = DateTime.Now;
                     //不需要一創建就需要填寫排放氣體 否則客戶會無法填寫
                     //排放氣體應該留到Edit讓盤查員填寫
+
+                    if (_context.Materials
+                        .Where(x=>x.Id == device.MaterialId)
+                        .Select(x => x.CO2CEF) != null)//如果物料的CO2有排放係數(CEF) 則自動帶出 //修正資料庫如果沒有排放係數即外來鍵Null 
+                    {
+                        toCreate.CO2 = true;
+                    }
+                    if (_context.Materials
+                        .Where(x => x.Id == device.MaterialId)
+                        .Select(x => x.CH4CEF) != null)//如果物料的CH4有排放係數(CEF) 則自動帶出 //修正資料庫如果沒有排放係數即外來鍵Null 
+                    {
+                        toCreate.CH4 = true;
+                    }
+                    if (_context.Materials
+                        .Where(x => x.Id == device.MaterialId)
+                        .Select(x => x.N2OCEF) != null)//如果物料的N2O有排放係數(CEF) 則自動帶出 //修正資料庫如果沒有排放係數即外來鍵Null 
+                    {
+                        toCreate.N2O = true;
+                    }
                 }
-                
-                if (_context.Materials
-                    .Where(x=>x.Id==device.MaterialId)
-                    .Select(x=>x.CO2Id) != null)//如果物料的CO2有排放係數(CEF) 則自動帶出 //修正資料庫如果沒有排放係數即外來鍵Null 
-                {
-                    toCreate.CO2 = true;
-                }
-                if (_context.Materials
-                    .Where(x => x.Id == device.MaterialId)
-                    .Select(x => x.CH4Id) != null)//如果物料的CH4有排放係數(CEF) 則自動帶出 //修正資料庫如果沒有排放係數即外來鍵Null 
-                {
-                    toCreate.CH4 = true;
-                }
-                if (_context.Materials
-                    .Where(x => x.Id == device.MaterialId)
-                    .Select(x => x.N2OId) != null)//如果物料的N2O有排放係數(CEF) 則自動帶出 //修正資料庫如果沒有排放係數即外來鍵Null 
-                {
-                    toCreate.N2O = true;
-                }
+                                
                 _context.Add(toCreate);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
-            ViewData["ActivityDataId"] = new SelectList(_context.ActivityDatas, "Id", "Name", device.ActivityDataId);
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name", device.MaterialId);
             return View(device);
         }
@@ -128,8 +125,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return NotFound();
             }
-            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
-            ViewData["ActivityDataId"] = new SelectList(_context.ActivityDatas, "Id", "Name", device.ActivityDataId);
+            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");;
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name", device.MaterialId);
             return View(device);
         }
@@ -158,7 +154,6 @@ namespace Carbon_inventory_platform.Controllers
                         toUpdate.AssetNo = device.AssetNo;
                         toUpdate.Name = device.Name;
                         toUpdate.Provess = device.Provess;
-                        toUpdate.ActivityDataId = device.ActivityDataId;
                         toUpdate.MaterialId = device.MaterialId;
                         toUpdate.CO2 = device.CO2;
                         toUpdate.CH4 = device.CH4;
@@ -185,7 +180,6 @@ namespace Carbon_inventory_platform.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
-            ViewData["ActivityDataId"] = new SelectList(_context.ActivityDatas, "Id", "Name", device.ActivityDataId);
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name", device.MaterialId);
             return View(device);
         }
@@ -199,7 +193,6 @@ namespace Carbon_inventory_platform.Controllers
             }
 
             var device = await _context.Devices
-                .Include(d => d.ActivityData)
                 .Include(d => d.Material)
                 .Include(d => d.Areas)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -235,33 +228,40 @@ namespace Carbon_inventory_platform.Controllers
             return (_context.Devices?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        public IActionResult AddActivityData()
+        public async Task<IActionResult> AddActivityData(Guid? id)
         {
-            return View();
+            if (id == null || _context.Devices == null)
+            {
+                return NotFound();
+            }
+
+            var activitydata = await _context.Devices.FindAsync(id);
+            if (activitydata == null)
+            {
+                return View();
+            }
+            return View(activitydata);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddActivityData([Bind("Id,Num,Unit,Source,Dept,Level,Correction")] ActivityData activityData)
+        public async Task<IActionResult> AddActivityData(Guid? id,[Bind("Id,Num,Unit,Source,Dept,Level,Correction")] Device activityData)
         {
-            if (ModelState.IsValid)
+            var toUpdate = await _context.Devices.FindAsync(id);
+
+            if (toUpdate != null)
             {
-                var toCreate = new ActivityData()
-                {
-                    Id = Guid.NewGuid(),
-                    Num = activityData.Num,
-                    Unit = activityData.Unit,
-                    Source = activityData.Source,
-                    Dept = activityData.Dept,
-                    Level = activityData.Level,
-                    Correction = activityData.Correction,
-                    isDeleted = 0,
-                    CreateTime = DateTime.Now
-                };
-                _context.Add(activityData);
+                toUpdate.Num = activityData.Num;
+                toUpdate.Unit = activityData.Unit;
+                toUpdate.Source = activityData.Source;
+                toUpdate.Dept = activityData.Dept;
+                toUpdate.Level = activityData.Level;
+                toUpdate.Correction = activityData.Correction;
+                //toUpdate.ModifiedTime = DateTime.Now;
+            }
+            
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
             return View(activityData);
         }
     }
