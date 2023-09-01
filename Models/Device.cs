@@ -15,6 +15,14 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "財產編號")]
         public string? AssetNo { get; set; }
 
+        [MaxLength(10)]
+        [Display(Name = "範疇別")]
+        public string Scope { get; set; } = "";
+
+        [MaxLength(10)]
+        [Display(Name = "排放型式")]
+        public string EmissionPattern { get; set; } = "";
+
         [MaxLength(20)]
         [Display(Name = "排放源名稱")]
         public string Name { get; set; } = ""; //需修改
@@ -46,6 +54,7 @@ namespace Carbon_inventory_platform.Models
 
         [Display(Name = "排放NF3")]
         public Boolean NF3 { get; set; } = false;
+
         [Display(Name = "活動數據")]
         public float Num { get; set; }
 
@@ -82,6 +91,8 @@ namespace Carbon_inventory_platform.Models
         //Navigation Property
         [ForeignKey("AreaId")]
         public ICollection<Area> Areas { get; set; } = null!;
+
+        [Display(Name = "使用物料")]
         [ForeignKey("MaterialId")]
         public Material? Material { get; set; } //可以為Null 
         

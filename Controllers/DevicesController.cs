@@ -55,8 +55,12 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Devices/Create
         public IActionResult Create()
         {
-            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
+            string[] scope = { "範疇一", "範疇二"};
+            string[] emissionPattern = { "固定", "移動", "製程", "逸散" };
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name");
+            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
+            ViewData["Scope"] = new SelectList(scope);
+            ViewData["EmissionPattern"] = new SelectList(emissionPattern);
             return View();
         }
 
@@ -65,7 +69,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AreaId,AssetNo,Name,Provess,MaterialId")] Device device)
+        public async Task<IActionResult> Create([Bind("Id,AreaId,AssetNo,Name,Provess,Scope,EmissionPattern,MaterialId")] Device device)
         {
             if (ModelState.IsValid)
             {
@@ -77,6 +81,8 @@ namespace Carbon_inventory_platform.Controllers
                     toCreate.AssetNo = device.AssetNo;
                     toCreate.Name = device.Name;
                     toCreate.Provess = device.Provess;
+                    toCreate.Scope = device.Scope;
+                    toCreate.EmissionPattern = device.EmissionPattern;
                     toCreate.MaterialId = device.MaterialId;
                     toCreate.isDeleted = 0;
                     toCreate.CreateTime = DateTime.Now;
@@ -107,8 +113,12 @@ namespace Carbon_inventory_platform.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            string[] scope = { "範疇一", "範疇二" };
+            string[] emissionPattern = { "固定", "移動", "製程", "逸散" };
+            ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name");
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
-            ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name", device.MaterialId);
+            ViewData["Scope"] = new SelectList(scope);
+            ViewData["EmissionPattern"] = new SelectList(emissionPattern);
             return View(device);
         }
 
@@ -125,8 +135,12 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return NotFound();
             }
-            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");;
-            ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name", device.MaterialId);
+            string[] scope = { "範疇一", "範疇二" };
+            string[] emissionPattern = { "固定", "移動", "製程", "逸散" };
+            ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name");
+            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
+            ViewData["Scope"] = new SelectList(scope);
+            ViewData["EmissionPattern"] = new SelectList(emissionPattern);
             return View(device);
         }
 
@@ -135,7 +149,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,AreaId,AssetNo,Name,Provess,ActivityDataId,MaterialId,CO2,CH4,N2O,HFCS,PFCS,SF6,NF3")] Device device)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,AreaId,AssetNo,Name,Provess,Scope,EmissionPattern,MaterialId,CO2,CH4,N2O,HFCS,PFCS,SF6,NF3")] Device device)
         {
             if (id != device.Id)
             {
@@ -154,6 +168,8 @@ namespace Carbon_inventory_platform.Controllers
                         toUpdate.AssetNo = device.AssetNo;
                         toUpdate.Name = device.Name;
                         toUpdate.Provess = device.Provess;
+                        toUpdate.Scope = device.Scope;
+                        toUpdate.EmissionPattern = device.EmissionPattern;
                         toUpdate.MaterialId = device.MaterialId;
                         toUpdate.CO2 = device.CO2;
                         toUpdate.CH4 = device.CH4;
@@ -179,8 +195,12 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            string[] scope = { "範疇一", "範疇二" };
+            string[] emissionPattern = { "固定", "移動", "製程", "逸散" };
+            ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name");
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
-            ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name", device.MaterialId);
+            ViewData["Scope"] = new SelectList(scope);
+            ViewData["EmissionPattern"] = new SelectList(emissionPattern);
             return View(device);
         }
 
@@ -240,6 +260,15 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return View();
             }
+            string[] unit = { "公噸", "公秉", "千立方公尺", "千度", "人小時", "其他" };
+            string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
+            string[] level = { "連續監測", "定期採樣", "自行評估" };
+            string[] correction = { "每年外校一次以上量測", "每年外校不到一次量測", "非量測所得知數據" };
+
+            ViewData["Unit"] = new SelectList(unit);
+            ViewData["Source"] = new SelectList(source);
+            ViewData["Level"] = new SelectList(level);
+            ViewData["Correction"] = new SelectList(correction);
             return View(activitydata);
         }
 
@@ -259,10 +288,17 @@ namespace Carbon_inventory_platform.Controllers
                 toUpdate.Correction = activityData.Correction;
                 //toUpdate.ModifiedTime = DateTime.Now;
             }
-            
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            return View(activityData);
+            string[] unit = { "公噸", "公秉", "千立方公尺", "千度", "人小時", "其他" };
+            string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
+            string[] level = { "連續監測", "定期採樣", "自行評估" };
+            string[] correction = { "每年外校一次以上量測", "每年外校不到一次量測", "非量測所得知數據"};
+
+            ViewData["Unit"] = new SelectList(unit);
+            ViewData["Source"] = new SelectList(source);
+            ViewData["Level"] = new SelectList(level);
+            ViewData["Correction"] = new SelectList(correction);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
