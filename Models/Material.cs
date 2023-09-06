@@ -55,5 +55,7 @@ namespace Carbon_inventory_platform.Models
 
         //Navigation Property
         public ICollection<Device> Devices { get; set; } = null!;
+	
+	//物料資料庫
     }
 }
