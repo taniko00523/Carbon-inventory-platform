@@ -12,9 +12,10 @@
 <table class="table">
     <thead>
         <tr>
+            
             <th>
-                所在廠區
-            </th>
+                @* @Html.DisplayNameFor(model => model.AreaId)  廠區名稱bug *@
+                @Html.DisplayNameFor(model => model.Areas.Name)
             <th>
                 @Html.DisplayNameFor(model => model.AssetNo)
             </th>
@@ -61,7 +62,8 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.AreaId)
+                    @* @Html.DisplayNameFor(model => model.AreaId)  廠區名稱bug *@
+               @Html.DisplayFor(modelItem => item.Areas.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AssetNo)

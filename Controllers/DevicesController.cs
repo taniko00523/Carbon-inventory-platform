@@ -20,10 +20,12 @@ namespace Carbon_inventory_platform.Controllers
         {
             _context = context;
         }
-
+        
         //GET: Devices
         public async Task<IActionResult> Index()
         {
+            
+
             return _context.Devices != null ? //如果有抓到資料表Null
                           View(await _context.Devices
                           .Where(x => x.isDeleted == 0) //抓出資料表裡面沒被刪除的
@@ -55,12 +57,14 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Devices/Create
         public IActionResult Create()
         {
+            
             string[] scope = { "範疇一", "範疇二"};
             string[] emissionPattern = { "固定", "移動", "製程", "逸散" };
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name");
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
             ViewData["Scope"] = new SelectList(scope);
             ViewData["EmissionPattern"] = new SelectList(emissionPattern);
+
             return View();
         }
 
@@ -71,10 +75,11 @@ namespace Carbon_inventory_platform.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,AreaId,AssetNo,Name,Provess,Scope,EmissionPattern,MaterialId")] Device device)
         {
+
             if (ModelState.IsValid)
             {
                 var toCreate = new Device();
-                if(toCreate != null)
+                
                 {
                     toCreate.Id = Guid.NewGuid();
                     toCreate.AreaId = device.AreaId;
@@ -86,11 +91,13 @@ namespace Carbon_inventory_platform.Controllers
                     toCreate.MaterialId = device.MaterialId;
                     toCreate.isDeleted = 0;
                     toCreate.CreateTime = DateTime.Now;
+
+
                     //不需要一創建就需要填寫排放氣體 否則客戶會無法填寫
                     //排放氣體應該留到Edit讓盤查員填寫
 
                     if (_context.Materials
-                        .Where(x=>x.Id == device.MaterialId)
+                        .Where(x => x.Id == device.MaterialId)
                         .Select(x => x.CO2CEF) != null)//如果物料的CO2有排放係數(CEF) 則自動帶出 //修正資料庫如果沒有排放係數即外來鍵Null 
                     {
                         toCreate.CO2 = true;
@@ -108,17 +115,64 @@ namespace Carbon_inventory_platform.Controllers
                         toCreate.N2O = true;
                     }
                 }
-                                
-                _context.Add(toCreate);
+                
+
+            /* if (ModelState.IsValid)
+             {
+                 var toCreate = new Device();
+                 if(toCreate != null)
+                 {
+                     toCreate.Id = Guid.NewGuid();
+                     toCreate.AreaId = device.AreaId;
+                     toCreate.AssetNo = device.AssetNo;
+                     toCreate.Name = device.Name;
+                     toCreate.Provess = device.Provess;
+                     toCreate.Scope = device.Scope;
+                     toCreate.EmissionPattern = device.EmissionPattern;
+                     toCreate.MaterialId = device.MaterialId;
+                     toCreate.isDeleted = 0;
+                     toCreate.CreateTime = DateTime.Now;
+
+
+                     //不需要一創建就需要填寫排放氣體 否則客戶會無法填寫
+                     //排放氣體應該留到Edit讓盤查員填寫
+
+                     if (_context.Materials
+                         .Where(x=>x.Id == device.MaterialId)
+                         .Select(x => x.CO2CEF) != null)//如果物料的CO2有排放係數(CEF) 則自動帶出 //修正資料庫如果沒有排放係數即外來鍵Null 
+                     {
+                         toCreate.CO2 = true;
+                     }
+                     if (_context.Materials
+                         .Where(x => x.Id == device.MaterialId)
+                         .Select(x => x.CH4CEF) != null)//如果物料的CH4有排放係數(CEF) 則自動帶出 //修正資料庫如果沒有排放係數即外來鍵Null 
+                     {
+                         toCreate.CH4 = true;
+                     }
+                     if (_context.Materials
+                         .Where(x => x.Id == device.MaterialId)
+                         .Select(x => x.N2OCEF) != null)//如果物料的N2O有排放係數(CEF) 則自動帶出 //修正資料庫如果沒有排放係數即外來鍵Null 
+                     {
+                         toCreate.N2O = true;
+                     }
+                 }*/
+
+
+
+
+            _context.Add(toCreate);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+               
             string[] scope = { "範疇一", "範疇二" };
             string[] emissionPattern = { "固定", "移動", "製程", "逸散" };
             ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name");
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
             ViewData["Scope"] = new SelectList(scope);
             ViewData["EmissionPattern"] = new SelectList(emissionPattern);
+            
             return View(device);
         }
 

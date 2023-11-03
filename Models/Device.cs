@@ -1,16 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Carbon_inventory_platform.Models
 {
     public class Device
     {
+       
+            
         [Display(Name = "ID")]
         public Guid Id { get; set; }
 
         [Display(Name = "廠區名稱")]
-        public Guid AreaId { get; set; }
 
+        public Guid AreaId { get; set; } 
+        
+        
+       
         [MaxLength(20)]
         [Display(Name = "財產編號")]
         public string? AssetNo { get; set; }
@@ -90,16 +97,16 @@ namespace Carbon_inventory_platform.Models
 
         //Navigation Property
         [ForeignKey("AreaId")]
-        public ICollection<Area> Areas { get; set; } = null!;
-
+        public Area? Areas { get; set; }
+        //public ICollection<Area> Areas { get; set; } *廠區名稱顯示bug
         [Display(Name = "使用物料")]
         [ForeignKey("MaterialId")]
         public Material? Material { get; set; } //可以為Null 
-        
+      
         public Device()
         {
             Id = Guid.NewGuid();
-            Areas = new List<Area>();
+            //Area= new Area(); *廠區名稱顯示bug
         }
     }
 }

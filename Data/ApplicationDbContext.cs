@@ -39,7 +39,8 @@ namespace Carbon_inventory_platform.Data
 
             builder.Entity<Device>(entity =>
             {
-                entity.HasMany(e => e.Areas);
+                //entity.HasMany(e => e.Areas);// 廠區名稱bug修改成以下
+                entity.HasOne(e => e.Areas);
                 entity.HasOne(e => e.Material);
             });
 
