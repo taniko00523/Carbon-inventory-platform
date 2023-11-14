@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_inventory_platform.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231103052736_0.0.1-8")]
+    [Migration("20231113061208_0.0.1-8")]
     partial class _0018
     {
         /// <inheritdoc />
@@ -163,6 +163,9 @@ namespace Carbon_inventory_platform.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("Emissions")
+                        .HasColumnType("int");
 
                     b.Property<bool>("HFCS")
                         .HasColumnType("bit");

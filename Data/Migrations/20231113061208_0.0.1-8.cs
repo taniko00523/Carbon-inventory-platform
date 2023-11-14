@@ -14,6 +14,13 @@ namespace Carbon_inventory_platform.Data.Migrations
             migrationBuilder.DropTable(
                 name: "AreaDevice");
 
+            migrationBuilder.AddColumn<int>(
+                name: "Emissions",
+                table: "Devices",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
+
             migrationBuilder.CreateIndex(
                 name: "IX_Devices_AreaId",
                 table: "Devices",
@@ -37,6 +44,10 @@ namespace Carbon_inventory_platform.Data.Migrations
 
             migrationBuilder.DropIndex(
                 name: "IX_Devices_AreaId",
+                table: "Devices");
+
+            migrationBuilder.DropColumn(
+                name: "Emissions",
                 table: "Devices");
 
             migrationBuilder.CreateTable(

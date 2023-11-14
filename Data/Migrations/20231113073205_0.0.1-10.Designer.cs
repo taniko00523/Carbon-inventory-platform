@@ -4,6 +4,7 @@ using Carbon_inventory_platform.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_inventory_platform.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231113073205_0.0.1-10")]
+    partial class _00110
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,19 +242,19 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<float>("CH4CEF")
                         .HasColumnType("real");
 
-                    b.Property<float?>("CH4ULL")
+                    b.Property<float>("CH4ULL")
                         .HasColumnType("real");
 
-                    b.Property<float?>("CH4UUL")
+                    b.Property<float>("CH4UUL")
                         .HasColumnType("real");
 
                     b.Property<float>("CO2CEF")
                         .HasColumnType("real");
 
-                    b.Property<float?>("CO2ULL")
+                    b.Property<float>("CO2ULL")
                         .HasColumnType("real");
 
-                    b.Property<float?>("CO2UUL")
+                    b.Property<float>("CO2UUL")
                         .HasColumnType("real");
 
                     b.Property<string>("EmissionPattern")
@@ -262,10 +265,10 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<float>("N2OCEF")
                         .HasColumnType("real");
 
-                    b.Property<float?>("N2OULL")
+                    b.Property<float>("N2OULL")
                         .HasColumnType("real");
 
-                    b.Property<float?>("N2OUUL")
+                    b.Property<float>("N2OUUL")
                         .HasColumnType("real");
 
                     b.Property<string>("Name")
@@ -523,18 +526,6 @@ namespace Carbon_inventory_platform.Data.Migrations
                             Name = "液化天然氣",
                             Scope = "範疇1",
                             Unit = "M3",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 56,
-                            CH4CEF = 0f,
-                            CO2CEF = 0.495f,
-                            EmissionPattern = "其他電力",
-                            N2OCEF = 0f,
-                            Name = "外購電力",
-                            Scope = "範疇2",
-                            Unit = "",
                             Year = 0
                         });
                 });

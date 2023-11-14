@@ -62,6 +62,9 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "排放NF3")]
         public Boolean NF3 { get; set; } = false;
 
+        [Display(Name = "排放量")]
+        public float Emissions { get; set; } = 0;
+
         [Display(Name = "活動數據")]
         public float Num { get; set; }
 

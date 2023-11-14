@@ -7,7 +7,7 @@
 <h1>新增</h1>
 
 <h4>設備資料維護</h4>
-<hr />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -43,9 +43,13 @@
                 <label asp-for="EmissionPattern" class="control-label"></label>
                 <select asp-for="EmissionPattern" class="form-control" id="emissionDropdown" asp-items="ViewBag.EmissionPattern">
                 </select>
+                
                 <span asp-validation-for="EmissionPattern" class="text-danger"></span>
             </div>
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <div class="form-group">
+                <label asp-for="MaterialId" class="control-label"></label>
+                <select asp-for="MaterialId" class="form-control" id="MaterialDropdown" asp-items="ViewBag.MaterialId"></select>
+            </div>
             <script>
                 $(document).ready(function () {
                     // 当"Scope"下拉框的选择发生变化时
@@ -55,33 +59,72 @@
 
                         // 在"emissionDropdown"下拉框中动态更新选项
                         $("#emissionDropdown").empty();
+                        $("#MaterialDropdown").empty();
 
                         // 添加根据"Scope"选择的选项，这里可以是从服务器获取的数据
-                        if (selectedScope === "範疇一") {
-                            $("#emissionDropdown").append("<option value='1'>固定</option>");
-                            $("#emissionDropdown").append("<option value='2'>移動</option>");
-                        } else if (selectedScope === "範疇二") {
-                            $("#emissionDropdown").append("<option value='3'>製程</option>");
-                            $("#emissionDropdown").append("<option value='4'>逸散</option>");
+                        if (selectedScope === "類別一") {
+                            $("#emissionDropdown").append("<option value='固定'>固定</option>");
+                            $("#emissionDropdown").append("<option value='移動'>移動</option>");
+                            $("#emissionDropdown").append("<option value='製程'>製程</option>");
+                            $("#emissionDropdown").append("<option value='逸散'>逸散</option>");
+                            $("#MaterialDropdown").append("<option value='煤油'>煤油</option>");
+                            $("#MaterialDropdown").append("<option value='柴油'>柴油</option>");
+                            $("#MaterialDropdown").append("<option value='車用汽油'>車用汽油</option>");
+                            $("#MaterialDropdown").append("<option value='液化石油氣'>液化石油氣</option>");
+                            $("#MaterialDropdown").append("<option value='潤滑油'>潤滑油</option>");
+                            $("#MaterialDropdown").append("<option value='液化石油氣'>其他油品</option>");
+                            $("#MaterialDropdown").append("<option value='乙烷'>乙烷</option>");
+                        } else if (selectedScope === "類別二") {
+                            $("#emissionDropdown").append("<option value='外購電力'>外購電力</option>");
+                            $("#MaterialDropdown").append("<option value='外購電力'>外購電力</option>");
                         }
                         // 可以根据需要添加更多选项
                     });
                 });
             </script>
-            @*<div class="form-group">
-                <label asp-for="Scope" class="control-label"></label>
-                <select asp-for="Scope" class="form-control" asp-items="ViewBag.Scope"></select>
-                <span asp-validation-for="Scope" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmissionPattern" class="control-label"></label>
-                <select asp-for="EmissionPattern" class="form-control" asp-items="ViewBag.EmissionPattern"></select>
-                <span asp-validation-for="EmissionPattern" class="text-danger"></span>
-            </div> 下拉式選單連結修改*@
-            <div class="form-group">
-                <label asp-for="MaterialId" class="control-label"></label>
-                <select asp-for="MaterialId" class ="form-control" asp-items="ViewBag.MaterialId"></select>
-            </div>
+            <script>
+                $(document).ready(function () {
+                    // 当"EmissionPattern"下拉框的选择发生变化时
+                    $("#emissionDropdown").change(function () {
+                        // 获取所选的值
+                        var selectedEmissionPattern = $(this).val();
+
+                        // 在"fuelTypeDropdown"下拉框中动态更新选项
+                        $("#emissionDropdown").empty();
+                        $("#MaterialDropdown").empty();
+
+                        // 添加根据"EmissionPattern"选择的选项
+                        if (selectedEmissionPattern === "固定") {
+                            $("#MaterialDropdown").append("<option value='煤油'>煤油</option>");
+                            $("#MaterialDropdown").append("<option value='柴油'>柴油</option>");
+                            $("#MaterialDropdown").append("<option value='車用汽油'>車用汽油</option>");
+                            $("#MaterialDropdown").append("<option value='液化石油氣'>液化石油氣</option>");
+                            $("#MaterialDropdown").append("<option value='潤滑油'>潤滑油</option>");
+                            $("#MaterialDropdown").append("<option value='液化石油氣'>其他油品</option>");
+                            $("#MaterialDropdown").append("<option value='乙烷'>乙烷</option>");
+                        } else if (selectedEmissionPattern === "移動") {
+                            $("#MaterialDropdown").append("<option value='煤油'>煤油</option>");
+                            $("#MaterialDropdown").append("<option value='柴油'>柴油</option>");
+                            $("#MaterialDropdown").append("<option value='車用汽油'>車用汽油</option>");
+                            $("#MaterialDropdown").append("<option value='液化石油氣'>液化石油氣</option>");
+                            $("#MaterialDropdown").append("<option value='潤滑油'>潤滑油</option>");
+                            $("#MaterialDropdown").append("<option value='液化天然氣'>液化天然氣</option>");
+                        } else if (selectedEmissionPattern === "逸散") {
+                            $("#MaterialDropdown").append("<option value='R-410A'>R-410A</option>");
+                            $("#MaterialDropdown").append("<option value='R-22'>R-22</option>");
+                            $("#MaterialDropdown").append("<option value='R-23'>R-23</option>");
+                            $("#MaterialDropdown").append("<option value='R-134A'>R-134A</option>");
+                            $("#MaterialDropdown").append("<option value='WD-40'>WD-40</option>");
+                        } else if (selectedEmissionPattern === "製程") {
+                            $("#MaterialDropdown").append("<option value='焊條'>焊條</option>");
+                            $("#MaterialDropdown").append("<option value='乙炔'>乙炔</option>");
+                        } else if (selectedEmissionPattern === "外購電力") {
+                            $("#MaterialDropdown").append("<option value='外購電力'>外購電力</option>");
+                        }
+
+                    });
+                });
+            </script>
             <div class="form-group">
                 <input type="submit" value="新增" class="btn btn-primary" />
                 <a class="btn btn-secondary" asp-action="Index">返回</a>

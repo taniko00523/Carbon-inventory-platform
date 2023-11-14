@@ -13,18 +13,17 @@
     <thead>
         <tr>
             
-            <th>
-                @* @Html.DisplayNameFor(model => model.AreaId)  廠區名稱bug *@
+            @* <th>
                 @Html.DisplayNameFor(model => model.Areas.Name)
             <th>
                 @Html.DisplayNameFor(model => model.AssetNo)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Provess)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Material)
             </th>
@@ -43,17 +42,20 @@
             <th>
                 @Html.DisplayNameFor(model => model.HFCS)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.PFCS)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.SF6)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.NF3)
-            </th> 
+            </th>  *@
             <th>
                 @Html.DisplayNameFor(model => model.Num)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Emissions)
             </th>
             <th></th>
         </tr>
@@ -61,19 +63,18 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                    @* @Html.DisplayNameFor(model => model.AreaId)  廠區名稱bug *@
+            @* <td>
                @Html.DisplayFor(modelItem => item.Areas.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AssetNo)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.Provess)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Material.Name)
             </td>
@@ -104,24 +105,24 @@
                         <p>Y</p>
                     }
             </td>
-            <td>
+            @* <td>
                     @if (item.PFCS == true)
                     {
                         <p>Y</p>
                     }
-            </td>
+            </td> *@
             <td>
                     @if (item.SF6 == true)
                     {
                         <p>Y</p>
                     }
             </td>
-            <td>
+            @* <td>
                     @if (item.NF3 == true)
                     {
                         <p>Y</p>
                     }
-            </td>
+            </td> *@
             <td>
                     @if (item.Num != 0)
                     {
@@ -131,6 +132,9 @@
                     {
                         <p>未填寫</p>
                     }
+            </td>
+             <td>
+                @Html.DisplayFor(modelItem => item.Emissions)
             </td>
             <td>
                     <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> |

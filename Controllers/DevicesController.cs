@@ -55,18 +55,19 @@ namespace Carbon_inventory_platform.Controllers
         }
 
         // GET: Devices/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            
-            string[] scope = { "範疇一", "範疇二"};
+            string[] scope = { "類別一", "類別二" };
             string[] emissionPattern = { "固定", "移動", "製程", "逸散" };
-            ViewData["MaterialId"] = new SelectList(_context.Materials, "Id", "Name");
-            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
+
+            ViewData["MaterialId"] = new SelectList(await _context.Materials.ToListAsync(), "Id", "Name");
+            ViewData["AreasId"] = new SelectList(await _context.Areas.Where(x => x.isDeleted == 0).ToListAsync(), "Id", "Name");
             ViewData["Scope"] = new SelectList(scope);
             ViewData["EmissionPattern"] = new SelectList(emissionPattern);
 
             return View();
         }
+
 
         // POST: Devices/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -328,9 +329,22 @@ namespace Carbon_inventory_platform.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddActivityData(Guid? id,[Bind("Id,Num,Unit,Source,Dept,Level,Correction")] Device activityData)
+        public async Task<IActionResult> AddActivityData(Guid? id, [Bind("Id,Num,Unit,Source,Dept,Level,CO2,Correction,MaterialId,Emissions")] Device activityData)
         {
             var toUpdate = await _context.Devices.FindAsync(id);
+
+            float all = 0;
+            if (toUpdate.CO2 == true && toUpdate.CH4 == true && toUpdate.N2O == true)
+            {
+                var materialsData = await _context.Materials.FindAsync(toUpdate.MaterialId);// 抓取對應的Materials 數據
+                // 如果找到 Materials 数据，计算 Emissions
+                if (materialsData != null)
+                {
+                    all = (float)(activityData.Num * materialsData.CO2CEF * 1 + activityData.Num * materialsData.CH4CEF * 27.9 + activityData.Num * materialsData.N2OCEF * 273);
+                }
+                
+            }
+
 
             if (toUpdate != null)
             {
@@ -340,6 +354,7 @@ namespace Carbon_inventory_platform.Controllers
                 toUpdate.Dept = activityData.Dept;
                 toUpdate.Level = activityData.Level;
                 toUpdate.Correction = activityData.Correction;
+                toUpdate.Emissions = all;
                 //toUpdate.ModifiedTime = DateTime.Now;
             }
             string[] unit = { "公噸", "公秉", "千立方公尺", "千度", "人小時", "其他" };
