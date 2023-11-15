@@ -4,6 +4,7 @@ using Carbon_inventory_platform.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_inventory_platform.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231115011450_0.0.1-15")]
+    partial class _00115
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -630,61 +633,6 @@ namespace Carbon_inventory_platform.Data.Migrations
                             Scope = "範疇2",
                             Unit = "",
                             Year = 0
-                        });
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Refrigerant", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<double>("Num")
-                        .HasColumnType("float");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("refrigerants");
-
-                    b.HasData(
-                        new
-                        {
-                            Name = "家用冷凍、冷藏裝備",
-                            Num = 0.0030000000260770321
-                        },
-                        new
-                        {
-                            Name = "獨立商用冷凍、冷藏裝備",
-                            Num = 0.054999999701976776
-                        },
-                        new
-                        {
-                            Name = "中、大型冷凍、冷藏裝備",
-                            Num = 0.20000000298023224
-                        },
-                        new
-                        {
-                            Name = "交通用冷凍、冷藏裝備",
-                            Num = 0.33000001311302185
-                        },
-                        new
-                        {
-                            Name = "工業冷凍、冷藏裝備，包括食品加工及冷藏",
-                            Num = 0.15999999642372131
-                        },
-                        new
-                        {
-                            Name = "冰水機",
-                            Num = 0.090000003576278687
-                        },
-                        new
-                        {
-                            Name = "住宅及商業建築冷氣機",
-                            Num = 0.029999999329447746
-                        },
-                        new
-                        {
-                            Name = "移動式空氣清靜機",
-                            Num = 0.20000000298023224
                         });
                 });
 

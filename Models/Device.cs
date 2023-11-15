@@ -7,15 +7,11 @@ namespace Carbon_inventory_platform.Models
 {
     public class Device
     {
-       
-            
         [Display(Name = "ID")]
         public Guid Id { get; set; }
 
         [Display(Name = "廠區名稱")]
-
         public Guid AreaId { get; set; } 
-        
         
        
         [MaxLength(20)]
@@ -23,7 +19,7 @@ namespace Carbon_inventory_platform.Models
         public string? AssetNo { get; set; }
 
         [MaxLength(10)]
-        [Display(Name = "範疇別")]
+        [Display(Name = "類別")]
         public string Scope { get; set; } = "";
 
         [MaxLength(10)]
@@ -39,7 +35,7 @@ namespace Carbon_inventory_platform.Models
         public string Provess { get; set; } = ""; //需修改
 
         [Display(Name = "原燃物料")] 
-        public int MaterialId { get; set; }
+        public string Material { get; set; }
 
         [Display(Name = "排放CO2")]
         public Boolean CO2 { get; set; } = false;
@@ -102,9 +98,9 @@ namespace Carbon_inventory_platform.Models
         [ForeignKey("AreaId")]
         public Area? Areas { get; set; }
         //public ICollection<Area> Areas { get; set; } *廠區名稱顯示bug
-        [Display(Name = "使用物料")]
-        [ForeignKey("MaterialId")]
-        public Material? Material { get; set; } //可以為Null 
+        //[Display(Name = "使用物料")]
+        //[ForeignKey("MaterialId")]
+        //public Material Material { get; set; } //可以為Null 
       
         public Device()
         {

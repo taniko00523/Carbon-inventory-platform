@@ -16,7 +16,9 @@ namespace Carbon_inventory_platform.Data
         public DbSet<Area> Areas { get; set; } = null!;
         public DbSet<Device> Devices { get; set; } = null!;
         public DbSet<Material> Materials { get; set; } = null!;
-       
+        public DbSet<GWP> GWPs { get; set; }
+        public DbSet<Refrigerant> refrigerants { get; set; } = null!;
+
         //public virtual DbSet<User> Users { get; set; }
         //public virtual DbSet<Staff> Staffs { get; set; }
         //public virtual DbSet<Groups> Groups { get; set; }
@@ -41,7 +43,7 @@ namespace Carbon_inventory_platform.Data
             {
                 //entity.HasMany(e => e.Areas);// 廠區名稱bug修改成以下
                 entity.HasOne(e => e.Areas);
-                entity.HasOne(e => e.Material);
+                //entity.HasOne(e => e.Material);
             });
 
             builder.Entity<Material>(entity =>
@@ -128,6 +130,31 @@ new Material { Id = 56, Name = "外購電力", Scope = "範疇2", EmissionPatter
 //new Material { Id = 72, Name = "外購電力", Scope = "範疇2", EmissionPattern = "其他電力", CO2CEF = 0.529F, CO2ULL = null, CO2UUL = null, CH4CEF = null, CH4ULL = null, CH4UUL = null, N2OCEF = null, N2OULL = null, N2OUUL = null, Unit = "" },
 //new Material { Id = 73, Name = "外購電力", Scope = "範疇2", EmissionPattern = "其他電力", CO2CEF = 0.529F, CO2ULL = null, CO2UUL = null, CH4CEF = null, CH4ULL = null, CH4UUL = null, N2OCEF = null, N2OULL = null, N2OUUL = null, Unit = "" },
 //new Material { Id = 74, Name = "外購電力", Scope = "範疇2", EmissionPattern = "其他電力", CO2CEF = 0.533F, CO2ULL = null, CO2UUL = null, CH4CEF = null, CH4ULL = null, CH4UUL = null, N2OCEF = null, N2OULL = null, N2OUUL = null, Unit = "" }
+                );
+            builder.Entity<GWP>().HasData(
+new GWP { Name = "CO2", Num = 1F, GWP_Year = 2022 },
+new GWP { Name = "CH4", Num = 27.9F, GWP_Year = 2022 },
+new GWP { Name = "N2O", Num = 273F, GWP_Year = 2022 },
+new GWP { Name = "R-23", Num = 14600F, GWP_Year = 2022 },
+new GWP { Name = "R-32", Num = 771F, GWP_Year = 2022 },
+new GWP { Name = "R-134A", Num = 1530F, GWP_Year = 2022 },
+new GWP { Name = "七氟丙烷", Num = 3600F, GWP_Year = 2022 },
+new GWP { Name = "R-22", Num = 1960F, GWP_Year = 2022 },
+new GWP { Name = "R-410A", Num = 2256F, GWP_Year = 2022 },
+new GWP { Name = "R-600A", Num = 0, GWP_Year = 2022 },
+new GWP { Name = "NF3", Num = 17400F, GWP_Year = 2022 },
+new GWP { Name = "SF6", Num = 24300F, GWP_Year = 2022 }
+                );
+
+            builder.Entity<Refrigerant>().HasData(
+new Refrigerant { Name = "家用冷凍、冷藏裝備", Num = 0.003000F},
+new Refrigerant { Name = "獨立商用冷凍、冷藏裝備", Num = 0.055000F},
+new Refrigerant { Name = "中、大型冷凍、冷藏裝備", Num = 0.200000F},
+new Refrigerant { Name = "交通用冷凍、冷藏裝備", Num = 0.33F },
+new Refrigerant { Name = "工業冷凍、冷藏裝備，包括食品加工及冷藏", Num = 0.16F },
+new Refrigerant { Name = "冰水機", Num = 0.09F },
+new Refrigerant { Name = "住宅及商業建築冷氣機", Num = 0.03F },
+new Refrigerant { Name = "移動式空氣清靜機", Num = 0.2F }
                 );
         }
     }

@@ -4,6 +4,7 @@ using Carbon_inventory_platform.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_inventory_platform.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231115004428_0.0.1-12")]
+    partial class _00112
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,9 +173,8 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<int>("Level")
                         .HasColumnType("int");
 
-                    b.Property<string>("Material")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Material")
+                        .HasColumnType("int");
 
                     b.Property<int?>("MaterialId")
                         .HasColumnType("int");
@@ -230,96 +232,6 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.HasIndex("MaterialId");
 
                     b.ToTable("Devices");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.GWP", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("GWP_Year")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Num")
-                        .HasColumnType("real");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("GWPs");
-
-                    b.HasData(
-                        new
-                        {
-                            Name = "CO2",
-                            GWP_Year = 2022,
-                            Num = 1f
-                        },
-                        new
-                        {
-                            Name = "CH4",
-                            GWP_Year = 2022,
-                            Num = 27.9f
-                        },
-                        new
-                        {
-                            Name = "N2O",
-                            GWP_Year = 2022,
-                            Num = 273f
-                        },
-                        new
-                        {
-                            Name = "R-23",
-                            GWP_Year = 2022,
-                            Num = 14600f
-                        },
-                        new
-                        {
-                            Name = "R-32",
-                            GWP_Year = 2022,
-                            Num = 771f
-                        },
-                        new
-                        {
-                            Name = "R-134A",
-                            GWP_Year = 2022,
-                            Num = 1530f
-                        },
-                        new
-                        {
-                            Name = "七氟丙烷",
-                            GWP_Year = 2022,
-                            Num = 3600f
-                        },
-                        new
-                        {
-                            Name = "R-22",
-                            GWP_Year = 2022,
-                            Num = 1960f
-                        },
-                        new
-                        {
-                            Name = "R-410A",
-                            GWP_Year = 2022,
-                            Num = 2256f
-                        },
-                        new
-                        {
-                            Name = "R-600A",
-                            GWP_Year = 2022,
-                            Num = 0f
-                        },
-                        new
-                        {
-                            Name = "NF3",
-                            GWP_Year = 2022,
-                            Num = 17400f
-                        },
-                        new
-                        {
-                            Name = "SF6",
-                            GWP_Year = 2022,
-                            Num = 24300f
-                        });
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Material", b =>
@@ -630,61 +542,6 @@ namespace Carbon_inventory_platform.Data.Migrations
                             Scope = "範疇2",
                             Unit = "",
                             Year = 0
-                        });
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Refrigerant", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<double>("Num")
-                        .HasColumnType("float");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("refrigerants");
-
-                    b.HasData(
-                        new
-                        {
-                            Name = "家用冷凍、冷藏裝備",
-                            Num = 0.0030000000260770321
-                        },
-                        new
-                        {
-                            Name = "獨立商用冷凍、冷藏裝備",
-                            Num = 0.054999999701976776
-                        },
-                        new
-                        {
-                            Name = "中、大型冷凍、冷藏裝備",
-                            Num = 0.20000000298023224
-                        },
-                        new
-                        {
-                            Name = "交通用冷凍、冷藏裝備",
-                            Num = 0.33000001311302185
-                        },
-                        new
-                        {
-                            Name = "工業冷凍、冷藏裝備，包括食品加工及冷藏",
-                            Num = 0.15999999642372131
-                        },
-                        new
-                        {
-                            Name = "冰水機",
-                            Num = 0.090000003576278687
-                        },
-                        new
-                        {
-                            Name = "住宅及商業建築冷氣機",
-                            Num = 0.029999999329447746
-                        },
-                        new
-                        {
-                            Name = "移動式空氣清靜機",
-                            Num = 0.20000000298023224
                         });
                 });
 
