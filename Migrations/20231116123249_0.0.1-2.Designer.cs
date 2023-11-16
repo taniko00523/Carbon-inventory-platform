@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Carbon_inventory_platform.Data.Migrations
+namespace Carbon_inventory_platform.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231113074000_0.0.1-11")]
-    partial class _00111
+    [Migration("20231116123249_0.0.1-2")]
+    partial class _0012
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,6 +126,74 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.ToTable("Companies");
                 });
 
+            modelBuilder.Entity("Carbon_inventory_platform.Models.DataCorrection", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("dataCorrections");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            name = "有外部校正或多組數據佐證者"
+                        },
+                        new
+                        {
+                            id = 2,
+                            name = "有內部校正或經過會計簽證等證明者"
+                        },
+                        new
+                        {
+                            id = 3,
+                            name = "未進行儀器校正或未進行紀錄彙整者"
+                        });
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.DataLevel", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("dataLevels");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            name = "連續監測"
+                        },
+                        new
+                        {
+                            id = 2,
+                            name = "定期/間歇量測"
+                        },
+                        new
+                        {
+                            id = 3,
+                            name = "自行/財務推估"
+                        });
+                });
+
             modelBuilder.Entity("Carbon_inventory_platform.Models.Device", b =>
                 {
                     b.Property<Guid>("Id")
@@ -139,10 +207,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<bool>("CH4")
+                    b.Property<float>("CH4")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("CH4_Emission")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("CO2")
+                    b.Property<float>("CO2")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("CO2_Emission")
                         .HasColumnType("bit");
 
                     b.Property<int>("Correction")
@@ -167,22 +241,38 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<float>("Emissions")
                         .HasColumnType("real");
 
-                    b.Property<bool>("HFCS")
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<float>("HFCS")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("HFCS_Emission")
                         .HasColumnType("bit");
 
                     b.Property<int>("Level")
                         .HasColumnType("int");
 
-                    b.Property<int>("MaterialId")
+                    b.Property<string>("Material")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MaterialId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("N2O")
+                    b.Property<float>("N2O")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("N2O_Emission")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("NF3")
+                    b.Property<float>("NF3")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("NF3_Emission")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -193,7 +283,10 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<float>("Num")
                         .HasColumnType("real");
 
-                    b.Property<bool>("PFCS")
+                    b.Property<float>("PFCS")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("PFCS_Emission")
                         .HasColumnType("bit");
 
                     b.Property<string>("Provess")
@@ -201,7 +294,10 @@ namespace Carbon_inventory_platform.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<bool>("SF6")
+                    b.Property<float>("SF6")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("SF6_Emission")
                         .HasColumnType("bit");
 
                     b.Property<string>("Scope")
@@ -231,6 +327,96 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.ToTable("Devices");
                 });
 
+            modelBuilder.Entity("Carbon_inventory_platform.Models.GWP", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("GWP_Year")
+                        .HasColumnType("int");
+
+                    b.Property<float?>("Num")
+                        .HasColumnType("real");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("GWPs");
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "CO2",
+                            GWP_Year = 2022,
+                            Num = 1f
+                        },
+                        new
+                        {
+                            Name = "CH4",
+                            GWP_Year = 2022,
+                            Num = 27.9f
+                        },
+                        new
+                        {
+                            Name = "N2O",
+                            GWP_Year = 2022,
+                            Num = 273f
+                        },
+                        new
+                        {
+                            Name = "R-23",
+                            GWP_Year = 2022,
+                            Num = 14600f
+                        },
+                        new
+                        {
+                            Name = "R-32",
+                            GWP_Year = 2022,
+                            Num = 771f
+                        },
+                        new
+                        {
+                            Name = "R-134A",
+                            GWP_Year = 2022,
+                            Num = 1530f
+                        },
+                        new
+                        {
+                            Name = "七氟丙烷",
+                            GWP_Year = 2022,
+                            Num = 3600f
+                        },
+                        new
+                        {
+                            Name = "R-22",
+                            GWP_Year = 2022,
+                            Num = 1960f
+                        },
+                        new
+                        {
+                            Name = "R-410A",
+                            GWP_Year = 2022,
+                            Num = 2256f
+                        },
+                        new
+                        {
+                            Name = "R-600A",
+                            GWP_Year = 2022,
+                            Num = 0f
+                        },
+                        new
+                        {
+                            Name = "NF3",
+                            GWP_Year = 2022,
+                            Num = 17400f
+                        },
+                        new
+                        {
+                            Name = "SF6",
+                            GWP_Year = 2022,
+                            Num = 24300f
+                        });
+                });
+
             modelBuilder.Entity("Carbon_inventory_platform.Models.Material", b =>
                 {
                     b.Property<int>("Id")
@@ -239,7 +425,7 @@ namespace Carbon_inventory_platform.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("CH4CEF")
+                    b.Property<float?>("CH4CEF")
                         .HasColumnType("real");
 
                     b.Property<float?>("CH4ULL")
@@ -248,7 +434,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<float?>("CH4UUL")
                         .HasColumnType("real");
 
-                    b.Property<float>("CO2CEF")
+                    b.Property<float?>("CO2CEF")
                         .HasColumnType("real");
 
                     b.Property<float?>("CO2ULL")
@@ -262,7 +448,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<float>("N2OCEF")
+                    b.Property<float?>("N2OCEF")
                         .HasColumnType("real");
 
                     b.Property<float?>("N2OULL")
@@ -542,6 +728,61 @@ namespace Carbon_inventory_platform.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Refrigerant", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("Num")
+                        .HasColumnType("float");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("refrigerants");
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "家用冷凍、冷藏裝備",
+                            Num = 0.0030000000260770321
+                        },
+                        new
+                        {
+                            Name = "獨立商用冷凍、冷藏裝備",
+                            Num = 0.054999999701976776
+                        },
+                        new
+                        {
+                            Name = "中、大型冷凍、冷藏裝備",
+                            Num = 0.20000000298023224
+                        },
+                        new
+                        {
+                            Name = "交通用冷凍、冷藏裝備",
+                            Num = 0.33000001311302185
+                        },
+                        new
+                        {
+                            Name = "工業冷凍、冷藏裝備，包括食品加工及冷藏",
+                            Num = 0.15999999642372131
+                        },
+                        new
+                        {
+                            Name = "冰水機",
+                            Num = 0.090000003576278687
+                        },
+                        new
+                        {
+                            Name = "住宅及商業建築冷氣機",
+                            Num = 0.029999999329447746
+                        },
+                        new
+                        {
+                            Name = "移動式空氣清靜機",
+                            Num = 0.20000000298023224
+                        });
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -763,15 +1004,11 @@ namespace Carbon_inventory_platform.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Carbon_inventory_platform.Models.Material", "Material")
+                    b.HasOne("Carbon_inventory_platform.Models.Material", null)
                         .WithMany("Devices")
-                        .HasForeignKey("MaterialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MaterialId");
 
                     b.Navigation("Areas");
-
-                    b.Navigation("Material");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

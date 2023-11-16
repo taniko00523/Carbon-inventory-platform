@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Carbon_inventory_platform.Data.Migrations
+namespace Carbon_inventory_platform.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231115011450_0.0.1-15")]
-    partial class _00115
+    [Migration("20231116171303_0.0.1-5")]
+    partial class _0015
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,6 +126,74 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.ToTable("Companies");
                 });
 
+            modelBuilder.Entity("Carbon_inventory_platform.Models.DataCorrection", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("dataCorrections");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            name = "有外部校正或多組數據佐證者"
+                        },
+                        new
+                        {
+                            id = 2,
+                            name = "有內部校正或經過會計簽證等證明者"
+                        },
+                        new
+                        {
+                            id = 3,
+                            name = "未進行儀器校正或未進行紀錄彙整者"
+                        });
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.DataLevel", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("dataLevels");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            name = "連續監測"
+                        },
+                        new
+                        {
+                            id = 2,
+                            name = "定期/間歇量測"
+                        },
+                        new
+                        {
+                            id = 3,
+                            name = "自行/財務推估"
+                        });
+                });
+
             modelBuilder.Entity("Carbon_inventory_platform.Models.Device", b =>
                 {
                     b.Property<Guid>("Id")
@@ -139,10 +207,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<bool>("CH4")
+                    b.Property<float>("CH4")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("CH4_Emission")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("CO2")
+                    b.Property<float>("CO2")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("CO2_Emission")
                         .HasColumnType("bit");
 
                     b.Property<int>("Correction")
@@ -167,7 +241,13 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<float>("Emissions")
                         .HasColumnType("real");
 
-                    b.Property<bool>("HFCS")
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<float>("HFCS")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("HFCS_Emission")
                         .HasColumnType("bit");
 
                     b.Property<int>("Level")
@@ -183,10 +263,16 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("N2O")
+                    b.Property<float>("N2O")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("N2O_Emission")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("NF3")
+                    b.Property<float>("NF3")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("NF3_Emission")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -197,7 +283,10 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<float>("Num")
                         .HasColumnType("real");
 
-                    b.Property<bool>("PFCS")
+                    b.Property<float>("PFCS")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("PFCS_Emission")
                         .HasColumnType("bit");
 
                     b.Property<string>("Provess")
@@ -205,7 +294,10 @@ namespace Carbon_inventory_platform.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<bool>("SF6")
+                    b.Property<float>("SF6")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("SF6_Emission")
                         .HasColumnType("bit");
 
                     b.Property<string>("Scope")
@@ -217,6 +309,12 @@ namespace Carbon_inventory_platform.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<float>("ULL")
+                        .HasColumnType("real");
+
+                    b.Property<float>("UUL")
+                        .HasColumnType("real");
 
                     b.Property<string>("Unit")
                         .IsRequired()
@@ -243,7 +341,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<int>("GWP_Year")
                         .HasColumnType("int");
 
-                    b.Property<float>("Num")
+                    b.Property<float?>("Num")
                         .HasColumnType("real");
 
                     b.HasKey("Name");
@@ -336,19 +434,19 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<float>("CH4CEF")
                         .HasColumnType("real");
 
-                    b.Property<float?>("CH4ULL")
+                    b.Property<float>("CH4ULL")
                         .HasColumnType("real");
 
-                    b.Property<float?>("CH4UUL")
+                    b.Property<float>("CH4UUL")
                         .HasColumnType("real");
 
                     b.Property<float>("CO2CEF")
                         .HasColumnType("real");
 
-                    b.Property<float?>("CO2ULL")
+                    b.Property<float>("CO2ULL")
                         .HasColumnType("real");
 
-                    b.Property<float?>("CO2UUL")
+                    b.Property<float>("CO2UUL")
                         .HasColumnType("real");
 
                     b.Property<string>("EmissionPattern")
@@ -359,10 +457,10 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.Property<float>("N2OCEF")
                         .HasColumnType("real");
 
-                    b.Property<float?>("N2OULL")
+                    b.Property<float>("N2OULL")
                         .HasColumnType("real");
 
-                    b.Property<float?>("N2OUUL")
+                    b.Property<float>("N2OUUL")
                         .HasColumnType("real");
 
                     b.Property<string>("Name")
@@ -395,7 +493,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.558763f,
-                            CO2ULL = 0.015299f,
+                            CO2ULL = -0.015299f,
                             CO2UUL = 0.025035f,
                             EmissionPattern = "固定",
                             N2OCEF = 2.1E-05f,
@@ -413,7 +511,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.606032f,
-                            CO2ULL = 0.020243f,
+                            CO2ULL = -0.020243f,
                             CO2UUL = 0.009447f,
                             EmissionPattern = "固定",
                             N2OCEF = 2.1E-05f,
@@ -431,7 +529,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.263133f,
-                            CO2ULL = 0.025974f,
+                            CO2ULL = -0.025974f,
                             CO2UUL = 0.053391f,
                             EmissionPattern = "固定",
                             N2OCEF = 2E-05f,
@@ -449,7 +547,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
                             CO2CEF = 1.752881f,
-                            CO2ULL = 0.023772f,
+                            CO2ULL = -0.023772f,
                             CO2UUL = 0.03962f,
                             EmissionPattern = "固定",
                             N2OCEF = 3E-06f,
@@ -467,7 +565,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.946167f,
-                            CO2ULL = 0.0191f,
+                            CO2ULL = -0.0191f,
                             CO2UUL = 0.025921f,
                             EmissionPattern = "固定",
                             N2OCEF = 2.4E-05f,
@@ -485,7 +583,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.762032f,
-                            CO2ULL = 0.015007f,
+                            CO2ULL = -0.015007f,
                             CO2UUL = 0.015007f,
                             EmissionPattern = "固定",
                             N2OCEF = 2.3E-05f,
@@ -503,7 +601,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
                             CO2CEF = 2.860187f,
-                            CO2ULL = 0.082792f,
+                            CO2ULL = -0.082792f,
                             CO2UUL = 0.113636f,
                             EmissionPattern = "固定",
                             N2OCEF = 5E-06f,
@@ -521,7 +619,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.44f,
                             CO2CEF = 2.263133f,
-                            CO2ULL = 0.025974f,
+                            CO2ULL = -0.025974f,
                             CO2UUL = 0.053391f,
                             EmissionPattern = "移動",
                             N2OCEF = 0.000261f,
@@ -539,7 +637,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                             CH4ULL = 0.589744f,
                             CH4UUL = 1.435897f,
                             CO2CEF = 2.606032f,
-                            CO2ULL = 0.020243f,
+                            CO2ULL = -0.020243f,
                             CO2UUL = 0.009447f,
                             EmissionPattern = "移動",
                             N2OCEF = 0.000137f,
@@ -557,7 +655,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.558763f,
-                            CO2ULL = 0.015299f,
+                            CO2ULL = -0.015299f,
                             CO2UUL = 0.025035f,
                             EmissionPattern = "移動",
                             N2OCEF = 2.1E-05f,
@@ -575,7 +673,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.946167f,
-                            CO2ULL = 0.0191f,
+                            CO2ULL = -0.0191f,
                             CO2UUL = 0.025921f,
                             EmissionPattern = "移動",
                             N2OCEF = 2.4E-05f,
@@ -593,7 +691,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                             CH4ULL = 0f,
                             CH4UUL = 0f,
                             CO2CEF = 1.752881f,
-                            CO2ULL = 0.023772f,
+                            CO2ULL = -0.023772f,
                             CO2UUL = 0.03962f,
                             EmissionPattern = "移動",
                             N2OCEF = 6E-06f,
@@ -611,7 +709,7 @@ namespace Carbon_inventory_platform.Data.Migrations
                             CH4ULL = 0.456522f,
                             CH4UUL = 15.73913f,
                             CO2CEF = 2.113915f,
-                            CO2ULL = 0.032086f,
+                            CO2ULL = -0.032086f,
                             CO2UUL = 0.039216f,
                             EmissionPattern = "移動",
                             N2OCEF = 0.000113f,
@@ -626,13 +724,74 @@ namespace Carbon_inventory_platform.Data.Migrations
                         {
                             Id = 56,
                             CH4CEF = 0f,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
                             CO2CEF = 0.495f,
+                            CO2ULL = -0.07f,
+                            CO2UUL = 0.07f,
                             EmissionPattern = "其他電力",
                             N2OCEF = 0f,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
                             Name = "外購電力",
                             Scope = "範疇2",
                             Unit = "",
                             Year = 0
+                        });
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Refrigerant", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("Num")
+                        .HasColumnType("float");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("refrigerants");
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "家用冷凍、冷藏裝備",
+                            Num = 0.0030000000260770321
+                        },
+                        new
+                        {
+                            Name = "獨立商用冷凍、冷藏裝備",
+                            Num = 0.054999999701976776
+                        },
+                        new
+                        {
+                            Name = "中、大型冷凍、冷藏裝備",
+                            Num = 0.20000000298023224
+                        },
+                        new
+                        {
+                            Name = "交通用冷凍、冷藏裝備",
+                            Num = 0.33000001311302185
+                        },
+                        new
+                        {
+                            Name = "工業冷凍、冷藏裝備，包括食品加工及冷藏",
+                            Num = 0.15999999642372131
+                        },
+                        new
+                        {
+                            Name = "冰水機",
+                            Num = 0.090000003576278687
+                        },
+                        new
+                        {
+                            Name = "住宅及商業建築冷氣機",
+                            Num = 0.029999999329447746
+                        },
+                        new
+                        {
+                            Name = "移動式空氣清靜機",
+                            Num = 0.20000000298023224
                         });
                 });
 

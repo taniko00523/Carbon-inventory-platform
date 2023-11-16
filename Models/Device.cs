@@ -81,8 +81,14 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "排放量")]
         public float Emissions { get; set; } = 0;
 
+        public float UUL { get; set; } = 0;
+        public float ULL { get; set; } = 0;
+
         [Display(Name = "活動數據")]
         public float Num { get; set; }
+
+        [Display(Name = "數據等級評分")]
+        public int Grade { get; set; } = 27;
 
         [MaxLength(20)]
         [Display(Name = "單位")]

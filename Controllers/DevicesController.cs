@@ -173,7 +173,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,AreaId,AssetNo,Name,Provess,Scope,EmissionPattern,Material,CO2,CH4,N2O,HFCS,PFCS,SF6,NF3")] Device device)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,AreaId,AssetNo,Name,Provess,Scope,EmissionPattern,Material,CO2_Emission,CH4_Emission,N2O_Emission,HFCS_Emission,PFCS_Emission,SF6_Emission,NF3_Emission")] Device device)
         {
             if (id != device.Id)
             {
@@ -291,6 +291,7 @@ namespace Carbon_inventory_platform.Controllers
             return View(activitydata);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddActivityData(Guid? id, [Bind("Id,Num,Unit,Source,Dept,Level,Correction,Material,Emissions")] Device activityData)
@@ -305,23 +306,46 @@ namespace Carbon_inventory_platform.Controllers
             float CH4 = 0;
             float N2O = 0;
             float HFCS = 0;
+            int Grade =0 ;
+            float CO2ULL=0 ;
+            float CO2UUL=0 ;
+            float CH4ULL=0 ;
+            float CH4UUL=0 ;
+            float N2OULL=0 ;
+            float N2OUUL=0 ;
+            float UUL =0 ;
+            float ULL = 0;
+            float count_ULL = 0 ;
+            float count_UUL = 0 ;
             if (toUpdate.CO2_Emission == true && toUpdate.CH4_Emission == true && toUpdate.N2O_Emission == true) //固定移動
             {
-                var materialsData = await _context.Materials
+                var materialsData = await _context.Materials//區分固定與移動
+                    .Where(x => x.EmissionPattern == toUpdate.EmissionPattern)
                     .Where(x => x.Name == toUpdate.Material)
-                    .Where(x => x.EmissionPattern == toUpdate.EmissionPattern) //區分固定與移動
                     .FirstOrDefaultAsync();// 抓取對應的Materials 數據
+                                
                 float CH4_GWP = (float)(await _context.GWPs.Where(x => x.Name == "CH4").FirstOrDefaultAsync()).Num;
                 float N2O_GWP = (float)(await _context.GWPs.Where(x => x.Name == "N2O").FirstOrDefaultAsync()).Num;
-
+                
                 // 如果找到 Materials 数据，计算 Emissions
                 if (materialsData != null)
                 {
                     CO2 = (float)(activityData.Num /1000 * materialsData.CO2CEF * 1);
                     CH4 = (float)(activityData.Num / 1000 * materialsData.CH4CEF * CH4_GWP);
                     N2O = (float)(activityData.Num / 1000 * materialsData.N2OCEF * N2O_GWP);
+                    Grade = 3 * activityData.Level * activityData.Correction;
                     all = CO2 + CH4 + N2O;
                 }
+                CO2ULL = (float)CalculateRoundDistance(-0.01F, materialsData.CO2ULL);//單排放源CO2排放95%信賴區間下限
+                CO2UUL = (float)CalculateRoundDistance(0.01F, materialsData.CO2UUL);//單排放源CO2排放95%信賴區間上限
+                CH4ULL = (float)CalculateRoundDistance(-0.01F, materialsData.CH4ULL);//單排放源CH4排放95%信賴區間下限
+                CH4UUL = (float)CalculateRoundDistance(0.01F, materialsData.CH4UUL);//單排放源CH4排放95%信賴區間上限
+                N2OULL = (float)CalculateRoundDistance(-0.01F, materialsData.N2OULL);//單排放源N2O排放95%信賴區間下限
+                N2OUUL = (float)CalculateRoundDistance(0.01F, materialsData.N2OUUL);//單排放源N2O排放95%信賴區間上限
+                UUL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2UUL, CH4UUL, N2OUUL);//單排放源排放95%信賴區間下限
+                ULL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2ULL, CH4ULL, N2OULL);//單排放源排放95%信賴區間上限
+                count_UUL = (float)(Math.Pow((UUL * activityData.Emissions),2));
+                count_ULL = (float)(Math.Pow((ULL * activityData.Emissions), 2));
             }
             else if (toUpdate.HFCS_Emission == true)
             {
@@ -332,58 +356,86 @@ namespace Carbon_inventory_platform.Controllers
                     if (toUpdate.Name == "冰箱")
                     {
                         HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.003);
+                        Grade = 3 * activityData.Level * activityData.Correction;
                         all = HFCS;
                     }
                     if (toUpdate.Name == "乾燥機")
                     {
                         HFCS = (float)(activityData.Num /1000* GWPData.Num * 0.16);
+                        Grade = 3 * activityData.Level * activityData.Correction;
                         all = HFCS;
                     }
                     if (toUpdate.Name == "工業冷媒")
                     {
                         HFCS = (float)(activityData.Num /1000 * GWPData.Num * 0.16);
+                        Grade = 3 * activityData.Level * activityData.Correction;
                         all = HFCS;
                     }
                     if (toUpdate.Name == "冰水主機")
                     {
                         HFCS = (float)(activityData.Num/1000 * GWPData.Num * 0.09);
+                        Grade = 3 * activityData.Level * activityData.Correction;
                         all = HFCS;
                     }
                     if (toUpdate.Name == "冷氣機")
                     {
                         HFCS = (float)(activityData.Num /1000 * GWPData.Num * 0.03);
+                        Grade = 3 * activityData.Level * activityData.Correction;
                         all = HFCS;
                     }
                     if (toUpdate.Name == "飲水機")
                     {
                         HFCS = (float)(activityData.Num /1000 * GWPData.Num * 0.003);
+                        Grade = 3 * activityData.Level * activityData.Correction;
                         all = HFCS;
                     }
                     if (toUpdate.Name == "車用空調")
                     {
                         HFCS = (float)(activityData.Num/1000 * GWPData.Num * 0.2);
+                        Grade = 3 * activityData.Level * activityData.Correction;
                         all = HFCS;
                     }
                 }
-            } else if (toUpdate.CO2_Emission == true)
+            } else if (toUpdate.CH4_Emission == true)
+            {
+                var GWPData = await _context.GWPs.Where(x => x.Name == "CH4").FirstOrDefaultAsync();
+
+                // 如果找到 Materials 数据，计算 Emissions
+                if (GWPData != null)
+                {
+                    CH4 = (float)(activityData.Num /1000 * 0.002546062 * GWPData.Num);
+                    Grade = 3 * activityData.Level * activityData.Correction;
+                    all = CH4;
+                }
+            } else if (toUpdate.CO2_Emission == true) //外購電力及製程
             {
                 var materialsData = await _context.Materials.Where(x => x.Name == toUpdate.Material).FirstOrDefaultAsync();// 抓取對應的Materials 數據
 
                 // 如果找到 Materials 数据，计算 Emissions
                 if (materialsData != null)
                 {
-                    CO2 = (float)(activityData.Num/1000 * materialsData.CO2CEF);
-                    all = CO2;
-                }
-            } else if (toUpdate.CH4_Emission == true)
-            {
-                var GWPData = await _context.GWPs.Where(x => x.Name == toUpdate.Material).FirstOrDefaultAsync();
-
-                // 如果找到 Materials 数据，计算 Emissions
-                if (GWPData != null)
-                {
-                    CH4 = (float)(activityData.Num /1000 * 0.002546062 * GWPData.Num);
-                    all = CH4;
+                    if (toUpdate.Material=="外購電力")
+                    {
+                        CO2 = (float)(activityData.Num / 1000 * materialsData.CO2CEF);
+                        Grade = 3 * activityData.Level * activityData.Correction;
+                        all = CO2;
+                        CO2ULL = (float)CalculateRoundDistance(-0.01F, materialsData.CO2ULL);//單排放源CO2排放95%信賴區間下限
+                        CO2UUL = (float)CalculateRoundDistance(0.01F, materialsData.CO2UUL);//單排放源CO2排放95%信賴區間上限
+                        CH4ULL = (float)CalculateRoundDistance(-0.01F, materialsData.CH4ULL);//單排放源CH4排放95%信賴區間下限
+                        CH4UUL = (float)CalculateRoundDistance(0.01F, materialsData.CH4UUL);//單排放源CH4排放95%信賴區間上限
+                        N2OULL = (float)CalculateRoundDistance(-0.01F, materialsData.N2OULL);//單排放源N2O排放95%信賴區間下限
+                        N2OUUL = (float)CalculateRoundDistance(0.01F, materialsData.N2OUUL);//單排放源N2O排放95%信賴區間上限
+                        UUL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2UUL, CH4UUL, N2OUUL);//單排放源排放95%信賴區間下限
+                        ULL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2ULL, CH4ULL, N2OULL);//單排放源排放95%信賴區間上限
+                        count_UUL = (float)(Math.Pow((UUL * activityData.Emissions), 2));
+                        count_ULL = (float)(Math.Pow((ULL * activityData.Emissions), 2));
+                    }
+                    else //製程
+                    {
+                        CO2 = (float)(activityData.Num / 1000 * materialsData.CO2CEF);
+                        Grade = 1 * activityData.Level * activityData.Correction;
+                        all = CO2;
+                    }
                 }
             }
 
@@ -400,6 +452,9 @@ namespace Carbon_inventory_platform.Controllers
                 toUpdate.N2O = N2O;
                 toUpdate.HFCS = HFCS;
                 toUpdate.Emissions = all;
+                toUpdate.Grade = Grade;
+                toUpdate.UUL = UUL;
+                toUpdate.ULL = ULL;
                 //toUpdate.ModifiedTime = DateTime.Now;
             }
            
@@ -414,20 +469,22 @@ namespace Carbon_inventory_platform.Controllers
 
         public async Task<IActionResult> Default()
         {
+            var Company_id = Guid.NewGuid();
+            var Area_id = Guid.NewGuid();
             await _context.Companies.AddAsync(new Company()
             {
-                Id = Guid.NewGuid(),
+                Id = Company_id,
                 Name = "Default",
                 Owner = "Default",
                 Email = "Default",
                 Phone = "Default",
                 CreateTime = DateTime.Now
             });
-
+            await _context.SaveChangesAsync();
             await _context.Areas.AddAsync(new Area()
             {
-                Id = Guid.NewGuid(),
-                CompanyId = _context.Companies.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
+                Id = Area_id,
+                CompanyId = Company_id,
                 Name = "Default",
                 PostalCode = 0,
                 City = "Default",
@@ -437,10 +494,10 @@ namespace Carbon_inventory_platform.Controllers
                 Type = "Default",
                 CreateTime = DateTime.Now
             });
-
+            await _context.SaveChangesAsync();
             await _context.Devices.AddAsync(new Device()
             {
-                Id = new Guid(),
+                Id = Area_id,
                 AreaId = _context.Areas.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
                 AssetNo = "Default",
                 Provess = "Default",
@@ -577,5 +634,49 @@ namespace Carbon_inventory_platform.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        static double CalculateRoundDistance(float num1, float num2) // 計算兩數平方和的平方根，並四捨五入到小數點後5位
+        {
+            if (num1 != 0 && num2 != 0)
+            {
+                double distance = Math.Sqrt(Math.Pow(num1, 2) + Math.Pow(num2, 2));
+                return Math.Round(distance, 5);
+            }
+            return 0;
+        }
+        static double CalculateAHorAG(double J, double R, double Z, double value1, double value2, double value3)
+        {
+            double numerator = Math.Sqrt(Math.Pow(J * value1, 2) + Math.Pow(R * value2, 2));
+
+            if (Z != 0)
+            {
+                numerator += Math.Pow(Z * value3, 2);
+            }
+
+            double denominator = J + R + Z;
+
+            if (denominator != 0)
+            {
+                return numerator / denominator;
+            }
+
+            return value1;
+        }
+
+        static double CalculateAI(double num, double J, double R, double Z)
+        {
+            if (num != 0)
+            {
+                double sum = J + R + Z;
+                return Math.Pow(num * sum, 2);
+            }
+            return 0;
+        }
+
+        //static double CalculateFinalResult(double[] values)
+        //{
+        //    double sum = values.Sum();
+        //    return Math.Sqrt(sum) / (AK + AL + AM);
+        //}
     }
 }

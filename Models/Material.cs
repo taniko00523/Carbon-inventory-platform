@@ -20,31 +20,31 @@ namespace Carbon_inventory_platform.Models
         public string EmissionPattern { get; set; } = "";
 
         [Display(Name = "CO2排放係數")]
-        public float? CO2CEF { get; set; } = 0;
+        public float CO2CEF { get; set; } = 0;
 
         [Display(Name = "CO2不確定性95%信賴區間下限")]
-        public float? CO2ULL { get; set; }
+        public float CO2ULL { get; set; } = 0;
 
         [Display(Name = "CO2不確定性95%信賴區間上限")]
-        public float? CO2UUL { get; set; }
+        public float CO2UUL { get; set; } = 0;
 
         [Display(Name = "CH4排放係數")]
-        public float? CH4CEF { get; set; } = 0;
+        public float CH4CEF { get; set; } = 0;
 
         [Display(Name = "CH4不確定性95%信賴區間下限")]
-        public float? CH4ULL { get; set; }
+        public float CH4ULL { get; set; } = 0;
 
         [Display(Name = "CH4不確定性95%信賴區間上限")]
-        public float? CH4UUL { get; set; }
+        public float CH4UUL { get; set; } = 0;
 
         [Display(Name = "N2O排放係數")]
-        public float? N2OCEF { get; set; } = 0;
+        public float N2OCEF { get; set; } = 0;
 
         [Display(Name = "N2O不確定性95%信賴區間下限")]
-        public float? N2OULL { get; set; }
+        public float N2OULL { get; set; }=0;
 
         [Display(Name = "N2O不確定性95%信賴區間上限")]
-        public float? N2OUUL { get; set; }
+        public float N2OUUL { get; set; } = 0;
 
         [Display(Name = "年份")]
         public int Year { get; set; }
