@@ -85,6 +85,20 @@ namespace Carbon_inventory_platform.Controllers
             }
             return View(company);
         }
+        public async Task<IActionResult> Default()
+        {
+           await _context.Companies.AddAsync(new Company()
+           {
+               Id = Guid.NewGuid(),
+               Name = "Default",
+               Owner = "Default",
+               Email = "Default",
+               Phone = "Default",
+               CreateTime = DateTime.Now
+           });
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
         // POST: Companies/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.

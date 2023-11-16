@@ -18,6 +18,8 @@ namespace Carbon_inventory_platform.Data
         public DbSet<Material> Materials { get; set; } = null!;
         public DbSet<GWP> GWPs { get; set; }
         public DbSet<Refrigerant> refrigerants { get; set; } = null!;
+        public DbSet<DataLevel> dataLevels { get; set; } = null!;
+        public DbSet<DataCorrection> dataCorrections { get; set; }=null!;
 
         //public virtual DbSet<User> Users { get; set; }
         //public virtual DbSet<Staff> Staffs { get; set; }
@@ -155,6 +157,16 @@ new Refrigerant { Name = "工業冷凍、冷藏裝備，包括食品加工及冷
 new Refrigerant { Name = "冰水機", Num = 0.09F },
 new Refrigerant { Name = "住宅及商業建築冷氣機", Num = 0.03F },
 new Refrigerant { Name = "移動式空氣清靜機", Num = 0.2F }
+                );
+            builder.Entity<DataLevel>().HasData(
+new DataLevel { id = 1, name = "連續監測" },
+new DataLevel { id = 2, name = "定期/間歇量測" },
+new DataLevel { id = 3, name = "自行/財務推估" }
+                );
+            builder.Entity<DataCorrection>().HasData(
+new DataLevel { id = 1, name= "有外部校正或多組數據佐證者" },
+new DataLevel { id = 2, name = "有內部校正或經過會計簽證等證明者" },
+new DataLevel { id = 3, name = "未進行儀器校正或未進行紀錄彙整者" }
                 );
         }
     }

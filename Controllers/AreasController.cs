@@ -195,5 +195,24 @@ namespace Carbon_inventory_platform.Controllers
         {
           return (_context.Areas?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        public async Task<IActionResult> Default()
+        {
+            await _context.Areas.AddAsync(new Area()
+            {
+                Id = Guid.NewGuid(),
+                CompanyId = _context.Companies.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
+                Name = "Default",
+                PostalCode = 0,
+                City = "Default",
+                District = "Default",
+                Address = "Default",
+                Year = 111,
+                Type = "Default",
+                CreateTime = DateTime.Now
+            });
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

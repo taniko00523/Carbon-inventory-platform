@@ -4,6 +4,7 @@ using Carbon_inventory_platform.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_inventory_platform.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231116062317_0.0.1-17")]
+    partial class _00117
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,74 +124,6 @@ namespace Carbon_inventory_platform.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.DataCorrection", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("dataCorrections");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            name = "有外部校正或多組數據佐證者"
-                        },
-                        new
-                        {
-                            id = 2,
-                            name = "有內部校正或經過會計簽證等證明者"
-                        },
-                        new
-                        {
-                            id = 3,
-                            name = "未進行儀器校正或未進行紀錄彙整者"
-                        });
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.DataLevel", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("dataLevels");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            name = "連續監測"
-                        },
-                        new
-                        {
-                            id = 2,
-                            name = "定期/間歇量測"
-                        },
-                        new
-                        {
-                            id = 3,
-                            name = "自行/財務推估"
-                        });
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Device", b =>

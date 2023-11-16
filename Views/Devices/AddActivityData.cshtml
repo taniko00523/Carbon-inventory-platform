@@ -4,9 +4,9 @@
     ViewData["Title"] = "活動數據";
 }
 
-<h1>活動數據</h1>
+<h1>活動數據設定</h1>
 
-<h4>設備名稱</h4>
+<h4>@Model.Name</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -34,12 +34,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Level" class="control-label"></label>
-                <select asp-for="Level" class="form-control" asp-items="ViewBag.Level"></select>
+                <select asp-for="Level" class="form-control" asp-items="ViewBag.DataLevel"></select>
                 <span asp-validation-for="Level" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Correction" class="control-label"></label>
-                <select asp-for="Correction" class="form-control" asp-items="ViewBag.Correction"></select>
+                <select asp-for="Correction" class="form-control" asp-items="ViewBag.DataCorrection"></select>
                 <span asp-validation-for="Correction" class="text-danger"></span>
             </div>
             <div class="form-group">

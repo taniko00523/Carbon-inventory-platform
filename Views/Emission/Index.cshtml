@@ -5,6 +5,7 @@
 }
 
 <h1>總碳排放量</h1>
+<h2>類別一七大溫室氣體排放量統計表</h2>
 <table class="table">
     <thead>
         <tr>
@@ -37,23 +38,146 @@
     <tbody>
         <tr>
             <td>
-                @ViewData["sum_hardlymove"]
+                @ViewData["sum1_CO2"]
             </td>
             <td>
-                @ViewData["sum_move"]
+                @ViewData["sum_CH4"]
             </td>
             <td>
-                @ViewData["sum_escape"]
+                @ViewData["sum_N2O"]
             </td>
             <td>
-                @ViewData["sum_process"]
+                @ViewData["sum_HFCS"]
             </td>
             <td>
-                @ViewData["sum_electricity"]
+                @ViewData["sum_PFCS"]
+            </td>
+            <td>
+                @ViewData["sum_SF6"]
+            </td>
+            <td>
+                @ViewData["sum_NF3"]
+            </td>
+            <td>
+                @ViewData["sum_Scope1"]
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @ViewData["percentage1_CO2"]
+            </td>
+            <td>
+                @ViewData["percentage1_CH4"]
+            </td>
+            <td>
+                @ViewData["percentage1_N2O"]
+            </td>
+            <td>
+                @ViewData["percentage1_HFCS"]
+            </td>
+            <td>
+                @ViewData["percentage1_PFCS"]
+            </td>
+            <td>
+                @ViewData["percentage1_SF6"]
+            </td>
+            <td>
+                @ViewData["percentage1_NF3"]
+            </td>
+            <td>
+                100%
             </td>
         </tr>
     </tbody>
 </table>
+
+<h2>全廠七大溫室氣體排放量統計表</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                CO2
+            </th>
+            <th>
+                CH4
+            </th>
+            <th>
+                N2O
+            </th>
+            <th>
+                HFCS
+            </th>
+            <th>
+                PFCS
+            </th>
+            <th>
+                SF6
+            </th>
+            <th>
+                NF3
+            </th>
+            <th>
+                全廠七種溫室氣體年總排放當量
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @ViewData["sum2_CO2"]
+            </td>
+            <td>
+                @ViewData["sum_CH4"]
+            </td>
+            <td>
+                @ViewData["sum_N2O"]
+            </td>
+            <td>
+                @ViewData["sum_HFCS"]
+            </td>
+            <td>
+                @ViewData["sum_PFCS"]
+            </td>
+            <td>
+                @ViewData["sum_SF6"]
+            </td>
+            <td>
+                @ViewData["sum_NF3"]
+            </td>
+            <td>
+                @ViewData["sum_All"]
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @ViewData["percentage2_CO2"]
+            </td>
+            <td>
+                @ViewData["percentage2_CH4"]
+            </td>
+            <td>
+                @ViewData["percentage2_N2O"]
+            </td>
+            <td>
+                @ViewData["percentage2_HFCS"]
+            </td>
+            <td>
+                @ViewData["percentage2_PFCS"]
+            </td>
+            <td>
+                @ViewData["percentage2_SF6"]
+            </td>
+            <td>
+                @ViewData["percentage2_NF3"]
+            </td>
+            <td>
+                100%
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>直接排放型式統計表</h3>
 <table class="table">
     <thead>
         <tr>
@@ -70,7 +194,7 @@
                 製程
             </th>
             <th>
-                外購電力
+                總計
             </th>
         </tr>
     </thead>
@@ -89,8 +213,66 @@
                 @ViewData["sum_process"]
             </td>
             <td>
-                @ViewData["sum_electricity"]
+                @ViewData["sum_Scope1"]
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @ViewData["percentage_hardlymove"]
+            </td>
+            <td>
+                @ViewData["percentage_move"]
+            </td>
+            <td>
+                @ViewData["percentage_escape"]
+            </td>
+            <td>
+                @ViewData["percentage_process"]
+            </td>
+            <td>
+                @ViewData["percentage_Scope1"]
             </td>
         </tr>
     </tbody>
 </table>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                類別一
+            </th>
+            <th>
+                類別二
+            </th>
+            <th>
+                總排放當量
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @ViewData["sum_Scope1"]
+            </td>
+            <td>
+                @ViewData["sum_Scope2"]
+            </td>
+            <td>
+                @ViewData["sum_All"]
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @ViewData["percentage_Scope1"]
+            </td>
+            <td>
+                @ViewData["percentage_Scope2"]
+            </td>
+            <td>
+                100%
+            </td>
+        </tr>
+    </tbody>
+</table>
+

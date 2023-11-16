@@ -12,7 +12,6 @@ namespace Carbon_inventory_platform.Models
 
         [Display(Name = "廠區名稱")]
         public Guid AreaId { get; set; } 
-        
        
         [MaxLength(20)]
         [Display(Name = "財產編號")]
@@ -38,25 +37,46 @@ namespace Carbon_inventory_platform.Models
         public string Material { get; set; }
 
         [Display(Name = "排放CO2")]
-        public Boolean CO2 { get; set; } = false;
+        public Boolean CO2_Emission { get; set; } = false;
 
         [Display(Name = "排放CH4")]
-        public Boolean CH4 { get; set; } = false;
+        public Boolean CH4_Emission { get; set; } = false;
 
         [Display(Name = "排放N2O")]
-        public Boolean N2O { get; set; } = false;
+        public Boolean N2O_Emission { get; set; } = false;
 
         [Display(Name = "排放HFCS")]
-        public Boolean HFCS { get; set; } = false;
+        public Boolean HFCS_Emission { get; set; } = false;
 
         [Display(Name = "排放PFCS")]
-        public Boolean PFCS { get; set; } = false;
+        public Boolean PFCS_Emission { get; set; } = false;
 
         [Display(Name = "排放SF6")]
-        public Boolean SF6 { get; set; } = false;
+        public Boolean SF6_Emission { get; set; } = false;
 
         [Display(Name = "排放NF3")]
-        public Boolean NF3 { get; set; } = false;
+        public Boolean NF3_Emission { get; set; } = false;
+
+        [Display(Name = "CO2排放量")]
+        public float CO2 { get; set; } = 0;
+
+        [Display(Name = "CH4排放量")]
+        public float CH4 { get; set; } = 0;
+
+        [Display(Name = "N2O排放量")]
+        public float N2O { get; set; } = 0;
+
+        [Display(Name = "HFCS排放量")]
+        public float HFCS { get; set; } = 0;
+
+        [Display(Name = "PFCS排放量")]
+        public float PFCS { get; set; } = 0;
+
+        [Display(Name = "SF6排放量")]
+        public float SF6 { get; set; } = 0;
+
+        [Display(Name = "NF3排放量")]
+        public float NF3 { get; set; } = 0;
 
         [Display(Name = "排放量")]
         public float Emissions { get; set; } = 0;
