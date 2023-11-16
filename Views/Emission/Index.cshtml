@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Carbon_inventory_platform.Models.Device>
+
+@{
+    ViewData["Title"] = "總碳排放量";
+}
+
+<h1>總碳排放量</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                CO2
+            </th>
+            <th>
+                CH4
+            </th>
+            <th>
+                N2O
+            </th>
+            <th>
+                HFCS
+            </th>
+            <th>
+                PFCS
+            </th>
+            <th>
+                SF6
+            </th>
+            <th>
+                NF3
+            </th>
+            <th>
+                七種溫室氣體年總排放當量
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @ViewData["sum_hardlymove"]
+            </td>
+            <td>
+                @ViewData["sum_move"]
+            </td>
+            <td>
+                @ViewData["sum_escape"]
+            </td>
+            <td>
+                @ViewData["sum_process"]
+            </td>
+            <td>
+                @ViewData["sum_electricity"]
+            </td>
+        </tr>
+    </tbody>
+</table>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                固定
+            </th>
+            <th>
+                移動
+            </th>
+            <th>
+                逸散
+            </th>
+            <th>
+                製程
+            </th>
+            <th>
+                外購電力
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @ViewData["sum_hardlymove"]
+            </td>
+            <td>
+                @ViewData["sum_move"]
+            </td>
+            <td>
+                @ViewData["sum_escape"]
+            </td>
+            <td>
+                @ViewData["sum_process"]
+            </td>
+            <td>
+                @ViewData["sum_electricity"]
+            </td>
+        </tr>
+    </tbody>
+</table>
