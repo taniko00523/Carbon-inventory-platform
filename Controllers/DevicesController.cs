@@ -33,15 +33,12 @@ namespace Carbon_inventory_platform.Controllers
         //GET: Devices
         public async Task<IActionResult> Index(Guid? id)
         {
-            return _context.Devices != null ? //如果有抓到資料表Null
-                          View(await _context.Devices
-                          .Where(x => x.isDeleted == 0)
-                          .FirstOrDefaultAsync(m => m.AreaId == id)) :
-            //.Where(x => x.isDeleted == 0) //抓出資料表裡面沒被刪除的
-            //.OrderBy(x => x.CreateTime)
-            //.Include(x => x.Areas)
-            //.ToListAsync()) : //非同步方法
-            Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
+            return _context.Devices != null ?
+       View(await _context.Devices
+       .Where(x=>x.isDeleted != 1)
+           .Where(m => m.AreaId == id)
+           .ToListAsync()) :
+       Problem("沒有找到資料表");
         }
 
         //GET: Devices/Details/5
@@ -500,8 +497,8 @@ namespace Carbon_inventory_platform.Controllers
             await _context.SaveChangesAsync();
             await _context.Devices.AddAsync(new Device()
             {
-                Id = Area_id,
-                AreaId = _context.Areas.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
+                Id = Guid.NewGuid(),
+                AreaId = Area_id,
                 AssetNo = "Default",
                 Provess = "Default",
                 Name = "緊急發電機",
@@ -516,7 +513,7 @@ namespace Carbon_inventory_platform.Controllers
             await _context.Devices.AddAsync(new Device()
             {
                 Id = new Guid(),
-                AreaId = _context.Areas.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
+                AreaId = Area_id,
                 AssetNo = "Default",
                 Provess = "Default",
                 Name = "公務車",
@@ -531,7 +528,7 @@ namespace Carbon_inventory_platform.Controllers
             await _context.Devices.AddAsync(new Device()
             {
                 Id = new Guid(),
-                AreaId = _context.Areas.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
+                AreaId = Area_id,
                 AssetNo = "Default",
                 Provess = "Default",
                 Name = "公務車",
@@ -546,7 +543,7 @@ namespace Carbon_inventory_platform.Controllers
             await _context.Devices.AddAsync(new Device()
             {
                 Id = new Guid(),
-                AreaId = _context.Areas.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
+                AreaId = Area_id,
                 AssetNo = "Default",
                 Provess = "Default",
                 Name = "冷氣機",
@@ -559,7 +556,7 @@ namespace Carbon_inventory_platform.Controllers
             await _context.Devices.AddAsync(new Device()
             {
                 Id = new Guid(),
-                AreaId = _context.Areas.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
+                AreaId = Area_id,
                 AssetNo = "Default",
                 Provess = "Default",
                 Name = "飲水機",
@@ -572,7 +569,7 @@ namespace Carbon_inventory_platform.Controllers
             await _context.Devices.AddAsync(new Device()
             {
                 Id = new Guid(),
-                AreaId = _context.Areas.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
+                AreaId = Area_id,
                 AssetNo = "Default",
                 Provess = "Default",
                 Name = "乾燥機",
@@ -585,7 +582,7 @@ namespace Carbon_inventory_platform.Controllers
             await _context.Devices.AddAsync(new Device()
             {
                 Id = new Guid(),
-                AreaId = _context.Areas.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
+                AreaId = Area_id,
                 AssetNo = "Default",
                 Provess = "Default",
                 Name = "冰水主機",
@@ -598,7 +595,7 @@ namespace Carbon_inventory_platform.Controllers
             await _context.Devices.AddAsync(new Device()
             {
                 Id = new Guid(),
-                AreaId = _context.Areas.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
+                AreaId = Area_id,
                 AssetNo = "Default",
                 Provess = "Default",
                 Name = "車用空調",
@@ -611,7 +608,7 @@ namespace Carbon_inventory_platform.Controllers
             await _context.Devices.AddAsync(new Device()
             {
                 Id = new Guid(),
-                AreaId = _context.Areas.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
+                AreaId = Area_id,
                 AssetNo = "Default",
                 Provess = "Default",
                 Name = "化糞池",
@@ -624,7 +621,7 @@ namespace Carbon_inventory_platform.Controllers
             await _context.Devices.AddAsync(new Device()
             {
                 Id = new Guid(),
-                AreaId = _context.Areas.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
+                AreaId = Area_id,
                 AssetNo = "Default",
                 Provess = "Default",
                 Name = "電力",
@@ -635,7 +632,7 @@ namespace Carbon_inventory_platform.Controllers
                 CreateTime = DateTime.Now
             });
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index","Home");
         }
 
         static double CalculateRoundDistance(float num1, float num2) // 計算兩數平方和的平方根，並四捨五入到小數點後5位

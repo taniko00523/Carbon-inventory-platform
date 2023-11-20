@@ -3,12 +3,7 @@
 @{
     ViewData["Title"] = "設備資料維護";
 }
-
-<h1>設備資料維護</h1>
-<p>
-    <a class="btn btn-primary" asp-action="Default">預設設定</a>
-</p>
-
+<h1>排放源鑑別</h1>
 <p>
     <a class="btn btn-primary" asp-action="Create">新增設備</a>
 </p>
@@ -49,9 +44,9 @@
             @* <th>
             @Html.DisplayNameFor(model => model.PFCS_Emission)
             </th> *@
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.SF6_Emission)
-            </th>
+            </th> *@
             @* <th>
             @Html.DisplayNameFor(model => model.NF3_Emission)
             </th>  *@
@@ -116,12 +111,12 @@
             <p>Y</p>
             }
             </td> *@
-                <td>
+                @* <td>
                     @if (item.SF6_Emission == true)
                     {
                         <p>Y</p>
                     }
-                </td>
+                </td> *@
                 @* <td>
             @if (item.NF3_Emission == true)
             {

@@ -36,25 +36,25 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "原燃物料")] 
         public string Material { get; set; }
 
-        [Display(Name = "排放CO2")]
+        [Display(Name = "排放CO₂")]
         public Boolean CO2_Emission { get; set; } = false;
 
-        [Display(Name = "排放CH4")]
+        [Display(Name = "排放CH₄")]
         public Boolean CH4_Emission { get; set; } = false;
 
-        [Display(Name = "排放N2O")]
+        [Display(Name = "排放N₂O")]
         public Boolean N2O_Emission { get; set; } = false;
 
-        [Display(Name = "排放HFCS")]
+        [Display(Name = "排放HFCₛ")]
         public Boolean HFCS_Emission { get; set; } = false;
 
-        [Display(Name = "排放PFCS")]
+        [Display(Name = "排放PFCₛ")]
         public Boolean PFCS_Emission { get; set; } = false;
 
-        [Display(Name = "排放SF6")]
+        [Display(Name = "排放SF₆")]
         public Boolean SF6_Emission { get; set; } = false;
 
-        [Display(Name = "排放NF3")]
+        [Display(Name = "排放NF₃")]
         public Boolean NF3_Emission { get; set; } = false;
 
         [Display(Name = "CO2排放量")]

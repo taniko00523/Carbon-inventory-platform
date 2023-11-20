@@ -8,7 +8,7 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "ID")]
         public Guid Id { get; set; }
 
-        [Display(Name = "公司代號")]
+        [Display(Name = "公司別")]
         public Guid CompanyId { get; set; } //使用者公司代號自動帶入 不須選擇
 
         [MaxLength(20)]

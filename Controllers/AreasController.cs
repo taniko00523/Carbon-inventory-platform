@@ -90,19 +90,19 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Areas/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null || _context.Areas == null)
-            {
-                return NotFound();
-            }
+            var area = await _context.Areas
+                .Include(x => x.Company)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
-            var area = await _context.Areas.FindAsync(id);
             if (area == null)
             {
                 return NotFound();
             }
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", area.CompanyId);
+
+            ViewBag.CompanyId = new SelectList(_context.Companies, "Id", "Name", area.CompanyId);
             return View(area);
         }
+
 
         // POST: Areas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
