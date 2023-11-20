@@ -31,15 +31,17 @@ namespace Carbon_inventory_platform.Controllers
         string[] correction = { "每年外校一次以上量測", "每年外校不到一次量測", "非量測所得知數據" };
 
         //GET: Devices
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Guid? id)
         {
             return _context.Devices != null ? //如果有抓到資料表Null
                           View(await _context.Devices
-                          .Where(x => x.isDeleted == 0) //抓出資料表裡面沒被刪除的
-                          .OrderBy(x => x.CreateTime)
-                          .Include(x => x.Areas)
-                          .ToListAsync()) : //非同步方法
-                          Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
+                          .Where(x => x.isDeleted == 0)
+                          .FirstOrDefaultAsync(m => m.AreaId == id)) :
+            //.Where(x => x.isDeleted == 0) //抓出資料表裡面沒被刪除的
+            //.OrderBy(x => x.CreateTime)
+            //.Include(x => x.Areas)
+            //.ToListAsync()) : //非同步方法
+            Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
         }
 
         //GET: Devices/Details/5
@@ -409,7 +411,8 @@ namespace Carbon_inventory_platform.Controllers
                 }
             } else if (toUpdate.CO2_Emission == true) //外購電力及製程
             {
-                var materialsData = await _context.Materials.Where(x => x.Name == toUpdate.Material).FirstOrDefaultAsync();// 抓取對應的Materials 數據
+                var AreaData = await _context.Areas.Where(x => x.Id == toUpdate.AreaId).FirstOrDefaultAsync(); //抓取廠區資料來比對基準年
+                var materialsData = await _context.Materials.Where(x => x.Name == toUpdate.Material).Where(x => x.Year== AreaData.Year).FirstOrDefaultAsync();// 抓取對應的Materials 數據
 
                 // 如果找到 Materials 数据，计算 Emissions
                 if (materialsData != null)
