@@ -12,7 +12,7 @@ namespace Carbon_inventory_platform.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> IndexAsync(Guid? id)
         {
             //        var devices = await _context.Devices
             //.Where(x => x.isDeleted == 0)
@@ -215,6 +215,7 @@ namespace Carbon_inventory_platform.Controllers
 
             var devices = await _context.Devices
                 .Where(x => x.isDeleted == 0)
+                .Where(x => x.AreaId == id)
                 .OrderBy(x => x.CreateTime)
                 .Include(x => x.Areas)
                 .ToListAsync();

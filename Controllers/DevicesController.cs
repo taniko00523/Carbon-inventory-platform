@@ -30,9 +30,8 @@ namespace Carbon_inventory_platform.Controllers
         string[] level = { "連續監測", "定期採樣", "自行評估" };
         string[] correction = { "每年外校一次以上量測", "每年外校不到一次量測", "非量測所得知數據" };
         //GET: Devices
-        public async Task<IActionResult> Index(Guid? id)
+        public async Task<IActionResult> Index(Guid id)
         {
-
             return _context.Devices != null ?
        View(await _context.Devices
        .Where(x => x.isDeleted != 1)
@@ -216,7 +215,8 @@ namespace Carbon_inventory_platform.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                var AreaID = device.AreaId;
+                return RedirectToAction("Index","Devices", new { id = AreaID });
             }
             ViewData["name"] = new SelectList(name);
             ViewData["Material"] = new SelectList(await _context.Materials.Where(x => x.EmissionPattern == "固定").ToListAsync(), "Name", "Name");
@@ -261,7 +261,8 @@ namespace Carbon_inventory_platform.Controllers
                 toDelete.DeleteTime = DateTime.Now;
             }
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var AreaID = toDelete.AreaId;
+            return RedirectToAction("Index", "Devices", new { id = AreaID });
         }
 
         private bool DeviceExists(Guid id)
@@ -466,177 +467,11 @@ namespace Carbon_inventory_platform.Controllers
             ViewData["Level"] = new SelectList(level);
             ViewData["Correction"] = new SelectList(correction);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var AreaID = activityData.AreaId;
+            return RedirectToAction("Index","Devices", new { id = AreaID });
         }
 
-        public async Task<IActionResult> Default()
-        {
-            var Company_id = Guid.NewGuid();
-            var Area_id = Guid.NewGuid();
-            await _context.Companies.AddAsync(new Company()
-            {
-                Id = Company_id,
-                Name = "Default",
-                Owner = "Default",
-                Email = "Default",
-                Phone = "Default",
-                CreateTime = DateTime.Now
-            });
-            await _context.SaveChangesAsync();
-            await _context.Areas.AddAsync(new Area()
-            {
-                Id = Area_id,
-                CompanyId = Company_id,
-                Name = "Default",
-                PostalCode = 0,
-                City = "Default",
-                District = "Default",
-                Address = "Default",
-                Year = 111,
-                Type = "Default",
-                CreateTime = DateTime.Now
-            });
-            await _context.SaveChangesAsync();
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = Guid.NewGuid(),
-                AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
-                Name = "緊急發電機",
-                Material = "柴油",
-                Scope = "類別一",
-                EmissionPattern = "固定",
-                CO2_Emission = true,
-                CH4_Emission = true,
-                N2O_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
-                Name = "公務車",
-                Material = "柴油",
-                Scope = "類別一",
-                EmissionPattern = "移動",
-                CO2_Emission = true,
-                CH4_Emission = true,
-                N2O_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
-                Name = "公務車",
-                Material = "車用汽油",
-                Scope = "類別一",
-                EmissionPattern = "移動",
-                CO2_Emission = true,
-                CH4_Emission = true,
-                N2O_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
-                Name = "冷氣機",
-                Material = "R-410A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
-                Name = "飲水機",
-                Material = "R-134A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
-                Name = "乾燥機",
-                Material = "R-134A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
-                Name = "冰水主機",
-                Material = "R-134A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
-                Name = "車用空調",
-                Material = "R-134A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
-                Name = "化糞池",
-                Material = "廢水處理",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                CH4_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
-                Name = "電力",
-                Material = "外購電力",
-                Scope = "類別二",
-                EmissionPattern = "外購電力",
-                CO2_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
-        }
-
+        
         static double CalculateRoundDistance(float num1, float num2) // 計算兩數平方和的平方根，並四捨五入到小數點後5位
         {
             if (num1 != 0 && num2 != 0)
