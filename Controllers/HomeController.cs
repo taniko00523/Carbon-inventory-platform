@@ -3,6 +3,10 @@ using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.Office.Interop.Word;
+using Xceed.Words.NET;
+
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -28,6 +32,119 @@ namespace Carbon_inventory_platform.Controllers
 
         public IActionResult Privacy()
         {
+            return View();
+        }
+        //public IActionResult Word([FromServices] IWebHostEnvironment env)
+        //{
+        //    // 這裡要替換成你 MVC 應用程式中正確的檔案路徑
+        //    string fileName = "87.docx";
+        //    string filePath = Path.Combine(env.WebRootPath, fileName);
+
+        //    // 初始化 Word 應用程式
+        //    var wordApp = new Microsoft.Office.Interop.Word.Application();
+
+        //    // 開啟文件
+        //    Document doc = wordApp.Documents.Open(filePath);
+
+        //    // 在文檔中查找要替換的文本
+        //    doc.Content.Copy();
+
+        //    // 創建一個新的文檔
+        //    Document newDoc = wordApp.Documents.Add();
+
+        //    // 將剪貼板中的內容粘貼到新文檔
+        //    newDoc.Content.Paste();
+
+        //    // 設定要查找和替換的文本
+        //    string searchText = "公司概況";
+        //    string replacementText = "合為至";
+
+        //    // 遍歷文檔的所有範圍，執行查找和替換
+        //    foreach (Microsoft.Office.Interop.Word.Range range in newDoc.StoryRanges)
+        //    {
+        //        range.Find.ClearFormatting();
+        //        range.Find.Execute(searchText, ReplaceWith: replacementText, Replace: WdReplace.wdReplaceAll);
+        //    }
+
+        //    // 保存新文檔
+        //    fileName = "1.docx";
+        //    string newFilePath = Path.Combine(env.WebRootPath, fileName);
+        //    newDoc.SaveAs2(newFilePath);
+
+        //    // 關閉文檔
+        //    doc.Close(false);
+        //    newDoc.Save();
+        //    newDoc.Close();
+
+        //    // 退出 Word 應用程式
+        //    wordApp.Quit();
+
+        //    // 釋放資源
+        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(doc);
+        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(newDoc);
+        //    System.Runtime.InteropServices.Marshal.ReleaseComObject(wordApp);
+
+        //    // 返回一個視圖或其他操作，根據你的需求
+        //    return View();
+        //}
+
+        public async Task<IActionResult> WordAsync(Guid id)
+        {
+            // 這裡要替換成你 MVC 應用程式中正確的檔案路徑
+            string filePath = "D:\\專題\\Test.docx";
+            string newFilePath = "D:\\專題\\1.docx";
+
+            // 複製文件
+            using (DocX doc = DocX.Load(filePath))
+            {
+                // 設定要查找和替換的文本
+                
+                string CO2_1 = "類別一CO2排放";
+                string CH4 = "CH4排放";
+                string N2O = "N2O排放";
+                string HFCS = "HFCS排放";
+                string PFCS = "PFCS排放";
+                string SF6 = "SF6排放";
+                string NF3 = "NF3排放";
+                string Scope1 = "類別一總排放";
+
+
+
+
+                var data = await _context.Areas.Where(x => x.Id == id).Include(x => x.Company).FirstOrDefaultAsync();
+                var device = await _context.Devices.Where(x => x.AreaId == id).ToListAsync();
+                //var area = _context.Areas.Where(x => x.Id != id).ToListAsync();
+                string rep_baseInfomation = "公司基本資料";
+                string rep_Year = "111年";
+                string rep_companyName = "2";
+                string rep_uniformNumber = "3";
+                string rep_factoryNumber = "4";
+                string rep_location = "5";
+                string rep_address = "6";
+
+                // 遍歷文檔的所有段落，執行查找和替換
+                foreach (var paragraph in doc.Paragraphs)
+                {
+                    paragraph.ReplaceText("補充公司基本資料", rep_baseInfomation);
+                    paragraph.ReplaceText("補充盤查年度", (data.Year+1911).ToString() + "年");
+                    paragraph.ReplaceText("補充公司場所名稱", data.Company.Name);
+                    paragraph.ReplaceText("補充統一編號", data.UniqueCode.ToString());
+                    paragraph.ReplaceText("補充工廠登記編號", data.FactorCode.ToString());
+                    paragraph.ReplaceText("補充地址", data.City + data.District + data.Address);
+                    paragraph.ReplaceText("固定排放源補充", "123");
+                    paragraph.ReplaceText("移動排放源補充", rep_address);
+                    paragraph.ReplaceText("逸散源補充", rep_address);
+                    paragraph.ReplaceText("製程排放源補充", rep_address);
+                    paragraph.ReplaceText("基準年補充", (data.Year + 1911).ToString() + "年");
+
+
+                }
+
+                // 保存新文檔
+                doc.SaveAs(newFilePath);
+            }
+
+            // 返回一個視圖或其他操作，根據你的需求
             return View();
         }
 

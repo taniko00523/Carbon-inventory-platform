@@ -18,6 +18,12 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "郵遞區號")]
         public int PostalCode { get; set; }
 
+        [Display(Name = "統一邊號")]
+        public int UniqueCode { get; set; }
+
+        [Display(Name = "工廠登記編號")]
+        public int FactorCode { get; set; }
+
         [MaxLength(10)]
         [Display(Name = "縣市別")]
         public string City { get; set; } = "";

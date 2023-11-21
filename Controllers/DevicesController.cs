@@ -467,7 +467,7 @@ namespace Carbon_inventory_platform.Controllers
             ViewData["Level"] = new SelectList(level);
             ViewData["Correction"] = new SelectList(correction);
             await _context.SaveChangesAsync();
-            var AreaID = activityData.AreaId;
+            var AreaID = toUpdate.AreaId;
             return RedirectToAction("Index","Devices", new { id = AreaID });
         }
 

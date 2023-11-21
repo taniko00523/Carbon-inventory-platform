@@ -1054,3 +1054,7 @@ C:\Users\JX-130108\OneDrive - 南臺科技大學\文件\GitHub\Carbon-inventory-
 C:\Users\JX-130108\OneDrive - 南臺科技大學\文件\GitHub\Carbon-inventory-platform\obj\Debug\net7.0\Carbon_inventory_platform.genruntimeconfig.cache
 C:\Users\JX-130108\OneDrive - 南臺科技大學\文件\GitHub\Carbon-inventory-platform\obj\Debug\net7.0\ref\Carbon_inventory_platform.dll
 D:\C#\Carbon-inventory-platform\obj\Debug\net7.0\Carbon_inventory_platform.sourcelink.json
+D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Microsoft.Office.Interop.Word.dll
+D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Xceed.Document.NET5.dll
+D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Xceed.Words.NET5.dll
+D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\System.IO.Packaging.dll
