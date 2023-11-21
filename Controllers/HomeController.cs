@@ -31,6 +31,15 @@ namespace Carbon_inventory_platform.Controllers
             return View();
         }
 
+        //public IActionResult OtherAction(int id)
+        //{
+        //    // 從 TempData 中檢索 SelectedItemId
+        //    TempData["SelectedItemId"] = id;
+
+        //    // 重定向到 Devices 控制器的 Index 動作，並將 itemId 作為路由值傳遞
+        //    return RedirectToAction("Index", "Devices", id);
+        //}
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

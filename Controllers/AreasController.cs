@@ -147,7 +147,7 @@ namespace Carbon_inventory_platform.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index","Home");
             }
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", area.CompanyId);
             return View(area);

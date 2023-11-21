@@ -23,19 +23,19 @@ namespace Carbon_inventory_platform.Controllers
         }
         string[] scope = { "類別一", "類別二" };
         string[] emissionPattern = { "固定", "移動", "製程", "逸散" };
-        string[] name = { 
+        string[] name = {
             "緊急發電機", "廚房", "公務車", "堆高機", "冷氣機", "冰箱", "乾燥機", "飲水機", "冰水主機", "車用空調", "工業冷媒", "CO2滅火器", "海龍滅火器", "FM200", "WD40", "化糞池", "瓦斯罐", "電力", "其他" };
         string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
         string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
         string[] level = { "連續監測", "定期採樣", "自行評估" };
         string[] correction = { "每年外校一次以上量測", "每年外校不到一次量測", "非量測所得知數據" };
-
         //GET: Devices
         public async Task<IActionResult> Index(Guid? id)
         {
+
             return _context.Devices != null ?
        View(await _context.Devices
-       .Where(x=>x.isDeleted != 1)
+       .Where(x => x.isDeleted != 1)
            .Where(m => m.AreaId == id)
            .ToListAsync()) :
        Problem("沒有找到資料表");
@@ -107,14 +107,14 @@ namespace Carbon_inventory_platform.Controllers
                     if (_context.Materials
     .Where(x => x.Name == device.Material)
     .Select(x => x.CH4CEF)
-    .FirstOrDefault() != null)
+    .FirstOrDefault() != 0)
                     {
                         toCreate.CH4_Emission = true;
                     }
                     if (_context.Materials
     .Where(x => x.Name == device.Material)
     .Select(x => x.N2OCEF)
-    .FirstOrDefault() != null)
+    .FirstOrDefault() != 0)
                     {
                         toCreate.N2O_Emission = true;
                     }
@@ -134,9 +134,9 @@ namespace Carbon_inventory_platform.Controllers
                     }
                 }
                 _context.Add(toCreate);
-
+                var AreaID = device.AreaId;
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index","Devices", new { id = AreaID });
             }
             ViewData["name"] = new SelectList(name);
             ViewData["Material"] = new SelectList(await _context.Materials.Where(x => x.EmissionPattern == "固定").ToListAsync(), "Name", "Name");
@@ -305,31 +305,31 @@ namespace Carbon_inventory_platform.Controllers
             float CH4 = 0;
             float N2O = 0;
             float HFCS = 0;
-            int Grade =0 ;
-            float CO2ULL=0 ;
-            float CO2UUL=0 ;
-            float CH4ULL=0 ;
-            float CH4UUL=0 ;
-            float N2OULL=0 ;
-            float N2OUUL=0 ;
-            float UUL =0 ;
+            int Grade = 0;
+            float CO2ULL = 0;
+            float CO2UUL = 0;
+            float CH4ULL = 0;
+            float CH4UUL = 0;
+            float N2OULL = 0;
+            float N2OUUL = 0;
+            float UUL = 0;
             float ULL = 0;
-            float count_ULL = 0 ;
-            float count_UUL = 0 ;
+            float count_ULL = 0;
+            float count_UUL = 0;
             if (toUpdate.CO2_Emission == true && toUpdate.CH4_Emission == true && toUpdate.N2O_Emission == true) //固定移動
             {
                 var materialsData = await _context.Materials//區分固定與移動
                     .Where(x => x.EmissionPattern == toUpdate.EmissionPattern)
                     .Where(x => x.Name == toUpdate.Material)
                     .FirstOrDefaultAsync();// 抓取對應的Materials 數據
-                                
+
                 float CH4_GWP = (float)(await _context.GWPs.Where(x => x.Name == "CH4").FirstOrDefaultAsync()).Num;
                 float N2O_GWP = (float)(await _context.GWPs.Where(x => x.Name == "N2O").FirstOrDefaultAsync()).Num;
-                
+
                 // 如果找到 Materials 数据，计算 Emissions
                 if (materialsData != null)
                 {
-                    CO2 = (float)(activityData.Num /1000 * materialsData.CO2CEF * 1);
+                    CO2 = (float)(activityData.Num / 1000 * materialsData.CO2CEF * 1);
                     CH4 = (float)(activityData.Num / 1000 * materialsData.CH4CEF * CH4_GWP);
                     N2O = (float)(activityData.Num / 1000 * materialsData.N2OCEF * N2O_GWP);
                     Grade = 3 * activityData.Level * activityData.Correction;
@@ -343,7 +343,7 @@ namespace Carbon_inventory_platform.Controllers
                 N2OUUL = (float)CalculateRoundDistance(0.01F, materialsData.N2OUUL);//單排放源N2O排放95%信賴區間上限
                 UUL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2UUL, CH4UUL, N2OUUL);//單排放源排放95%信賴區間下限
                 ULL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2ULL, CH4ULL, N2OULL);//單排放源排放95%信賴區間上限
-                count_UUL = (float)(Math.Pow((UUL * activityData.Emissions),2));
+                count_UUL = (float)(Math.Pow((UUL * activityData.Emissions), 2));
                 count_ULL = (float)(Math.Pow((ULL * activityData.Emissions), 2));
             }
             else if (toUpdate.HFCS_Emission == true)
@@ -360,61 +360,63 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     if (toUpdate.Name == "乾燥機")
                     {
-                        HFCS = (float)(activityData.Num /1000* GWPData.Num * 0.16);
+                        HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.16);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = HFCS;
                     }
                     if (toUpdate.Name == "工業冷媒")
                     {
-                        HFCS = (float)(activityData.Num /1000 * GWPData.Num * 0.16);
+                        HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.16);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = HFCS;
                     }
                     if (toUpdate.Name == "冰水主機")
                     {
-                        HFCS = (float)(activityData.Num/1000 * GWPData.Num * 0.09);
+                        HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.09);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = HFCS;
                     }
                     if (toUpdate.Name == "冷氣機")
                     {
-                        HFCS = (float)(activityData.Num /1000 * GWPData.Num * 0.03);
+                        HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.03);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = HFCS;
                     }
                     if (toUpdate.Name == "飲水機")
                     {
-                        HFCS = (float)(activityData.Num /1000 * GWPData.Num * 0.003);
+                        HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.003);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = HFCS;
                     }
                     if (toUpdate.Name == "車用空調")
                     {
-                        HFCS = (float)(activityData.Num/1000 * GWPData.Num * 0.2);
+                        HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.2);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = HFCS;
                     }
                 }
-            } else if (toUpdate.CH4_Emission == true)
+            }
+            else if (toUpdate.CH4_Emission == true)
             {
                 var GWPData = await _context.GWPs.Where(x => x.Name == "CH4").FirstOrDefaultAsync();
 
                 // 如果找到 Materials 数据，计算 Emissions
                 if (GWPData != null)
                 {
-                    CH4 = (float)(activityData.Num /1000 * 0.002546062 * GWPData.Num);
+                    CH4 = (float)(activityData.Num / 1000 * 0.002546062 * GWPData.Num);
                     Grade = 3 * activityData.Level * activityData.Correction;
                     all = CH4;
                 }
-            } else if (toUpdate.CO2_Emission == true) //外購電力及製程
+            }
+            else if (toUpdate.CO2_Emission == true) //外購電力及製程
             {
                 var AreaData = await _context.Areas.Where(x => x.Id == toUpdate.AreaId).FirstOrDefaultAsync(); //抓取廠區資料來比對基準年
-                var materialsData = await _context.Materials.Where(x => x.Name == toUpdate.Material).Where(x => x.Year== AreaData.Year).FirstOrDefaultAsync();// 抓取對應的Materials 數據
+                var materialsData = await _context.Materials.Where(x => x.Name == toUpdate.Material).Where(x => x.Year == AreaData.Year).FirstOrDefaultAsync();// 抓取對應的Materials 數據
 
                 // 如果找到 Materials 数据，计算 Emissions
                 if (materialsData != null)
                 {
-                    if (toUpdate.Material=="外購電力")
+                    if (toUpdate.Material == "外購電力")
                     {
                         CO2 = (float)(activityData.Num / 1000 * materialsData.CO2CEF);
                         Grade = 3 * activityData.Level * activityData.Correction;
@@ -457,7 +459,7 @@ namespace Carbon_inventory_platform.Controllers
                 toUpdate.ULL = ULL;
                 //toUpdate.ModifiedTime = DateTime.Now;
             }
-           
+
 
             ViewData["Unit"] = new SelectList(unit);
             ViewData["Source"] = new SelectList(source);
@@ -632,7 +634,7 @@ namespace Carbon_inventory_platform.Controllers
                 CreateTime = DateTime.Now
             });
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
 
         static double CalculateRoundDistance(float num1, float num2) // 計算兩數平方和的平方根，並四捨五入到小數點後5位
