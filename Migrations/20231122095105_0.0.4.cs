@@ -5,36 +5,36 @@
 namespace Carbon_inventory_platform.Migrations
 {
     /// <inheritdoc />
-    public partial class _0017 : Migration
+    public partial class _004 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "FactorCode",
-                table: "Areas",
-                type: "int",
+            migrationBuilder.AddColumn<float>(
+                name: "count_ULL",
+                table: "Devices",
+                type: "real",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 0f);
 
-            migrationBuilder.AddColumn<int>(
-                name: "UniqueCode",
-                table: "Areas",
-                type: "int",
+            migrationBuilder.AddColumn<float>(
+                name: "count_UUL",
+                table: "Devices",
+                type: "real",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 0f);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "FactorCode",
-                table: "Areas");
+                name: "count_ULL",
+                table: "Devices");
 
             migrationBuilder.DropColumn(
-                name: "UniqueCode",
-                table: "Areas");
+                name: "count_UUL",
+                table: "Devices");
         }
     }
 }

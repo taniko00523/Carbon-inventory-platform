@@ -6,6 +6,8 @@ using System.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.Office.Interop.Word;
 using Xceed.Words.NET;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Xceed.Document.NET;
 
 
 namespace Carbon_inventory_platform.Controllers
@@ -113,6 +115,13 @@ namespace Carbon_inventory_platform.Controllers
 
                 var data = await _context.Areas.Where(x => x.Id == id).Include(x => x.Company).FirstOrDefaultAsync();
                 var device = await _context.Devices.Where(x => x.AreaId == id).ToListAsync();
+                var emission = await _context.emissions.Where(x => x.AreaId == id).FirstOrDefaultAsync();
+                var nonMove = device.Where(d => d.EmissionPattern == "固定").Select(d => d.Name).ToList();
+                var move = device.Where(d => d.EmissionPattern == "移動").Select(d => d.Name).ToList();
+                var escape = device.Where(d => d.EmissionPattern == "逸散").Select(d => d.Name).ToList();
+                var process = device.Where(d => d.EmissionPattern == "製程").Select(d => d.Name).ToList();
+                //缺少類別二
+
                 //var area = _context.Areas.Where(x => x.Id != id).ToListAsync();
                 string rep_baseInfomation = "公司基本資料";
                 string rep_Year = "111年";
@@ -121,6 +130,25 @@ namespace Carbon_inventory_platform.Controllers
                 string rep_factoryNumber = "4";
                 string rep_location = "5";
                 string rep_address = "6";
+                var table = doc.AddTable(3, 3);
+
+                // Fill the table with numbers 1 to 9
+                int num = 1;
+                foreach (var row in table.Rows)
+                {
+                    foreach (var cell in row.Cells)
+                    {
+                        cell.InsertParagraph(num.ToString());
+                        num++;
+                    }
+                }
+
+                // Set the table design and alignment
+                table.Design = TableDesign.TableGrid;
+                table.Alignment = Alignment.center;
+
+                // Add the table to the document
+                doc.InsertTable(table);
 
                 // 遍歷文檔的所有段落，執行查找和替換
                 foreach (var paragraph in doc.Paragraphs)
@@ -131,11 +159,85 @@ namespace Carbon_inventory_platform.Controllers
                     paragraph.ReplaceText("補充統一編號", data.UniqueCode.ToString());
                     paragraph.ReplaceText("補充工廠登記編號", data.FactorCode.ToString());
                     paragraph.ReplaceText("補充地址", data.City + data.District + data.Address);
-                    paragraph.ReplaceText("固定排放源補充", "123");
-                    paragraph.ReplaceText("移動排放源補充", rep_address);
-                    paragraph.ReplaceText("逸散源補充", rep_address);
-                    paragraph.ReplaceText("製程排放源補充", rep_address);
+                    if(nonMove.Count != 0)
+                    {
+                        paragraph.ReplaceText("組織邊界的各據點內所擁有的固定式化石燃料燃燒排放源。", "組織邊界的各據點內所擁有的固定式化石燃料燃燒排放源，固定排放源包含" + string.Join(", ", nonMove));
+                    }
+                    if (move.Count != 0)
+                    {
+                        paragraph.ReplaceText("組織邊界的各據點內所擁有的可移動且燃燒化石燃料的排放源。", "組織邊界的各據點內所擁有的可移動且燃燒化石燃料的排放源，移動排放源包含" + string.Join(", ", move));
+                    }
+                    if (escape.Count != 0)
+                    {
+                        paragraph.ReplaceText("組織邊界的各據點內所擁有的人為逸散溫室氣體排放源。", "組織邊界的各據點內所擁有的人為逸散溫室氣體排放源，逸散源包含" + string.Join(", ", escape));
+                    }
+                    if (process.Count !=  0)
+                    {
+                        paragraph.ReplaceText("組織邊界內在製程中化學反應產生的溫室氣體排放源。", "組織邊界內在製程中化學反應產生的溫室氣體排放源，如" + string.Join(", ", process));
+                    }
                     paragraph.ReplaceText("基準年補充", (data.Year + 1911).ToString() + "年");
+                    paragraph.ReplaceText("類別一CO2排放", emission.Scope1_CO2);
+                    paragraph.ReplaceText("CO2排放", emission.CO2);
+                    paragraph.ReplaceText("CH4排放", emission.CH4);
+                    paragraph.ReplaceText("N2O排放", emission.N2O);
+                    paragraph.ReplaceText("HFCS排放", emission.HFCS);
+                    paragraph.ReplaceText("PFCS排放", emission.PFCS);
+                    paragraph.ReplaceText("SF6排放", emission.SF6);
+                    paragraph.ReplaceText("NF3排放", emission.NF3);
+                    paragraph.ReplaceText("類別一CO2占比", emission.percentage1_CO2);
+                    paragraph.ReplaceText("類別一CH4占比", emission.percentage1_CH4);
+                    paragraph.ReplaceText("類別一N2O占比", emission.percentage1_N2O);
+                    paragraph.ReplaceText("類別一HFCS占比", emission.percentage1_HFCS);
+                    paragraph.ReplaceText("類別一PFCS占比", emission.percentage1_PFCS);
+                    paragraph.ReplaceText("類別一SF6占比", emission.percentage1_SF6);
+                    paragraph.ReplaceText("類別一NF3占比", emission.percentage2_NF3);
+                    paragraph.ReplaceText("類別一CO2排放", emission.Scope1);
+                    paragraph.ReplaceText("CO2占比", emission.percentage2_CO2);
+                    paragraph.ReplaceText("CH4占比", emission.percentage2_CH4);
+                    paragraph.ReplaceText("N2O占比", emission.percentage2_N2O);
+                    paragraph.ReplaceText("HFCS占比", emission.percentage2_HFCS);
+                    paragraph.ReplaceText("PFCS占比", emission.percentage2_PFCS);
+                    paragraph.ReplaceText("SF6占比", emission.percentage2_SF6);
+                    paragraph.ReplaceText("NF3占比", emission.percentage2_NF3);
+                    paragraph.ReplaceText("總排放當量", emission.All);
+                    paragraph.ReplaceText("固定排放量", emission.non_move);
+                    paragraph.ReplaceText("移動排放量", emission.move);
+                    paragraph.ReplaceText("製程排放量", emission.process);
+                    paragraph.ReplaceText("逸散排放量", emission.escape);
+                    paragraph.ReplaceText("固定排放比例", emission.percentage_nonMove);
+                    paragraph.ReplaceText("製程排放比例", emission.percentage_Process);
+                    paragraph.ReplaceText("移動排放比例", emission.percentage_Move);
+                    paragraph.ReplaceText("逸散排放比例", emission.percentage_Escape);
+                    paragraph.ReplaceText("類別一占比", emission.percentage_Scope1);
+                    paragraph.ReplaceText("類別二占比", emission.percentage_Scope2);
+                    paragraph.ReplaceText("類別一總排放", emission.Scope1);
+                    paragraph.ReplaceText("類別二總排放", emission.Scope2);
+                    paragraph.ReplaceText("進行評估排放當量", emission.cal_all);
+                    paragraph.ReplaceText("不確定性評估占比", emission.percentage_CalAll);
+                    paragraph.ReplaceText("第1級評分", emission.no1_Grade);
+                    paragraph.ReplaceText("第2級評分", emission.no2_Grade);
+                    paragraph.ReplaceText("第3級評分", emission.no3_Grade);
+                    paragraph.ReplaceText("清冊等級分數補充", emission.avg_Grade);
+                    paragraph.ReplaceText("清冊級別補充", emission.all_Grade);
+                    paragraph.ReplaceText("95上", emission.UUL);
+                    paragraph.ReplaceText("95下", emission.ULL);
+
+                    foreach (var item in device)
+                    {
+                        if(item.CO2_Emission ==true && item.CH4_Emission ==true && item.N2O_Emission == true) 
+                        {
+                            var materialsData = await _context.Materials//區分固定與移動
+                   .Where(x => x.EmissionPattern == item.EmissionPattern)
+                   .Where(x => x.Name == item.Material)
+                   .FirstOrDefaultAsync();
+                            
+                        }
+                    }
+
+
+
+
+
 
 
                 }

@@ -19,6 +19,7 @@ namespace Carbon_inventory_platform.Data
         public DbSet<GWP> GWPs { get; set; }
         public DbSet<Refrigerant> refrigerants { get; set; } = null!;
         public DbSet<DataLevel> dataLevels { get; set; } = null!;
+        public DbSet<Emission> emissions { get; set; } = null!;
         public DbSet<DataCorrection> dataCorrections { get; set; }=null!;
 
         //public virtual DbSet<User> Users { get; set; }
@@ -46,6 +47,10 @@ namespace Carbon_inventory_platform.Data
                 //entity.HasMany(e => e.Areas);// 廠區名稱bug修改成以下
                 entity.HasOne(e => e.Areas);
                 //entity.HasOne(e => e.Material);
+            });
+            builder.Entity<Emission>(entity =>
+            {
+                entity.HasOne(e => e.Areas);
             });
 
             builder.Entity<Material>(entity =>
@@ -79,7 +84,7 @@ namespace Carbon_inventory_platform.Data
 //new Material { Id = 19, Name = "天然氣凝結油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.839525F, CO2ULL = 0.0919F, CO2UUL = 0.096573F, CH4CEF = 0.000133F, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000027F, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "M3" },
 new Material { Id = 20, Name = "煤油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.558763F, CO2ULL = -0.015299F, CO2UUL = 0.025035F, CH4CEF = 0.000107F, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000021F, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
 //new Material { Id = 21, Name = "頁岩油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.794563F, CO2ULL = 0.075034F, CO2UUL = 0.080491F, CH4CEF = 0.000108F, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000022F, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 22, Name = "柴油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.606032F, CO2ULL = -0.020243F, CO2UUL = 0.009447F, CH4CEF = 0.000106F, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000021F, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
+new Material { Id = 22, Name = "柴油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.6060317920F,CO2ULL = -0.020243F, CO2UUL = 0.009447F, CH4CEF = 0.000106F, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000021F, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
 new Material { Id = 23, Name = "車用汽油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.263133F, CO2ULL = -0.025974F, CO2UUL = 0.053391F, CH4CEF = 0.000098F, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.00002F, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
 //new Material { Id = 24, Name = "蒸餘油 (燃料油)", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 3.11096F, CO2ULL = 0.024548F, CO2UUL = 0.018088F, CH4CEF = 0.000121F, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000024F, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
 new Material { Id = 25, Name = "液化石油氣", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 1.752881F, CO2ULL = -0.023772F, CO2UUL = 0.03962F, CH4CEF = 0.000028F, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.000003F, N2OULL = 0.7F, N2OUUL = 2F, Unit = "L" },
@@ -113,7 +118,7 @@ new Material { Id = 52, Name = "煤油", Scope = "類別1", EmissionPattern = "�
 new Material { Id = 53, Name = "潤滑油", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 2.946167F, CO2ULL = -0.0191F, CO2UUL = 0.025921F, CH4CEF = 0.000121F, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000024F, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
 new Material { Id = 54, Name = "液化石油氣", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 1.752881F, CO2ULL = -0.023772F, CO2UUL = 0.03962F, CH4CEF = 0.001722F, CH4ULL = 0F, CH4UUL = 0F, N2OCEF = 0.000006F, N2OULL = 0F, N2OUUL = 0F, Unit = "L" },
 new Material { Id = 55, Name = "液化天然氣", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 2.113915F, CO2ULL = -0.032086F, CO2UUL = 0.039216F, CH4CEF = 0.003467F, CH4ULL = 0.456522F, CH4UUL = 15.73913F, N2OCEF = 0.000113F, N2OULL = 0.666667F, N2OUUL = 24.666667F, Unit = "M3" },
-new Material { Id = 56, Name = "外購電力", Scope = "類別2", EmissionPattern = "其他電力", CO2CEF = 0.495F, CO2ULL = -0.07F, Unit = "" ,Year=111}
+new Material { Id = 56, Name = "外購電力", Scope = "類別2", EmissionPattern = "其他電力", CO2CEF = 0.495F, CO2ULL = -0.07F, CO2UUL = 0.07F, Unit = "" ,Year=111}
 //new Material { Id = 57, Name = "WD-40", Scope = "類別2", EmissionPattern = "逸散", CO2CEF = 1, CO2ULL =  Unit = "", Year = 111 }
 
 //new Material { Id = 57, Name = "外購電力", Scope = "類別2", EmissionPattern = "其他電力", CO2CEF = 0.559F, CO2ULL = null, CO2UUL = null, CH4CEF = null, CH4ULL = null, CH4UUL = null, N2OCEF = null, N2OULL = null, N2OUUL = null, Unit = "" },

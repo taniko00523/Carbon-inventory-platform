@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_inventory_platform.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231116161502_0.0.1-3")]
-    partial class _0013
+    [Migration("20231122095105_0.0.4")]
+    partial class _004
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,6 +55,9 @@ namespace Carbon_inventory_platform.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<int>("FactorCode")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
@@ -69,6 +72,9 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<string>("Type")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("UniqueCode")
+                        .HasColumnType("int");
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
@@ -321,6 +327,12 @@ namespace Carbon_inventory_platform.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<float>("count_ULL")
+                        .HasColumnType("real");
+
+                    b.Property<float>("count_UUL")
+                        .HasColumnType("real");
+
                     b.Property<byte>("isDeleted")
                         .HasColumnType("tinyint");
 
@@ -331,6 +343,184 @@ namespace Carbon_inventory_platform.Migrations
                     b.HasIndex("MaterialId");
 
                     b.ToTable("Devices");
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Emission", b =>
+                {
+                    b.Property<Guid>("AreaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("All")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CH4")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CO2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HFCS")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("N2O")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NF3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PFCS")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SF6")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Scope1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Scope1_CO2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Scope2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("all_Grade")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("avg_Grade")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("cal_all")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("escape")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("move")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("no1_Grade")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("no2_Grade")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("no3_Grade")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("non_move")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage1_CH4")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage1_CO2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage1_HFCS")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage1_N2O")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage1_NF3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage1_PFCS")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage1_SF6")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage2_CH4")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage2_CO2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage2_HFCS")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage2_N2O")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage2_NF3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage2_PFCS")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage2_SF6")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage_CalAll")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage_Escape")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage_Move")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage_Process")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage_Scope1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage_Scope2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("percentage_nonMove")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("process")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AreaId");
+
+                    b.ToTable("emissions");
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.GWP", b =>
@@ -493,14 +683,14 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.558763f,
-                            CO2ULL = 0.015299f,
+                            CO2ULL = -0.015299f,
                             CO2UUL = 0.025035f,
                             EmissionPattern = "固定",
                             N2OCEF = 2.1E-05f,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "煤油",
-                            Scope = "範疇1",
+                            Scope = "類別1",
                             Unit = "L",
                             Year = 0
                         },
@@ -511,14 +701,14 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.606032f,
-                            CO2ULL = 0.020243f,
+                            CO2ULL = -0.020243f,
                             CO2UUL = 0.009447f,
                             EmissionPattern = "固定",
                             N2OCEF = 2.1E-05f,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "柴油",
-                            Scope = "範疇1",
+                            Scope = "類別1",
                             Unit = "L",
                             Year = 0
                         },
@@ -529,14 +719,14 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.263133f,
-                            CO2ULL = 0.025974f,
+                            CO2ULL = -0.025974f,
                             CO2UUL = 0.053391f,
                             EmissionPattern = "固定",
                             N2OCEF = 2E-05f,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "車用汽油",
-                            Scope = "範疇1",
+                            Scope = "類別1",
                             Unit = "L",
                             Year = 0
                         },
@@ -547,14 +737,14 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
                             CO2CEF = 1.752881f,
-                            CO2ULL = 0.023772f,
+                            CO2ULL = -0.023772f,
                             CO2UUL = 0.03962f,
                             EmissionPattern = "固定",
                             N2OCEF = 3E-06f,
                             N2OULL = 0.7f,
                             N2OUUL = 2f,
                             Name = "液化石油氣",
-                            Scope = "範疇1",
+                            Scope = "類別1",
                             Unit = "L",
                             Year = 0
                         },
@@ -565,14 +755,14 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.946167f,
-                            CO2ULL = 0.0191f,
+                            CO2ULL = -0.0191f,
                             CO2UUL = 0.025921f,
                             EmissionPattern = "固定",
                             N2OCEF = 2.4E-05f,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "潤滑油",
-                            Scope = "範疇1",
+                            Scope = "類別1",
                             Unit = "L",
                             Year = 0
                         },
@@ -583,14 +773,14 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.762032f,
-                            CO2ULL = 0.015007f,
+                            CO2ULL = -0.015007f,
                             CO2UUL = 0.015007f,
                             EmissionPattern = "固定",
                             N2OCEF = 2.3E-05f,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "其他油品",
-                            Scope = "範疇1",
+                            Scope = "類別1",
                             Unit = "L",
                             Year = 0
                         },
@@ -601,14 +791,14 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
                             CO2CEF = 2.860187f,
-                            CO2ULL = 0.082792f,
+                            CO2ULL = -0.082792f,
                             CO2UUL = 0.113636f,
                             EmissionPattern = "固定",
                             N2OCEF = 5E-06f,
                             N2OULL = 0.7f,
                             N2OUUL = 2f,
                             Name = "乙烷",
-                            Scope = "範疇1",
+                            Scope = "類別1",
                             Unit = "L",
                             Year = 0
                         },
@@ -619,14 +809,14 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.44f,
                             CO2CEF = 2.263133f,
-                            CO2ULL = 0.025974f,
+                            CO2ULL = -0.025974f,
                             CO2UUL = 0.053391f,
                             EmissionPattern = "移動",
                             N2OCEF = 0.000261f,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "車用汽油",
-                            Scope = "範疇1",
+                            Scope = "類別1",
                             Unit = "L",
                             Year = 0
                         },
@@ -637,14 +827,14 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0.589744f,
                             CH4UUL = 1.435897f,
                             CO2CEF = 2.606032f,
-                            CO2ULL = 0.020243f,
+                            CO2ULL = -0.020243f,
                             CO2UUL = 0.009447f,
                             EmissionPattern = "移動",
                             N2OCEF = 0.000137f,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.076923f,
                             Name = "柴油",
-                            Scope = "範疇1",
+                            Scope = "類別1",
                             Unit = "L",
                             Year = 0
                         },
@@ -655,14 +845,14 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.558763f,
-                            CO2ULL = 0.015299f,
+                            CO2ULL = -0.015299f,
                             CO2UUL = 0.025035f,
                             EmissionPattern = "移動",
                             N2OCEF = 2.1E-05f,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "煤油",
-                            Scope = "範疇1",
+                            Scope = "類別1",
                             Unit = "L",
                             Year = 0
                         },
@@ -673,14 +863,14 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
                             CO2CEF = 2.946167f,
-                            CO2ULL = 0.0191f,
+                            CO2ULL = -0.0191f,
                             CO2UUL = 0.025921f,
                             EmissionPattern = "移動",
                             N2OCEF = 2.4E-05f,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "潤滑油",
-                            Scope = "範疇1",
+                            Scope = "類別1",
                             Unit = "L",
                             Year = 0
                         },
@@ -691,14 +881,14 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0f,
                             CH4UUL = 0f,
                             CO2CEF = 1.752881f,
-                            CO2ULL = 0.023772f,
+                            CO2ULL = -0.023772f,
                             CO2UUL = 0.03962f,
                             EmissionPattern = "移動",
                             N2OCEF = 6E-06f,
                             N2OULL = 0f,
                             N2OUUL = 0f,
                             Name = "液化石油氣",
-                            Scope = "範疇1",
+                            Scope = "類別1",
                             Unit = "L",
                             Year = 0
                         },
@@ -709,14 +899,14 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0.456522f,
                             CH4UUL = 15.73913f,
                             CO2CEF = 2.113915f,
-                            CO2ULL = 0.032086f,
+                            CO2ULL = -0.032086f,
                             CO2UUL = 0.039216f,
                             EmissionPattern = "移動",
                             N2OCEF = 0.000113f,
                             N2OULL = 0.666667f,
                             N2OUUL = 24.666668f,
                             Name = "液化天然氣",
-                            Scope = "範疇1",
+                            Scope = "類別1",
                             Unit = "M3",
                             Year = 0
                         },
@@ -727,16 +917,16 @@ namespace Carbon_inventory_platform.Migrations
                             CH4ULL = 0f,
                             CH4UUL = 0f,
                             CO2CEF = 0.495f,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
+                            CO2ULL = -0.07f,
+                            CO2UUL = 0.07f,
                             EmissionPattern = "其他電力",
                             N2OCEF = 0f,
                             N2OULL = 0f,
                             N2OUUL = 0f,
                             Name = "外購電力",
-                            Scope = "範疇2",
+                            Scope = "類別2",
                             Unit = "",
-                            Year = 0
+                            Year = 111
                         });
                 });
 
@@ -1019,6 +1209,17 @@ namespace Carbon_inventory_platform.Migrations
                     b.HasOne("Carbon_inventory_platform.Models.Material", null)
                         .WithMany("Devices")
                         .HasForeignKey("MaterialId");
+
+                    b.Navigation("Areas");
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Emission", b =>
+                {
+                    b.HasOne("Carbon_inventory_platform.Models.Area", "Areas")
+                        .WithMany()
+                        .HasForeignKey("AreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Areas");
                 });

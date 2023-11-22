@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Carbon_inventory_platform.Migrations
 {
     /// <inheritdoc />
-    public partial class _0011 : Migration
+    public partial class _001 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -119,15 +119,15 @@ namespace Carbon_inventory_platform.Migrations
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Scope = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     EmissionPattern = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    CO2CEF = table.Column<float>(type: "real", nullable: true),
-                    CO2ULL = table.Column<float>(type: "real", nullable: true),
-                    CO2UUL = table.Column<float>(type: "real", nullable: true),
-                    CH4CEF = table.Column<float>(type: "real", nullable: true),
-                    CH4ULL = table.Column<float>(type: "real", nullable: true),
-                    CH4UUL = table.Column<float>(type: "real", nullable: true),
-                    N2OCEF = table.Column<float>(type: "real", nullable: true),
-                    N2OULL = table.Column<float>(type: "real", nullable: true),
-                    N2OUUL = table.Column<float>(type: "real", nullable: true),
+                    CO2CEF = table.Column<float>(type: "real", nullable: false),
+                    CO2ULL = table.Column<float>(type: "real", nullable: false),
+                    CO2UUL = table.Column<float>(type: "real", nullable: false),
+                    CH4CEF = table.Column<float>(type: "real", nullable: false),
+                    CH4ULL = table.Column<float>(type: "real", nullable: false),
+                    CH4UUL = table.Column<float>(type: "real", nullable: false),
+                    N2OCEF = table.Column<float>(type: "real", nullable: false),
+                    N2OULL = table.Column<float>(type: "real", nullable: false),
+                    N2OUUL = table.Column<float>(type: "real", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
                 },
@@ -262,6 +262,8 @@ namespace Carbon_inventory_platform.Migrations
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     PostalCode = table.Column<int>(type: "int", nullable: false),
+                    UniqueCode = table.Column<int>(type: "int", nullable: false),
+                    FactorCode = table.Column<int>(type: "int", nullable: false),
                     City = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     District = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -310,7 +312,10 @@ namespace Carbon_inventory_platform.Migrations
                     SF6 = table.Column<float>(type: "real", nullable: false),
                     NF3 = table.Column<float>(type: "real", nullable: false),
                     Emissions = table.Column<float>(type: "real", nullable: false),
+                    UUL = table.Column<float>(type: "real", nullable: false),
+                    ULL = table.Column<float>(type: "real", nullable: false),
                     Num = table.Column<float>(type: "real", nullable: false),
+                    Grade = table.Column<int>(type: "int", nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Source = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Dept = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
@@ -338,6 +343,60 @@ namespace Carbon_inventory_platform.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "emissions",
+                columns: table => new
+                {
+                    AreaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Scope1_CO2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CO2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CH4 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    N2O = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HFCS = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PFCS = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SF6 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NF3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage1_CO2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage1_CH4 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage1_N2O = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage1_HFCS = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage1_PFCS = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage1_SF6 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage1_NF3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage2_CO2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage2_CH4 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage2_N2O = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage2_HFCS = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage2_PFCS = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage2_SF6 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage2_NF3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    non_move = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    move = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    process = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    escape = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage_nonMove = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage_Move = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage_Process = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage_Escape = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage_Scope1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Scope1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Scope2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    All = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage_Scope2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    cal_all = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    percentage_CalAll = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_emissions", x => x.AreaId);
+                    table.ForeignKey(
+                        name: "FK_emissions_Areas_AreaId",
+                        column: x => x.AreaId,
+                        principalTable: "Areas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "GWPs",
                 columns: new[] { "Name", "GWP_Year", "Num" },
@@ -362,20 +421,20 @@ namespace Carbon_inventory_platform.Migrations
                 columns: new[] { "Id", "CH4CEF", "CH4ULL", "CH4UUL", "CO2CEF", "CO2ULL", "CO2UUL", "EmissionPattern", "N2OCEF", "N2OULL", "N2OUUL", "Name", "Scope", "Unit", "Year" },
                 values: new object[,]
                 {
-                    { 20, 0.000107f, 0.666667f, 2.333333f, 2.558763f, 0.015299f, 0.025035f, "固定", 2.1E-05f, 0.666667f, 2.333333f, "煤油", "範疇1", "L", 0 },
-                    { 22, 0.000106f, 0.666667f, 2.333333f, 2.606032f, 0.020243f, 0.009447f, "固定", 2.1E-05f, 0.666667f, 2.333333f, "柴油", "範疇1", "L", 0 },
-                    { 23, 9.8E-05f, 0.666667f, 2.333333f, 2.263133f, 0.025974f, 0.053391f, "固定", 2E-05f, 0.666667f, 2.333333f, "車用汽油", "範疇1", "L", 0 },
-                    { 25, 2.8E-05f, 0.7f, 2f, 1.752881f, 0.023772f, 0.03962f, "固定", 3E-06f, 0.7f, 2f, "液化石油氣", "範疇1", "L", 0 },
-                    { 28, 0.000121f, 0.666667f, 2.333333f, 2.946167f, 0.0191f, 0.025921f, "固定", 2.4E-05f, 0.666667f, 2.333333f, "潤滑油", "範疇1", "L", 0 },
-                    { 29, 0.000113f, 0.666667f, 2.333333f, 2.762032f, 0.015007f, 0.015007f, "固定", 2.3E-05f, 0.666667f, 2.333333f, "其他油品", "範疇1", "L", 0 },
-                    { 30, 4.6E-05f, 0.7f, 2f, 2.860187f, 0.082792f, 0.113636f, "固定", 5E-06f, 0.7f, 2f, "乙烷", "範疇1", "L", 0 },
-                    { 50, 0.000816f, 0.666667f, 2.44f, 2.263133f, 0.025974f, 0.053391f, "移動", 0.000261f, 0.666667f, 2.333333f, "車用汽油", "範疇1", "L", 0 },
-                    { 51, 0.000137f, 0.589744f, 1.435897f, 2.606032f, 0.020243f, 0.009447f, "移動", 0.000137f, 0.666667f, 2.076923f, "柴油", "範疇1", "L", 0 },
-                    { 52, 0.000107f, 0.666667f, 2.333333f, 2.558763f, 0.015299f, 0.025035f, "移動", 2.1E-05f, 0.666667f, 2.333333f, "煤油", "範疇1", "L", 0 },
-                    { 53, 0.000121f, 0.666667f, 2.333333f, 2.946167f, 0.0191f, 0.025921f, "移動", 2.4E-05f, 0.666667f, 2.333333f, "潤滑油", "範疇1", "L", 0 },
-                    { 54, 0.001722f, 0f, 0f, 1.752881f, 0.023772f, 0.03962f, "移動", 6E-06f, 0f, 0f, "液化石油氣", "範疇1", "L", 0 },
-                    { 55, 0.003467f, 0.456522f, 15.73913f, 2.113915f, 0.032086f, 0.039216f, "移動", 0.000113f, 0.666667f, 24.666668f, "液化天然氣", "範疇1", "M3", 0 },
-                    { 56, 0f, null, null, 0.495f, null, null, "其他電力", 0f, null, null, "外購電力", "範疇2", "", 0 }
+                    { 20, 0.000107f, 0.666667f, 2.333333f, 2.558763f, -0.015299f, 0.025035f, "固定", 2.1E-05f, 0.666667f, 2.333333f, "煤油", "類別1", "L", 0 },
+                    { 22, 0.000106f, 0.666667f, 2.333333f, 2.606032f, -0.020243f, 0.009447f, "固定", 2.1E-05f, 0.666667f, 2.333333f, "柴油", "類別1", "L", 0 },
+                    { 23, 9.8E-05f, 0.666667f, 2.333333f, 2.263133f, -0.025974f, 0.053391f, "固定", 2E-05f, 0.666667f, 2.333333f, "車用汽油", "類別1", "L", 0 },
+                    { 25, 2.8E-05f, 0.7f, 2f, 1.752881f, -0.023772f, 0.03962f, "固定", 3E-06f, 0.7f, 2f, "液化石油氣", "類別1", "L", 0 },
+                    { 28, 0.000121f, 0.666667f, 2.333333f, 2.946167f, -0.0191f, 0.025921f, "固定", 2.4E-05f, 0.666667f, 2.333333f, "潤滑油", "類別1", "L", 0 },
+                    { 29, 0.000113f, 0.666667f, 2.333333f, 2.762032f, -0.015007f, 0.015007f, "固定", 2.3E-05f, 0.666667f, 2.333333f, "其他油品", "類別1", "L", 0 },
+                    { 30, 4.6E-05f, 0.7f, 2f, 2.860187f, -0.082792f, 0.113636f, "固定", 5E-06f, 0.7f, 2f, "乙烷", "類別1", "L", 0 },
+                    { 50, 0.000816f, 0.666667f, 2.44f, 2.263133f, -0.025974f, 0.053391f, "移動", 0.000261f, 0.666667f, 2.333333f, "車用汽油", "類別1", "L", 0 },
+                    { 51, 0.000137f, 0.589744f, 1.435897f, 2.606032f, -0.020243f, 0.009447f, "移動", 0.000137f, 0.666667f, 2.076923f, "柴油", "類別1", "L", 0 },
+                    { 52, 0.000107f, 0.666667f, 2.333333f, 2.558763f, -0.015299f, 0.025035f, "移動", 2.1E-05f, 0.666667f, 2.333333f, "煤油", "類別1", "L", 0 },
+                    { 53, 0.000121f, 0.666667f, 2.333333f, 2.946167f, -0.0191f, 0.025921f, "移動", 2.4E-05f, 0.666667f, 2.333333f, "潤滑油", "類別1", "L", 0 },
+                    { 54, 0.001722f, 0f, 0f, 1.752881f, -0.023772f, 0.03962f, "移動", 6E-06f, 0f, 0f, "液化石油氣", "類別1", "L", 0 },
+                    { 55, 0.003467f, 0.456522f, 15.73913f, 2.113915f, -0.032086f, 0.039216f, "移動", 0.000113f, 0.666667f, 24.666668f, "液化天然氣", "類別1", "M3", 0 },
+                    { 56, 0f, 0f, 0f, 0.495f, -0.07f, 0f, "其他電力", 0f, 0f, 0f, "外購電力", "類別2", "", 111 }
                 });
 
             migrationBuilder.InsertData(
@@ -496,6 +555,9 @@ namespace Carbon_inventory_platform.Migrations
                 name: "Devices");
 
             migrationBuilder.DropTable(
+                name: "emissions");
+
+            migrationBuilder.DropTable(
                 name: "GWPs");
 
             migrationBuilder.DropTable(
@@ -508,10 +570,10 @@ namespace Carbon_inventory_platform.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Areas");
+                name: "Materials");
 
             migrationBuilder.DropTable(
-                name: "Materials");
+                name: "Areas");
 
             migrationBuilder.DropTable(
                 name: "Companies");

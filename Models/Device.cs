@@ -83,6 +83,8 @@ namespace Carbon_inventory_platform.Models
 
         public float UUL { get; set; } = 0;
         public float ULL { get; set; } = 0;
+        public float count_UUL { get; set; } = 0;
+        public float count_ULL { get; set; } = 0;
 
         [Display(Name = "活動數據")]
         public float Num { get; set; }

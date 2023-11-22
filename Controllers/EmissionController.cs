@@ -1,4 +1,5 @@
 ﻿using Carbon_inventory_platform.Data;
+using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -219,14 +220,15 @@ namespace Carbon_inventory_platform.Controllers
                 .OrderBy(x => x.CreateTime)
                 .Include(x => x.Areas)
                 .ToListAsync();
-
+            var toCreate = new Emission();
+            
             float sum_hardlymove = 0, sum_move = 0, sum_escape = 0, sum_process = 0, sum_electricity = 0,
                 sum1_CO2 = 0, sum2_CO2 = 0, sum_CH4 = 0, sum_N2O = 0, sum_HFCS = 0, sum_PFCS = 0,
                 sum_SF6 = 0, sum_NF3 = 0, sum_Scope1 = 0, sum_Scope2 = 0, sum_all = 0;
             int no1_Grade = 0, no2_Grade = 0, no3_Grade = 0;
             float avg_Grade = 0;
             string all_Grade = "";
-            float all_UUL = 0, all_ULL = 0, sum_Uncertainty = 0;
+            float all_UUL = 0, all_ULL = 0, all_countUUL = 0, all_countULL = 0, sum_Uncertainty = 0;
 
             foreach (var item in devices)
             {
@@ -259,8 +261,8 @@ namespace Carbon_inventory_platform.Controllers
                 else no3_Grade++;
 
                 
-                all_ULL += item.ULL;
-                all_UUL += item.UUL;
+                all_countULL += item.count_ULL;
+                all_countUUL += item.count_UUL;
                 if (item.UUL != 0)
                 {
                     sum_Uncertainty += item.Emissions;
@@ -274,27 +276,46 @@ namespace Carbon_inventory_platform.Controllers
                 avg_Grade += (float)Math.Round((float)(Math.Round(item.Emissions / sum_all, 4) * item.Grade), 2);
             }
             
-            all_ULL = (float)(Math.Pow(all_ULL, 0.5) / sum_Uncertainty);
-            all_UUL = (float)(Math.Pow(all_UUL, 0.5) / sum_Uncertainty);
+            all_ULL = (float)(Math.Pow(all_countULL, 0.5) / sum_Uncertainty);
+            all_UUL = (float)(Math.Pow(all_countUUL, 0.5) / sum_Uncertainty);
 
             // 以下是 ViewBag 設定，您可以根據需要進行修改
+            ViewBag.sum_electricity = sum_electricity.ToString("F4");
+
+            ViewBag.sum1_CO2 = sum1_CO2.ToString("F4");
+
+            ViewBag.sum2_CO2 = (sum1_CO2 + sum2_CO2).ToString("F4");
+
+            ViewBag.sum_CH4 = sum_CH4.ToString("F4");
+
+            ViewBag.sum_N2O = sum_N2O.ToString("F4");
+
+
+            ViewBag.sum_HFCS = sum_HFCS.ToString("F4");
+            
+
+            ViewBag.sum_PFCS = sum_PFCS.ToString("F4");
+           
+
+            ViewBag.sum_SF6 = sum_SF6.ToString("F4");
+
+            ViewBag.sum_NF3 = sum_NF3.ToString("F4");
+
+            ViewBag.sum_Scope1 = sum_Scope1.ToString("F4");
+
+            ViewBag.sum_Scope2 = sum_Scope2.ToString("F4");
+            
+            ViewBag.sum_All = sum_all.ToString("F4");
 
             ViewBag.sum_hardlymove = sum_hardlymove.ToString("F4");
+            
             ViewBag.sum_move = sum_move.ToString("F4");
+
             ViewBag.sum_escape = sum_escape.ToString("F4");
+
             ViewBag.sum_process = sum_process.ToString("F4");
-            ViewBag.sum_electricity = sum_electricity.ToString("F4");
-            ViewBag.sum1_CO2 = sum1_CO2.ToString("F4");
-            ViewBag.sum2_CO2 = (sum1_CO2 + sum2_CO2).ToString("F4");
-            ViewBag.sum_CH4 = sum_CH4.ToString("F4");
-            ViewBag.sum_N2O = sum_N2O.ToString("F4");
-            ViewBag.sum_HFCS = sum_HFCS.ToString("F4");
-            ViewBag.sum_PFCS = sum_PFCS.ToString("F4");
-            ViewBag.sum_SF6 = sum_SF6.ToString("F4");
-            ViewBag.sum_NF3 = sum_NF3.ToString("F4");
-            ViewBag.sum_Scope1 = sum_Scope1.ToString("F4");
-            ViewBag.sum_Scope2 = sum_Scope2.ToString("F4");
-            ViewBag.sum_All = sum_all.ToString("F4");
+
+            
 
             ViewBag.no1_Grade = no1_Grade;
             ViewBag.no2_Grade = no2_Grade;
@@ -303,36 +324,153 @@ namespace Carbon_inventory_platform.Controllers
             ViewBag.all_Grade = avg_Grade < 10 ? "第一級" : (avg_Grade < 19 ? "第二級" : "第三級");
 
             ViewBag.percentage1_CO2 = (sum1_CO2 / sum_Scope1 * 100).ToString("F2") + "%";
+
             ViewBag.percentage1_CH4 = (sum_CH4 / sum_Scope1 * 100).ToString("F2") + "%";
+
             ViewBag.percentage1_N2O = (sum_N2O / sum_Scope1 * 100).ToString("F2") + "%";
+
             ViewBag.percentage1_HFCS = (sum_HFCS / sum_Scope1 * 100).ToString("F2") + "%";
+
             ViewBag.percentage1_PFCS = (sum_PFCS / sum_Scope1 * 100).ToString("F2") + "%";
+
             ViewBag.percentage1_SF6 = (sum_SF6 / sum_Scope1 * 100).ToString("F2") + "%";
+
             ViewBag.percentage1_NF3 = (sum_NF3 / sum_Scope1 * 100).ToString("F2") + "%";
 
+
             ViewBag.percentage2_CO2 = ((sum1_CO2 + sum2_CO2) / sum_all * 100).ToString("F2") + "%";
+
             ViewBag.percentage2_CH4 = (sum_CH4 / sum_all * 100).ToString("F2") + "%";
+
             ViewBag.percentage2_N2O = (sum_N2O / sum_all * 100).ToString("F2") + "%";
+
             ViewBag.percentage2_HFCS = (sum_HFCS / sum_all * 100).ToString("F2") + "%";
+
             ViewBag.percentage2_PFCS = (sum_PFCS / sum_all * 100).ToString("F2") + "%";
+
             ViewBag.percentage2_SF6 = (sum_SF6 / sum_all * 100).ToString("F2") + "%";
+
             ViewBag.percentage2_NF3 = (sum_NF3 / sum_all * 100).ToString("F2") + "%";
 
             ViewBag.percentage_hardlymove = (sum_hardlymove / sum_all * 100).ToString("F2") + "%";
+
             ViewBag.percentage_move = (sum_move / sum_all * 100).ToString("F2") + "%";
+
             ViewBag.percentage_escape = (sum_escape / sum_all * 100).ToString("F2") + "%";
+
             ViewBag.percentage_process = (sum_process / sum_all * 100).ToString("F2") + "%";
+
             ViewBag.percentage_Scope1 = (sum_Scope1 / sum_all * 100).ToString("F2") + "%";
 
             ViewBag.percentage_Scope2 = (sum_Scope2 / sum_all * 100).ToString("F2") + "%";
 
+
             ViewBag.all_ULL = "-" + all_ULL.ToString("P2");
             ViewBag.all_UUL = "+" + all_UUL.ToString("P2");
+
             
 
-            ViewBag.sum_Uncertainty = sum_Uncertainty;
+            ViewBag.sum_Uncertainty = sum_Uncertainty.ToString("F4");
             ViewBag.percentage_Uncertainty = (sum_Uncertainty/sum_all * 100).ToString("F2") + "%";
-
+            if (_context.emissions.Where(x => x.AreaId == id).ToList().Count != 0)
+            {
+                toCreate = await _context.emissions.FindAsync(id);
+                toCreate.Scope1_CO2 = sum1_CO2.ToString("F4");
+                toCreate.CO2 = (sum1_CO2 + sum2_CO2).ToString("F4");
+                toCreate.CH4 = sum_CH4.ToString("F4");
+                toCreate.N2O = sum_N2O.ToString("F4");
+                toCreate.HFCS = sum_HFCS.ToString("F4");
+                toCreate.PFCS = sum_PFCS.ToString("F4");
+                toCreate.SF6 = sum_SF6.ToString("F4");
+                toCreate.NF3 = sum_NF3.ToString("F4");
+                toCreate.Scope1 = sum_Scope1.ToString("F4");
+                toCreate.Scope2 = sum_Scope2.ToString("F4");
+                toCreate.All = sum_all.ToString("F4");
+                toCreate.non_move = sum_hardlymove.ToString("F4");
+                toCreate.move = sum_move.ToString("F4");
+                toCreate.escape = sum_escape.ToString("F4");
+                toCreate.process = sum_process.ToString("F4");
+                toCreate.percentage1_CO2 = (sum1_CO2 / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage1_CH4 = (sum_CH4 / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage1_N2O = (sum_N2O / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage1_HFCS = (sum_HFCS / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage1_PFCS = (sum_PFCS / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage1_SF6 = (sum_SF6 / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage1_NF3 = (sum_NF3 / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage2_CO2 = ((sum1_CO2 + sum2_CO2) / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage2_CH4 = (sum_CH4 / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage2_N2O = (sum_N2O / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage2_HFCS = (sum_HFCS / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage2_PFCS = (sum_PFCS / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage2_SF6 = (sum_SF6 / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage2_NF3 = (sum_NF3 / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage_nonMove = (sum_hardlymove / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage_Move = (sum_move / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage_Escape = (sum_escape / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage_Process = (sum_process / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage_Scope1 = (sum_Scope1 / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage_Scope2 = (sum_Scope2 / sum_all * 100).ToString("F2") + "%";
+                toCreate.cal_all = sum_Uncertainty.ToString("F4");
+                toCreate.no1_Grade = no1_Grade.ToString();
+                toCreate.no2_Grade = no2_Grade.ToString();
+                toCreate.no3_Grade = no3_Grade.ToString();
+                toCreate.avg_Grade = avg_Grade.ToString("F2");
+                toCreate.all_Grade = avg_Grade < 10 ? "第一級" : (avg_Grade < 19 ? "第二級" : "第三級");
+                toCreate.percentage_CalAll = (sum_Uncertainty / sum_all * 100).ToString("F2") + "%";
+                toCreate.ULL = "-" + all_ULL.ToString("P2");
+                toCreate.UUL = "+" + all_UUL.ToString("P2");
+            }
+            else
+            {
+                toCreate.AreaId = (Guid)id;
+                toCreate.Scope1_CO2 = sum1_CO2.ToString("F4");
+                toCreate.CO2 = (sum1_CO2 + sum2_CO2).ToString("F4");
+                toCreate.CH4 = sum_CH4.ToString("F4");
+                toCreate.N2O = sum_N2O.ToString("F4");
+                toCreate.HFCS = sum_HFCS.ToString("F4");
+                toCreate.PFCS = sum_PFCS.ToString("F4");
+                toCreate.SF6 = sum_SF6.ToString("F4");
+                toCreate.NF3 = sum_NF3.ToString("F4");
+                toCreate.Scope1 = sum_Scope1.ToString("F4");
+                toCreate.Scope2 = sum_Scope2.ToString("F4");
+                toCreate.All = sum_all.ToString("F4");
+                toCreate.non_move = sum_hardlymove.ToString("F4");
+                toCreate.move = sum_move.ToString("F4");
+                toCreate.escape = sum_escape.ToString("F4");
+                toCreate.process = sum_process.ToString("F4");
+                toCreate.percentage1_CO2 = (sum1_CO2 / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage1_CH4 = (sum_CH4 / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage1_N2O = (sum_N2O / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage1_HFCS = (sum_HFCS / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage1_PFCS = (sum_PFCS / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage1_SF6 = (sum_SF6 / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage1_NF3 = (sum_NF3 / sum_Scope1 * 100).ToString("F2") + "%";
+                toCreate.percentage2_CO2 = ((sum1_CO2 + sum2_CO2) / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage2_CH4 = (sum_CH4 / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage2_N2O = (sum_N2O / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage2_HFCS = (sum_HFCS / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage2_PFCS = (sum_PFCS / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage2_SF6 = (sum_SF6 / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage2_NF3 = (sum_NF3 / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage_nonMove = (sum_hardlymove / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage_Move = (sum_move / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage_Escape = (sum_escape / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage_Process = (sum_process / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage_Scope1 = (sum_Scope1 / sum_all * 100).ToString("F2") + "%";
+                toCreate.percentage_Scope2 = (sum_Scope2 / sum_all * 100).ToString("F2") + "%";
+                toCreate.cal_all = sum_Uncertainty.ToString("F4");
+                toCreate.percentage_CalAll = (sum_Uncertainty / sum_all * 100).ToString("F2") + "%";
+                toCreate.no1_Grade = no1_Grade.ToString();
+                toCreate.no2_Grade = no2_Grade.ToString();
+                toCreate.no3_Grade = no3_Grade.ToString();
+                toCreate.avg_Grade = avg_Grade.ToString("F2");
+                toCreate.all_Grade = avg_Grade < 10 ? "第一級" : (avg_Grade < 19 ? "第二級" : "第三級");
+                toCreate.ULL = "-" + all_ULL.ToString("P2");
+                toCreate.UUL = "+" + all_UUL.ToString("P2");
+                _context.Add(toCreate);
+            }
+            
+            await _context.SaveChangesAsync();
             return _context.Devices != null ?
                 View(await _context.Devices
                     .Where(x => x.isDeleted == 0)

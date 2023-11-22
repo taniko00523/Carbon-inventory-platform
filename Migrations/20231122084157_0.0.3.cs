@@ -5,7 +5,7 @@
 namespace Carbon_inventory_platform.Migrations
 {
     /// <inheritdoc />
-    public partial class _0015 : Migration
+    public partial class _003 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -13,9 +13,9 @@ namespace Carbon_inventory_platform.Migrations
             migrationBuilder.UpdateData(
                 table: "Materials",
                 keyColumn: "Id",
-                keyValue: 50,
-                columns: new[] { "CO2CEF", "CO2ULL" },
-                values: new object[] { 2.263133f, -0.025974f });
+                keyValue: 56,
+                column: "CO2UUL",
+                value: 0.07f);
         }
 
         /// <inheritdoc />
@@ -24,9 +24,9 @@ namespace Carbon_inventory_platform.Migrations
             migrationBuilder.UpdateData(
                 table: "Materials",
                 keyColumn: "Id",
-                keyValue: 50,
-                columns: new[] { "CO2CEF", "CO2ULL" },
-                values: new object[] { -2.263133f, 0.025974f });
+                keyValue: 56,
+                column: "CO2UUL",
+                value: 0f);
         }
     }
 }

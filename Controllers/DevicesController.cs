@@ -32,6 +32,7 @@ namespace Carbon_inventory_platform.Controllers
         //GET: Devices
         public async Task<IActionResult> Index(Guid id)
         {
+            TempData["SelectedAreaId"] = id;
             return _context.Devices != null ?
        View(await _context.Devices
        .Where(x => x.isDeleted != 1)
@@ -79,7 +80,6 @@ namespace Carbon_inventory_platform.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,AreaId,AssetNo,Name,Provess,Scope,EmissionPattern,Material")] Device device)
         {
-
             if (ModelState.IsValid)
             {
                 var toCreate = new Device();
@@ -334,7 +334,7 @@ namespace Carbon_inventory_platform.Controllers
                     CH4 = (float)(activityData.Num / 1000 * materialsData.CH4CEF * CH4_GWP);
                     N2O = (float)(activityData.Num / 1000 * materialsData.N2OCEF * N2O_GWP);
                     Grade = 3 * activityData.Level * activityData.Correction;
-                    all = CO2 + CH4 + N2O;
+                    all = (float)Math.Round(CO2 + CH4 + N2O, 4);
                 }
                 CO2ULL = (float)CalculateRoundDistance(-0.01F, materialsData.CO2ULL);//單排放源CO2排放95%信賴區間下限
                 CO2UUL = (float)CalculateRoundDistance(0.01F, materialsData.CO2UUL);//單排放源CO2排放95%信賴區間上限
@@ -344,8 +344,8 @@ namespace Carbon_inventory_platform.Controllers
                 N2OUUL = (float)CalculateRoundDistance(0.01F, materialsData.N2OUUL);//單排放源N2O排放95%信賴區間上限
                 UUL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2UUL, CH4UUL, N2OUUL);//單排放源排放95%信賴區間下限
                 ULL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2ULL, CH4ULL, N2OULL);//單排放源排放95%信賴區間上限
-                count_UUL = (float)(Math.Pow((UUL * activityData.Emissions), 2));
-                count_ULL = (float)(Math.Pow((ULL * activityData.Emissions), 2));
+                count_UUL = (float)(Math.Pow((UUL * all), 2));
+                count_ULL = (float)(Math.Pow((ULL * all), 2));
             }
             else if (toUpdate.HFCS_Emission == true)
             {
@@ -357,43 +357,43 @@ namespace Carbon_inventory_platform.Controllers
                     {
                         HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.003);
                         Grade = 3 * activityData.Level * activityData.Correction;
-                        all = HFCS;
+                        all = (float)Math.Round(HFCS, 4);
                     }
                     if (toUpdate.Name == "乾燥機")
                     {
                         HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.16);
                         Grade = 3 * activityData.Level * activityData.Correction;
-                        all = HFCS;
+                        all = (float)Math.Round(HFCS, 4);
                     }
                     if (toUpdate.Name == "工業冷媒")
                     {
                         HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.16);
                         Grade = 3 * activityData.Level * activityData.Correction;
-                        all = HFCS;
+                        all = (float)Math.Round(HFCS, 4);
                     }
                     if (toUpdate.Name == "冰水主機")
                     {
                         HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.09);
                         Grade = 3 * activityData.Level * activityData.Correction;
-                        all = HFCS;
+                        all = (float)Math.Round(HFCS, 4);
                     }
                     if (toUpdate.Name == "冷氣機")
                     {
                         HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.03);
                         Grade = 3 * activityData.Level * activityData.Correction;
-                        all = HFCS;
+                        all = (float)Math.Round(HFCS, 4);
                     }
                     if (toUpdate.Name == "飲水機")
                     {
                         HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.003);
                         Grade = 3 * activityData.Level * activityData.Correction;
-                        all = HFCS;
+                        all = (float)Math.Round(HFCS, 4);
                     }
                     if (toUpdate.Name == "車用空調")
                     {
                         HFCS = (float)(activityData.Num / 1000 * GWPData.Num * 0.2);
                         Grade = 3 * activityData.Level * activityData.Correction;
-                        all = HFCS;
+                        all = (float)Math.Round(HFCS, 4);
                     }
                 }
             }
@@ -406,7 +406,7 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     CH4 = (float)(activityData.Num / 1000 * 0.002546062 * GWPData.Num);
                     Grade = 3 * activityData.Level * activityData.Correction;
-                    all = CH4;
+                    all = (float)Math.Round(CH4, 4);
                 }
             }
             else if (toUpdate.CO2_Emission == true) //外購電力及製程
@@ -430,14 +430,14 @@ namespace Carbon_inventory_platform.Controllers
                         N2OUUL = (float)CalculateRoundDistance(0.01F, materialsData.N2OUUL);//單排放源N2O排放95%信賴區間上限
                         UUL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2UUL, CH4UUL, N2OUUL);//單排放源排放95%信賴區間下限
                         ULL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2ULL, CH4ULL, N2OULL);//單排放源排放95%信賴區間上限
-                        count_UUL = (float)(Math.Pow((UUL * activityData.Emissions), 2));
-                        count_ULL = (float)(Math.Pow((ULL * activityData.Emissions), 2));
+                        count_UUL = (float)(Math.Pow((UUL * all), 2));
+                        count_ULL = (float)(Math.Pow((ULL * all), 2));
                     }
                     else //製程
                     {
                         CO2 = (float)(activityData.Num / 1000 * materialsData.CO2CEF);
                         Grade = 1 * activityData.Level * activityData.Correction;
-                        all = CO2;
+                        all = (float)Math.Round(CO2, 4);
                     }
                 }
             }
@@ -458,6 +458,8 @@ namespace Carbon_inventory_platform.Controllers
                 toUpdate.Grade = Grade;
                 toUpdate.UUL = UUL;
                 toUpdate.ULL = ULL;
+                toUpdate.count_UUL = count_UUL;
+                toUpdate.count_ULL = count_ULL;
                 //toUpdate.ModifiedTime = DateTime.Now;
             }
 
@@ -483,13 +485,7 @@ namespace Carbon_inventory_platform.Controllers
         }
         static double CalculateAHorAG(double J, double R, double Z, double value1, double value2, double value3)
         {
-            double numerator = Math.Sqrt(Math.Pow(J * value1, 2) + Math.Pow(R * value2, 2));
-
-            if (Z != 0)
-            {
-                numerator += Math.Pow(Z * value3, 2);
-            }
-
+            double numerator = Math.Sqrt(Math.Pow(J * value1, 2) + Math.Pow(R * value2, 2) + Math.Pow(Z * value3, 2));
             double denominator = J + R + Z;
 
             if (denominator != 0)
