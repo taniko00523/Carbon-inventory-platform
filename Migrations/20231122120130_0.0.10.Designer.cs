@@ -4,6 +4,7 @@ using Carbon_inventory_platform.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_inventory_platform.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231122120130_0.0.10")]
+    partial class _0010
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -607,12 +610,6 @@ namespace Carbon_inventory_platform.Migrations
                             Name = "R-600A",
                             GWP_Year = 2022,
                             Num = 0f
-                        },
-                        new
-                        {
-                            Name = "R-407C",
-                            GWP_Year = 2022,
-                            Num = 1908f
                         },
                         new
                         {
@@ -1486,7 +1483,7 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 57,
-                            CH4CEF = 0.002546062,
+                            CH4CEF = 0.0025460619945079088,
                             CH4ULL = 0f,
                             CH4UUL = 0f,
                             CO2CEF = 0.0,
@@ -1514,43 +1511,7 @@ namespace Carbon_inventory_platform.Migrations
                             N2OCEF = 0.0,
                             N2OULL = 0f,
                             N2OUUL = 0f,
-                            Name = "二氧化碳",
-                            Scope = "類別1",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 59,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 3.3841653850000002,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "製程",
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "乙炔",
-                            Scope = "類別1",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 60,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 3.6666666665999998,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "製程",
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "焊條",
+                            Name = "CO2",
                             Scope = "類別1",
                             Unit = "",
                             Year = 0

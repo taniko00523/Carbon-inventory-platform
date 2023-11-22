@@ -23,6 +23,9 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "電話號碼")]
         public string Phone { get; set; } =null!;
 
+        [Display(Name = "公司簡介")]
+        public string Information { get; set; } = "";
+
         [Display(Name = "是否刪除")]
         public byte isDeleted { get; set; } = 0;
 

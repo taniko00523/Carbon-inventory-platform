@@ -24,7 +24,7 @@ namespace Carbon_inventory_platform.Controllers
         string[] scope = { "類別一", "類別二" };
         string[] emissionPattern = { "固定", "移動", "製程", "逸散" };
         string[] name = {
-            "緊急發電機", "廚房", "公務車", "堆高機", "冷氣機", "冰箱", "乾燥機", "飲水機", "冰水主機", "車用空調", "工業冷媒", "CO2滅火器", "海龍滅火器", "FM200", "WD40", "化糞池", "瓦斯罐", "電力", "其他" };
+            "緊急發電機", "廚房", "公務車", "堆高機", "冷氣機", "冰箱", "乾燥機", "飲水機", "冰水主機", "車用空調", "工業冷媒", "CO2滅火器", "海龍滅火器", "FM200", "WD40", "化糞池", "瓦斯罐","焊條","乙炔","二氧化碳", "電力", "其他" };
         string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
         string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
         string[] level = { "連續監測", "定期採樣", "自行評估" };
@@ -99,7 +99,7 @@ namespace Carbon_inventory_platform.Controllers
                     if (_context.Materials
     .Where(x => x.Name == device.Material)
     .Select(x => x.CO2CEF)
-    .FirstOrDefault() != null)
+    .FirstOrDefault() != 0)
                     {
                         toCreate.CO2_Emission = true;
                     }
@@ -116,13 +116,6 @@ namespace Carbon_inventory_platform.Controllers
     .FirstOrDefault() != 0)
                     {
                         toCreate.N2O_Emission = true;
-                    }
-                    if (_context.GWPs
-    .Where(x => x.Name == device.Material)
-    .Select(x => x.Name)
-    .FirstOrDefault() == "CH4")
-                    {
-                        toCreate.CH4_Emission = true;
                     }
                     else if (_context.GWPs
     .Where(x => x.Name == device.Material)
@@ -399,12 +392,15 @@ namespace Carbon_inventory_platform.Controllers
             }
             else if (toUpdate.CH4_Emission == true)
             {
+                var materialsData = await _context.Materials
+                    .Where(x => x.Name == toUpdate.Material)
+                    .FirstOrDefaultAsync();//
                 var GWPData = await _context.GWPs.Where(x => x.Name == "CH4").FirstOrDefaultAsync();
 
                 // 如果找到 Materials 数据，计算 Emissions
                 if (GWPData != null)
                 {
-                    CH4 = (float)(activityData.Num / 1000 * 0.002546062 * GWPData.Num);
+                    CH4 = (float)(activityData.Num / 1000 * materialsData.CH4CEF * GWPData.Num);
                     Grade = 3 * activityData.Level * activityData.Correction;
                     all = (float)Math.Round(CH4, 4);
                 }
@@ -412,33 +408,34 @@ namespace Carbon_inventory_platform.Controllers
             else if (toUpdate.CO2_Emission == true) //外購電力及製程
             {
                 var AreaData = await _context.Areas.Where(x => x.Id == toUpdate.AreaId).FirstOrDefaultAsync(); //抓取廠區資料來比對基準年
-                var materialsData = await _context.Materials.Where(x => x.Name == toUpdate.Material).Where(x => x.Year == AreaData.Year).FirstOrDefaultAsync();// 抓取對應的Materials 數據
+                var materialsData = await _context.Materials.Where(x => x.Name == toUpdate.Material).FirstOrDefaultAsync();// 抓取對應的Materials 數據
+                var eletronicData = await _context.Materials.Where(x => x.Name == toUpdate.Material).Where(x => x.Year == AreaData.Year).FirstOrDefaultAsync();// 抓取對應的Materials 數據
 
                 // 如果找到 Materials 数据，计算 Emissions
-                if (materialsData != null)
+                if (eletronicData != null)
                 {
                     if (toUpdate.Material == "外購電力")
                     {
-                        CO2 = (float)(activityData.Num / 1000 * materialsData.CO2CEF);
+                        CO2 = (float)(activityData.Num / 1000 * eletronicData.CO2CEF);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = CO2;
-                        CO2ULL = (float)CalculateRoundDistance(-0.01F, materialsData.CO2ULL);//單排放源CO2排放95%信賴區間下限
-                        CO2UUL = (float)CalculateRoundDistance(0.01F, materialsData.CO2UUL);//單排放源CO2排放95%信賴區間上限
-                        CH4ULL = (float)CalculateRoundDistance(-0.01F, materialsData.CH4ULL);//單排放源CH4排放95%信賴區間下限
-                        CH4UUL = (float)CalculateRoundDistance(0.01F, materialsData.CH4UUL);//單排放源CH4排放95%信賴區間上限
-                        N2OULL = (float)CalculateRoundDistance(-0.01F, materialsData.N2OULL);//單排放源N2O排放95%信賴區間下限
-                        N2OUUL = (float)CalculateRoundDistance(0.01F, materialsData.N2OUUL);//單排放源N2O排放95%信賴區間上限
+                        CO2ULL = (float)CalculateRoundDistance(-0.01F, eletronicData.CO2ULL);//單排放源CO2排放95%信賴區間下限
+                        CO2UUL = (float)CalculateRoundDistance(0.01F, eletronicData.CO2UUL);//單排放源CO2排放95%信賴區間上限
+                        CH4ULL = (float)CalculateRoundDistance(-0.01F, eletronicData.CH4ULL);//單排放源CH4排放95%信賴區間下限
+                        CH4UUL = (float)CalculateRoundDistance(0.01F, eletronicData.CH4UUL);//單排放源CH4排放95%信賴區間上限
+                        N2OULL = (float)CalculateRoundDistance(-0.01F, eletronicData.N2OULL);//單排放源N2O排放95%信賴區間下限
+                        N2OUUL = (float)CalculateRoundDistance(0.01F, eletronicData.N2OUUL);//單排放源N2O排放95%信賴區間上限
                         UUL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2UUL, CH4UUL, N2OUUL);//單排放源排放95%信賴區間下限
                         ULL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2ULL, CH4ULL, N2OULL);//單排放源排放95%信賴區間上限
                         count_UUL = (float)(Math.Pow((UUL * all), 2));
                         count_ULL = (float)(Math.Pow((ULL * all), 2));
                     }
-                    else //製程
-                    {
-                        CO2 = (float)(activityData.Num / 1000 * materialsData.CO2CEF);
-                        Grade = 1 * activityData.Level * activityData.Correction;
-                        all = (float)Math.Round(CO2, 4);
-                    }
+                }
+                else if(materialsData != null) //製程
+                {
+                    CO2 = (float)(activityData.Num / 1000 * materialsData.CO2CEF);
+                    Grade = 1 * activityData.Level * activityData.Correction;
+                    all = (float)Math.Round(CO2, 4);
                 }
             }
 

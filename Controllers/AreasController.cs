@@ -62,7 +62,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,PostalCode,City,District,Address,Year,Type")] Area area)
+        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,PostalCode,City,District,Address,FactorCode,UniqueCode,Year,Type")] Area area)
         {
             if (ModelState.IsValid)
             {
@@ -74,6 +74,8 @@ namespace Carbon_inventory_platform.Controllers
                     City = area.City,
                     District = area.District,
                     Address = area.Address,
+                    FactorCode = area.FactorCode,
+                    UniqueCode = area.UniqueCode,
                     Year = area.Year,
                     Type = area.Type,
                     isDeleted = 0,
@@ -109,7 +111,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,CompanyId,Name,PostalCode,City,District,Address,Year,Type")] Area area)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,CompanyId,Name,PostalCode,City,District,FactorCode,UniqueCode,Address,Year,Type")] Area area)
         {
             if (id != area.Id)
             {
@@ -130,6 +132,8 @@ namespace Carbon_inventory_platform.Controllers
                         toUpdate.City = area.City;
                         toUpdate.District = area.District;
                         toUpdate.Address = area.Address;
+                        toUpdate.FactorCode = area.FactorCode;
+                        toUpdate.UniqueCode = area.UniqueCode;
                         toUpdate.Year = area.Year;
                         toUpdate.Type = area.Type;
                         toUpdate.ModifiedTime = DateTime.Now;

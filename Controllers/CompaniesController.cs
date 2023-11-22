@@ -105,7 +105,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Owner,Email,Phone")] Company company)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Owner,Email,Phone,Information")] Company company)
         {
             if (id != company.Id)
             {
@@ -123,6 +123,7 @@ namespace Carbon_inventory_platform.Controllers
                         toUpdate.Owner = company.Owner;
                         toUpdate.Email = company.Email;
                         toUpdate.Phone = company.Phone;
+                        toUpdate.Information = company.Information;
                         toUpdate.isDeleted = 0;
                         toUpdate.ModifiedTime = DateTime.Now;
                     }
