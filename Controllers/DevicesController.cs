@@ -33,6 +33,7 @@ namespace Carbon_inventory_platform.Controllers
         public async Task<IActionResult> Index(Guid id)
         {
             TempData["SelectedAreaId"] = id;
+
             return _context.Devices != null ?
        View(await _context.Devices
        .Where(x => x.isDeleted != 1)

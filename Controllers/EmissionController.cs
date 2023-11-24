@@ -305,7 +305,7 @@ namespace Carbon_inventory_platform.Controllers
 
             ViewBag.sum_Scope2 = sum_Scope2.ToString("F4");
             
-            ViewBag.sum_All = sum_all.ToString("F4");
+            ViewBag.sum_All = sum_all.ToString("F3");
 
             ViewBag.sum_hardlymove = sum_hardlymove.ToString("F4");
             
@@ -385,7 +385,7 @@ namespace Carbon_inventory_platform.Controllers
                 toCreate.NF3 = sum_NF3.ToString("F4");
                 toCreate.Scope1 = sum_Scope1.ToString("F4");
                 toCreate.Scope2 = sum_Scope2.ToString("F4");
-                toCreate.All = sum_all.ToString("F4");
+                toCreate.All = sum_all.ToString("F3");
                 toCreate.non_move = sum_hardlymove.ToString("F4");
                 toCreate.move = sum_move.ToString("F4");
                 toCreate.escape = sum_escape.ToString("F4");
@@ -433,7 +433,7 @@ namespace Carbon_inventory_platform.Controllers
                 toCreate.NF3 = sum_NF3.ToString("F4");
                 toCreate.Scope1 = sum_Scope1.ToString("F4");
                 toCreate.Scope2 = sum_Scope2.ToString("F4");
-                toCreate.All = sum_all.ToString("F4");
+                toCreate.All = sum_all.ToString("F3");
                 toCreate.non_move = sum_hardlymove.ToString("F4");
                 toCreate.move = sum_move.ToString("F4");
                 toCreate.escape = sum_escape.ToString("F4");

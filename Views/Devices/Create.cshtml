@@ -11,11 +11,11 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="AreaId" value="@TempData.Peek("SelectedAreaId")" />
+            <input type="hidden" asp-for="AreaId" value="@TempData.Peek("SelectedAreaId")" />
             @* <div class="form-group">
-                <label asp-for="AssetNo" class="control-label"></label>
-                <input asp-for="AssetNo" class="form-control" />
-                <span asp-validation-for="AssetNo" class="text-danger"></span>
+            <label asp-for="AssetNo" class="control-label"></label>
+            <input asp-for="AssetNo" class="form-control" />
+            <span asp-validation-for="AssetNo" class="text-danger"></span>
             </div> *@
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -24,10 +24,10 @@
                 <input asp-for="Name" class="form-control" id="OtherName" style="display:none;" /> @*隱藏的其他欄位*@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-           @*  <div class="form-group">
-                <label asp-for="Provess" class="control-label"></label>
-                <input asp-for="Provess" class="form-control" />
-                <span asp-validation-for="Provess" class="text-danger"></span>
+            @*  <div class="form-group">
+            <label asp-for="Provess" class="control-label"></label>
+            <input asp-for="Provess" class="form-control" />
+            <span asp-validation-for="Provess" class="text-danger"></span>
             </div> *@
             <div class="form-group">
                 <label asp-for="Scope" class="control-label"></label>
@@ -52,7 +52,7 @@
                         var selectedName = $(this).val();
 
                         // 隐藏所有的输入框
-                        
+
 
                         // 根据选择的值显示对应的输入框
                         if (selectedName === "其他") {
@@ -64,7 +64,7 @@
                     });
                 });
             </script>
-            
+
             <script>
                 $(document).ready(function () {
                     // 当"Scope"下拉框的选择发生变化时
@@ -383,7 +383,7 @@
                 });
             </script>
             <div class="form-group">
-                <input type="submit" value="新增" class="btn btn-primary" asp-controller="Devices" asp-action="Create"/>
+                <input type="submit" value="新增" class="btn btn-primary" asp-controller="Devices" asp-action="Create" />
                 <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("SelectedAreaId")">返回</a>
             </div>
         </form>
@@ -391,5 +391,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -50,8 +50,8 @@ namespace Carbon_inventory_platform.Controllers
 
             string Name = data.Company.Name;
 
-            string filePath = "D:\\專題\\Test.docx";
-            string newFilePath = "D:\\專題\\" + Name + ".docx";
+            string filePath = "C:\\報告書\\溫室氣體盤查報告書範本.docx";
+            string newFilePath = "C:\\報告書\\" + Name + "-溫室氣體盤查報告書" + ".docx";
 
             // 複製文件
             using (DocX doc = DocX.Load(filePath))
