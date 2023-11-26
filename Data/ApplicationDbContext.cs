@@ -125,7 +125,8 @@ new GWP { Name = "R-410A", Num = 2256F, GWP_Year = 2022 },
 new GWP { Name = "R-600A", Num = 0, GWP_Year = 2022 },
 new GWP { Name = "R-407C", Num = 1908, GWP_Year = 2022 },
 new GWP { Name = "NF3", Num = 17400F, GWP_Year = 2022 },
-new GWP { Name = "SF6", Num = 24300F, GWP_Year = 2022 }
+new GWP { Name = "SF6", Num = 24300F, GWP_Year = 2022 },
+new GWP { Name = "R-417A", Num = 2127, GWP_Year = 2022 }
                 );
 
             builder.Entity<Refrigerant>().HasData(

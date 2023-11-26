@@ -44,7 +44,81 @@
                 <label asp-for="Material" class="control-label"></label>
                 <select asp-for="Material" class="form-control" id="MaterialDropdown" asp-items="ViewBag.Material"></select>
             </div>
-            <script>
+
+            @section scripts
+                {
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        // 处理scopeDropdown的变化
+                        $('#scopeDropdown').change(function () {
+                            var selectedScope = $(this).val();
+
+                            // 发送AJAX请求获取相应的emission选项
+                            $.ajax({
+                                url: '/Devices/GetEmissionsByScope',
+                                type: 'GET',
+                                data: { scope: selectedScope },
+                                success: function (data) {
+                                    // 清空emissionDropdown的选项
+                                    $('#emissionDropdown').empty();
+
+                                    // 添加新的emission选项
+                                    $.each(data, function (i, item) {
+                                        $('#emissionDropdown').append($('<option>', {
+                                            value: item,
+                                            text: item
+                                        }));
+                                    });
+
+                                    // 触发emissionDropdown的change事件，以便执行之后的逻辑
+                                    $('#emissionDropdown').trigger('change');
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        });
+
+                        // 处理emissionDropdown的变化
+                        $('#emissionDropdown').change(function () {
+                            var selectedValue = $(this).val();
+
+                            $.ajax({
+                                url: '/Devices/GetMaterialsAndGWPNames',
+                                type: 'GET',
+                                data: { emissionPattern: selectedValue },
+                                success: function (data) {
+                                    // 清空MaterialDropdown的选项
+                                    $('#MaterialDropdown').empty();
+
+                                    // 添加新的Material选项
+                                    $.each(data.materials, function (i, item) {
+                                        $('#MaterialDropdown').append($('<option>', {
+                                            value: item.name,
+                                            text: item.name
+                                        }));
+                                    });
+
+                                    // 添加新的GWPNames选项
+                                    $.each(data.gwpNames, function (i, item) {
+                                        $('#MaterialDropdown').append($('<option>', {
+                                            value: item.name,
+                                            text: item.name
+                                        }));
+                                    });
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        });
+                    });
+                </script>
+            }
+
+
+            @* <script>
                 $(document).ready(function () {
                     // 当"nameDropdown"下拉框的选择发生变化时
                     $("#nameDropdown").change(function () {
@@ -381,7 +455,7 @@
                         // 可以根據需要添加更多選項
                     });
                 });
-            </script>
+            </script> *@
             <div class="form-group">
                 <input type="submit" value="新增" class="btn btn-primary" asp-controller="Devices" asp-action="Create" />
                 <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("SelectedAreaId")">返回</a>
@@ -390,8 +464,3 @@
     </div>
 </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}

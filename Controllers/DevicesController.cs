@@ -139,6 +139,59 @@ namespace Carbon_inventory_platform.Controllers
             return View(device);
         }
 
+        [HttpGet]
+        public JsonResult GetMaterialsAndGWPNames(string emissionPattern)
+        {
+            var materials = _context.Materials
+                .Where(x => x.EmissionPattern == emissionPattern)
+                .Select(x => new { name = x.Name })
+                .ToList();
+
+            var gwpNames = _context.GWPs
+                .Select(x => new { name = x.Name })
+                .ToList();
+
+            return Json(new { materials, gwpNames });
+        }
+
+
+        [HttpGet]
+        public JsonResult GetMaterials(string emissionPattern)
+        {
+            
+            var materials = _context.Materials
+                .Where(x => x.EmissionPattern == emissionPattern)
+                .Select(x => new { name = x.Name })
+                .ToList();
+
+            return Json(materials);
+        }
+        [HttpGet]
+        public JsonResult GetEmissionsByScope(string scope)
+        {
+            // 根据scope的值生成相应的emission选项，这里假设你已经有了相应的逻辑来获取这些选项
+            var emissions = GetEmissionsByScopeFromDatabase(scope);
+
+            return Json(emissions);
+        }
+
+        // 示例中的方法，根据scope获取emission选项
+        private List<string> GetEmissionsByScopeFromDatabase(string scope)
+        {
+            // 在这里添加逻辑从数据库获取emission选项
+            // 假设你有一个类似的方法，根据scope返回对应的emission选项列表
+            // 以下为示例，你需要根据你的实际情况进行修改
+            if (scope == "類別一")
+            {
+                return new List<string> { "固定", "移動", "逸散", "製程" };
+            }
+            else
+            {
+                // 其他情况的处理
+                return new List<string> { "外購電力" };
+            }
+        }
+
         // GET: Devices/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
