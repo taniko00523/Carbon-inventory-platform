@@ -317,7 +317,11 @@ namespace Carbon_inventory_platform.Controllers
                 return Problem("沒有找到資料");
             }
             var toDelete = await _context.Devices.FindAsync(id);
-            if (toDelete != null)
+            if(toDelete.Num == 0)
+            {
+                _context.Devices.Remove(toDelete);
+            }
+            else if (toDelete != null)
             {
                 toDelete.isDeleted = 1;
                 toDelete.DeleteTime = DateTime.Now;

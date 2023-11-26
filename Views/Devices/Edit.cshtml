@@ -13,7 +13,7 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
+            <div class="form-group" style="display: none;">
                 <label asp-for="AreaId" class="control-label"></label>
                 <select asp-for="AreaId" class="form-control" asp-items="ViewBag.AreasId"></select>
                 <span asp-validation-for="AreaId" class="text-danger"></span>
@@ -50,7 +50,7 @@
                 <select asp-for="Material" class="form-control" id="MaterialDropdown" asp-items=" ViewBag.Material"></select>
                 <span asp-validation-for="Material" class="text-danger"></span>
             </div>
-            <div class="form-group">
+           @*  <div class="form-group">
                 <label asp-for="CO2_Emission" class="control-label"></label>
                 <input class="form-check-input" type="checkbox" value="true" asp-for="CO2_Emission" class="form-control" />
                 <span asp-validation-for="CO2_Emission" class="text-danger"></span>
@@ -84,264 +84,184 @@
                 <label asp-for="NF3_Emission" class="control-label"></label>
                 <input class="form-check-input" type="checkbox" value="true" asp-for="NF3_Emission" class="form-control" />
                 <span asp-validation-for="NF3_Emission" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="form-group">
                 <input type="submit" value="儲存" class="btn btn-primary" />|
                 <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@Model.AreaId">返回</a>
             </div>
-            <script>
-                $(document).ready(function () {
-                    // 當"nameDropdown"下拉框的選擇發生變化時
-                    $("#nameDropdown").change(function () {
-                        // 獲取所選的值
-                        var selectedName = $(this).val();
+            @section scripts
+            {
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        $('#nameDropdown').change(function () {
+                            var selectedName = $(this).val();
 
-                        // 在"emissionDropdown"下拉框中動態更新選項
-                        $("#scopeDropdown").empty();
-                        $("#emissionDropdown").empty();
-                        $("#MaterialDropdown").empty(); // 確保在清空 "emissionDropdown" 後再次清空 "MaterialDropdown"
+                            // 发送 AJAX 请求获取相应的DeviceData
+                            $.ajax({
+                                url: '/Devices/GetDeviceData',
+                                type: 'GET',
+                                data: { selectedName: selectedName },
+                                success: function (data) {
+                                    // 获取DeviceData中的Scope和EmissionPattern
+                                    var selectedScope = data.scope;
+                                    var selectedEmission = data.emissionPattern;
+                                    var selectedMaterial = data.material;
 
-                        // 根據設備選擇的選項
-                        if (selectedName === "冷氣機") {
-                            $("#scopeDropdown").append("<option value='類別一' selected>類別一</option>");
-                            $("#scopeDropdown").append("<option value='類別二'>類別二</option>");
-                            $("#emissionDropdown").append("<option value='固定'>固定</option>");
-                            $("#emissionDropdown").append("<option value='移動'>移動</option>");
-                            $("#emissionDropdown").append("<option value='製程'>製程</option>");
-                            $("#emissionDropdown").append("<option value='逸散' selected>逸散</option>");
-                            $("#MaterialDropdown").append("<option value='R-410A'selected>R-410A</option>");
-                            $("#MaterialDropdown").append("<option value='R-22'>R-22</option>");
-                            $("#MaterialDropdown").append("<option value='R-23'>R-23</option>");
-                            $("#MaterialDropdown").append("<option value='R-134A'>R-134A</option>");
-                            $("#MaterialDropdown").append("<option value='R-407C'>R-407C</option>");
-                            $("#MaterialDropdown").append("<option value='R-600A'>R-600A</option>");
-                            $("#MaterialDropdown").append("<option value='WD-40'>WD-40</option>");
-                            $("#MaterialDropdown").append("<option value='二氟一氯一溴甲烷'>海龍1211</option>");
-                            $("#MaterialDropdown").append("<option value='七氟丙烷'>FM200</option>");
-                            $("#MaterialDropdown").append("<option value='CO2'>二氧化碳</option>");
-                            $("#MaterialDropdown").append("<option value='廢水處理'>廢水處理</option>");
-                        } else if (selectedName === "冰水主機" || selectedName === "冰箱" || selectedName === "飲水機" || selectedName === "乾燥機" || selectedName === "車用空調" || selectedName === "工業冷媒") {
-                            $("#scopeDropdown").append("<option value='類別一' selected>類別一</option>");
-                            $("#scopeDropdown").append("<option value='類別二'>類別二</option>");
-                            $("#emissionDropdown").append("<option value='固定'>固定</option>");
-                            $("#emissionDropdown").append("<option value='移動'>移動</option>");
-                            $("#emissionDropdown").append("<option value='製程'>製程</option>");
-                            $("#emissionDropdown").append("<option value='逸散' selected>逸散</option>");
-                            $("#MaterialDropdown").append("<option value='R-410A'>R-410A</option>");
-                            $("#MaterialDropdown").append("<option value='R-22'>R-22</option>");
-                            $("#MaterialDropdown").append("<option value='R-23'>R-23</option>");
-                            $("#MaterialDropdown").append("<option value='R-134A' selected>R-134A</option>");
-                            $("#MaterialDropdown").append("<option value='R-407C'>R-407C</option>");
-                            $("#MaterialDropdown").append("<option value='R-600A'>R-600A</option>");
-                            $("#MaterialDropdown").append("<option value='WD-40'>WD-40</option>");
-                            $("#MaterialDropdown").append("<option value='二氟一氯一溴甲烷'>海龍1211</option>");
-                            $("#MaterialDropdown").append("<option value='七氟丙烷'>FM200</option>");
-                            $("#MaterialDropdown").append("<option value='CO2'>二氧化碳</option>");
-                            $("#MaterialDropdown").append("<option value='廢水處理'>廢水處理</option>");
-                        } else if (selectedName === "緊急發電機") {
-                            $("#scopeDropdown").append("<option value='類別一' selected>類別一</option>");
-                            $("#scopeDropdown").append("<option value='類別二'>類別二</option>");
-                            $("#emissionDropdown").append("<option value='固定' selected>固定</option>");
-                            $("#emissionDropdown").append("<option value='移動'>移動</option>");
-                            $("#emissionDropdown").append("<option value='製程'>製程</option>");
-                            $("#emissionDropdown").append("<option value='逸散'>逸散</option>");
-                            $("#MaterialDropdown").append("<option value='煤油'>煤油</option>");
-                            $("#MaterialDropdown").append("<option value='柴油' selected>柴油</option>");
-                            $("#MaterialDropdown").append("<option value='車用汽油'>車用汽油</option>");
-                            $("#MaterialDropdown").append("<option value='液化石油氣'>液化石油氣</option>");
-                            $("#MaterialDropdown").append("<option value='潤滑油'>潤滑油</option>");
-                            $("#MaterialDropdown").append("<option value='液化石油氣'>其他油品</option>");
-                            $("#MaterialDropdown").append("<option value='乙烷'>乙烷</option>");
-                        } else if (selectedName === "廚房") {
-                            $("#scopeDropdown").append("<option value='類別一' selected>類別一</option>");
-                            $("#scopeDropdown").append("<option value='類別二'>類別二</option>");
-                            $("#emissionDropdown").append("<option value='固定' selected>固定</option>");
-                            $("#emissionDropdown").append("<option value='移動'>移動</option>");
-                            $("#emissionDropdown").append("<option value='製程'>製程</option>");
-                            $("#emissionDropdown").append("<option value='逸散'>逸散</option>");
-                            $("#MaterialDropdown").append("<option value='煤油'>煤油</option>");
-                            $("#MaterialDropdown").append("<option value='柴油' >柴油</option>");
-                            $("#MaterialDropdown").append("<option value='車用汽油'>車用汽油</option>");
-                            $("#MaterialDropdown").append("<option value='液化石油氣'selected>液化石油氣</option>");
-                            $("#MaterialDropdown").append("<option value='潤滑油'>潤滑油</option>");
-                            $("#MaterialDropdown").append("<option value='液化石油氣'>其他油品</option>");
-                            $("#MaterialDropdown").append("<option value='乙烷'>乙烷</option>");
-                        } else if (selectedName === "公務車") {
-                            $("#scopeDropdown").append("<option value='類別一' selected>類別一</option>");
-                            $("#scopeDropdown").append("<option value='類別二'>類別二</option>");
-                            $("#emissionDropdown").append("<option value='固定'>固定</option>");
-                            $("#emissionDropdown").append("<option value='移動' selected>移動</option>");
-                            $("#emissionDropdown").append("<option value='製程'>製程</option>");
-                            $("#emissionDropdown").append("<option value='逸散'>逸散</option>");
-                            $("#MaterialDropdown").append("<option value='煤油'>煤油</option>");
-                            $("#MaterialDropdown").append("<option value='柴油'>柴油</option>");
-                            $("#MaterialDropdown").append("<option value='車用汽油' selected>車用汽油</option>");
-                            $("#MaterialDropdown").append("<option value='液化石油氣'>液化石油氣</option>");
-                            $("#MaterialDropdown").append("<option value='潤滑油'>潤滑油</option>");
-                            $("#MaterialDropdown").append("<option value='液化天然氣'>液化天然氣</option>");
-                        } else if (selectedName === "堆高機") {
-                            $("#scopeDropdown").append("<option value='類別一' selected>類別一</option>");
-                            $("#scopeDropdown").append("<option value='類別二'>類別二</option>");
-                            $("#emissionDropdown").append("<option value='固定'>固定</option>");
-                            $("#emissionDropdown").append("<option value='移動' selected>移動</option>");
-                            $("#emissionDropdown").append("<option value='製程'>製程</option>");
-                            $("#emissionDropdown").append("<option value='逸散'>逸散</option>");
-                            $("#MaterialDropdown").append("<option value='煤油'>煤油</option>");
-                            $("#MaterialDropdown").append("<option value='柴油'selected>柴油</option>");
-                            $("#MaterialDropdown").append("<option value='車用汽油' >車用汽油</option>");
-                            $("#MaterialDropdown").append("<option value='液化石油氣'>液化石油氣</option>");
-                            $("#MaterialDropdown").append("<option value='潤滑油'>潤滑油</option>");
-                            $("#MaterialDropdown").append("<option value='液化天然氣'>液化天然氣</option>");
-                        } else if (selectedName === "CO2滅火器") {
-                            $("#scopeDropdown").append("<option value='類別一' selected>類別一</option>");
-                            $("#scopeDropdown").append("<option value='類別二'>類別二</option>");
-                            $("#emissionDropdown").append("<option value='固定'>固定</option>");
-                            $("#emissionDropdown").append("<option value='移動'>移動</option>");
-                            $("#emissionDropdown").append("<option value='製程'>製程</option>");
-                            $("#emissionDropdown").append("<option value='逸散'selected>逸散</option>");
-                            $("#MaterialDropdown").append("<option value='R-410A'>R-410A</option>");
-                            $("#MaterialDropdown").append("<option value='R-22'>R-22</option>");
-                            $("#MaterialDropdown").append("<option value='R-23'>R-23</option>");
-                            $("#MaterialDropdown").append("<option value='R-134A'>R-134A</option>");
-                            $("#MaterialDropdown").append("<option value='R-407C'>R-407C</option>");
-                            $("#MaterialDropdown").append("<option value='R-600A'>R-600A</option>");
-                            $("#MaterialDropdown").append("<option value='WD-40'>WD-40</option>");
-                            $("#MaterialDropdown").append("<option value='二氟一氯一溴甲烷'>海龍1211</option>");
-                            $("#MaterialDropdown").append("<option value='七氟丙烷'>FM200</option>");
-                            $("#MaterialDropdown").append("<option value='CO2' selected>二氧化碳</option>");
-                            $("#MaterialDropdown").append("<option value='廢水處理'>廢水處理</option>");
-                        } else if (selectedName === "WD40") {
-                            $("#scopeDropdown").append("<option value='類別一' selected>類別一</option>");
-                            $("#scopeDropdown").append("<option value='類別二'>類別二</option>");
-                            $("#emissionDropdown").append("<option value='固定'>固定</option>");
-                            $("#emissionDropdown").append("<option value='移動'>移動</option>");
-                            $("#emissionDropdown").append("<option value='製程'>製程</option>");
-                            $("#emissionDropdown").append("<option value='逸散'selected>逸散</option>");
-                            $("#MaterialDropdown").append("<option value='R-410A'>R-410A</option>");
-                            $("#MaterialDropdown").append("<option value='R-22'>R-22</option>");
-                            $("#MaterialDropdown").append("<option value='R-23'>R-23</option>");
-                            $("#MaterialDropdown").append("<option value='R-134A'>R-134A</option>");
-                            $("#MaterialDropdown").append("<option value='R-407C'>R-407C</option>");
-                            $("#MaterialDropdown").append("<option value='R-600A'>R-600A</option>");
-                            $("#MaterialDropdown").append("<option value='WD-40' selected>WD-40</option>");
-                            $("#MaterialDropdown").append("<option value='二氟一氯一溴甲烷'>海龍1211</option>");
-                            $("#MaterialDropdown").append("<option value='七氟丙烷'>FM200</option>");
-                            $("#MaterialDropdown").append("<option value='CO2' selected>二氧化碳</option>");
-                            $("#MaterialDropdown").append("<option value='廢水處理'>廢水處理</option>");
-                        } else if (selectedName === "海龍滅火器") {
-                            $("#scopeDropdown").append("<option value='類別一' selected>類別一</option>");
-                            $("#scopeDropdown").append("<option value='類別二'>類別二</option>");
-                            $("#emissionDropdown").append("<option value='固定'>固定</option>");
-                            $("#emissionDropdown").append("<option value='移動'>移動</option>");
-                            $("#emissionDropdown").append("<option value='製程'>製程</option>");
-                            $("#emissionDropdown").append("<option value='逸散'selected>逸散</option>");
-                            $("#MaterialDropdown").append("<option value='R-410A'>R-410A</option>");
-                            $("#MaterialDropdown").append("<option value='R-22'>R-22</option>");
-                            $("#MaterialDropdown").append("<option value='R-23'>R-23</option>");
-                            $("#MaterialDropdown").append("<option value='R-134A'>R-134A</option>");
-                            $("#MaterialDropdown").append("<option value='R-407C'>R-407C</option>");
-                            $("#MaterialDropdown").append("<option value='R-600A'>R-600A</option>");
-                            $("#MaterialDropdown").append("<option value='WD-40'>WD-40</option>");
-                            $("#MaterialDropdown").append("<option value='二氟一氯一溴甲烷' selected>海龍1211</option>");
-                            $("#MaterialDropdown").append("<option value='七氟丙烷'>FM200</option>");
-                            $("#MaterialDropdown").append("<option value='CO2' selected>二氧化碳</option>");
-                            $("#MaterialDropdown").append("<option value='廢水處理'>廢水處理</option>");
-                        } else if (selectedName === "FM200") {
-                            $("#scopeDropdown").append("<option value='類別一' selected>類別一</option>");
-                            $("#scopeDropdown").append("<option value='類別二'>類別二</option>");
-                            $("#emissionDropdown").append("<option value='固定'>固定</option>");
-                            $("#emissionDropdown").append("<option value='移動'>移動</option>");
-                            $("#emissionDropdown").append("<option value='製程'>製程</option>");
-                            $("#emissionDropdown").append("<option value='逸散'selected>逸散</option>");
-                            $("#MaterialDropdown").append("<option value='R-410A'>R-410A</option>");
-                            $("#MaterialDropdown").append("<option value='R-22'>R-22</option>");
-                            $("#MaterialDropdown").append("<option value='R-23'>R-23</option>");
-                            $("#MaterialDropdown").append("<option value='R-134A'>R-134A</option>");
-                            $("#MaterialDropdown").append("<option value='R-407C'>R-407C</option>");
-                            $("#MaterialDropdown").append("<option value='R-600A'>R-600A</option>");
-                            $("#MaterialDropdown").append("<option value='WD-40'>WD-40</option>");
-                            $("#MaterialDropdown").append("<option value='二氟一氯一溴甲烷'>海龍1211</option>");
-                            $("#MaterialDropdown").append("<option value='七氟丙烷' selected>FM200</option>");
-                            $("#MaterialDropdown").append("<option value='CO2' selected>二氧化碳</option>");
-                            $("#MaterialDropdown").append("<option value='廢水處理'>廢水處理</option>");
-                        } else if (selectedName === "化糞池") {
-                            $("#scopeDropdown").append("<option value='類別一' selected>類別一</option>");
-                            $("#scopeDropdown").append("<option value='類別二'>類別二</option>");
-                            $("#emissionDropdown").append("<option value='固定'>固定</option>");
-                            $("#emissionDropdown").append("<option value='移動'>移動</option>");
-                            $("#emissionDropdown").append("<option value='製程'>製程</option>");
-                            $("#emissionDropdown").append("<option value='逸散'selected>逸散</option>");
-                            $("#MaterialDropdown").append("<option value='R-410A'>R-410A</option>");
-                            $("#MaterialDropdown").append("<option value='R-22'>R-22</option>");
-                            $("#MaterialDropdown").append("<option value='R-23'>R-23</option>");
-                            $("#MaterialDropdown").append("<option value='R-134A'>R-134A</option>");
-                            $("#MaterialDropdown").append("<option value='R-407C'>R-407C</option>");
-                            $("#MaterialDropdown").append("<option value='R-600A'>R-600A</option>");
-                            $("#MaterialDropdown").append("<option value='WD-40'>WD-40</option>");
-                            $("#MaterialDropdown").append("<option value='二氟一氯一溴甲烷'>海龍1211</option>");
-                            $("#MaterialDropdown").append("<option value='七氟丙烷'>FM200</option>");
-                            $("#MaterialDropdown").append("<option value='CO2' selected>二氧化碳</option>");
-                            $("#MaterialDropdown").append("<option value='廢水處理' selected>廢水處理</option>");
-                        } else if (selectedName === "電力") {
-                            $("#scopeDropdown").append("<option value='類別一'>類別一</option>");
-                            $("#scopeDropdown").append("<option value='類別二'selected>類別二</option>");
-                            $("#emissionDropdown").append("<option value='外購電力'>外購電力</option>");
-                            $("#MaterialDropdown").append("<option value='外購電力'>外購電力</option>");
-                        }
-                        // 可以根據需要添加更多選項
+                                    // 更新 scopeDropdown 和 emissionDropdown
+                                    $('#scopeDropdown').val(selectedScope);
+
+                                    // 发送AJAX请求获取相应的emission选项
+                                    $.ajax({
+                                        url: '/Devices/GetEmissionsByScope',
+                                        type: 'GET',
+                                        data: { scope: selectedScope },
+                                        success: function (data) {
+                                            // 清空emissionDropdown的选项
+                                            $('#emissionDropdown').empty();
+
+                                            // 添加新的emission选项
+                                            $.each(data, function (i, item) {
+                                                $('#emissionDropdown').append($('<option>', {
+                                                    value: item,
+                                                    text: item
+                                                }));
+                                            });
+
+                                            $('#emissionDropdown').val(selectedEmission);
+                                        },
+                                        error: function (error) {
+                                            console.log(error);
+                                        }
+                                    });
+
+                                    // 发送 AJAX 请求获取相应的数据
+                                    $.ajax({
+                                        url: '/Devices/GetMaterialsAndGWPNames',
+                                        type: 'GET',
+                                        data: { emissionPattern: selectedEmission },
+                                        success: function (data) {
+                                            // 清空MaterialDropdown的选项
+                                            $('#MaterialDropdown').empty();
+
+                                            // 添加新的Material选项
+                                            $.each(data.materials, function (i, item) {
+                                                $('#MaterialDropdown').append($('<option>', {
+                                                    value: item.name,
+                                                    text: item.name
+                                                }));
+                                            });
+
+                                            // 添加新的GWPNames选项
+                                            $.each(data.gwpNames, function (i, item) {
+                                                $('#MaterialDropdown').append($('<option>', {
+                                                    value: item.name,
+                                                    text: item.name
+                                                }));
+                                            });
+
+                                            // 更新 MaterialDropdown 的选中项
+                                            $('#MaterialDropdown').val(selectedMaterial);
+                                        },
+                                        error: function (error) {
+                                            console.log(error);
+                                        }
+                                    });
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                            return false;
+                        });
+
+                        // 处理scopeDropdown的变化
+                        $('#scopeDropdown').change(function () {
+                            var selectedScope = $(this).val();
+
+                            // 发送AJAX请求获取相应的emission选项
+                            $.ajax({
+                                url: '/Devices/GetEmissionsByScope',
+                                type: 'GET',
+                                data: { scope: selectedScope },
+                                success: function (data) {
+                                    // 清空emissionDropdown的选项
+                                    $('#emissionDropdown').empty();
+
+                                    // 添加新的emission选项
+                                    $.each(data, function (i, item) {
+                                        $('#emissionDropdown').append($('<option>', {
+                                            value: item,
+                                            text: item
+                                        }));
+                                    });
+
+                                    // 触发emissionDropdown的change事件，以便执行之后的逻辑
+                                    $('#emissionDropdown').trigger('change');
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        });
+
+                        // 处理emissionDropdown的变化
+                        $('#emissionDropdown').change(function () {
+                            var selectedValue = $(this).val();
+
+                            $.ajax({
+                                url: '/Devices/GetMaterialsAndGWPNames',
+                                type: 'GET',
+                                data: { emissionPattern: selectedValue },
+                                success: function (data) {
+                                    // 清空MaterialDropdown的选项
+                                    $('#MaterialDropdown').empty();
+
+                                    // 添加新的Material选项
+                                    $.each(data.materials, function (i, item) {
+                                        $('#MaterialDropdown').append($('<option>', {
+                                            value: item.name,
+                                            text: item.name
+                                        }));
+                                    });
+
+                                    // 添加新的GWPNames选项
+                                    $.each(data.gwpNames, function (i, item) {
+                                        $('#MaterialDropdown').append($('<option>', {
+                                            value: item.name,
+                                            text: item.name
+                                        }));
+                                    });
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        });
+                        $('#nameDropdown').change(function () {
+                            // 如果選擇了"其他"
+                            if ($(this).val() === '其他') {
+                                // 顯示隱藏的輸入欄位
+                                $('#OtherName').show();
+                            } else {
+                                // 否則隱藏輸入欄位
+                                $('#OtherName').hide();
+                            }
+                        });
+
+                        // 攔截表單提交事件
+                        $('form').submit(function () {
+                            // 如果 nameDropdown 的值是 "其他"
+                            if ($('#nameDropdown').val() === '其他') {
+                                // 將 OtherName 的值設置為 nameDropdown 的值
+                                $('#nameDropdown').val($('#OtherName').val());
+                            }
+                            // 繼續提交表單
+                            return true;
+                        });
                     });
-
-                    // 當"EmissionPattern"下拉框的選擇發生變化時
-                    $("#emissionDropdown").change(function () {
-                        // 獲取所選的值
-                        var selectedEmissionPattern = $(this).val();
-
-                        // 在"fuelTypeDropdown"下拉框中動態更新選項
-                        $("#MaterialDropdown").empty();
-
-                        // 添加根據"EmissionPattern"選擇的選項
-                        if (selectedEmissionPattern === "固定") {
-                            $("#MaterialDropdown").append("<option value='煤油'>煤油</option>");
-                            $("#MaterialDropdown").append("<option value='柴油'>柴油</option>");
-                            $("#MaterialDropdown").append("<option value='車用汽油'>車用汽油</option>");
-                            $("#MaterialDropdown").append("<option value='液化石油氣'>液化石油氣</option>");
-                            $("#MaterialDropdown").append("<option value='潤滑油'>潤滑油</option>");
-                            $("#MaterialDropdown").append("<option value='液化石油氣'>其他油品</option>");
-                            $("#MaterialDropdown").append("<option value='乙烷'>乙烷</option>");
-                        } else if (selectedEmissionPattern === "移動") {
-                            $("#MaterialDropdown").append("<option value='煤油'>煤油</option>");
-                            $("#MaterialDropdown").append("<option value='柴油'>柴油</option>");
-                            $("#MaterialDropdown").append("<option value='車用汽油'>車用汽油</option>");
-                            $("#MaterialDropdown").append("<option value='液化石油氣'>液化石油氣</option>");
-                            $("#MaterialDropdown").append("<option value='潤滑油'>潤滑油</option>");
-                            $("#MaterialDropdown").append("<option value='液化天然氣'>液化天然氣</option>");
-                        } else if (selectedEmissionPattern === "逸散") {
-                            $("#MaterialDropdown").append("<option value='R-410A'>R-410A</option>");
-                            $("#MaterialDropdown").append("<option value='R-22'>R-22</option>");
-                            $("#MaterialDropdown").append("<option value='R-23'>R-23</option>");
-                            $("#MaterialDropdown").append("<option value='R-134A'>R-134A</option>");
-                            $("#MaterialDropdown").append("<option value='R-407C'>R-407C</option>");
-                            $("#MaterialDropdown").append("<option value='R-600A'>R-600A</option>");
-                            $("#MaterialDropdown").append("<option value='WD-40'>WD-40</option>");
-                            $("#MaterialDropdown").append("<option value='二氟一氯一溴甲烷'>海龍1211</option>");
-                            $("#MaterialDropdown").append("<option value='七氟丙烷'>FM200</option>");
-                            $("#MaterialDropdown").append("<option value='CO2'>二氧化碳</option>");
-                            $("#MaterialDropdown").append("<option value='廢水處理'>廢水處理</option>");
-
-                        } else if (selectedEmissionPattern === "製程") {
-                            $("#MaterialDropdown").append("<option value='焊條'>焊條</option>");
-                            $("#MaterialDropdown").append("<option value='乙炔'>乙炔</option>");
-                        } else if (selectedEmissionPattern === "外購電力") {
-                            $("#MaterialDropdown").append("<option value='外購電力'>外購電力</option>");
-                        }
-                        // 可以根據需要添加更多選項
-                    });
-                });
-            </script>
+                </script>
+            }
         </form>
     </div>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
