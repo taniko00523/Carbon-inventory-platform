@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NuGet.DependencyResolver;
+using System.Reflection.Emit;
 
 namespace Carbon_inventory_platform.Data
 {
@@ -20,7 +21,8 @@ namespace Carbon_inventory_platform.Data
         public DbSet<Refrigerant> refrigerants { get; set; } = null!;
         public DbSet<DataLevel> dataLevels { get; set; } = null!;
         public DbSet<Emission> emissions { get; set; } = null!;
-        public DbSet<DataCorrection> dataCorrections { get; set; }=null!;
+        public DbSet<DataCorrection> dataCorrections { get; set; } = null!;
+        public DbSet<DeviceData> deviceDatas { get; set; } = null!;
 
         //public virtual DbSet<User> Users { get; set; }
         //public virtual DbSet<Staff> Staffs { get; set; }
@@ -106,10 +108,10 @@ new Material { Id = 40, Name = "煤油", Scope = "類別1", EmissionPattern = "�
 new Material { Id = 41, Name = "潤滑油", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 2.946167424, CO2ULL = 0.0191F, CO2UUL = 0.025921F, CH4CEF = 0.00012057984, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000024115968, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
 new Material { Id = 42, Name = "液化石油氣", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 1.7528812758, CO2ULL = 0.023772F, CO2UUL = 0.03962F, CH4CEF = 0.001722323916, CH4ULL = 0F, CH4UUL = 0F, N2OCEF = 0.0000055558836, N2OULL = 0F, N2OUUL = 0F, Unit = "L" },
 new Material { Id = 43, Name = "液化天然氣", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 2.11391532, CO2ULL = 0.032086F, CO2UUL = 0.039216F, CH4CEF = 0.0034666704, CH4ULL = 0.456522F, CH4UUL = 15.73913F, N2OCEF = 0.0001130436, N2OULL = 0.666667F, N2OUUL = 24.666667F, Unit = "M3" },
-new Material { Id = 56, Name = "外購電力", Scope = "類別2", EmissionPattern = "其他電力", CO2CEF = 0.495, CO2ULL = -0.07F, CO2UUL = 0.07F, Unit = "" ,Year=111},
+new Material { Id = 56, Name = "外購電力", Scope = "類別2", EmissionPattern = "外購電力", CO2CEF = 0.495, CO2ULL = -0.07F, CO2UUL = 0.07F, Unit = "", Year = 111 },
 new Material { Id = 57, Name = "廢水處理", Scope = "類別1", EmissionPattern = "逸散", CH4CEF = 0.002546062 },
-new Material { Id = 58, Name = "二氧化碳", Scope = "類別1", EmissionPattern = "逸散", CO2CEF = 1},
-new Material { Id = 59, Name = "乙炔", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.3841653850},
+new Material { Id = 58, Name = "二氧化碳", Scope = "類別1", EmissionPattern = "逸散", CO2CEF = 1 },
+new Material { Id = 59, Name = "乙炔", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.3841653850 },
 new Material { Id = 60, Name = "焊條", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.6666666666 }
 );
             builder.Entity<GWP>().HasData(
@@ -125,14 +127,36 @@ new GWP { Name = "R-410A", Num = 2256F, GWP_Year = 2022 },
 new GWP { Name = "R-600A", Num = 0, GWP_Year = 2022 },
 new GWP { Name = "R-407C", Num = 1908, GWP_Year = 2022 },
 new GWP { Name = "NF3", Num = 17400F, GWP_Year = 2022 },
-new GWP { Name = "SF6", Num = 24300F, GWP_Year = 2022 },
-new GWP { Name = "R-417A", Num = 2127, GWP_Year = 2022 }
+new GWP { Name = "SF6", Num = 24300F, GWP_Year = 2022 }
                 );
+            builder.Entity<DeviceData>().HasData(
+                new DeviceData { Id = 1, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-410A" },
+        new DeviceData { Id = 2, Name = "冰水主機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A" },
+        new DeviceData { Id = 3, Name = "冰箱", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A" },
+        new DeviceData { Id = 4, Name = "飲水機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A" },
+        new DeviceData { Id = 5, Name = "乾燥機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A" },
+        new DeviceData { Id = 6, Name = "車用空調", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A" },
+        new DeviceData { Id = 7, Name = "工業冷媒", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A" },
+        new DeviceData { Id = 8, Name = "緊急發電機", Scope = "類別一", EmissionPattern = "固定", Material = "柴油" },
+                new DeviceData { Id = 9, Name = "廚房", Scope = "類別一", EmissionPattern = "固定", Material = "液化石油氣" },
+                new DeviceData { Id = 10, Name = "公務車", Scope = "類別一", EmissionPattern = "移動", Material = "車用汽油" },
+                new DeviceData { Id = 11, Name = "堆高機", Scope = "類別一", EmissionPattern = "移動", Material = "柴油" },
+                new DeviceData { Id = 12, Name = "CO2滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳" },
+                new DeviceData { Id = 13, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳" },
+                new DeviceData { Id = 14, Name = "WD40", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳" },
+                new DeviceData { Id = 15, Name = "海龍滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "海龍1211" },
+                new DeviceData { Id = 16, Name = "FM200", Scope = "類別一", EmissionPattern = "逸散", Material = "FM200" },
+                new DeviceData { Id = 17, Name = "化糞池", Scope = "類別一", EmissionPattern = "逸散", Material = "廢水處理" },
+                new DeviceData { Id = 18, Name = "電力", Scope = "類別二", EmissionPattern = "外購電力", Material = "外購電力" },
+                new DeviceData { Id = 19, Name = "乙炔", Scope = "類別一", EmissionPattern = "製程", Material = "乙炔" },
+                new DeviceData { Id = 20, Name = "焊條", Scope = "類別一", EmissionPattern = "製程", Material = "焊條" }
+
+    );
 
             builder.Entity<Refrigerant>().HasData(
-new Refrigerant { Name = "家用冷凍、冷藏裝備", Num = 0.003000F},
-new Refrigerant { Name = "獨立商用冷凍、冷藏裝備", Num = 0.055000F},
-new Refrigerant { Name = "中、大型冷凍、冷藏裝備", Num = 0.200000F},
+new Refrigerant { Name = "家用冷凍、冷藏裝備", Num = 0.003000F },
+new Refrigerant { Name = "獨立商用冷凍、冷藏裝備", Num = 0.055000F },
+new Refrigerant { Name = "中、大型冷凍、冷藏裝備", Num = 0.200000F },
 new Refrigerant { Name = "交通用冷凍、冷藏裝備", Num = 0.33F },
 new Refrigerant { Name = "工業冷凍、冷藏裝備，包括食品加工及冷藏", Num = 0.16F },
 new Refrigerant { Name = "冰水機", Num = 0.09F },
@@ -145,7 +169,7 @@ new DataLevel { id = 2, name = "定期/間歇量測" },
 new DataLevel { id = 3, name = "自行/財務推估" }
                 );
             builder.Entity<DataCorrection>().HasData(
-new DataLevel { id = 1, name= "有外部校正或多組數據佐證者" },
+new DataLevel { id = 1, name = "有外部校正或多組數據佐證者" },
 new DataLevel { id = 2, name = "有內部校正或經過會計簽證等證明者" },
 new DataLevel { id = 3, name = "未進行儀器校正或未進行紀錄彙整者" }
                 );

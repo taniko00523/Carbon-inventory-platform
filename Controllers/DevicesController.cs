@@ -138,20 +138,35 @@ namespace Carbon_inventory_platform.Controllers
             ViewData["EmissionPattern"] = new SelectList(emissionPattern);
             return View(device);
         }
+        [HttpGet]//新增
+        public JsonResult GetDeviceData(string selectedName)
+        {
+            var deviceData = _context.deviceDatas
+                .Where(x => x.Name == selectedName)
+                .FirstOrDefault();
+
+            return Json(deviceData);
+        }
 
         [HttpGet]
         public JsonResult GetMaterialsAndGWPNames(string emissionPattern)
         {
             var materials = _context.Materials
-                .Where(x => x.EmissionPattern == emissionPattern)
-                .Select(x => new { name = x.Name })
-                .ToList();
+    .Where(x => x.EmissionPattern == emissionPattern)
+    .Select(x => new { name = x.Name })
+    .ToList();
 
-            var gwpNames = _context.GWPs
-                .Select(x => new { name = x.Name })
-                .ToList();
+            List<object> gwpNames = new List<object>();
+
+            if (emissionPattern == "逸散")
+            {
+                gwpNames = _context.GWPs
+                    .Select(x => new { name = x.Name })
+                    .ToList<object>(); // 將型別調整為相同的 List<object>
+            }
 
             return Json(new { materials, gwpNames });
+
         }
 
 
