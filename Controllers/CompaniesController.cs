@@ -173,7 +173,10 @@ namespace Carbon_inventory_platform.Controllers
                 return Problem("沒有找到資料");
             }
             var toDelete = await _context.Companies.FindAsync(id);
-            if (toDelete != null)
+            if (toDelete.Name == "Default")
+            {
+                _context.Companies.Remove(toDelete);
+            }else if (toDelete != null)
             {
                 toDelete.isDeleted = 1;
                 toDelete.DeleteTime = DateTime.Now;

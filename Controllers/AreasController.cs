@@ -185,8 +185,11 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return Problem("沒有找到資料");
             }
-            var toDelete = await _context.Areas.FindAsync(id);
-            if (toDelete != null)
+            var toDelete = await _context.Areas.FindAsync(id);  
+            if (toDelete.Address == "Default")
+            {
+                _context.Areas.Remove(toDelete);
+            }else if (toDelete != null)
             {
                 toDelete.isDeleted = 1;
                 toDelete.DeleteTime = DateTime.Now;
