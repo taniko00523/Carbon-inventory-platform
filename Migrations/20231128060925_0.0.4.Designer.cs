@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_inventory_platform.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231122115556_0.0.8")]
-    partial class _008
+    [Migration("20231128060925_0.0.4")]
+    partial class _004
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,10 +101,25 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<DateTime?>("DeleteTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("EasyEnglishName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EasyName")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("EnglishName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Information")
                         .IsRequired()
@@ -115,8 +130,8 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Owner")
                         .IsRequired()
@@ -347,6 +362,246 @@ namespace Carbon_inventory_platform.Migrations
                     b.HasIndex("MaterialId");
 
                     b.ToTable("Devices");
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.DeviceData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Correction")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmissionPattern")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Material")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Scope")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("deviceDatas");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Correction = 3,
+                            EmissionPattern = "逸散",
+                            Level = 3,
+                            Material = "R-410A",
+                            Name = "冷氣機",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Correction = 3,
+                            EmissionPattern = "逸散",
+                            Level = 3,
+                            Material = "R-134A",
+                            Name = "冰水主機",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Correction = 3,
+                            EmissionPattern = "逸散",
+                            Level = 3,
+                            Material = "R-134A",
+                            Name = "冰箱",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Correction = 3,
+                            EmissionPattern = "逸散",
+                            Level = 3,
+                            Material = "R-134A",
+                            Name = "飲水機",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Correction = 3,
+                            EmissionPattern = "逸散",
+                            Level = 3,
+                            Material = "R-134A",
+                            Name = "乾燥機",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Correction = 3,
+                            EmissionPattern = "逸散",
+                            Level = 3,
+                            Material = "R-134A",
+                            Name = "車用空調",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Correction = 3,
+                            EmissionPattern = "逸散",
+                            Level = 3,
+                            Material = "R-134A",
+                            Name = "工業冷媒",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Correction = 3,
+                            EmissionPattern = "固定",
+                            Level = 3,
+                            Material = "柴油",
+                            Name = "緊急發電機",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Correction = 2,
+                            EmissionPattern = "固定",
+                            Level = 2,
+                            Material = "液化石油氣",
+                            Name = "廚房",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Correction = 2,
+                            EmissionPattern = "移動",
+                            Level = 2,
+                            Material = "車用汽油",
+                            Name = "公務車",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Correction = 2,
+                            EmissionPattern = "移動",
+                            Level = 2,
+                            Material = "柴油",
+                            Name = "堆高機",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Correction = 3,
+                            EmissionPattern = "逸散",
+                            Level = 3,
+                            Material = "二氧化碳",
+                            Name = "CO2滅火器",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Correction = 3,
+                            EmissionPattern = "逸散",
+                            Level = 3,
+                            Material = "二氧化碳",
+                            Name = "二氧化碳",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Correction = 3,
+                            EmissionPattern = "逸散",
+                            Level = 3,
+                            Material = "二氧化碳",
+                            Name = "WD40",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Correction = 3,
+                            EmissionPattern = "逸散",
+                            Level = 3,
+                            Material = "海龍1211",
+                            Name = "海龍滅火器",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Correction = 3,
+                            EmissionPattern = "逸散",
+                            Level = 3,
+                            Material = "FM200",
+                            Name = "FM200",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Correction = 3,
+                            EmissionPattern = "逸散",
+                            Level = 3,
+                            Material = "廢水處理",
+                            Name = "化糞池",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Correction = 1,
+                            EmissionPattern = "外購電力",
+                            Level = 1,
+                            Material = "外購電力",
+                            Name = "電力",
+                            Scope = "類別二"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Correction = 3,
+                            EmissionPattern = "製程",
+                            Level = 3,
+                            Material = "乙炔",
+                            Name = "乙炔",
+                            Scope = "類別一"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Correction = 3,
+                            EmissionPattern = "製程",
+                            Level = 3,
+                            Material = "焊條",
+                            Name = "焊條",
+                            Scope = "類別一"
+                        });
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Emission", b =>
@@ -609,7 +864,13 @@ namespace Carbon_inventory_platform.Migrations
                         {
                             Name = "R-600A",
                             GWP_Year = 2022,
-                            Num = 0f
+                            Num = 0.006f
+                        },
+                        new
+                        {
+                            Name = "R-407C",
+                            GWP_Year = 2022,
+                            Num = 1908f
                         },
                         new
                         {
@@ -633,8 +894,8 @@ namespace Carbon_inventory_platform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("CH4CEF")
-                        .HasColumnType("real");
+                    b.Property<double>("CH4CEF")
+                        .HasColumnType("float");
 
                     b.Property<float>("CH4ULL")
                         .HasColumnType("real");
@@ -642,8 +903,8 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<float>("CH4UUL")
                         .HasColumnType("real");
 
-                    b.Property<float>("CO2CEF")
-                        .HasColumnType("real");
+                    b.Property<double>("CO2CEF")
+                        .HasColumnType("float");
 
                     b.Property<float>("CO2ULL")
                         .HasColumnType("real");
@@ -656,8 +917,8 @@ namespace Carbon_inventory_platform.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<float>("N2OCEF")
-                        .HasColumnType("real");
+                    b.Property<double>("N2OCEF")
+                        .HasColumnType("float");
 
                     b.Property<float>("N2OULL")
                         .HasColumnType("real");
@@ -691,14 +952,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 1,
-                            CH4CEF = 2.4660252E-05f,
+                            CH4CEF = 2.4660252E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 2.3328598f,
+                            CO2CEF = 2.3328598392000002,
                             CO2ULL = 0.077167f,
                             CO2UUL = 0.067653f,
                             EmissionPattern = "固定",
-                            N2OCEF = 3.699038E-05f,
+                            N2OCEF = 3.6990377999999997E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "自產煤",
@@ -709,14 +970,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 2,
-                            CH4CEF = 2.8470253E-05f,
+                            CH4CEF = 2.847024E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 2.6932847f,
+                            CO2CEF = 2.6932847039999999,
                             CO2ULL = 0.077167f,
                             CO2UUL = 0.067653f,
                             EmissionPattern = "固定",
-                            N2OCEF = 4.270538E-05f,
+                            N2OCEF = 4.2705359999999997E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "原料煤",
@@ -727,14 +988,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 3,
-                            CH4CEF = 2.5455252E-05f,
+                            CH4CEF = 2.5455744000000001E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 2.4081135f,
+                            CO2CEF = 2.4081133823999998,
                             CO2ULL = 0.077167f,
                             CO2UUL = 0.067653f,
                             EmissionPattern = "固定",
-                            N2OCEF = 3.8183378E-05f,
+                            N2OCEF = 3.8183616000000002E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "燃料煤",
@@ -745,14 +1006,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 4,
-                            CH4CEF = 2.9726252E-05f,
+                            CH4CEF = 2.9726279999999999E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 2.9220934f,
+                            CO2CEF = 2.922093324,
                             CO2ULL = 0.03764f,
                             CO2UUL = 0.027467f,
                             EmissionPattern = "固定",
-                            N2OCEF = 4.458938E-05f,
+                            N2OCEF = 4.4589419999999998E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "無煙煤",
@@ -763,14 +1024,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 5,
-                            CH4CEF = 2.8470253E-05f,
+                            CH4CEF = 2.847024E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 2.6932847f,
+                            CO2CEF = 2.6932847039999999,
                             CO2ULL = 0.077167f,
                             CO2UUL = 0.067653f,
                             EmissionPattern = "固定",
-                            N2OCEF = 4.270538E-05f,
+                            N2OCEF = 4.2705359999999997E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "焦煤",
@@ -781,14 +1042,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 6,
-                            CH4CEF = 2.5455252E-05f,
+                            CH4CEF = 2.5455744000000001E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 2.4081135f,
+                            CO2CEF = 2.4081133823999998,
                             CO2ULL = 0.053911f,
                             CO2UUL = 0.053911f,
                             EmissionPattern = "固定",
-                            N2OCEF = 3.8183378E-05f,
+                            N2OCEF = 3.8183616000000002E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "煙煤",
@@ -799,14 +1060,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 7,
-                            CH4CEF = 2.0515252E-05f,
+                            CH4CEF = 2.0515320000000001E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 1.9715222f,
+                            CO2CEF = 1.971522252,
                             CO2ULL = 0.034339f,
                             CO2UUL = 0.040583f,
                             EmissionPattern = "固定",
-                            N2OCEF = 3.077338E-05f,
+                            N2OCEF = 3.0772979999999997E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "亞煙煤(發電)",
@@ -817,14 +1078,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 8,
-                            CH4CEF = 2.3446251E-05f,
+                            CH4CEF = 2.3446080000000001E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 2.2531683f,
+                            CO2CEF = 2.2531682879999999,
                             CO2ULL = 0.034339f,
                             CO2UUL = 0.040583f,
                             EmissionPattern = "固定",
-                            N2OCEF = 3.5169378E-05f,
+                            N2OCEF = 3.5169120000000003E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "亞煙煤(其他)",
@@ -835,14 +1096,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 9,
-                            CH4CEF = 1.1907252E-05f,
+                            CH4CEF = 1.19072592E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 1.2026331f,
+                            CO2CEF = 1.2026331792,
                             CO2ULL = 0.1f,
                             CO2UUL = 0.138614f,
                             EmissionPattern = "固定",
-                            N2OCEF = 1.7860379E-05f,
+                            N2OCEF = 1.78608888E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "褐煤",
@@ -853,14 +1114,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 10,
-                            CH4CEF = 8.905252E-06f,
+                            CH4CEF = 8.9053236000000002E-06,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 0.95286965f,
+                            CO2CEF = 0.95286962519999996,
                             CO2ULL = 0.157009f,
                             CO2UUL = 0.168224f,
                             EmissionPattern = "固定",
-                            N2OCEF = 1.3358378E-05f,
+                            N2OCEF = 1.33579854E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "油頁岩",
@@ -871,14 +1132,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 11,
-                            CH4CEF = 9.767252E-06f,
+                            CH4CEF = 9.7678044000000006E-06,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 1.0353873f,
+                            CO2CEF = 1.0353872663999999,
                             CO2ULL = 0.056604f,
                             CO2UUL = 0.018868f,
                             EmissionPattern = "固定",
-                            N2OCEF = 1.4651378E-05f,
+                            N2OCEF = 1.46517066E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "泥煤",
@@ -889,14 +1150,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 12,
-                            CH4CEF = 1.5909252E-05f,
+                            CH4CEF = 1.5909840000000001E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 1.5512094f,
+                            CO2CEF = 1.5512094000000001,
                             CO2ULL = 0.104615f,
                             CO2UUL = 0.117949f,
                             EmissionPattern = "固定",
-                            N2OCEF = 2.3864379E-05f,
+                            N2OCEF = 2.386476E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "煤球",
@@ -907,14 +1168,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 13,
-                            CH4CEF = 2.9307252E-05f,
+                            CH4CEF = 2.93076E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 3.1359131f,
+                            CO2CEF = 3.1359132000000001,
                             CO2ULL = 0.105607f,
                             CO2UUL = 0.11215f,
                             EmissionPattern = "固定",
-                            N2OCEF = 4.396138E-05f,
+                            N2OCEF = 4.3961400000000002E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "焦炭",
@@ -925,14 +1186,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 14,
-                            CH4CEF = 0.000102995255f,
+                            CH4CEF = 0.00010299528000000001,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 3.3473465f,
+                            CO2CEF = 3.3473465999999998,
                             CO2ULL = 0.149744f,
                             CO2UUL = 0.179487f,
                             EmissionPattern = "固定",
-                            N2OCEF = 2.0599378E-05f,
+                            N2OCEF = 2.0599056E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "石油焦",
@@ -943,14 +1204,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 15,
-                            CH4CEF = 9.420325E-05f,
+                            CH4CEF = 9.4203000000000006E-05,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.19807f,
+                            CO2CEF = 2.19807,
                             CO2ULL = 0.035714f,
                             CO2UUL = 0.042857f,
                             EmissionPattern = "固定",
-                            N2OCEF = 1.8840377E-05f,
+                            N2OCEF = 1.8840600000000001E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "航空汽油",
@@ -961,14 +1222,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 16,
-                            CH4CEF = 0.00010048325f,
+                            CH4CEF = 0.00010048319999999999,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.3948495f,
+                            CO2CEF = 2.3948496000000001,
                             CO2ULL = 0.025175f,
                             CO2UUL = 0.040559f,
                             EmissionPattern = "固定",
-                            N2OCEF = 2.0096379E-05f,
+                            N2OCEF = 2.0096639999999999E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "航空燃油",
@@ -979,14 +1240,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 17,
-                            CH4CEF = 0.00011304325f,
+                            CH4CEF = 0.0001130436,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.762032f,
+                            CO2CEF = 2.7620319599999998,
                             CO2ULL = 0.030014f,
                             CO2UUL = 0.030014f,
                             EmissionPattern = "固定",
-                            N2OCEF = 2.2608378E-05f,
+                            N2OCEF = 2.2608720000000001E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "原油",
@@ -997,14 +1258,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 18,
-                            CH4CEF = 8.255925E-05f,
+                            CH4CEF = 8.2559509200000002E-05,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.1190274f,
+                            CO2CEF = 2.1190274028,
                             CO2ULL = 0.1f,
                             CO2UUL = 0.109091f,
                             EmissionPattern = "固定",
-                            N2OCEF = 1.6511378E-05f,
+                            N2OCEF = 1.6511901839999998E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "奧里油",
@@ -1015,14 +1276,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 19,
-                            CH4CEF = 0.00013268825f,
+                            CH4CEF = 0.00013268806559999999,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.8395245f,
+                            CO2CEF = 2.8395246038400002,
                             CO2ULL = 0.0919f,
                             CO2UUL = 0.096573f,
                             EmissionPattern = "固定",
-                            N2OCEF = 2.6537378E-05f,
+                            N2OCEF = 2.6537613120000002E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "天然氣凝結油",
@@ -1033,14 +1294,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 20,
-                            CH4CEF = 0.000106763255f,
+                            CH4CEF = 0.00010676339999999999,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.5587628f,
+                            CO2CEF = 2.5587628200000001,
                             CO2ULL = 0.015299f,
                             CO2UUL = 0.025035f,
                             EmissionPattern = "固定",
-                            N2OCEF = 2.1352378E-05f,
+                            N2OCEF = 2.1352679999999998E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "煤油",
@@ -1051,14 +1312,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 21,
-                            CH4CEF = 0.00010799425f,
+                            CH4CEF = 0.00010799431920000001,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.7945626f,
+                            CO2CEF = 2.79456255864,
                             CO2ULL = 0.075034f,
                             CO2UUL = 0.080491f,
                             EmissionPattern = "固定",
-                            N2OCEF = 2.1598378E-05f,
+                            N2OCEF = 2.1598863839999998E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "頁岩油",
@@ -1069,14 +1330,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 22,
-                            CH4CEF = 0.00010550725f,
+                            CH4CEF = 0.00010550736,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.606032f,
+                            CO2CEF = 2.606031792,
                             CO2ULL = 0.020243f,
                             CO2UUL = 0.009447f,
                             EmissionPattern = "固定",
-                            N2OCEF = 2.1101378E-05f,
+                            N2OCEF = 2.1101472000000001E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "柴油",
@@ -1087,14 +1348,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 23,
-                            CH4CEF = 9.797125E-05f,
+                            CH4CEF = 9.7971119999999996E-05,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.2631328f,
+                            CO2CEF = 2.2631328719999999,
                             CO2ULL = 0.025974f,
                             CO2UUL = 0.053391f,
                             EmissionPattern = "固定",
-                            N2OCEF = 1.9594378E-05f,
+                            N2OCEF = 1.9594223999999998E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "車用汽油",
@@ -1105,14 +1366,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 24,
-                            CH4CEF = 0.00012057925f,
+                            CH4CEF = 0.00012057984,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 3.1109598f,
+                            CO2CEF = 3.110959872,
                             CO2ULL = 0.024548f,
                             CO2UUL = 0.018088f,
                             EmissionPattern = "固定",
-                            N2OCEF = 2.4116378E-05f,
+                            N2OCEF = 2.4115968E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "蒸餘油 (燃料油)",
@@ -1123,14 +1384,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 25,
-                            CH4CEF = 2.7779251E-05f,
+                            CH4CEF = 2.7779418E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 1.7528813f,
+                            CO2CEF = 1.7528812758000001,
                             CO2ULL = 0.023772f,
                             CO2UUL = 0.03962f,
                             EmissionPattern = "固定",
-                            N2OCEF = 2.777378E-06f,
+                            N2OCEF = 2.7779418000000001E-06,
                             N2OULL = 0.7f,
                             N2OUUL = 2f,
                             Name = "液化石油氣",
@@ -1141,14 +1402,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 26,
-                            CH4CEF = 9.797125E-05f,
+                            CH4CEF = 9.7971119999999996E-05,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.393761f,
+                            CO2CEF = 2.393761032,
                             CO2ULL = 0.05457f,
                             CO2UUL = 0.040928f,
                             EmissionPattern = "固定",
-                            N2OCEF = 1.9594378E-05f,
+                            N2OCEF = 1.9594223999999998E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "石油腦",
@@ -1159,14 +1420,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 27,
-                            CH4CEF = 0.00012560425f,
+                            CH4CEF = 0.000125604,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 3.3787477f,
+                            CO2CEF = 3.3787476000000001,
                             CO2ULL = 0.095415f,
                             CO2UUL = 0.114002f,
                             EmissionPattern = "固定",
-                            N2OCEF = 2.5120378E-05f,
+                            N2OCEF = 2.5120799999999998E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "柏油",
@@ -1177,14 +1438,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 28,
-                            CH4CEF = 0.00012057925f,
+                            CH4CEF = 0.00012057984,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.9461675f,
+                            CO2CEF = 2.946167424,
                             CO2ULL = 0.0191f,
                             CO2UUL = 0.025921f,
                             EmissionPattern = "固定",
-                            N2OCEF = 2.4116378E-05f,
+                            N2OCEF = 2.4115968E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "潤滑油",
@@ -1195,14 +1456,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 29,
-                            CH4CEF = 0.00011304325f,
+                            CH4CEF = 0.0001130436,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.762032f,
+                            CO2CEF = 2.7620319599999998,
                             CO2ULL = 0.015007f,
                             CO2UUL = 0.015007f,
                             EmissionPattern = "固定",
-                            N2OCEF = 2.2608378E-05f,
+                            N2OCEF = 2.2608720000000001E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "其他油品",
@@ -1213,14 +1474,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 30,
-                            CH4CEF = 4.643125E-05f,
+                            CH4CEF = 4.6431611999999997E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 2.8601873f,
+                            CO2CEF = 2.8601872992000001,
                             CO2ULL = 0.082792f,
                             CO2UUL = 0.113636f,
                             EmissionPattern = "固定",
-                            N2OCEF = 4.643378E-06f,
+                            N2OCEF = 4.6431611999999997E-06,
                             N2OULL = 0.7f,
                             N2OUUL = 2f,
                             Name = "乙烷",
@@ -1231,14 +1492,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 31,
-                            CH4CEF = 3.3494252E-05f,
+                            CH4CEF = 3.3494400000000002E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 1.8790358f,
+                            CO2CEF = 1.87903584,
                             CO2ULL = 0.032086f,
                             CO2UUL = 0.039216f,
                             EmissionPattern = "固定",
-                            N2OCEF = 3.349378E-06f,
+                            N2OCEF = 3.3494399999999999E-06,
                             N2OULL = 0.7f,
                             N2OUUL = 2f,
                             Name = "天然氣",
@@ -1249,14 +1510,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 32,
-                            CH4CEF = 3.7681253E-05f,
+                            CH4CEF = 3.7681200000000001E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 2.170437f,
+                            CO2CEF = 2.1704371199999999,
                             CO2ULL = 0.163194f,
                             CO2UUL = 0.197917f,
                             EmissionPattern = "固定",
-                            N2OCEF = 3.768378E-06f,
+                            N2OCEF = 3.7681200000000001E-06,
                             N2OULL = 0.7f,
                             N2OUUL = 2f,
                             Name = "煉油氣",
@@ -1267,14 +1528,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 33,
-                            CH4CEF = 1.7584252E-05f,
+                            CH4CEF = 1.7584560000000002E-05,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 0.78075445f,
+                            CO2CEF = 0.78075446400000004,
                             CO2ULL = 0.15991f,
                             CO2UUL = 0.218468f,
                             EmissionPattern = "固定",
-                            N2OCEF = 1.758378E-06f,
+                            N2OCEF = 1.758456E-06,
                             N2OULL = 0.7f,
                             N2OUUL = 2f,
                             Name = "焦爐氣",
@@ -1285,14 +1546,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 34,
-                            CH4CEF = 3.253252E-06f,
+                            CH4CEF = 3.2531436E-06,
                             CH4ULL = 0.7f,
                             CH4UUL = 2f,
-                            CO2CEF = 0.8458173f,
+                            CO2CEF = 0.84581733599999998,
                             CO2ULL = 0.157692f,
                             CO2UUL = 0.184615f,
                             EmissionPattern = "固定",
-                            N2OCEF = 3.25378E-07f,
+                            N2OCEF = 3.2531435999999998E-07,
                             N2OULL = 0.7f,
                             N2OUUL = 2f,
                             Name = "高爐氣",
@@ -1303,14 +1564,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 35,
-                            CH4CEF = 0.00025492726f,
+                            CH4CEF = 0.00025492713443999999,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 0.77922726f,
+                            CO2CEF = 0.77922727427159999,
                             CO2ULL = 0.200654f,
                             CO2UUL = 0.31952f,
                             EmissionPattern = "固定",
-                            N2OCEF = 3.3990378E-05f,
+                            N2OCEF = 3.3990284592000002E-05,
                             N2OULL = 0.625f,
                             N2OUUL = 2.75f,
                             Name = "一般廢棄物",
@@ -1321,14 +1582,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 36,
-                            CH4CEF = 9.420325E-05f,
+                            CH4CEF = 9.4203000000000006E-05,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.19807f,
+                            CO2CEF = 2.19807,
                             CO2ULL = 0.035714f,
                             CO2UUL = 0.042857f,
                             EmissionPattern = "移動",
-                            N2OCEF = 1.8840377E-05f,
+                            N2OCEF = 1.8840600000000001E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "航空汽油",
@@ -1339,14 +1600,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 37,
-                            CH4CEF = 0.00010048325f,
+                            CH4CEF = 0.00010048319999999999,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.3948495f,
+                            CO2CEF = 2.3948496000000001,
                             CO2ULL = 0.025175f,
                             CO2UUL = 0.040559f,
                             EmissionPattern = "移動",
-                            N2OCEF = 2.0096379E-05f,
+                            N2OCEF = 2.0096639999999999E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "航空燃油",
@@ -1357,14 +1618,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 38,
-                            CH4CEF = 0.00081642624f,
+                            CH4CEF = 0.00081642599999999998,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.44f,
-                            CO2CEF = 2.2631328f,
+                            CO2CEF = 2.2631328719999999,
                             CO2ULL = 0.025974f,
                             CO2UUL = 0.053391f,
                             EmissionPattern = "移動",
-                            N2OCEF = 0.00026125638f,
+                            N2OCEF = 0.00026125631999999999,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "車用汽油",
@@ -1375,14 +1636,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 39,
-                            CH4CEF = 0.00013715925f,
+                            CH4CEF = 0.00013715956800000001,
                             CH4ULL = 0.589744f,
                             CH4UUL = 1.435897f,
-                            CO2CEF = 2.606032f,
+                            CO2CEF = 2.606031792,
                             CO2ULL = 0.020243f,
                             CO2UUL = 0.009447f,
                             EmissionPattern = "移動",
-                            N2OCEF = 0.00013715938f,
+                            N2OCEF = 0.00013715956800000001,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.076923f,
                             Name = "柴油",
@@ -1393,14 +1654,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 40,
-                            CH4CEF = 0.000106763255f,
+                            CH4CEF = 0.00010676339999999999,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.5587628f,
+                            CO2CEF = 2.5587628200000001,
                             CO2ULL = 0.015299f,
                             CO2UUL = 0.025035f,
                             EmissionPattern = "移動",
-                            N2OCEF = 2.1352378E-05f,
+                            N2OCEF = 2.1352679999999998E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "煤油",
@@ -1411,14 +1672,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 41,
-                            CH4CEF = 0.00012057925f,
+                            CH4CEF = 0.00012057984,
                             CH4ULL = 0.666667f,
                             CH4UUL = 2.333333f,
-                            CO2CEF = 2.9461675f,
+                            CO2CEF = 2.946167424,
                             CO2ULL = 0.0191f,
                             CO2UUL = 0.025921f,
                             EmissionPattern = "移動",
-                            N2OCEF = 2.4116378E-05f,
+                            N2OCEF = 2.4115968E-05,
                             N2OULL = 0.666667f,
                             N2OUUL = 2.333333f,
                             Name = "潤滑油",
@@ -1429,14 +1690,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 42,
-                            CH4CEF = 0.0017223232f,
+                            CH4CEF = 0.001722323916,
                             CH4ULL = 0f,
                             CH4UUL = 0f,
-                            CO2CEF = 1.7528813f,
+                            CO2CEF = 1.7528812758000001,
                             CO2ULL = 0.023772f,
                             CO2UUL = 0.03962f,
                             EmissionPattern = "移動",
-                            N2OCEF = 5.555378E-06f,
+                            N2OCEF = 5.5558836000000003E-06,
                             N2OULL = 0f,
                             N2OUUL = 0f,
                             Name = "液化石油氣",
@@ -1447,14 +1708,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 43,
-                            CH4CEF = 0.0034666702f,
+                            CH4CEF = 0.0034666704,
                             CH4ULL = 0.456522f,
                             CH4UUL = 15.73913f,
-                            CO2CEF = 2.1139152f,
+                            CO2CEF = 2.1139153199999998,
                             CO2ULL = 0.032086f,
                             CO2UUL = 0.039216f,
                             EmissionPattern = "移動",
-                            N2OCEF = 0.00011304338f,
+                            N2OCEF = 0.0001130436,
                             N2OULL = 0.666667f,
                             N2OUUL = 24.666668f,
                             Name = "液化天然氣",
@@ -1465,14 +1726,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 56,
-                            CH4CEF = 0f,
+                            CH4CEF = 0.0,
                             CH4ULL = 0f,
                             CH4UUL = 0f,
-                            CO2CEF = 0.495f,
+                            CO2CEF = 0.495,
                             CO2ULL = -0.07f,
                             CO2UUL = 0.07f,
-                            EmissionPattern = "其他電力",
-                            N2OCEF = 0f,
+                            EmissionPattern = "外購電力",
+                            N2OCEF = 0.0,
                             N2OULL = 0f,
                             N2OUUL = 0f,
                             Name = "外購電力",
@@ -1483,14 +1744,14 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 57,
-                            CH4CEF = 0f,
+                            CH4CEF = 0.002546062,
                             CH4ULL = 0f,
                             CH4UUL = 0f,
-                            CO2CEF = 1f,
+                            CO2CEF = 0.0,
                             CO2ULL = 0f,
                             CO2UUL = 0f,
                             EmissionPattern = "逸散",
-                            N2OCEF = 0f,
+                            N2OCEF = 0.0,
                             N2OULL = 0f,
                             N2OUUL = 0f,
                             Name = "廢水處理",
@@ -1501,17 +1762,53 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 58,
-                            CH4CEF = 0f,
+                            CH4CEF = 0.0,
                             CH4ULL = 0f,
                             CH4UUL = 0f,
-                            CO2CEF = 1f,
+                            CO2CEF = 1.0,
                             CO2ULL = 0f,
                             CO2UUL = 0f,
                             EmissionPattern = "逸散",
-                            N2OCEF = 0f,
+                            N2OCEF = 0.0,
                             N2OULL = 0f,
                             N2OUUL = 0f,
-                            Name = "CO2",
+                            Name = "二氧化碳",
+                            Scope = "類別1",
+                            Unit = "",
+                            Year = 0
+                        },
+                        new
+                        {
+                            Id = 59,
+                            CH4CEF = 0.0,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 3.3841653850000002,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
+                            EmissionPattern = "製程",
+                            N2OCEF = 0.0,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
+                            Name = "乙炔",
+                            Scope = "類別1",
+                            Unit = "",
+                            Year = 0
+                        },
+                        new
+                        {
+                            Id = 60,
+                            CH4CEF = 0.0,
+                            CH4ULL = 0f,
+                            CH4UUL = 0f,
+                            CO2CEF = 3.6666666665999998,
+                            CO2ULL = 0f,
+                            CO2UUL = 0f,
+                            EmissionPattern = "製程",
+                            N2OCEF = 0.0,
+                            N2OULL = 0f,
+                            N2OUUL = 0f,
+                            Name = "焊條",
                             Scope = "類別1",
                             Unit = "",
                             Year = 0

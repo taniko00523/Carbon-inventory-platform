@@ -124,32 +124,33 @@ new GWP { Name = "R-134A", Num = 1530F, GWP_Year = 2022 },
 new GWP { Name = "七氟丙烷", Num = 3600F, GWP_Year = 2022 },
 new GWP { Name = "R-22", Num = 1960F, GWP_Year = 2022 },
 new GWP { Name = "R-410A", Num = 2256F, GWP_Year = 2022 },
-new GWP { Name = "R-600A", Num = 0, GWP_Year = 2022 },
+new GWP { Name = "R-600A", Num = 0.006F, GWP_Year = 2022 },
+new GWP { Name = "R-417A", Num = 2127F, GWP_Year = 2022 },
 new GWP { Name = "R-407C", Num = 1908, GWP_Year = 2022 },
 new GWP { Name = "NF3", Num = 17400F, GWP_Year = 2022 },
 new GWP { Name = "SF6", Num = 24300F, GWP_Year = 2022 }
                 );
             builder.Entity<DeviceData>().HasData(
-                new DeviceData { Id = 1, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-410A" },
-        new DeviceData { Id = 2, Name = "冰水主機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A" },
-        new DeviceData { Id = 3, Name = "冰箱", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A" },
-        new DeviceData { Id = 4, Name = "飲水機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A" },
-        new DeviceData { Id = 5, Name = "乾燥機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A" },
-        new DeviceData { Id = 6, Name = "車用空調", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A" },
-        new DeviceData { Id = 7, Name = "工業冷媒", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A" },
-        new DeviceData { Id = 8, Name = "緊急發電機", Scope = "類別一", EmissionPattern = "固定", Material = "柴油" },
-                new DeviceData { Id = 9, Name = "廚房", Scope = "類別一", EmissionPattern = "固定", Material = "液化石油氣" },
-                new DeviceData { Id = 10, Name = "公務車", Scope = "類別一", EmissionPattern = "移動", Material = "車用汽油" },
-                new DeviceData { Id = 11, Name = "堆高機", Scope = "類別一", EmissionPattern = "移動", Material = "柴油" },
-                new DeviceData { Id = 12, Name = "CO2滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳" },
-                new DeviceData { Id = 13, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳" },
-                new DeviceData { Id = 14, Name = "WD40", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳" },
-                new DeviceData { Id = 15, Name = "海龍滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "海龍1211" },
-                new DeviceData { Id = 16, Name = "FM200", Scope = "類別一", EmissionPattern = "逸散", Material = "FM200" },
-                new DeviceData { Id = 17, Name = "化糞池", Scope = "類別一", EmissionPattern = "逸散", Material = "廢水處理" },
-                new DeviceData { Id = 18, Name = "電力", Scope = "類別二", EmissionPattern = "外購電力", Material = "外購電力" },
-                new DeviceData { Id = 19, Name = "乙炔", Scope = "類別一", EmissionPattern = "製程", Material = "乙炔" },
-                new DeviceData { Id = 20, Name = "焊條", Scope = "類別一", EmissionPattern = "製程", Material = "焊條" }
+                new DeviceData { Id = 1, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-410A" , Correction=3,Level=3},
+        new DeviceData { Id = 2, Name = "冰水主機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3 },
+        new DeviceData { Id = 3, Name = "冰箱", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3 },
+        new DeviceData { Id = 4, Name = "飲水機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3 },
+        new DeviceData { Id = 5, Name = "乾燥機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3 },
+        new DeviceData { Id = 6, Name = "車用空調", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3 },
+        new DeviceData { Id = 7, Name = "工業冷媒", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3 },
+        new DeviceData { Id = 8, Name = "緊急發電機", Scope = "類別一", EmissionPattern = "固定", Material = "柴油", Correction = 3, Level = 3 },
+                new DeviceData { Id = 9, Name = "廚房", Scope = "類別一", EmissionPattern = "固定", Material = "液化石油氣", Correction = 2, Level = 2 },
+                new DeviceData { Id = 10, Name = "公務車", Scope = "類別一", EmissionPattern = "移動", Material = "車用汽油", Correction = 2, Level = 2 },
+                new DeviceData { Id = 11, Name = "堆高機", Scope = "類別一", EmissionPattern = "移動", Material = "柴油", Correction = 2, Level = 2 },
+                new DeviceData { Id = 12, Name = "CO2滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Correction = 3, Level = 3 },
+                new DeviceData { Id = 13, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Correction = 3, Level = 3 },
+                new DeviceData { Id = 14, Name = "WD40", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Correction = 3, Level = 3 },
+                new DeviceData { Id = 15, Name = "海龍滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "海龍1211", Correction = 3, Level = 3 },
+                new DeviceData { Id = 16, Name = "FM200", Scope = "類別一", EmissionPattern = "逸散", Material = "FM200", Correction = 3, Level = 3 },
+                new DeviceData { Id = 17, Name = "化糞池", Scope = "類別一", EmissionPattern = "逸散", Material = "廢水處理", Correction = 3, Level = 3 },
+                new DeviceData { Id = 18, Name = "電力", Scope = "類別二", EmissionPattern = "外購電力", Material = "外購電力", Correction = 1, Level = 1 },
+                new DeviceData { Id = 19, Name = "乙炔", Scope = "類別一", EmissionPattern = "製程", Material = "乙炔", Correction = 3, Level = 3 },
+                new DeviceData { Id = 20, Name = "焊條", Scope = "類別一", EmissionPattern = "製程", Material = "焊條", Correction = 3, Level = 3 }
 
     );
 
@@ -169,9 +170,9 @@ new DataLevel { id = 2, name = "定期/間歇量測" },
 new DataLevel { id = 3, name = "自行/財務推估" }
                 );
             builder.Entity<DataCorrection>().HasData(
-new DataLevel { id = 1, name = "有外部校正或多組數據佐證者" },
-new DataLevel { id = 2, name = "有內部校正或經過會計簽證等證明者" },
-new DataLevel { id = 3, name = "未進行儀器校正或未進行紀錄彙整者" }
+new DataCorrection { id = 1, name = "有外部校正或多組數據佐證者" },
+new DataCorrection { id = 2, name = "有內部校正或經過會計簽證等證明者" },
+new DataCorrection { id = 3, name = "未進行儀器校正或未進行紀錄彙整者" }
                 );
         }
     }

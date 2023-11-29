@@ -98,10 +98,25 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<DateTime?>("DeleteTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("EasyEnglishName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EasyName")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("EnglishName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Information")
                         .IsRequired()
@@ -112,8 +127,8 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Owner")
                         .IsRequired()
@@ -354,10 +369,16 @@ namespace Carbon_inventory_platform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Correction")
+                        .HasColumnType("int");
+
                     b.Property<string>("EmissionPattern")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
 
                     b.Property<string>("Material")
                         .IsRequired()
@@ -381,7 +402,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 1,
+                            Correction = 3,
                             EmissionPattern = "逸散",
+                            Level = 3,
                             Material = "R-410A",
                             Name = "冷氣機",
                             Scope = "類別一"
@@ -389,7 +412,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 2,
+                            Correction = 3,
                             EmissionPattern = "逸散",
+                            Level = 3,
                             Material = "R-134A",
                             Name = "冰水主機",
                             Scope = "類別一"
@@ -397,7 +422,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 3,
+                            Correction = 3,
                             EmissionPattern = "逸散",
+                            Level = 3,
                             Material = "R-134A",
                             Name = "冰箱",
                             Scope = "類別一"
@@ -405,7 +432,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 4,
+                            Correction = 3,
                             EmissionPattern = "逸散",
+                            Level = 3,
                             Material = "R-134A",
                             Name = "飲水機",
                             Scope = "類別一"
@@ -413,7 +442,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 5,
+                            Correction = 3,
                             EmissionPattern = "逸散",
+                            Level = 3,
                             Material = "R-134A",
                             Name = "乾燥機",
                             Scope = "類別一"
@@ -421,7 +452,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 6,
+                            Correction = 3,
                             EmissionPattern = "逸散",
+                            Level = 3,
                             Material = "R-134A",
                             Name = "車用空調",
                             Scope = "類別一"
@@ -429,7 +462,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 7,
+                            Correction = 3,
                             EmissionPattern = "逸散",
+                            Level = 3,
                             Material = "R-134A",
                             Name = "工業冷媒",
                             Scope = "類別一"
@@ -437,7 +472,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 8,
+                            Correction = 3,
                             EmissionPattern = "固定",
+                            Level = 3,
                             Material = "柴油",
                             Name = "緊急發電機",
                             Scope = "類別一"
@@ -445,7 +482,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 9,
+                            Correction = 2,
                             EmissionPattern = "固定",
+                            Level = 2,
                             Material = "液化石油氣",
                             Name = "廚房",
                             Scope = "類別一"
@@ -453,7 +492,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 10,
+                            Correction = 2,
                             EmissionPattern = "移動",
+                            Level = 2,
                             Material = "車用汽油",
                             Name = "公務車",
                             Scope = "類別一"
@@ -461,7 +502,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 11,
+                            Correction = 2,
                             EmissionPattern = "移動",
+                            Level = 2,
                             Material = "柴油",
                             Name = "堆高機",
                             Scope = "類別一"
@@ -469,7 +512,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 12,
+                            Correction = 3,
                             EmissionPattern = "逸散",
+                            Level = 3,
                             Material = "二氧化碳",
                             Name = "CO2滅火器",
                             Scope = "類別一"
@@ -477,7 +522,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 13,
+                            Correction = 3,
                             EmissionPattern = "逸散",
+                            Level = 3,
                             Material = "二氧化碳",
                             Name = "二氧化碳",
                             Scope = "類別一"
@@ -485,7 +532,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 14,
+                            Correction = 3,
                             EmissionPattern = "逸散",
+                            Level = 3,
                             Material = "二氧化碳",
                             Name = "WD40",
                             Scope = "類別一"
@@ -493,7 +542,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 15,
+                            Correction = 3,
                             EmissionPattern = "逸散",
+                            Level = 3,
                             Material = "海龍1211",
                             Name = "海龍滅火器",
                             Scope = "類別一"
@@ -501,7 +552,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 16,
+                            Correction = 3,
                             EmissionPattern = "逸散",
+                            Level = 3,
                             Material = "FM200",
                             Name = "FM200",
                             Scope = "類別一"
@@ -509,7 +562,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 17,
+                            Correction = 3,
                             EmissionPattern = "逸散",
+                            Level = 3,
                             Material = "廢水處理",
                             Name = "化糞池",
                             Scope = "類別一"
@@ -517,7 +572,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 18,
+                            Correction = 1,
                             EmissionPattern = "外購電力",
+                            Level = 1,
                             Material = "外購電力",
                             Name = "電力",
                             Scope = "類別二"
@@ -525,7 +582,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 19,
+                            Correction = 3,
                             EmissionPattern = "製程",
+                            Level = 3,
                             Material = "乙炔",
                             Name = "乙炔",
                             Scope = "類別一"
@@ -533,7 +592,9 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 20,
+                            Correction = 3,
                             EmissionPattern = "製程",
+                            Level = 3,
                             Material = "焊條",
                             Name = "焊條",
                             Scope = "類別一"
@@ -800,7 +861,7 @@ namespace Carbon_inventory_platform.Migrations
                         {
                             Name = "R-600A",
                             GWP_Year = 2022,
-                            Num = 0f
+                            Num = 0.006f
                         },
                         new
                         {

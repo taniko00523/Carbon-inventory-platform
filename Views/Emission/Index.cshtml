@@ -5,6 +5,7 @@
 }
 
 <h1>總碳排放量</h1>
+<h3>@TempData["Company"]</h3>
 <p>
     <a class="btn btn-primary" asp-controller="Home" asp-action="Index">返回</a>
 </p>
@@ -41,7 +42,7 @@
     <tbody>
         <tr>
             <td>
-                @ViewBag.sum1_CO2
+                @ViewBag.Scope1_CO2
             </td>
             <td>
                 @ViewBag.sum_CH4
@@ -127,7 +128,7 @@
     <tbody>
         <tr>
             <td>
-                @ViewBag.sum2_CO2
+                @ViewBag.sum_CO2
             </td>
             <td>
                 @ViewBag.sum_CH4
@@ -204,7 +205,7 @@
     <tbody>
         <tr>
             <td>
-                @ViewBag.sum_hardlymove
+                @ViewBag.sum_non_move
             </td>
             <td>
                 @ViewBag.sum_move
@@ -221,7 +222,7 @@
         </tr>
         <tr>
             <td>
-                @ViewBag.percentage_hardlymove
+                @ViewBag.percentage_nonMove
             </td>
             <td>
                 @ViewBag.percentage_move
@@ -373,13 +374,13 @@
     <tbody>
         <tr>
             <td>
-                @ViewBag.percentage_Uncertainty
+                @ViewBag.percentage_CalAll
             </td>
             <td>
-                @ViewBag.all_ULL
+                @ViewBag.ULL
             </td>
             <td>
-                @ViewBag.all_UUL
+                @ViewBag.UUL
             </td>
         </tr>
     </tbody>

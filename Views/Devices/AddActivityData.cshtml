@@ -1,56 +1,90 @@
-﻿@model Carbon_inventory_platform.Models.Device
+﻿    @model Carbon_inventory_platform.Models.Device
 
-@{
-    ViewData["Title"] = "活動數據";
-}
+    @{
+        ViewData["Title"] = "活動數據";
+    }
 
-<h1>活動數據設定</h1>
+    <h1>活動數據設定</h1>
 
-<h4>@Model.Name</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="AddActivityData">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Num" class="control-label"></label>
-                <input asp-for="Num" class="form-control" />
-                <span asp-validation-for="Num" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Unit" class="control-label"></label>
-                <select asp-for="Unit" class="form-control" asp-items="ViewBag.Unit"></select>
-                <span asp-validation-for="Unit" class="text-danger"></span>
-            </div>
-            @* <div class="form-group">
+    <h4>@Model.Name</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="AddActivityData">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                <input asp-for="Name" id="nameInput" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Num" class="control-label"></label>
+                    <input asp-for="Num" class="form-control" />
+                    <span asp-validation-for="Num" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Unit" class="control-label"></label>
+                    <select asp-for="Unit" class="form-control" asp-items="ViewBag.Unit"></select>
+                    <span asp-validation-for="Unit" class="text-danger"></span>
+                </div>
+                @* <div class="form-group">
                 <label asp-for="Source" class="control-label"></label>
                 <select asp-for="Source" class="form-control" asp-items="ViewBag.Source"></select>
                 <span asp-validation-for="Source" class="text-danger"></span>
-            </div> *@
-           @*  <div class="form-group">
+                </div> *@
+                @*  <div class="form-group">
                 <label asp-for="Dept" class="control-label"></label>
                 <input asp-for="Dept" class="form-control" />
                 <span asp-validation-for="Dept" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
-                <label asp-for="Level" class="control-label"></label>
-                <select asp-for="Level" class="form-control" asp-items="ViewBag.DataLevel"></select>
-                <span asp-validation-for="Level" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Correction" class="control-label"></label>
-                <select asp-for="Correction" class="form-control" asp-items="ViewBag.DataCorrection"></select>
-                <span asp-validation-for="Correction" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="Id"/>
-                <input type="submit" value="儲存" class="btn btn-primary" />|
-                <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@Model.AreaId">返回</a>
-            </div>
-        </form>
-    </div>
-</div>
+                </div> *@
+                <div class="form-group">
+                    <label asp-for="Level" class="control-label"></label>
+                    <select asp-for="Level" class="form-control" id="levelDropdown" asp-items="ViewBag.DataLevel"></select>
+                    <span asp-validation-for="Level" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Correction" class="control-label"></label>
+                <select asp-for="Correction" class="form-control" id="correctionDropdown" asp-items="ViewBag.DataCorrection"></select>
+                    <span asp-validation-for="Correction" class="text-danger"></span>
+                </div>
+            @section scripts
+                {
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        // 獲取 nameDropdown 的值
+                        var selectedName = $('#nameInput').val();
+                        var id = $('#id').val();
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+                        // 发送 AJAX 请求获取相应的 DeviceData
+                        $.ajax({
+                            url: '/Devices/GetDeviceLevelAndCorrection',  // 正確的端點
+                            type: 'GET',
+                            data: { selectedName: selectedName, id: id  },  // 替換為實際的 device id
+                            success: function (data) {
+                                // 添加條件判斷
+                                if (data.num == 0) {
+                                    // 更新 levelDropdown 和 correctionDropdown
+                                    $('#levelDropdown').val(data.level);
+                                    $('#correctionDropdown').val(data.correction);
+                                }
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        });
+
+                        return false;
+                    });
+                </script>
+            }
+
+
+
+                <div class="form-group">
+                    <input type="hidden" asp-for="Id" id="id" />
+                    <input type="submit" value="儲存" class="btn btn-primary" />|
+                    <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@Model.AreaId">返回</a>
+                </div>
+            </form>
+        </div>
+    </div>

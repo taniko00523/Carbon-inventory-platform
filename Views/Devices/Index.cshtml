@@ -4,7 +4,7 @@
     ViewData["Title"] = "設備資料維護";
 }
 <h1>排放源鑑別</h1>
-<h2></h2>
+<h3>@TempData["Company"]</h3>
 @* 新增廠區名稱 *@
 <p>
     <a class="btn btn-primary" asp-action="Create">新增設備</a>
@@ -27,10 +27,13 @@
                 @Html.DisplayNameFor(model => model.Provess)
                 </th> *@
                 <th>
-                    @Html.DisplayNameFor(model => model.Material)
+                    @Html.DisplayNameFor(model => model.Scope)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.EmissionPattern)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Material)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.CO2_Emission)
@@ -81,10 +84,13 @@
                 @Html.DisplayFor(modelItem => item.Provess)
                 </td> *@
                         <td>
-                            @Html.DisplayFor(modelItem => item.Material)
+                            @Html.DisplayFor(modelItem => item.Scope)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.EmissionPattern)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Material)
                         </td>
                         <td>
                             @if (item.CO2_Emission == true)
@@ -131,7 +137,26 @@
                         <td>
                             @if (item.Num != 0)
                             {
-                                <p>@item.Num@item.Unit</p>
+                                string displayUnit;
+                                switch (item.Unit)
+                                {
+                                    case "公斤":
+                                        displayUnit = "公噸";
+                                        break;
+                                    case "公升":
+                                        displayUnit = "公秉";
+                                        break;
+                                    case "立方公尺":
+                                        displayUnit = "千立方公尺";
+                                        break;
+                                    case "度":
+                                        displayUnit = "千度";
+                                        break;
+                                    default:
+                                        displayUnit = item.Unit;
+                                        break;
+                                }
+                                <p>@($"{(decimal)item.Num / 1000:F4} {displayUnit}")</p>
                             }
                             else
                             {
@@ -170,10 +195,13 @@
                 @Html.DisplayFor(modelItem => item.Provess)
                 </td> *@
                         <td>
-                            @Html.DisplayFor(modelItem => item.Material)
+                            @Html.DisplayFor(modelItem => item.Scope)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.EmissionPattern)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Material)
                         </td>
                         <td>
                             @if (item.CO2_Emission == true)
@@ -220,7 +248,26 @@
                         <td>
                             @if (item.Num != 0)
                             {
-                                <p>@item.Num@item.Unit</p>
+                                string displayUnit;
+                                switch (item.Unit)
+                                {
+                                    case "公斤":
+                                        displayUnit = "公噸";
+                                        break;
+                                    case "公升":
+                                        displayUnit = "公秉";
+                                        break;
+                                    case "立方公尺":
+                                        displayUnit = "千立方公尺";
+                                        break;
+                                    case "度":
+                                        displayUnit = "千度";
+                                        break;
+                                    default:
+                                        displayUnit = item.Unit;
+                                        break;
+                                }
+                                <p>@($"{(decimal)item.Num / 1000:F4} {displayUnit}")</p>
                             }
                             else
                             {
@@ -259,10 +306,13 @@
                 @Html.DisplayFor(modelItem => item.Provess)
                 </td> *@
                         <td>
-                            @Html.DisplayFor(modelItem => item.Material)
+                            @Html.DisplayFor(modelItem => item.Scope)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.EmissionPattern)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Material)
                         </td>
                         <td>
                             @if (item.CO2_Emission == true)
@@ -309,7 +359,33 @@
                         <td>
                             @if (item.Num != 0)
                             {
-                                <p>@item.Num@item.Unit</p>
+                                @if(item.Unit == "人"){
+                                    <p>@item.Num@item.Unit</p>
+                                }
+                                else
+                                {
+                                    string displayUnit;
+                                    switch (item.Unit)
+                                    {
+                                        case "公斤":
+                                            displayUnit = "公噸";
+                                            break;
+                                        case "公升":
+                                            displayUnit = "公秉";
+                                            break;
+                                        case "立方公尺":
+                                            displayUnit = "千立方公尺";
+                                            break;
+                                        case "度":
+                                            displayUnit = "千度";
+                                            break;
+                                        default:
+                                            displayUnit = item.Unit;
+                                            break;
+                                    }
+                                    <p>@($"{(decimal)item.Num / 1000:F4} {displayUnit}")</p>
+                                }
+                                
                             }
                             else
                             {
@@ -348,10 +424,13 @@
                 @Html.DisplayFor(modelItem => item.Provess)
                 </td> *@
                         <td>
-                            @Html.DisplayFor(modelItem => item.Material)
+                            @Html.DisplayFor(modelItem => item.Scope)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.EmissionPattern)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Material)
                         </td>
                         <td>
                             @if (item.CO2_Emission == true)
@@ -398,7 +477,26 @@
                         <td>
                             @if (item.Num != 0)
                             {
-                                <p>@item.Num@item.Unit</p>
+                                string displayUnit;
+                                switch (item.Unit)
+                                {
+                                    case "公斤":
+                                        displayUnit = "公噸";
+                                        break;
+                                    case "公升":
+                                        displayUnit = "公秉";
+                                        break;
+                                    case "立方公尺":
+                                        displayUnit = "千立方公尺";
+                                        break;
+                                    case "度":
+                                        displayUnit = "千度";
+                                        break;
+                                    default:
+                                        displayUnit = item.Unit;
+                                        break;
+                                }
+                                <p>@($"{(decimal)item.Num / 1000:F4} {displayUnit}")</p>
                             }
                             else
                             {
@@ -437,10 +535,13 @@
                 @Html.DisplayFor(modelItem => item.Provess)
                 </td> *@
                         <td>
-                            @Html.DisplayFor(modelItem => item.Material)
+                            @Html.DisplayFor(modelItem => item.Scope)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.EmissionPattern)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Material)
                         </td>
                         <td>
                             @if (item.CO2_Emission == true)
@@ -487,7 +588,26 @@
                         <td>
                             @if (item.Num != 0)
                             {
-                                <p>@item.Num@item.Unit</p>
+                                string displayUnit;
+                                switch (item.Unit)
+                                {
+                                    case "公斤":
+                                        displayUnit = "公噸";
+                                        break;
+                                    case "公升":
+                                        displayUnit = "公秉";
+                                        break;
+                                    case "立方公尺":
+                                        displayUnit = "千立方公尺";
+                                        break;
+                                    case "度":
+                                        displayUnit = "千度";
+                                        break;
+                                    default:
+                                        displayUnit = item.Unit;
+                                        break;
+                                }
+                                <p>@($"{(decimal)item.Num / 1000:F4} {displayUnit}")</p>
                             }
                             else
                             {

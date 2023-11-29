@@ -18,5 +18,10 @@ namespace Carbon_inventory_platform.Models
 
         [Display(Name = "原燃物料")]
         public string Material { get; set; }
+        [Display(Name = "活動數據等級")]
+        public int Level { get; set; }
+
+        [Display(Name = "儀器校正等級")]
+        public int Correction { get; set; }
     }
 }

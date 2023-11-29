@@ -7,9 +7,21 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "ID")]
         public Guid Id { get; set; }
 
-        [MaxLength(20)]
+        [MaxLength(50)]
         [Display(Name = "公司名稱")]
         public string Name { get; set; } = "";
+
+        [MaxLength(10)]
+        [Display(Name = "公司簡稱")]
+        public string EasyName { get; set; } = "";
+
+        [MaxLength(100)]
+        [Display(Name = "英文公司名稱")]
+        public string EnglishName { get; set; } = "";
+
+        [MaxLength(100)]
+        [Display(Name = "英文公司簡稱")]
+        public string EasyEnglishName { get; set; } = "";
 
         [MaxLength(20)]
         [Display(Name = "負責人")]

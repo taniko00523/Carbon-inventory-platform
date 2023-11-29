@@ -3,12 +3,14 @@
 @{
     ViewData["Title"] = "輔導廠商";
 }
-
 <div class="row">
     <div class="col">
         <h1>輔導廠商</h1>
     </div>
-    <div class="col-6"></div>
+    <div class="col">
+        <p class="text-danger">@TempData["Finish"]</p>
+    </div>
+    <div class="col-2"></div>
     <div class="col">
         <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -45,7 +47,8 @@
                 </td>
                 <td>
                     <a class="btn btn-primary" asp-controller="Emission" asp-action="Index" asp-route-id="@item.Id">總排放量</a>|
-                    <a class="btn btn-primary" asp-controller="Home" asp-action="Word" asp-route-id="@item.Id">報告書產生</a>
+                    <a class="btn btn-primary" asp-controller="Devices" asp-action="Word" asp-route-id="@item.Id">報告書產生</a>|
+                    <a class="btn btn-primary" asp-controller="Devices" asp-action="HardWord" asp-route-id="@item.Id">複雜版報告書產生</a>
                 </td>
             </tr>
         }

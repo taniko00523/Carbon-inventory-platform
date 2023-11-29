@@ -5,15 +5,24 @@
 namespace Carbon_inventory_platform.Migrations
 {
     /// <inheritdoc />
-    public partial class _007 : Migration
+    public partial class _003 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Information",
+                name: "EasyEnglishName",
                 table: "Companies",
-                type: "nvarchar(max)",
+                type: "nvarchar(20)",
+                maxLength: 20,
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "EasyName",
+                table: "Companies",
+                type: "nvarchar(20)",
+                maxLength: 20,
                 nullable: false,
                 defaultValue: "");
         }
@@ -22,7 +31,11 @@ namespace Carbon_inventory_platform.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Information",
+                name: "EasyEnglishName",
+                table: "Companies");
+
+            migrationBuilder.DropColumn(
+                name: "EasyName",
                 table: "Companies");
         }
     }
