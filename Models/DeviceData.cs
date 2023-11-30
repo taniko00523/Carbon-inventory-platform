@@ -23,5 +23,7 @@ namespace Carbon_inventory_platform.Models
 
         [Display(Name = "儀器校正等級")]
         public int Correction { get; set; }
+
+        public string unit { get; set; }
     }
 }

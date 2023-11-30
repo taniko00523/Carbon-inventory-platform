@@ -25,7 +25,7 @@ namespace Carbon_inventory_platform.Controllers
         string[] scope = { "類別一", "類別二" };
         string[] emissionPattern = { "固定", "移動", "製程", "逸散" };
         string[] name = {
-            "緊急發電機", "廚房", "公務車", "堆高機", "冷氣機", "冰箱", "乾燥機", "飲水機", "冰水主機", "車用空調", "工業冷媒", "CO2滅火器", "海龍滅火器", "FM200", "WD40", "化糞池", "瓦斯罐","焊條","乙炔","二氧化碳", "電力", "其他" };
+            "緊急發電機", "廚房", "公務車", "堆高機", "冷氣機", "冰箱","商用冰箱","中、大型冰箱","低溫冷凍車", "乾燥機", "飲水機", "冰水主機", "車用空調", "工業冷藏、冷凍","食品加工冷藏、冷凍", "CO2滅火器", "海龍滅火器", "FM200", "WD40", "化糞池", "瓦斯罐","焊條","乙炔","二氧化碳", "電力", "其他" };
         string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
         string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
         string[] level = { "連續監測", "定期採樣", "自行評估" };
@@ -161,6 +161,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 level = deviceData?.Level,
                 correction = deviceData?.Correction,
+                unit = deviceData?.unit,
                 num =  device.Num
             };
             return Json(result);
@@ -448,21 +449,33 @@ namespace Carbon_inventory_platform.Controllers
 
                 if (GWPData != null)
                 {
-                    if (toUpdate.Name == "冰箱")
+                    if (toUpdate.Name == "冰箱"|| toUpdate.Name == "飲水機")
                     {
                         HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.003), 4);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = (float)Math.Round(HFCS, 4);
                     }
-                    if (toUpdate.Name == "乾燥機")
+                    if (toUpdate.Name == "商用冰箱")
                     {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.16),4);
+                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.055), 4);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = (float)Math.Round(HFCS, 4);
                     }
-                    if (toUpdate.Name == "工業冷媒")
+                    if (toUpdate.Name == "中、大型冰箱")
                     {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.16), 4);
+                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.2), 4);
+                        Grade = 3 * activityData.Level * activityData.Correction;
+                        all = (float)Math.Round(HFCS, 4);
+                    }
+                    if (toUpdate.Name == "低溫冷凍車")
+                    {
+                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.33), 4);
+                        Grade = 3 * activityData.Level * activityData.Correction;
+                        all = (float)Math.Round(HFCS, 4);
+                    }
+                    if (toUpdate.Name == "乾燥機"|| toUpdate.Name == "工業冷藏、冷凍"|| toUpdate.Name == "食品加工冷藏、冷凍")
+                    {
+                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.16),4);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = (float)Math.Round(HFCS, 4);
                     }
@@ -475,12 +488,6 @@ namespace Carbon_inventory_platform.Controllers
                     if (toUpdate.Name == "冷氣機")
                     {
                         HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.03),4);
-                        Grade = 3 * activityData.Level * activityData.Correction;
-                        all = (float)Math.Round(HFCS, 4);
-                    }
-                    if (toUpdate.Name == "飲水機")
-                    {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.003), 4);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = (float)Math.Round(HFCS, 4);
                     }
@@ -595,15 +602,6 @@ namespace Carbon_inventory_platform.Controllers
             return value1;
         }
 
-        static double CalculateAI(double num, double J, double R, double Z)
-        {
-            if (num != 0)
-            {
-                double sum = J + R + Z;
-                return Math.Pow(num * sum, 2);
-            }
-            return 0;
-        }
         public async Task<IActionResult> HardWordAsync(Guid id)
         {
 
