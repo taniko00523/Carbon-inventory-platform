@@ -127,9 +127,8 @@ namespace Carbon_inventory_platform.Models
         public Area? Areas { get; set; }
         //public ICollection<Area> Areas { get; set; } *廠區名稱顯示bug
         //[Display(Name = "使用物料")]
-        //[ForeignKey("MaterialId")]
-        //public Material Material { get; set; } //可以為Null 
-      
+         
+
         public Device()
         {
             Id = Guid.NewGuid();

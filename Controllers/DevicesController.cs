@@ -11,6 +11,8 @@ using Microsoft.CodeAnalysis.Elfie.Serialization;
 using NuGet.ContentModel;
 using static System.Formats.Asn1.AsnWriter;
 using Xceed.Words.NET;
+using Xceed.Document.NET;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -36,7 +38,7 @@ namespace Carbon_inventory_platform.Controllers
             TempData["SelectedAreaId"] = id;
             TempData["Company"] = await _context.Areas
             .Where(a => a.Id == id)
-            .Include(a=> a.Company)
+            .Include(a => a.Company)
             .Select(a => a.Company.Name)
             .FirstOrDefaultAsync();
 
@@ -135,7 +137,7 @@ namespace Carbon_inventory_platform.Controllers
                 _context.Add(toCreate);
                 var AreaID = device.AreaId;
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index","Devices", new { id = AreaID });
+                return RedirectToAction("Index", "Devices", new { id = AreaID });
             }
             ViewData["name"] = new SelectList(name);
             ViewData["Material"] = new SelectList(await _context.Materials.Where(x => x.EmissionPattern == "固定").ToListAsync(), "Name", "Name");
@@ -146,14 +148,14 @@ namespace Carbon_inventory_platform.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetDeviceLevelAndCorrection(string selectedName,Guid id)
+        public JsonResult GetDeviceLevelAndCorrection(string selectedName, Guid id)
         {
             var deviceData = _context.deviceDatas
        .Where(x => x.Name == selectedName)
        .FirstOrDefault();
 
             var device = _context.Devices
-                .Where(x=>x.Id == id)
+                .Where(x => x.Id == id)
                 .FirstOrDefault();
 
             // 假設有一個名為 emission 的屬性，將其包含在回應中
@@ -162,7 +164,7 @@ namespace Carbon_inventory_platform.Controllers
                 level = deviceData?.Level,
                 correction = deviceData?.Correction,
                 unit = deviceData?.unit,
-                num =  device.Num
+                num = device.Num
             };
             return Json(result);
         }
@@ -203,7 +205,7 @@ namespace Carbon_inventory_platform.Controllers
         [HttpGet]
         public JsonResult GetMaterials(string emissionPattern)
         {
-            
+
             var materials = _context.Materials
                 .Where(x => x.EmissionPattern == emissionPattern)
                 .Select(x => new { name = x.Name })
@@ -308,7 +310,7 @@ namespace Carbon_inventory_platform.Controllers
                     }
                 }
                 var AreaID = device.AreaId;
-                return RedirectToAction("Index","Devices", new { id = AreaID });
+                return RedirectToAction("Index", "Devices", new { id = AreaID });
             }
             ViewData["name"] = new SelectList(name);
             ViewData["Material"] = new SelectList(await _context.Materials.Where(x => x.EmissionPattern == "固定").ToListAsync(), "Name", "Name");
@@ -347,7 +349,7 @@ namespace Carbon_inventory_platform.Controllers
                 return Problem("沒有找到資料");
             }
             var toDelete = await _context.Devices.FindAsync(id);
-            if(toDelete.Num == 0)
+            if (toDelete.Num == 0)
             {
                 _context.Devices.Remove(toDelete);
             }
@@ -449,7 +451,7 @@ namespace Carbon_inventory_platform.Controllers
 
                 if (GWPData != null)
                 {
-                    if (toUpdate.Name == "冰箱"|| toUpdate.Name == "飲水機")
+                    if (toUpdate.Name == "冰箱" || toUpdate.Name == "飲水機")
                     {
                         HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.003), 4);
                         Grade = 3 * activityData.Level * activityData.Correction;
@@ -473,21 +475,21 @@ namespace Carbon_inventory_platform.Controllers
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = (float)Math.Round(HFCS, 4);
                     }
-                    if (toUpdate.Name == "乾燥機"|| toUpdate.Name == "工業冷藏、冷凍"|| toUpdate.Name == "食品加工冷藏、冷凍")
+                    if (toUpdate.Name == "乾燥機" || toUpdate.Name == "工業冷藏、冷凍" || toUpdate.Name == "食品加工冷藏、冷凍")
                     {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.16),4);
+                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.16), 4);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = (float)Math.Round(HFCS, 4);
                     }
                     if (toUpdate.Name == "冰水主機")
                     {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.09),4);
+                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.09), 4);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = (float)Math.Round(HFCS, 4);
                     }
                     if (toUpdate.Name == "冷氣機")
                     {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.03),4);
+                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.03), 4);
                         Grade = 3 * activityData.Level * activityData.Correction;
                         all = (float)Math.Round(HFCS, 4);
                     }
@@ -540,7 +542,7 @@ namespace Carbon_inventory_platform.Controllers
                         count_ULL = (float)(Math.Pow((ULL * all), 2));
                     }
                 }
-                else if(materialsData != null) //製程
+                else if (materialsData != null) //製程
                 {
                     CO2 = CO2 = (float)Math.Round((Math.Round(activityData.Num / 1000.0, 4) * materialsData.CO2CEF), 4);
                     Grade = 1 * activityData.Level * activityData.Correction;
@@ -576,10 +578,10 @@ namespace Carbon_inventory_platform.Controllers
             ViewData["Correction"] = new SelectList(correction);
             await _context.SaveChangesAsync();
             var AreaID = toUpdate.AreaId;
-            return RedirectToAction("Index","Devices", new { id = AreaID });
+            return RedirectToAction("Index", "Devices", new { id = AreaID });
         }
 
-        
+
         static double CalculateRoundDistance(float num1, float num2) // 計算兩數平方和的平方根，並四捨五入到小數點後5位
         {
             if (num1 != 0 && num2 != 0)
@@ -607,7 +609,9 @@ namespace Carbon_inventory_platform.Controllers
 
             // 這裡要替換成你 MVC 應用程式中正確的檔案路徑
             var data = await _context.Areas.Where(x => x.Id == id).Include(x => x.Company).FirstOrDefaultAsync();
-            var device = await _context.Devices.Where(x => x.AreaId == id).Where(x => x.isDeleted == 0).ToListAsync();
+            var device = await _context.Devices.Where(x => x.AreaId == id).Where(x => x.isDeleted == 0).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
+            var scope1_device = await _context.Devices.Where(x => x.AreaId == id).Where(x => x.isDeleted == 0).Where(x => x.Scope != "類別二").OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
+            var Material = await _context.Devices.Include(x=>x.Material).ToListAsync();
             var emission = await _context.emissions.Where(x => x.AreaId == id).FirstOrDefaultAsync();
             var nonMove = device.Where(d => d.EmissionPattern == "固定").Where(x => x.isDeleted == 0).Select(d => d.Name).ToList();
             var move = device.Where(d => d.EmissionPattern == "移動").Where(x => x.isDeleted == 0).Select(d => d.Name).ToList();
@@ -622,14 +626,26 @@ namespace Carbon_inventory_platform.Controllers
             // 複製文件
             using (DocX doc = DocX.Load(filePath))
             {
+                List<Paragraph> paragraphsToUpdate = new List<Paragraph>();
+
                 // 設定要查找和替換的文本
                 foreach (var paragraph in doc.Paragraphs)
                 {
-                    //foreach (var emissionDevice in device.Select(x => x.EmissionPattern))
-                    //{
-                    //    if(emission)
-                    //}
-                    
+                    if (paragraph.Text.Contains("類別表補充"))
+                    {
+                        paragraphsToUpdate.Add(paragraph);
+                    }
+
+                    if (paragraph.Text.Contains("類別一表補充"))
+                    {
+                        paragraphsToUpdate.Add(paragraph);
+                    }
+
+                    if (paragraph.Text.Contains("排放源活動數據表替換"))
+                    {
+                        paragraphsToUpdate.Add(paragraph);
+                    }
+
                     paragraph.ReplaceText("補充公司基本資料", data.Company.Information);
                     paragraph.ReplaceText("補充盤查年度", (data.Year + 1911).ToString() + "年");
                     paragraph.ReplaceText("民國年份補充", (data.Year).ToString());
@@ -705,9 +721,178 @@ namespace Carbon_inventory_platform.Controllers
                     paragraph.ReplaceText("補充姓名", data.Company.Owner);
                     paragraph.ReplaceText("補充電話", data.Company.Phone);
                     paragraph.ReplaceText("補充電子信箱", data.Company.Email);
+                }
+
+                foreach (var paragraph in paragraphsToUpdate) //類別表補充
+                {
+                    Table table = doc.AddTable(device.Count() + 1, 4);
+                    table.SetWidths(new float[] { 100, 150, 200, 100 });
+
+                    // 合併儲存格
+                    //table.MergeCellsInColumn(0, 1, 9);
+                    //table.MergeCellsInColumn(1, 3, 9);
+                    //table.MergeCellsInColumn(2, 6, 9);
+                    //table.MergeCellsInColumn(3, 7, 9);
+
+                    // 填充表格標題
+                    table.Rows[0].Cells[0].Paragraphs.First().Append("類別");
+                    table.Rows[0].Cells[1].Paragraphs.First().Append("型式");
+                    table.Rows[0].Cells[2].Paragraphs.First().Append("排放源");
+                    table.Rows[0].Cells[3].Paragraphs.First().Append("產生之溫室氣體");
+
+                    for (int x = 0; x < device.Count(); x++)
+                    {
+                        table.Rows[x + 1].Cells[0].Paragraphs.First().Append(device[x].Scope);
+                        table.Rows[x + 1].Cells[1].Paragraphs.First().Append(device[x].EmissionPattern);
+                        table.Rows[x + 1].Cells[2].Paragraphs.First().Append(device[x].Name + "(" + device[x].Material + ")");
+                        if (device[x].CO2_Emission == true && device[x].CH4_Emission == true && device[x].N2O_Emission == true)
+                        {
+                            table.Rows[x + 1].Cells[3].Paragraphs.First().Append("CO₂、CH₄、N₂O");
+                        }
+                        else if (device[x].CO2_Emission == true)
+                        {
+                            table.Rows[x + 1].Cells[3].Paragraphs.First().Append("CO₂");
+                        }
+                        else if (device[x].HFCS_Emission == true)
+                        {
+                            table.Rows[x + 1].Cells[3].Paragraphs.First().Append("HFCs");
+                        }
+                        else if (device[x].CH4_Emission == true)
+                        {
+                            table.Rows[x + 1].Cells[3].Paragraphs.First().Append("CH₄");
+                        }
+                    }
+                    paragraph.ReplaceTextWithObject("類別表補充", table);
+                }
+
+                foreach (var paragraph in paragraphsToUpdate) //類別一表補充
+                {
+                    Table table = doc.AddTable(scope1_device.Count() + 1, 4);
+                    table.SetWidths(new float[] { 100, 150, 200, 100 });
+
+                    // 填充表格標題
+                    table.Rows[0].Cells[0].Paragraphs.First().Append("類別");
+                    table.Rows[0].Cells[1].Paragraphs.First().Append("型式");
+                    table.Rows[0].Cells[2].Paragraphs.First().Append("排放源");
+                    table.Rows[0].Cells[3].Paragraphs.First().Append("產生之溫室氣體");
+
+                    for (int x = 0; x < scope1_device.Count(); x++)
+                    {
+                        table.Rows[x + 1].Cells[0].Paragraphs.First().Append(scope1_device[x].Scope);
+                        table.Rows[x + 1].Cells[1].Paragraphs.First().Append(scope1_device[x].EmissionPattern);
+                        table.Rows[x + 1].Cells[2].Paragraphs.First().Append(scope1_device[x].Name + "(" + scope1_device[x].Material + ")");
+                        if (scope1_device[x].CO2_Emission == true && scope1_device[x].CH4_Emission == true && scope1_device[x].N2O_Emission == true)
+                        {
+                            table.Rows[x + 1].Cells[3].Paragraphs.First().Append("CO₂、CH₄、N₂O");
+                        }
+                        else if (scope1_device[x].CO2_Emission == true)
+                        {
+                            table.Rows[x + 1].Cells[3].Paragraphs.First().Append("CO₂");
+                        }
+                        else if (scope1_device[x].HFCS_Emission == true)
+                        {
+                            table.Rows[x + 1].Cells[3].Paragraphs.First().Append("HFCs");
+                        }
+                        else if (scope1_device[x].CH4_Emission == true)
+                        {
+                            table.Rows[x + 1].Cells[3].Paragraphs.First().Append("CH₄");
+                        }
+                    }
+                    paragraph.ReplaceTextWithObject("類別一表補充", table);
+                }
+
+                foreach (var paragraph in paragraphsToUpdate) //排放源活動數據表替換
+                {
+                    Table table = doc.AddTable(device.Count() + 1, 5);
+                    //table.SetWidths(new float[] { 100, 150, 200, 100 });
+
+                    // 填充表格標題
+                    table.Rows[0].Cells[0].Paragraphs.First().Append("類別");
+                    table.Rows[0].Cells[1].Paragraphs.First().Append("排放型式");
+                    table.Rows[0].Cells[2].Paragraphs.First().Append("原燃物料");
+                    table.Rows[0].Cells[3].Paragraphs.First().Append("活動數據");
+                    table.Rows[0].Cells[4].Paragraphs.First().Append("單位");
 
 
+                    for (int x = 0; x < device.Count(); x++)
+                    {
+                        table.Rows[x + 1].Cells[0].Paragraphs.First().Append(device[x].Scope);
+                        table.Rows[x + 1].Cells[1].Paragraphs.First().Append(device[x].EmissionPattern);
+                        table.Rows[x + 1].Cells[2].Paragraphs.First().Append(device[x].Material + "(" + device[x].Name + ")");
+                        table.Rows[x + 1].Cells[3].Paragraphs.First().Append((device[x].Num / 1000).ToString("F4"));
+                        if (device[x].Unit == "人")
+                        {
+                            table.Rows[x + 1].Cells[4].Paragraphs.First().Append(device[x].Unit);
+                        }
+                        else
+                        {
+                            string displayUnit;
+                            switch (device[x].Unit)
+                            {
+                                case "公斤":
+                                    displayUnit = "公噸";
+                                    break;
+                                case "公升":
+                                    displayUnit = "公秉";
+                                    break;
+                                case "立方公尺":
+                                    displayUnit = "千立方公尺";
+                                    break;
+                                case "度":
+                                    displayUnit = "千度";
+                                    break;
+                                default:
+                                    displayUnit = device[x].Unit;
+                                    break;
+                            }
+                            table.Rows[x + 1].Cells[4].Paragraphs.First().Append(displayUnit);
+                        }
+                    }
+                    paragraph.ReplaceTextWithObject("排放源活動數據表替換", table);
+                }
+                foreach (var paragraph in paragraphsToUpdate) //類別表補充
+                {
+                    Table table = doc.AddTable(device.Count() + 1, 4);
+                    table.SetWidths(new float[] { 100, 150, 200, 100 });
 
+                    // 合併儲存格
+                    //table.MergeCellsInColumn(0, 1, 9);
+                    //table.MergeCellsInColumn(1, 3, 9);
+                    //table.MergeCellsInColumn(2, 6, 9);
+                    //table.MergeCellsInColumn(3, 7, 9);
+
+                    // 填充表格標題
+                    table.Rows[0].Cells[0].Paragraphs.First().Append("原燃物料");
+                    table.Rows[0].Cells[1].Paragraphs.First().Append("溫室氣體");
+                    table.Rows[0].Cells[2].Paragraphs.First().Append("排放係數");
+                    table.Rows[0].Cells[3].Paragraphs.First().Append("係數來源");
+                    table.Rows[0].Cells[4].Paragraphs.First().Append("係數單位");
+                    table.Rows[0].Cells[5].Paragraphs.First().Append("GWP(AR6)");
+
+
+                    for (int x = 0; x < device.Count(); x++)
+                    {
+                        table.Rows[x + 1].Cells[0].Paragraphs.First().Append(device[x].Material + "(" + device[x].EmissionPattern + ")");
+                        table.Rows[x + 1].Cells[1].Paragraphs.First().Append(device[x].EmissionPattern);
+                        table.Rows[x + 1].Cells[2].Paragraphs.First().Append(device[x].Name + "(" + device[x].Material + ")");
+                        if (device[x].CO2_Emission == true && device[x].CH4_Emission == true && device[x].N2O_Emission == true)
+                        {
+                            table.Rows[x + 1].Cells[3].Paragraphs.First().Append("CO₂、CH₄、N₂O");
+                        }
+                        else if (device[x].CO2_Emission == true)
+                        {
+                            table.Rows[x + 1].Cells[3].Paragraphs.First().Append("CO₂");
+                        }
+                        else if (device[x].HFCS_Emission == true)
+                        {
+                            table.Rows[x + 1].Cells[3].Paragraphs.First().Append("HFCs");
+                        }
+                        else if (device[x].CH4_Emission == true)
+                        {
+                            table.Rows[x + 1].Cells[3].Paragraphs.First().Append("CH₄");
+                        }
+                    }
+                    paragraph.ReplaceTextWithObject("類別表補充", table);
                 }
 
                 // 保存新文檔
