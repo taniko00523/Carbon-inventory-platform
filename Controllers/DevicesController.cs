@@ -611,7 +611,7 @@ namespace Carbon_inventory_platform.Controllers
             var data = await _context.Areas.Where(x => x.Id == id).Include(x => x.Company).FirstOrDefaultAsync();
             var device = await _context.Devices.Where(x => x.AreaId == id).Where(x => x.isDeleted == 0).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
             var scope1_device = await _context.Devices.Where(x => x.AreaId == id).Where(x => x.isDeleted == 0).Where(x => x.Scope != "類別二").OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
-            var Material = await _context.Devices.Include(x=>x.Material).ToListAsync();
+            var Material = await _context.Materials.ToListAsync();
             var emission = await _context.emissions.Where(x => x.AreaId == id).FirstOrDefaultAsync();
             var nonMove = device.Where(d => d.EmissionPattern == "固定").Where(x => x.isDeleted == 0).Select(d => d.Name).ToList();
             var move = device.Where(d => d.EmissionPattern == "移動").Where(x => x.isDeleted == 0).Select(d => d.Name).ToList();
@@ -855,12 +855,6 @@ namespace Carbon_inventory_platform.Controllers
                     Table table = doc.AddTable(device.Count() + 1, 4);
                     table.SetWidths(new float[] { 100, 150, 200, 100 });
 
-                    // 合併儲存格
-                    //table.MergeCellsInColumn(0, 1, 9);
-                    //table.MergeCellsInColumn(1, 3, 9);
-                    //table.MergeCellsInColumn(2, 6, 9);
-                    //table.MergeCellsInColumn(3, 7, 9);
-
                     // 填充表格標題
                     table.Rows[0].Cells[0].Paragraphs.First().Append("原燃物料");
                     table.Rows[0].Cells[1].Paragraphs.First().Append("溫室氣體");
@@ -875,6 +869,24 @@ namespace Carbon_inventory_platform.Controllers
                         table.Rows[x + 1].Cells[0].Paragraphs.First().Append(device[x].Material + "(" + device[x].EmissionPattern + ")");
                         table.Rows[x + 1].Cells[1].Paragraphs.First().Append(device[x].EmissionPattern);
                         table.Rows[x + 1].Cells[2].Paragraphs.First().Append(device[x].Name + "(" + device[x].Material + ")");
+                        if (device[x].EmissionPattern == "固定")
+                        {
+                            for (int y = 0; y < 2; y++) //分別抓取CO2 CH4 N2O...
+                            {
+
+                            }
+                        }
+                        else if (device[x].EmissionPattern == "移動")
+                        {
+
+                        }
+                        table.Rows[x + 1].Cells[2].Paragraphs.First().Append(
+                            _context.Materials
+                                .FirstOrDefault(m => m.Name == device[x].Material)?
+                                .CO2CEF
+                                .ToString()
+                        );
+
                         if (device[x].CO2_Emission == true && device[x].CH4_Emission == true && device[x].N2O_Emission == true)
                         {
                             table.Rows[x + 1].Cells[3].Paragraphs.First().Append("CO₂、CH₄、N₂O");
