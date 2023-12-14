@@ -57,13 +57,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 Id = Area_id,
                 CompanyId = Company_id,
-                Name = "Default",
-                PostalCode = 0,
-                City = "Default",
-                District = "Default",
-                Address = "Default",
                 Year = 111,
-                Type = "Default",
                 CreateTime = DateTime.Now
             });
             await _context.SaveChangesAsync();
@@ -71,8 +65,6 @@ namespace Carbon_inventory_platform.Controllers
             {
                 Id = Guid.NewGuid(),
                 AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
                 Name = "緊急發電機",
                 Material = "柴油",
                 Scope = "類別一",
@@ -87,8 +79,6 @@ namespace Carbon_inventory_platform.Controllers
             {
                 Id = new Guid(),
                 AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
                 Name = "公務車",
                 Material = "柴油",
                 Scope = "類別一",
@@ -102,8 +92,6 @@ namespace Carbon_inventory_platform.Controllers
             {
                 Id = new Guid(),
                 AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
                 Name = "公務車",
                 Material = "車用汽油",
                 Scope = "類別一",
@@ -117,8 +105,6 @@ namespace Carbon_inventory_platform.Controllers
             {
                 Id = new Guid(),
                 AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
                 Name = "冷氣機",
                 Material = "R-410A",
                 Scope = "類別一",
@@ -130,8 +116,6 @@ namespace Carbon_inventory_platform.Controllers
             {
                 Id = new Guid(),
                 AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
                 Name = "飲水機",
                 Material = "R-134A",
                 Scope = "類別一",
@@ -143,8 +127,6 @@ namespace Carbon_inventory_platform.Controllers
             {
                 Id = new Guid(),
                 AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
                 Name = "乾燥機",
                 Material = "R-134A",
                 Scope = "類別一",
@@ -156,8 +138,6 @@ namespace Carbon_inventory_platform.Controllers
             {
                 Id = new Guid(),
                 AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
                 Name = "冰水主機",
                 Material = "R-134A",
                 Scope = "類別一",
@@ -169,8 +149,6 @@ namespace Carbon_inventory_platform.Controllers
             {
                 Id = new Guid(),
                 AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
                 Name = "車用空調",
                 Material = "R-134A",
                 Scope = "類別一",
@@ -182,8 +160,6 @@ namespace Carbon_inventory_platform.Controllers
             {
                 Id = new Guid(),
                 AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
                 Name = "化糞池",
                 Material = "廢水處理",
                 Scope = "類別一",
@@ -195,8 +171,6 @@ namespace Carbon_inventory_platform.Controllers
             {
                 Id = new Guid(),
                 AreaId = Area_id,
-                AssetNo = "Default",
-                Provess = "Default",
                 Name = "電力",
                 Material = "外購電力",
                 Scope = "類別二",
