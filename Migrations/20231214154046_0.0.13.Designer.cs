@@ -4,6 +4,7 @@ using Carbon_inventory_platform.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_inventory_platform.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231214154046_0.0.13")]
+    partial class _0013
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -563,8 +566,8 @@ namespace Carbon_inventory_platform.Migrations
                             Correction = 3,
                             EmissionPattern = "逸散",
                             Level = 3,
-                            Material = "海龍-1211",
-                            Name = "海龍1211",
+                            Material = "海龍1211",
+                            Name = "海龍滅火器",
                             Scope = "類別一",
                             unit = "公斤"
                         },
@@ -913,12 +916,6 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Name = "R-12",
-                            GWP_Year = 2022,
-                            Num = 12500f
-                        },
-                        new
-                        {
                             Name = "R-23",
                             GWP_Year = 2022,
                             Num = 14600f
@@ -937,7 +934,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Name = "FM200",
+                            Name = "七氟丙烷",
                             GWP_Year = 2022,
                             Num = 3600f
                         },
@@ -994,12 +991,6 @@ namespace Carbon_inventory_platform.Migrations
                             Name = "SF6",
                             GWP_Year = 2022,
                             Num = 24300f
-                        },
-                        new
-                        {
-                            Name = "海龍-1211",
-                            GWP_Year = 2022,
-                            Num = 1930f
                         });
                 });
 
@@ -2187,25 +2178,6 @@ namespace Carbon_inventory_platform.Migrations
                             N2OUUL = 0f,
                             Name = "車用空調",
                             Scope = "",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 72,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 3.0259999999999998,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "製程",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "丁烷",
-                            Scope = "類別1",
                             Unit = "",
                             Year = 0
                         });

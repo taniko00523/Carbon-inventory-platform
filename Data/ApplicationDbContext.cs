@@ -123,24 +123,28 @@ new Material { Id = 67, Name = "工業冷藏、冷凍", HFCSCEF = 0.160000 }, //
 new Material { Id = 68, Name = "食品加工冷藏、冷凍", HFCSCEF = 0.160000 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
 new Material { Id = 69, Name = "冰水主機", HFCSCEF = 0.090000}, //冰水機
 new Material { Id = 70, Name = "冷氣機", HFCSCEF = 0.030000}, //住宅及商業建築冷氣機
-new Material { Id = 71, Name = "車用空調", HFCSCEF = 0.200000 } //移動式空氣清靜機
+new Material { Id = 71, Name = "車用空調", HFCSCEF = 0.200000 }, //移動式空氣清靜機
+new Material { Id = 72, Name = "丁烷", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.0260000000 }
 );
             builder.Entity<GWP>().HasData(
 new GWP { Name = "CO2", Num = 1, GWP_Year = 2022 },
 new GWP { Name = "CH4", Num = 27.9F, GWP_Year = 2022 },
 new GWP { Name = "N2O", Num = 273, GWP_Year = 2022 },
+new GWP { Name = "R-12", Num = 12500, GWP_Year = 2022 },
 new GWP { Name = "R-23", Num = 14600, GWP_Year = 2022 },
 new GWP { Name = "R-32", Num = 771, GWP_Year = 2022 },
 new GWP { Name = "R-134A", Num = 1530, GWP_Year = 2022 },
-new GWP { Name = "七氟丙烷", Num = 3600, GWP_Year = 2022 },
+new GWP { Name = "FM200", Num = 3600, GWP_Year = 2022 },
 new GWP { Name = "R-22", Num = 1960, GWP_Year = 2022 },
 new GWP { Name = "R-410A", Num = 2256, GWP_Year = 2022 },
 new GWP { Name = "R-600A", Num = 0.006F, GWP_Year = 2022 },
 new GWP { Name = "R-417A", Num = 2127, GWP_Year = 2022 },
+new GWP { Name = "R-404A", Num = 4728, GWP_Year = 2022 },
 new GWP { Name = "R-407C", Num = 1908, GWP_Year = 2022 },
 new GWP { Name = "R-507A", Num = 4475, GWP_Year = 2022 },
 new GWP { Name = "NF3", Num = 17400, GWP_Year = 2022 },
-new GWP { Name = "SF6", Num = 24300, GWP_Year = 2022 }
+new GWP { Name = "SF6", Num = 24300, GWP_Year = 2022 },
+new GWP { Name = "海龍-1211", Num = 1930, GWP_Year = 2022 }
                 );
             builder.Entity<DeviceData>().HasData(
                 new DeviceData { Id = 1, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-410A" , Correction=3,Level=3 ,unit="公斤"},
@@ -157,7 +161,7 @@ new GWP { Name = "SF6", Num = 24300, GWP_Year = 2022 }
                 new DeviceData { Id = 12, Name = "CO2滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Correction = 3, Level = 3 , unit = "公斤" },
                 new DeviceData { Id = 13, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Correction = 3, Level = 3 , unit = "公斤" },
                 new DeviceData { Id = 14, Name = "WD40", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Correction = 3, Level = 3 , unit = "公斤" },
-                new DeviceData { Id = 15, Name = "海龍滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "海龍1211", Correction = 3, Level = 3 , unit = "公斤" },
+                new DeviceData { Id = 15, Name = "海龍1211", Scope = "類別一", EmissionPattern = "逸散", Material = "海龍-1211", Correction = 3, Level = 3 , unit = "公斤" },
                 new DeviceData { Id = 16, Name = "FM200", Scope = "類別一", EmissionPattern = "逸散", Material = "FM200", Correction = 3, Level = 3 , unit = "公斤" },
                 new DeviceData { Id = 17, Name = "化糞池", Scope = "類別一", EmissionPattern = "逸散", Material = "廢水處理", Correction = 3, Level = 3 , unit = "人" },
                 new DeviceData { Id = 18, Name = "電力", Scope = "類別二", EmissionPattern = "外購電力", Material = "外購電力", Correction = 1, Level = 1, unit = "度" },

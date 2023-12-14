@@ -49,6 +49,7 @@ namespace Carbon_inventory_platform.Controllers
        View(await _context.Devices
        .Where(x => x.isDeleted != 1)
            .Where(m => m.AreaId == id)
+           .OrderBy(x => x.Name)
            .ToListAsync()) :
        Problem("沒有找到資料表");
         }
@@ -455,7 +456,14 @@ namespace Carbon_inventory_platform.Controllers
                     .FirstOrDefaultAsync();
 
                 var GWPData = await _context.GWPs.Where(x => x.Name == toUpdate.Material).FirstOrDefaultAsync();
-                HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * materialsData.HFCSCEF), 4);
+                if (materialsData != null)
+                {
+                    HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * materialsData.HFCSCEF), 4);
+                }
+                else //其他都用工業冷媒計算
+                {
+                    HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.16), 4);
+                }
                 Grade = 3 * activityData.Level * activityData.Correction;
                 all = (float)Math.Round(HFCS, 4);
                 //if (GWPData != null)

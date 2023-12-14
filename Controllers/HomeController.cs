@@ -28,6 +28,7 @@ namespace Carbon_inventory_platform.Controllers
                         View(await _context.Areas
                         .Where(x => x.isDeleted == 0) //抓出資料表裡面沒被刪除的
                         .Include(x => x.Company)
+                        .OrderBy(x => x.CreateTime)
                         .ToListAsync()) :
                         Problem("沒有找到資料"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
         }

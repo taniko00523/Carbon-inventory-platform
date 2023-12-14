@@ -15,7 +15,6 @@ namespace Carbon_inventory_platform.Controllers
         }
         public async Task<Emission> CountEmissionAsync(Guid? id)
         {
-
             var devices = await _context.Devices
                 .Where(x => x.isDeleted == 0)
                 .Where(x => x.AreaId == id)
