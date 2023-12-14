@@ -14,6 +14,8 @@ using Xceed.Words.NET;
 using Xceed.Document.NET;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Microsoft.Office.Interop.Word;
+using System.Runtime.InteropServices.JavaScript;
+using Microsoft.CodeAnalysis.Elfie.Model.Structures;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -508,7 +510,7 @@ namespace Carbon_inventory_platform.Controllers
                 //    }
                 //}
             }
-            else if (toUpdate.CH4_Emission == true)
+            else if (toUpdate.CH4_Emission == true) //化糞池 廢水處理
             {
                 var materialsData = await _context.Materials
                     .Where(x => x.Name == toUpdate.Material)
@@ -633,6 +635,7 @@ namespace Carbon_inventory_platform.Controllers
             // 複製文件
             using (DocX doc = DocX.Load(filePath))
             {
+
                 List<Xceed.Document.NET.Paragraph> paragraphsToUpdate = new List<Xceed.Document.NET.Paragraph>();
 
                 // 設定要查找和替換的文本
@@ -644,6 +647,11 @@ namespace Carbon_inventory_platform.Controllers
                     }
 
                     if (paragraph.Text.Contains("類別一表補充"))
+                    {
+                        paragraphsToUpdate.Add(paragraph);
+                    }
+
+                    if (paragraph.Text.Contains("排放源活動數據表替換"))
                     {
                         paragraphsToUpdate.Add(paragraph);
                     }
@@ -740,7 +748,7 @@ namespace Carbon_inventory_platform.Controllers
                     //table.MergeCellsInColumn(1, 3, 9);
                     //table.MergeCellsInColumn(2, 6, 9);
                     //table.MergeCellsInColumn(3, 7, 9);
-
+                    
                     // 填充表格標題
                     table.Rows[0].Cells[0].Paragraphs.First().Append("類別");
                     table.Rows[0].Cells[1].Paragraphs.First().Append("型式");
@@ -859,13 +867,14 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 foreach (var paragraph in paragraphsToUpdate) //類別表補充
                 {
-                    Xceed.Document.NET.Table table = doc.AddTable(50, 6);
-                    //device.Count() - device.Where(x => x.EmissionPattern == "固定").Count() - device.Where(x => x.EmissionPattern == "移動").Count() + -device.Where(x => x.EmissionPattern == "固定").Count() * 3 + device.Where(x => x.EmissionPattern == "移動").Count() * 3 + 1
+                    int nonMove_num = device.Where(x => x.EmissionPattern == "固定").Count();
+                    int move_num = device.Where(x => x.EmissionPattern == "移動").Count();
+                    int max = device.Count() - nonMove_num- move_num + nonMove_num*3 + move_num * 3;
+                    Xceed.Document.NET.Table table = doc.AddTable(max+1, 6);
                     table.SetWidths(new float[] { 100, 150, 200, 100 });
                     table.Design = TableDesign.TableGrid;
                     table.AutoFit = AutoFit.Window;
                     table.Alignment = Alignment.left;
-                    //doc.SetDefaultFont("標楷體", 12);
 
                     // 填充表格標題
                     table.Rows[0].Cells[0].Paragraphs.First().Append("原燃物料");
@@ -879,9 +888,11 @@ namespace Carbon_inventory_platform.Controllers
                     //table.Paragraphs.
 
                     //int x = 0; //格子
-                    for (int x = 0; x < device.Count() - device.Where(x => x.EmissionPattern == "固定").Count() - device.Where(x => x.EmissionPattern == "移動").Count() + -device.Where(x => x.EmissionPattern == "固定").Count() * 3 + device.Where(x => x.EmissionPattern == "移動").Count() * 3; x++) //格子
+                    int device_num = 0;
+
+                    for (int x = 0; x < max; x++) //格子
                     {
-                        for(int device_num=0;device_num<device.Count();device_num++)
+                        while (device_num < device.Count())
                         {
                             string displayUnit;
                             switch (device[device_num].Unit)
@@ -902,113 +913,85 @@ namespace Carbon_inventory_platform.Controllers
                                     displayUnit = device[device_num].Unit;
                                     break;
                             }
-                            if (_context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CO2CEF != 0 &&
-                                _context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CH4CEF != 0 &&
-                                _context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.N2OCEF != 0) //化石燃料
+
+                            // CO2, CH4, N2O 三種溫室氣體排放
+                            if (device[device_num].EmissionPattern == "固定" || device[device_num].EmissionPattern == "移動")
                             {
-                                int y = device_num; //因化石燃料有三種溫室氣體排放 所以要固定於同一個排放源 跑三次
-                                for (int num = 1; num <= 3; num++) //跑三次 分別把CO2、CH4、N2O抓出來
+                                for (int num = 1; num <= 3; num++)
                                 {
-                                    if (num == 1)
+                                    table.Rows[x + 1].Cells[0].Paragraphs.First().Append(device[device_num].Material + "(" + device[device_num].EmissionPattern + ")");
+                                    table.Rows[x + 1].Cells[1].Paragraphs.First().Append(num == 1 ? "CO₂" : (num == 2 ? "CH₄" : "N₂O"));
+
+                                    string gasType = num == 1 ? "CO2" : (num == 2 ? "CH4" : "N2O");
+
+                                    table.Rows[x + 1].Cells[2].Paragraphs.First().Append(
+                                        gasType == "CO2" ? _context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CO2CEF.ToString("F10") :
+                                        gasType == "CH4" ? _context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CH4CEF.ToString("F10") :
+                                        gasType == "N2O" ? _context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.N2OCEF.ToString("F10") :
+                                        "");
+
+                                    table.Rows[x + 1].Cells[3].Paragraphs.First().Append("溫室氣體排放係數管理表 6.0.4 版");
+                                    table.Rows[x + 1].Cells[4].Paragraphs.First().Append("公噸/" + displayUnit);
+                                    table.Rows[x + 1].Cells[5].Paragraphs.First().Append(
+                                        gasType == "CO2" ? _context.GWPs.FirstOrDefault(x => x.Name == "CO2").Num.ToString() :
+                                        gasType == "CH4" ? _context.GWPs.FirstOrDefault(x => x.Name == "CH4").Num.ToString() :
+                                        _context.GWPs.FirstOrDefault(x => x.Name == "N2O").Num.ToString());
+
+                                    if (num < 3)
                                     {
-                                        table.Rows[x + 1].Cells[0].Paragraphs.First().Append(device[y].Material + "(" + device[y].EmissionPattern + ")");
-                                        table.Rows[x + 1].Cells[1].Paragraphs.First().Append("CO₂");
-                                        table.Rows[x + 1].Cells[2].Paragraphs.First().Append(_context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CO2CEF.ToString());
-                                        table.Rows[x + 1].Cells[3].Paragraphs.First().Append("溫室氣體排放係數管理表 6.0.4 版");
-                                        table.Rows[x + 1].Cells[4].Paragraphs.First().Append("公噸/" + displayUnit);
-                                        table.Rows[x + 1].Cells[5].Paragraphs.First().Append(_context.GWPs.FirstOrDefault(x => x.Name == "CO2").Num.ToString());
-                                        x++;
-                                    }
-                                    else if (num == 2)
-                                    {
-                                        table.Rows[x + 1].Cells[0].Paragraphs.First().Append(device[y].Material + "(" + device[y].EmissionPattern + ")");
-                                        table.Rows[x + 1].Cells[1].Paragraphs.First().Append("CH₄");
-                                        table.Rows[x + 1].Cells[2].Paragraphs.First().Append(_context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CO2CEF.ToString());
-                                        table.Rows[x + 1].Cells[3].Paragraphs.First().Append("溫室氣體排放係數管理表 6.0.4 版");
-                                        table.Rows[x + 1].Cells[4].Paragraphs.First().Append("公噸/" + displayUnit);
-                                        table.Rows[x + 1].Cells[5].Paragraphs.First().Append(_context.GWPs.FirstOrDefault(x => x.Name == "CH₄").Num.ToString());
-                                        x++;
-                                    }
-                                    else if (num == 3)
-                                    {
-                                        table.Rows[x + 1].Cells[0].Paragraphs.First().Append(device[y].Material + "(" + device[y].EmissionPattern + ")");
-                                        table.Rows[x + 1].Cells[1].Paragraphs.First().Append("N₂O");
-                                        table.Rows[x + 1].Cells[2].Paragraphs.First().Append(_context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CO2CEF.ToString());
-                                        table.Rows[x + 1].Cells[3].Paragraphs.First().Append("溫室氣體排放係數管理表 6.0.4 版");
-                                        table.Rows[x + 1].Cells[4].Paragraphs.First().Append("公噸/" + displayUnit);
-                                        table.Rows[x + 1].Cells[5].Paragraphs.First().Append(_context.GWPs.FirstOrDefault(x => x.Name == "N₂O").Num.ToString());
-                                        x++;
+                                        x++; //下一格
                                     }
                                 }
+
                             }
-                            else if (_context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CO2CEF != 0) //外購電力 製程 逸散
+                            else
                             {
+                                // 其他情況
+                                string gasType;
+                                if (_context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material) != null)
+                                {
+                                    if (_context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CO2CEF != 0)
+                                    {
+                                        gasType = "CO2";
+                                    }
+                                    else if (_context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CH4CEF != 0)
+                                    {
+                                        gasType = "CH4";
+                                    }
+                                    else
+                                    {
+                                        // 可能有其他情況需要處理
+                                        gasType = "其他";
+                                    }
+                                }
+                                else
+                                {
+                                    gasType = "HFCs";
+                                }
+
+
                                 table.Rows[x + 1].Cells[0].Paragraphs.First().Append(device[device_num].Material + "(" + device[device_num].EmissionPattern + ")");
-                                table.Rows[x + 1].Cells[1].Paragraphs.First().Append("CO₂");
-                                table.Rows[x + 1].Cells[2].Paragraphs.First().Append(_context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CO2CEF.ToString());
+                                table.Rows[x + 1].Cells[1].Paragraphs.First().Append(gasType);
+                                table.Rows[x + 1].Cells[2].Paragraphs.First().Append(
+                                        gasType == "HFCs" ? _context.Materials.FirstOrDefault(m => m.Name == device[device_num].Name)?.HFCSCEF.ToString() :
+                                        gasType == "CO2" ? _context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CO2CEF.ToString() :
+                                        gasType == "CH4" ? _context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CH4CEF.ToString() :
+                                        gasType == "N2O" ? _context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.N2OCEF.ToString() :
+                                        "");
+
                                 table.Rows[x + 1].Cells[3].Paragraphs.First().Append("溫室氣體排放係數管理表 6.0.4 版");
                                 table.Rows[x + 1].Cells[4].Paragraphs.First().Append("公噸/" + displayUnit);
-                                table.Rows[x + 1].Cells[5].Paragraphs.First().Append(_context.GWPs.FirstOrDefault(x => x.Name == "CO2").Num.ToString());
+                                table.Rows[x + 1].Cells[5].Paragraphs.First().Append(!string.IsNullOrEmpty(gasType) ?
+                                                                (gasType == "HFCs" ? _context.GWPs.FirstOrDefault(x => x.Name == device[device_num].Material)?.Num.ToString() :
+                                                                                     _context.GWPs.FirstOrDefault(x => x.Name == gasType)?.Num.ToString()) :"0");
+
                             }
-                            else if (_context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CH4CEF != 0) //化糞池
-                            {
-                                table.Rows[x + 1].Cells[0].Paragraphs.First().Append(device[device_num].Material + "(" + device[device_num].EmissionPattern + ")");
-                                table.Rows[x + 1].Cells[1].Paragraphs.First().Append("CH₄");
-                                table.Rows[x + 1].Cells[2].Paragraphs.First().Append(_context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CO2CEF.ToString());
-                                table.Rows[x + 1].Cells[3].Paragraphs.First().Append("溫室氣體排放係數管理表 6.0.4 版");
-                                table.Rows[x + 1].Cells[4].Paragraphs.First().Append("公噸/" + displayUnit);
-                                table.Rows[x + 1].Cells[5].Paragraphs.First().Append(_context.GWPs.FirstOrDefault(x => x.Name == "CH4").Num.ToString());
-                            }
-                            else if (_context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.HFCSCEF != 0) //逸散: 冷媒 滅火器
-                            {
-                                table.Rows[x + 1].Cells[0].Paragraphs.First().Append(device[device_num].Material + "(" + device[device_num].EmissionPattern + ")");
-                                table.Rows[x + 1].Cells[1].Paragraphs.First().Append("HFCs");
-                                table.Rows[x + 1].Cells[2].Paragraphs.First().Append(_context.Materials.FirstOrDefault(m => m.Name == device[device_num].Name)?.CO2CEF.ToString());
-                                table.Rows[x + 1].Cells[3].Paragraphs.First().Append("溫室氣體排放係數管理表 6.0.4 版");
-                                table.Rows[x + 1].Cells[4].Paragraphs.First().Append("公噸/" + displayUnit);
-                                table.Rows[x + 1].Cells[5].Paragraphs.First().Append(_context.GWPs.FirstOrDefault(x => x.Name == device[device_num].Material).Num.ToString());
-                            }
+
+                            x++;
+                            device_num++;
                         }
-                        
-
-                        //table.Rows[x + 1].Cells[0].Paragraphs.First().Append(device[x].Material + "(" + device[x].EmissionPattern + ")");
-                        //table.Rows[x + 1].Cells[1].Paragraphs.First().Append(device[x].EmissionPattern);
-                        //table.Rows[x + 1].Cells[2].Paragraphs.First().Append(device[x].Name + "(" + device[x].Material + ")");
-                        //if (device[x].EmissionPattern == "固定")
-                        //{
-                        //    for (int y = 0; y < 2; y++) //分別抓取CO2 CH4 N2O...
-                        //    {
-
-                        //    }
-                        //}
-                        //else if (device[x].EmissionPattern == "移動")
-                        //{
-
-                        //}
-                        //table.Rows[x + 1].Cells[2].Paragraphs.First().Append(
-                        //    _context.Materials
-                        //        .FirstOrDefault(m => m.Name == device[x].Material)?
-                        //        .CO2CEF
-                        //        .ToString()
-                        //);
-
-                        //if (device[x].CO2_Emission == true && device[x].CH4_Emission == true && device[x].N2O_Emission == true)
-                        //{
-                        //    table.Rows[x + 1].Cells[3].Paragraphs.First().Append("CO₂、CH₄、N₂O");
-                        //}
-                        //else if (device[x].CO2_Emission == true)
-                        //{
-                        //    table.Rows[x + 1].Cells[3].Paragraphs.First().Append("CO₂");
-                        //}
-                        //else if (device[x].HFCS_Emission == true)
-                        //{
-                        //    table.Rows[x + 1].Cells[3].Paragraphs.First().Append("HFCs");
-                        //}
-                        //else if (device[x].CH4_Emission == true)
-                        //{
-                        //    table.Rows[x + 1].Cells[3].Paragraphs.First().Append("CH₄");
-                        //}
                     }
+
                     paragraph.ReplaceTextWithObject("排放係數表替換", table);
                 }
 
