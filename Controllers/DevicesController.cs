@@ -520,7 +520,7 @@ namespace Carbon_inventory_platform.Controllers
                 // 如果找到 Materials 数据，计算 Emissions
                 if (GWPData != null)
                 {
-                    CH4 = (float)(Math.Round(activityData.Num / 1000.0, 4) * materialsData.CH4CEF * GWPData.Num);
+                    CH4 = (float)(Math.Round(activityData.Num , 4) * materialsData.CH4CEF * GWPData.Num);
                     Grade = 3 * activityData.Level * activityData.Correction;
                     all = (float)Math.Round(CH4, 4);
                 }

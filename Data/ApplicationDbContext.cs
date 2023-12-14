@@ -109,7 +109,7 @@ new Material { Id = 41, Name = "潤滑油", Scope = "類別1", EmissionPattern =
 new Material { Id = 42, Name = "液化石油氣", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 1.7528812758, CO2ULL = 0.023772F, CO2UUL = 0.03962F, CH4CEF = 0.001722323916, CH4ULL = 0F, CH4UUL = 0F, N2OCEF = 0.0000055558836, N2OULL = 0F, N2OUUL = 0F, Unit = "L" },
 new Material { Id = 43, Name = "液化天然氣", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 2.11391532, CO2ULL = 0.032086F, CO2UUL = 0.039216F, CH4CEF = 0.0034666704, CH4ULL = 0.456522F, CH4UUL = 15.73913F, N2OCEF = 0.0001130436, N2OULL = 0.666667F, N2OUUL = 24.666667F, Unit = "M3" },
 new Material { Id = 56, Name = "外購電力", Scope = "類別2", EmissionPattern = "外購電力", CO2CEF = 0.495, CO2ULL = -0.07F, CO2UUL = 0.07F, Unit = "", Year = 111 },
-new Material { Id = 57, Name = "廢水處理", Scope = "類別1", EmissionPattern = "逸散", CH4CEF = 0.002546062 },
+new Material { Id = 57, Name = "廢水處理", Scope = "類別1", EmissionPattern = "逸散", CH4CEF = 0.0031875000 },
 new Material { Id = 58, Name = "二氧化碳", Scope = "類別1", EmissionPattern = "逸散", CO2CEF = 1 },
 new Material { Id = 59, Name = "乙炔", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.3841653850 },
 new Material { Id = 60, Name = "焊條", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.6666666666 },
