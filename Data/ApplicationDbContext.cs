@@ -124,7 +124,8 @@ new Material { Id = 68, Name = "食品加工冷藏、冷凍", HFCSCEF = 0.160000
 new Material { Id = 69, Name = "冰水主機", HFCSCEF = 0.090000}, //冰水機
 new Material { Id = 70, Name = "冷氣機", HFCSCEF = 0.030000}, //住宅及商業建築冷氣機
 new Material { Id = 71, Name = "車用空調", HFCSCEF = 0.200000 }, //移動式空氣清靜機
-new Material { Id = 72, Name = "丁烷", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.0260000000 }
+new Material { Id = 72, Name = "丁烷", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.0260000000 },
+new Material { Id = 73, Name = "外購電力", Scope = "類別2", EmissionPattern = "外購電力", CO2CEF = 0.509 ,Year=110}
 );
             builder.Entity<GWP>().HasData(
 new GWP { Name = "CO2", Num = 1, GWP_Year = 2022 },

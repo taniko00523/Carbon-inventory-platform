@@ -51,7 +51,7 @@
                 <td>
                     <a class="btn btn-danger" asp-controller="Emission" asp-action="Index" asp-route-id="@item.Id">總排放量</a>|
                     @* <a class="btn btn-dark" asp-controller="Devices" asp-action="Word" asp-route-id="@item.Id">報告書產生</a>| *@
-                    <a class="btn btn-dark" asp-controller="Devices" asp-action="HardWord" asp-route-id="@item.Id">報告書產生</a>
+                    <a class="btn btn-dark" asp-controller="Emission" asp-action="HardWord" asp-route-id="@item.Id">報告書產生</a>
                 </td>
             </tr>
         }
