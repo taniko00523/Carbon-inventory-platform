@@ -12,7 +12,7 @@ namespace Carbon_inventory_platform.Models
         public string Name { get; set; } = "";
 
         [MaxLength(10)]
-        [Display(Name = "範疇別")]
+        [Display(Name = "類別")]
         public string Scope { get; set; } = "";
 
         [MaxLength(10)]
@@ -45,6 +45,10 @@ namespace Carbon_inventory_platform.Models
 
         [Display(Name = "N2O不確定性95%信賴區間上限")]
         public float N2OUUL { get; set; } = 0;
+
+        [Display(Name = "HFCS排放係數")]
+        public double HFCSCEF { get; set; } = 0;
+
 
         [Display(Name = "年份")]
         public int Year { get; set; }

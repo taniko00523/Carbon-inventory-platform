@@ -447,59 +447,65 @@ namespace Carbon_inventory_platform.Controllers
             }
             else if (toUpdate.HFCS_Emission == true)
             {
-                var GWPData = await _context.GWPs.Where(x => x.Name == toUpdate.Material).FirstOrDefaultAsync();
+                var materialsData = await _context.Materials
+                    .Where(x => x.Name == toUpdate.Name)
+                    .FirstOrDefaultAsync();
 
-                if (GWPData != null)
-                {
-                    if (toUpdate.Name == "冰箱" || toUpdate.Name == "飲水機")
-                    {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.003), 4);
-                        Grade = 3 * activityData.Level * activityData.Correction;
-                        all = (float)Math.Round(HFCS, 4);
-                    }
-                    if (toUpdate.Name == "商用冰箱")
-                    {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.055), 4);
-                        Grade = 3 * activityData.Level * activityData.Correction;
-                        all = (float)Math.Round(HFCS, 4);
-                    }
-                    if (toUpdate.Name == "中、大型冰箱")
-                    {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.2), 4);
-                        Grade = 3 * activityData.Level * activityData.Correction;
-                        all = (float)Math.Round(HFCS, 4);
-                    }
-                    if (toUpdate.Name == "低溫冷凍車")
-                    {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.33), 4);
-                        Grade = 3 * activityData.Level * activityData.Correction;
-                        all = (float)Math.Round(HFCS, 4);
-                    }
-                    if (toUpdate.Name == "乾燥機" || toUpdate.Name == "工業冷藏、冷凍" || toUpdate.Name == "食品加工冷藏、冷凍")
-                    {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.16), 4);
-                        Grade = 3 * activityData.Level * activityData.Correction;
-                        all = (float)Math.Round(HFCS, 4);
-                    }
-                    if (toUpdate.Name == "冰水主機")
-                    {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.09), 4);
-                        Grade = 3 * activityData.Level * activityData.Correction;
-                        all = (float)Math.Round(HFCS, 4);
-                    }
-                    if (toUpdate.Name == "冷氣機")
-                    {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.03), 4);
-                        Grade = 3 * activityData.Level * activityData.Correction;
-                        all = (float)Math.Round(HFCS, 4);
-                    }
-                    if (toUpdate.Name == "車用空調")
-                    {
-                        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.2), 4);
-                        Grade = 3 * activityData.Level * activityData.Correction;
-                        all = (float)Math.Round(HFCS, 4);
-                    }
-                }
+                var GWPData = await _context.GWPs.Where(x => x.Name == toUpdate.Material).FirstOrDefaultAsync();
+                HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * materialsData.HFCSCEF), 4);
+                Grade = 3 * activityData.Level * activityData.Correction;
+                all = (float)Math.Round(HFCS, 4);
+                //if (GWPData != null)
+                //{
+                //    if (toUpdate.Name == "冰箱" || toUpdate.Name == "飲水機")
+                //    {
+                //        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.003), 4);
+                //        Grade = 3 * activityData.Level * activityData.Correction;
+                //        all = (float)Math.Round(HFCS, 4);
+                //    }
+                //    if (toUpdate.Name == "商用冰箱")
+                //    {
+                //        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.055), 4);
+                //        Grade = 3 * activityData.Level * activityData.Correction;
+                //        all = (float)Math.Round(HFCS, 4);
+                //    }
+                //    if (toUpdate.Name == "中、大型冰箱")
+                //    {
+                //        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.2), 4);
+                //        Grade = 3 * activityData.Level * activityData.Correction;
+                //        all = (float)Math.Round(HFCS, 4);
+                //    }
+                //    if (toUpdate.Name == "低溫冷凍車")
+                //    {
+                //        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.33), 4);
+                //        Grade = 3 * activityData.Level * activityData.Correction;
+                //        all = (float)Math.Round(HFCS, 4);
+                //    }
+                //    if (toUpdate.Name == "乾燥機" || toUpdate.Name == "工業冷藏、冷凍" || toUpdate.Name == "食品加工冷藏、冷凍")
+                //    {
+                //        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.16), 4);
+                //        Grade = 3 * activityData.Level * activityData.Correction;
+                //        all = (float)Math.Round(HFCS, 4);
+                //    }
+                //    if (toUpdate.Name == "冰水主機")
+                //    {
+                //        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.09), 4);
+                //        Grade = 3 * activityData.Level * activityData.Correction;
+                //        all = (float)Math.Round(HFCS, 4);
+                //    }
+                //    if (toUpdate.Name == "冷氣機")
+                //    {
+                //        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.03), 4);
+                //        Grade = 3 * activityData.Level * activityData.Correction;
+                //        all = (float)Math.Round(HFCS, 4);
+                //    }
+                //    if (toUpdate.Name == "車用空調")
+                //    {
+                //        HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.2), 4);
+                //        Grade = 3 * activityData.Level * activityData.Correction;
+                //        all = (float)Math.Round(HFCS, 4);
+                //    }
+                //}
             }
             else if (toUpdate.CH4_Emission == true)
             {

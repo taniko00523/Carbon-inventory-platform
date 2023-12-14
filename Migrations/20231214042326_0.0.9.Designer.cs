@@ -4,6 +4,7 @@ using Carbon_inventory_platform.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_inventory_platform.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231214042326_0.0.9")]
+    partial class _009
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1960,215 +1963,6 @@ namespace Carbon_inventory_platform.Migrations
                             N2OUUL = 0f,
                             Name = "焊條",
                             Scope = "類別1",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 61,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.0030000000000000001,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "冰箱",
-                            Scope = "",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 62,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.0030000000000000001,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "飲水機",
-                            Scope = "",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 63,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.055,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "商用冰箱",
-                            Scope = "",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 64,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.20000000000000001,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "中、大型冰箱",
-                            Scope = "",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 65,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.33000000000000002,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "低溫冷凍車",
-                            Scope = "",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 66,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.16,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "乾燥機",
-                            Scope = "",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 67,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.16,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "工業冷藏、冷凍",
-                            Scope = "",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 68,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.16,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "食品加工冷藏、冷凍",
-                            Scope = "",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 69,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.089999999999999997,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "冰水主機",
-                            Scope = "",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 70,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.029999999999999999,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "冷氣機",
-                            Scope = "",
-                            Unit = "",
-                            Year = 0
-                        },
-                        new
-                        {
-                            Id = 71,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.20000000000000001,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
-                            Name = "車用空調",
-                            Scope = "",
                             Unit = "",
                             Year = 0
                         });

@@ -112,7 +112,18 @@ new Material { Id = 56, Name = "外購電力", Scope = "類別2", EmissionPatter
 new Material { Id = 57, Name = "廢水處理", Scope = "類別1", EmissionPattern = "逸散", CH4CEF = 0.002546062 },
 new Material { Id = 58, Name = "二氧化碳", Scope = "類別1", EmissionPattern = "逸散", CO2CEF = 1 },
 new Material { Id = 59, Name = "乙炔", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.3841653850 },
-new Material { Id = 60, Name = "焊條", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.6666666666 }
+new Material { Id = 60, Name = "焊條", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.6666666666 },
+new Material { Id = 61, Name= "冰箱", HFCSCEF= 0.003000}, //家用冷凍、冷藏裝備
+new Material { Id = 62, Name = "飲水機", HFCSCEF = 0.003000 }, //家用冷凍、冷藏裝備
+new Material { Id = 63, Name = "商用冰箱", HFCSCEF = 0.055000}, //獨立商用冷凍、冷藏裝備	
+new Material { Id = 64, Name = "中、大型冰箱", HFCSCEF = 0.200000}, //中、大型冷凍、冷藏裝備
+new Material { Id = 65, Name = "低溫冷凍車", HFCSCEF = 0.330000}, //交通用冷凍、冷藏裝備
+new Material { Id = 66, Name = "乾燥機", HFCSCEF = 0.160000}, //工業冷凍、冷藏裝備，包括食品加工及冷藏
+new Material { Id = 67, Name = "工業冷藏、冷凍", HFCSCEF = 0.160000 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
+new Material { Id = 68, Name = "食品加工冷藏、冷凍", HFCSCEF = 0.160000 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
+new Material { Id = 69, Name = "冰水主機", HFCSCEF = 0.090000}, //冰水機
+new Material { Id = 70, Name = "冷氣機", HFCSCEF = 0.030000}, //住宅及商業建築冷氣機
+new Material { Id = 71, Name = "車用空調", HFCSCEF = 0.200000 } //移動式空氣清靜機
 );
             builder.Entity<GWP>().HasData(
 new GWP { Name = "CO2", Num = 1, GWP_Year = 2022 },
