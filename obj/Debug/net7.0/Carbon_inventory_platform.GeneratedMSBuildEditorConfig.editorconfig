@@ -9,143 +9,141 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Carbon_inventory_platform
 build_property.RootNamespace = Carbon_inventory_platform
-build_property.ProjectDir = D:\C#\Carbon-inventory-platform\
-build_property.EnableComHosting = 
-build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.ProjectDir = C:\Carbon-inventory-platform\
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\C#\Carbon-inventory-platform
+build_property.MSBuildProjectDirectory = C:\Carbon-inventory-platform
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/C\#/Carbon-inventory-platform/Areas/Identity/Pages/_ViewStart.cshtml]
+[C:/Carbon-inventory-platform/Areas/Identity/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Areas/Create.cshtml]
+[C:/Carbon-inventory-platform/Views/Areas/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJlYXNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Areas/Default.cshtml]
+[C:/Carbon-inventory-platform/Views/Areas/Default.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJlYXNcRGVmYXVsdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Areas/Delete.cshtml]
+[C:/Carbon-inventory-platform/Views/Areas/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJlYXNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Areas/Details.cshtml]
+[C:/Carbon-inventory-platform/Views/Areas/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJlYXNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Areas/Edit.cshtml]
+[C:/Carbon-inventory-platform/Views/Areas/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJlYXNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Areas/Index.cshtml]
+[C:/Carbon-inventory-platform/Views/Areas/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJlYXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Companies/Create.cshtml]
+[C:/Carbon-inventory-platform/Views/Companies/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcGFuaWVzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Companies/Default.cshtml]
+[C:/Carbon-inventory-platform/Views/Companies/Default.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcGFuaWVzXERlZmF1bHQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Companies/Delete.cshtml]
+[C:/Carbon-inventory-platform/Views/Companies/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcGFuaWVzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Companies/Details.cshtml]
+[C:/Carbon-inventory-platform/Views/Companies/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcGFuaWVzXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Companies/Edit.cshtml]
+[C:/Carbon-inventory-platform/Views/Companies/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcGFuaWVzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Companies/Index.cshtml]
+[C:/Carbon-inventory-platform/Views/Companies/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcGFuaWVzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Devices/AddActivityData.cshtml]
+[C:/Carbon-inventory-platform/Views/Devices/AddActivityData.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2aWNlc1xBZGRBY3Rpdml0eURhdGEuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Devices/Create.cshtml]
+[C:/Carbon-inventory-platform/Views/Devices/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2aWNlc1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Devices/Default.cshtml]
+[C:/Carbon-inventory-platform/Views/Devices/Default.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2aWNlc1xEZWZhdWx0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Devices/Delete.cshtml]
+[C:/Carbon-inventory-platform/Views/Devices/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2aWNlc1xEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Devices/Details.cshtml]
+[C:/Carbon-inventory-platform/Views/Devices/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2aWNlc1xEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Devices/Edit.cshtml]
+[C:/Carbon-inventory-platform/Views/Devices/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2aWNlc1xFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Devices/HardWord.cshtml]
+[C:/Carbon-inventory-platform/Views/Devices/HardWord.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2aWNlc1xIYXJkV29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Devices/Index.cshtml]
+[C:/Carbon-inventory-platform/Views/Devices/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2aWNlc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Devices/Word.cshtml]
+[C:/Carbon-inventory-platform/Views/Devices/Word.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2aWNlc1xXb3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Emission/HardWord.cshtml]
+[C:/Carbon-inventory-platform/Views/Emission/HardWord.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1pc3Npb25cSGFyZFdvcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Emission/Index.cshtml]
+[C:/Carbon-inventory-platform/Views/Emission/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1pc3Npb25cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Home/CountEmission.cshtml]
+[C:/Carbon-inventory-platform/Views/Home/CountEmission.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb3VudEVtaXNzaW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Home/Index.cshtml]
+[C:/Carbon-inventory-platform/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Home/Privacy.cshtml]
+[C:/Carbon-inventory-platform/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Shared/Error.cshtml]
+[C:/Carbon-inventory-platform/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Shared/_LoginPartial.cshtml]
+[C:/Carbon-inventory-platform/Views/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Carbon-inventory-platform/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/_ViewImports.cshtml]
+[C:/Carbon-inventory-platform/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/_ViewStart.cshtml]
+[C:/Carbon-inventory-platform/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/C\#/Carbon-inventory-platform/Views/Shared/_Layout.cshtml]
+[C:/Carbon-inventory-platform/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-1wdvs1yram
