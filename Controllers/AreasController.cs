@@ -112,13 +112,16 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,CompanyId,Name,PostalCode,City,District,FactorCode,UniqueCode,Address,Year,Type")] Area area)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,CompanyId,Name,PostalCode,FactorCode,UniqueCode,FullAddress,Year,Type")] Area area)
         {
             if (id != area.Id)
             {
                 return NotFound();
             }
 
+            string City = area.FullAddress;
+            string District = area.FullAddress;
+            string Address = area.FullAddress;
             if (ModelState.IsValid)
             {
                 try
@@ -130,9 +133,10 @@ namespace Carbon_inventory_platform.Controllers
                         toUpdate.CompanyId = area.CompanyId;
                         toUpdate.Name = area.Name;
                         toUpdate.PostalCode = area.PostalCode;
-                        toUpdate.City = area.City;
-                        toUpdate.District = area.District;
-                        toUpdate.Address = area.Address;
+                        toUpdate.FullAddress = area.FullAddress;
+                        toUpdate.City = GetCity(City);
+                        toUpdate.District = GetDistrict(District);
+                        toUpdate.Address = GetAddress(Address);
                         toUpdate.FactorCode = area.FactorCode;
                         toUpdate.UniqueCode = area.UniqueCode;
                         toUpdate.Year = area.Year;
@@ -204,23 +208,20 @@ namespace Carbon_inventory_platform.Controllers
           return (_context.Areas?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        public async Task<IActionResult> Default()
+        static string GetCity(string input)
         {
-            await _context.Areas.AddAsync(new Area()
-            {
-                Id = Guid.NewGuid(),
-                CompanyId = _context.Companies.Where(c => c.Name == "Default").Select(c => c.Id).FirstOrDefault(),
-                Name = "Default",
-                PostalCode = 0,
-                City = "Default",
-                District = "Default",
-                Address = "Default",
-                Year = 111,
-                Type = "Default",
-                CreateTime = DateTime.Now
-            });
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            // 使用Substring获取从指定位置开始到字符串末尾的子串
+            return input.Substring(0,3);
+        }
+        static string GetDistrict(string input)
+        {
+            // 使用Substring获取从指定位置开始到字符串末尾的子串
+            return input.Substring(3,3);
+        }
+        static string GetAddress(string input)
+        {
+            // 使用Substring获取从指定位置开始到字符串末尾的子串
+            return input.Substring(6);
         }
     }
 }

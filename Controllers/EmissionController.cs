@@ -307,14 +307,6 @@ namespace Carbon_inventory_platform.Controllers
                 foreach (var paragraph in paragraphsToUpdate) //類別表補充
                 {
                     Xceed.Document.NET.Table table = doc.AddTable(device.Count() + 1, 4);
-                    table.SetWidths(new float[] { 100, 150, 200, 100 });
-
-                    // 合併儲存格
-                    //table.MergeCellsInColumn(0, 1, 9);
-                    //table.MergeCellsInColumn(1, 3, 9);
-                    //table.MergeCellsInColumn(2, 6, 9);
-                    //table.MergeCellsInColumn(3, 7, 9);
-
                     // 填充表格標題
                     table.Rows[0].Cells[0].Paragraphs.First().Append("類別");
                     table.Rows[0].Cells[1].Paragraphs.First().Append("型式");
@@ -543,7 +535,7 @@ namespace Carbon_inventory_platform.Controllers
                                         gasType == "CO2" ? _context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CO2CEF.ToString() :
                                         gasType == "CH4" ? _context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.CH4CEF.ToString() :
                                         gasType == "N2O" ? _context.Materials.FirstOrDefault(m => m.Name == device[device_num].Material)?.N2OCEF.ToString() :
-                                        "");
+                                        ""); //增加其他
 
                                 table.Rows[x + 1].Cells[3].Paragraphs.First().Append("溫室氣體排放係數管理表 6.0.4 版");
                                 table.Rows[x + 1].Cells[4].Paragraphs.First().Append("公噸/" + displayUnit);

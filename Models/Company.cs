@@ -13,7 +13,7 @@ namespace Carbon_inventory_platform.Models
 
         [MaxLength(10)]
         [Display(Name = "公司簡稱")]
-        public string EasyName { get; set; } = "";
+        public string? EasyName { get; set; } = "";
 
         [MaxLength(100)]
         [Display(Name = "英文公司名稱")]
@@ -21,10 +21,10 @@ namespace Carbon_inventory_platform.Models
 
         [MaxLength(100)]
         [Display(Name = "英文公司簡稱")]
-        public string EasyEnglishName { get; set; } = "";
+        public string? EasyEnglishName { get; set; } = "";
 
         [MaxLength(20)]
-        [Display(Name = "負責人")]
+        [Display(Name = "聯絡人")]
         public string Owner { get; set; } = "";
 
         [MaxLength(50)]

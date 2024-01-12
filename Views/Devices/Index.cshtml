@@ -173,7 +173,7 @@
                             }
                             else
                             {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> <p>|</p>
+                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> 
                             }
                             <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
                             <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
@@ -291,7 +291,7 @@
                             }
                             else
                             {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> <p>|</p>
+                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> 
                             }
                             <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
                             <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
@@ -416,7 +416,7 @@
                             }
                             else
                             {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> <p>|</p>
+                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> 
                             }
                             <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
                             <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
@@ -528,8 +528,15 @@
                             <p>@item.Emissions 噸CO₂e<p/>
                         </td>
                         <td>
-                            <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> |
-                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a> |
+                            @if (item.Num != 0)
+                            {
+                                <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">修改活動數據</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> 
+                            }
+                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
                             <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
                         </td>
                     </tr>
@@ -645,7 +652,7 @@
                             }
                             else
                             {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> <p>|</p>
+                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> 
                             }
                             <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a> 
                             <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>

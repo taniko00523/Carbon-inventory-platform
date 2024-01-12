@@ -122,8 +122,8 @@ namespace Carbon_inventory_platform.Controllers
                     if (toUpdate != null)
                     {
                         toUpdate.Name = company.Name;
-                        toUpdate.EasyName = company.EasyName;
-                        toUpdate.EasyEnglishName = company.EasyEnglishName;
+                        toUpdate.EasyName = RemoveSuffixes(company.Name);
+                        toUpdate.EasyEnglishName = RemoveENSuffixes(company.EnglishName);
                         toUpdate.EnglishName = company.EnglishName;
                         toUpdate.Owner = company.Owner;
                         toUpdate.Email = company.Email;
@@ -193,6 +193,42 @@ namespace Carbon_inventory_platform.Controllers
         private bool CompanyExists(Guid id)
         {
           return (_context.Companies?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+        static string RemoveSuffixes(string input)
+        {
+
+            string[] suffixes = {  "股份有限公司","有限公司" };
+            foreach (string suffix in suffixes)
+            {
+                if (input.EndsWith(suffix))
+                {
+                    return input.Substring(0, input.Length - suffix.Length);
+                }
+            }
+
+            // 如果没有匹配的后缀，则返回原始输入
+            return input;
+        }
+        static string RemoveENSuffixes(string input)
+        {
+            string[] suffixes = { "INDUSTRIAL CO., LTD", "PAPERWARE CO., LTD", "SCIENTIFIC CO., LTD", "B.T. CO.,LTD", "AUTOMOBILE DIE CO., LTD", "INTERNATIONAL CO., LTD", "MACHINE CO., LTD", "TECHNOLOGY CO., LTD", "Co., Ltd", "CORPORATION" };
+
+            // 使用 Trim() 去除字符串两端的空格
+            string trimmedInput = input.Trim();
+
+            // 判断是否包含后缀
+            foreach (string suffix in suffixes)
+            {
+                // 使用 StringComparison.OrdinalIgnoreCase 进行不区分大小写的比较
+                if (trimmedInput.IndexOf(suffix, StringComparison.OrdinalIgnoreCase) != -1)
+                {
+                    // 如果包含后缀，截取到后缀的位置
+                        return trimmedInput.Substring(0, trimmedInput.IndexOf(suffix, StringComparison.OrdinalIgnoreCase));
+                }
+            }
+
+            // 如果没有匹配的后缀，则返回原始输入
+            return input;
         }
     }
 }

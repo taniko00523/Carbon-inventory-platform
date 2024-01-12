@@ -36,6 +36,10 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "地址")]
         public string Address { get; set; } = "";
 
+        [MaxLength(100)]
+        [Display(Name = "地址")]
+        public string FullAddress { get; set; } = "";
+
         [Display(Name = "基準年")]
         public int Year { get; set; }
 

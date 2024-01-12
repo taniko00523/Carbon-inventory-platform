@@ -45,11 +45,11 @@
                     <a class="btn btn-primary" asp-controller="Companies" asp-action="Edit" asp-route-id="@item.CompanyId">公司資料設定</a>
                 </td>
                 <td>
-                    <a class="btn btn-info" asp-controller="Areas" asp-action="Edit" asp-route-id="@item.Id">邊界資料設定</a>|
+                    <a class="btn btn-info" asp-controller="Areas" asp-action="Edit" asp-route-id="@item.Id">邊界資料設定</a>
                     <a class="btn btn-success" asp-controller="Devices" asp-action="Index" asp-route-id="@item.Id">排放源設定</a>
                 </td>
                 <td>
-                    <a class="btn btn-danger" asp-controller="Emission" asp-action="Index" asp-route-id="@item.Id">總排放量</a>|
+                    <a class="btn btn-danger" asp-controller="Emission" asp-action="Index" asp-route-id="@item.Id">總排放量</a>
                     @* <a class="btn btn-dark" asp-controller="Devices" asp-action="Word" asp-route-id="@item.Id">報告書產生</a>| *@
                     <a class="btn btn-dark" asp-controller="Emission" asp-action="HardWord" asp-route-id="@item.Id">報告書產生</a>
                 </td>

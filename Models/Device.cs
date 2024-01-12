@@ -89,6 +89,9 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "活動數據")]
         public float Num { get; set; }
 
+        //[Display(Name ="盤查年度")]
+        //public int year { get; set; }
+
         [Display(Name = "數據等級評分")]
         public int Grade { get; set; } = 27;
 
