@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\WebMVC</_PublishTargetUrl>
+    <History>True|2024-01-12T08:08:40.6223162Z;True|2024-01-12T16:07:34.7416363+08:00;True|2024-01-12T15:54:17.8132698+08:00;True|2024-01-12T15:54:03.2084039+08:00;True|2024-01-12T15:47:58.4501561+08:00;</History>
+    <LastFailureDetails />
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=%28localdb%29\mssqllocaldb%3bUser ID=sa%3bPassword=sa%3bDatabase=Carbon inventory platform%3bTrusted_Connection=True%3bMultipleActiveResultSets=true</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

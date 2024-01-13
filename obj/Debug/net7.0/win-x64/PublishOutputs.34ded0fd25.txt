@@ -1,0 +1,6 @@
+D:\C#\Carbon-inventory-platform\obj\Host\bin\appsettings.Development.json
+D:\C#\Carbon-inventory-platform\obj\Host\bin\appsettings.json
+D:\C#\Carbon-inventory-platform\obj\Host\bin\electron.manifest.json
+D:\C#\Carbon-inventory-platform\obj\Host\bin\Carbon_inventory_platform.pdb
+D:\C#\Carbon-inventory-platform\obj\Host\bin\Microsoft.Data.SqlClient.SNI.dll
+D:\C#\Carbon-inventory-platform\obj\Host\bin\Carbon_inventory_platform.exe
