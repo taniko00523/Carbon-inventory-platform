@@ -84,10 +84,14 @@
 
 
 
-            <div class="form-group">
+            <div class="form-group" style="float:left">
                 <input type="hidden" asp-for="Id" id="id" />
                 <input type="submit" value="儲存" class="btn btn-primary" />|
-                <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@Model.AreaId">返回</a>
+            </div>
+        </form>
+        <form method="post" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-Year="@TempData.Peek("yearSelected")">
+            <div class="form-group" style="float:left">
+                <button type="submit" class="btn btn-secondary">返回</button>
             </div>
         </form>
     </div>

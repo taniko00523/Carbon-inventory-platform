@@ -52,6 +52,8 @@ namespace Carbon_inventory_platform.Models
         public string ULL { get; set; }
         public string UUL { get; set; }
 
+        public int Year {  get; set; }
+
 
         [ForeignKey("AreaId")]
         public Area? Areas { get; set; }

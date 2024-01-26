@@ -7,7 +7,10 @@
 <h1>總碳排放量</h1>
 <h3>@TempData["Company"]</h3>
 <p>
-    <a class="btn btn-primary" asp-controller="Home" asp-action="Index">返回</a>
+    <a class="btn btn-dark" asp-controller="Emission" asp-action="Word" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-year="@TempData.Peek("yearSelected")">報告書下載</a>
+    <form method="post" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-Year="@TempData.Peek("yearSelected")">
+        <button type="submit" class="btn btn-secondary">返回</button>
+    </form>
 </p>
 <h3>類別一七大溫室氣體排放量統計表</h3>
 <table class="table">
@@ -384,4 +387,3 @@
             </td>
         </tr>
     </tbody>
-</table>

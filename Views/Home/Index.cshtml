@@ -5,7 +5,7 @@
 }
 <div class="row">
     <div class="col">
-        <h1>輔導廠商</h1>
+        <h1>儀錶板</h1>
     </div>
     <div class="col">
         <p class="text-danger">@TempData["Finish"]</p>
@@ -18,7 +18,7 @@
         </form>
     </div>
     <p>
-        <a class="btn btn-dark" asp-controller="Home" asp-action="Default">新增預設設定</a>
+        <a class="btn btn-dark" asp-controller="Home" asp-action="Create">新增公司</a>
     </p>
 </div>
 
@@ -28,9 +28,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.Company.Name)
             </th>
-            <th></th>
             <th>設定</th>
-            <th>排放量</th>
+            <th>刪除</th>
         </tr>
     </thead>
 
@@ -43,15 +42,23 @@
                 </td>
                 <td>
                     <a class="btn btn-primary" asp-controller="Companies" asp-action="Edit" asp-route-id="@item.CompanyId">公司資料設定</a>
+                   
+                        @if (Model.Where(x => x.CompanyId == item.CompanyId).ToList().Count() > 1)
+                        {
+                        <a class="btn btn-info" asp-area="" asp-controller="Areas" asp-action="Index" asp-route-id="@item.CompanyId">廠區資料</a>
+                        <a class="btn btn-success" asp-controller="Devices" asp-action="Index" asp-route-id="@item.Id">排放源設定</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-info" asp-area="" asp-controller="Areas" asp-action="Create" asp-route-id="@item.CompanyId">新增廠區</a>
+                        <a class="btn btn-info" asp-area="" asp-controller="Areas" asp-action="Edit" asp-route-id="@item.Id">廠區資料設定</a>
+                        <a class="btn btn-success" asp-controller="Devices" asp-action="Index" asp-route-id="@item.Id">排放源設定</a>
+                    }
                 </td>
                 <td>
-                    <a class="btn btn-info" asp-controller="Areas" asp-action="Edit" asp-route-id="@item.Id">邊界資料設定</a>
-                    <a class="btn btn-success" asp-controller="Devices" asp-action="Index" asp-route-id="@item.Id">排放源設定</a>
-                </td>
-                <td>
-                    <a class="btn btn-danger" asp-controller="Emission" asp-action="Index" asp-route-id="@item.Id">總排放量</a>
-                    @* <a class="btn btn-dark" asp-controller="Devices" asp-action="Word" asp-route-id="@item.Id">報告書產生</a>| *@
-                    <a class="btn btn-dark" asp-controller="Emission" asp-action="HardWord" asp-route-id="@item.Id">報告書產生</a>
+                    <form method="post" asp-controller="Home" asp-action="Delete" asp-route-companyId="@item.CompanyId" asp-route-areaId="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">
+                        <button type="submit" class="btn btn-danger">刪除</button>
+                    </form>
                 </td>
             </tr>
         }

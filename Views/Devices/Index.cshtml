@@ -4,12 +4,34 @@
     ViewData["Title"] = "設備資料維護";
 }
 <h1>排放源鑑別</h1>
-<h3>@TempData["Company"]</h3>
+<h3>@TempData.Peek("Company")</h3>
 @* 新增廠區名稱 *@
 <p>
-    <a class="btn btn-primary" asp-action="Create">新增設備</a>
+    @if(Model.Count() < 1)
+    {
+        <a class="btn btn-primary" asp-action="Default" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-year="@TempData.Peek("yearSelected")">導入預設</a>
+    }
+    @if (Model.Count() > 1)
+    {
+        <a class="btn btn-primary" asp-action="Create">新增設備</a>
+        <a class="btn btn-danger" asp-controller="Emission" asp-action="Index" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-year="@TempData.Peek("yearSelected")">總排放量</a>
+        <a class="btn btn-dark" asp-controller="Emission" asp-action="Word" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-year="@TempData.Peek("yearSelected")">報告書下載</a>
+    }
     <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">返回</a>
 </p>
+@using (Html.BeginForm("Index", "Devices", FormMethod.Post))
+{
+    
+    <div class="row justify-content-start">
+        <div class="col-1">
+            <label for="Year">選擇年份:</label>
+        </div>
+        <div class="col-3">
+            @Html.DropDownList("Year", ViewData["Year"] as SelectList, "請選擇盤查年度", new { @class = "form-select", onchange = "this.form.submit();" })
+        </div>
+    </div>
+}
+
 <div class="table-responsive">
     <table class="table">
         <thead>
@@ -164,7 +186,7 @@
                             }
                         </td>
                         <td>
-                            <p>@item.Emissions 噸CO₂e<p/>
+                            <p>@item.Emissions 噸CO₂e<p />
                         </td>
                         <td>
                             @if (item.Num != 0)
@@ -173,7 +195,7 @@
                             }
                             else
                             {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> 
+                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
                             }
                             <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
                             <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
@@ -282,7 +304,7 @@
                             }
                         </td>
                         <td>
-                            <p>@item.Emissions 噸CO₂e<p/>
+                            <p>@item.Emissions 噸CO₂e<p />
                         </td>
                         <td>
                             @if (item.Num != 0)
@@ -291,7 +313,7 @@
                             }
                             else
                             {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> 
+                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
                             }
                             <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
                             <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
@@ -306,7 +328,7 @@
             {
                 if (item.EmissionPattern == "逸散")
                 {
-                    <tr class="table-warning"> 
+                    <tr class="table-warning">
                         @* <td>
                 @Html.DisplayFor(modelItem => item.Areas.Name)
                 </td>
@@ -373,7 +395,8 @@
                         <td>
                             @if (item.Num != 0)
                             {
-                                @if(item.Unit == "人"){
+                                @if (item.Unit == "人")
+                                {
                                     <p>@item.Num@item.Unit</p>
                                 }
                                 else
@@ -399,7 +422,7 @@
                                     }
                                     <p>@($"{(decimal)item.Num / 1000:F4} {displayUnit}")</p>
                                 }
-                                
+
                             }
                             else
                             {
@@ -407,7 +430,7 @@
                             }
                         </td>
                         <td>
-                            <p>@item.Emissions 噸CO₂e<p/>
+                            <p>@item.Emissions 噸CO₂e<p />
                         </td>
                         <td>
                             @if (item.Num != 0)
@@ -416,7 +439,7 @@
                             }
                             else
                             {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> 
+                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
                             }
                             <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
                             <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
@@ -525,7 +548,7 @@
                             }
                         </td>
                         <td>
-                            <p>@item.Emissions 噸CO₂e<p/>
+                            <p>@item.Emissions 噸CO₂e<p />
                         </td>
                         <td>
                             @if (item.Num != 0)
@@ -534,7 +557,7 @@
                             }
                             else
                             {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> 
+                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
                             }
                             <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
                             <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
@@ -643,7 +666,7 @@
                             }
                         </td>
                         <td>
-                            <p>@item.Emissions 噸CO₂e<p/>
+                            <p>@item.Emissions 噸CO₂e<p />
                         </td>
                         <td>
                             @if (item.Num != 0)
@@ -652,9 +675,9 @@
                             }
                             else
                             {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a> 
+                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
                             }
-                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a> 
+                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
                             <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
                         </td>
                     </tr>
@@ -663,4 +686,5 @@
             }
         </tbody>
     </table>
+    
 </div>

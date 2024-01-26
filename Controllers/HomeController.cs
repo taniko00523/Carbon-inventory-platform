@@ -24,6 +24,9 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Companies
         public async Task<IActionResult> Index()
         {
+
+            var del = TempData["SelectedAreaId"];
+            del = TempData["yearSelected"];
             return _context.Areas != null ? //如果有抓到資料表Null
                         View(await _context.Areas
                         .Where(x => x.isDeleted == 0) //抓出資料表裡面沒被刪除的
@@ -40,17 +43,15 @@ namespace Carbon_inventory_platform.Controllers
 
         
 
-        public async Task<IActionResult> Default()
+        public async Task<IActionResult> Create()
         {
             var Company_id = Guid.NewGuid();
             var Area_id = Guid.NewGuid();
             await _context.Companies.AddAsync(new Company()
             {
                 Id = Company_id,
-                Name = "Default",
-                Owner = "Default",
-                Email = "Default",
-                Phone = "Default",
+                Name = "新增公司",
+                Phone = "-",
                 CreateTime = DateTime.Now
             });
             await _context.SaveChangesAsync();
@@ -58,129 +59,71 @@ namespace Carbon_inventory_platform.Controllers
             {
                 Id = Area_id,
                 CompanyId = Company_id,
-                Year = 111,
-                CreateTime = DateTime.Now
-            });
-            await _context.SaveChangesAsync();
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = Guid.NewGuid(),
-                AreaId = Area_id,
-                Name = "緊急發電機",
-                Material = "柴油",
-                Scope = "類別一",
-
-                EmissionPattern = "固定",
-                CO2_Emission = true,
-                CH4_Emission = true,
-                N2O_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                Name = "公務車",
-                Material = "柴油",
-                Scope = "類別一",
-                EmissionPattern = "移動",
-                CO2_Emission = true,
-                CH4_Emission = true,
-                N2O_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                Name = "公務車",
-                Material = "車用汽油",
-                Scope = "類別一",
-                EmissionPattern = "移動",
-                CO2_Emission = true,
-                CH4_Emission = true,
-                N2O_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                Name = "冷氣機",
-                Material = "R-410A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                Name = "飲水機",
-                Material = "R-134A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                Name = "乾燥機",
-                Material = "R-134A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                Name = "冰水主機",
-                Material = "R-134A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                Name = "車用空調",
-                Material = "R-134A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                Name = "化糞池",
-                Material = "廢水處理",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                CH4_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = Area_id,
-                Name = "電力",
-                Material = "外購電力",
-                Scope = "類別二",
-                EmissionPattern = "外購電力",
-                CO2_Emission = true,
+                Year = DateTime.Now.Year-1912, //減去1911取得民國年 在減1取去年當基準年
                 CreateTime = DateTime.Now
             });
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+       
+
+        // POST: Companies/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid companyId, Guid areaId)
+        {
+            if (_context.Companies == null)
+            {
+                return Problem("沒有找到資料");
+            }
+            var delComapany = await _context.Companies.FindAsync(companyId); //查詢Companies主鑑符合companyId的資料
+            var delArea = await _context.Areas.Where(x => x.CompanyId == companyId).ToListAsync(); //查詢Areas中外來鑑CompanyId符合companyId的資料集合
+            var delDevice = await _context.Devices.Where(x => x.AreaId == areaId).ToListAsync(); //查詢Devices中外來鑑AreaId中符合areaId的資料集合
+            if (delComapany.ModifiedTime == null) 
+            {
+                _context.Companies.Remove(delComapany);
+            }
+            else
+            {
+                delComapany.isDeleted = 1;
+                delComapany.DeleteTime = DateTime.Now;
+            }
+
+            if(delArea.Count != 0) //是否有Area資料
+            {
+                foreach (var area in delArea) //有則遍尋delArea裡的資料，沒修改過的直接刪除，有修改過的則隱藏
+                {
+                    if (area.ModifiedTime == null)
+                    {
+                        _context.Areas.Remove(area);
+                    }
+                    else
+                    {
+                        area.isDeleted = 1;
+                        area.DeleteTime = DateTime.Now;
+                    }
+                }
+            }
+            if(delDevice.Count() != 0) //是否有Device資料
+            {
+                foreach (var device in delDevice) //有則遍尋delDevice 裡的資料，沒修改過的直接刪除，有修改過的則隱藏
+                {
+                    if (device.ModifiedTime == null) 
+                    {
+                        _context.Devices.Remove(device);
+                    }
+                    else
+                    {
+                        device.isDeleted = 1;
+                        device.DeleteTime = DateTime.Now;
+                    }
+                }
+            }
+            
+            
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

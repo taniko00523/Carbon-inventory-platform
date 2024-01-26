@@ -104,12 +104,10 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EasyEnglishName")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("EasyName")
-                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
@@ -356,6 +354,9 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<byte>("isDeleted")
                         .HasColumnType("tinyint");
+
+                    b.Property<int>("year")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -752,6 +753,9 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<string>("UUL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
 
                     b.Property<string>("all_Grade")
                         .IsRequired()

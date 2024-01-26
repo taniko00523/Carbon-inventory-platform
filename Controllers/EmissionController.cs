@@ -2,6 +2,7 @@
 using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Office.Interop.Word;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
 
@@ -15,13 +16,14 @@ namespace Carbon_inventory_platform.Controllers
         {
             _context = context;
         }
-        public async Task<Emission> CountEmissionAsync(Guid? id)
+        public async Task<Emission> CountEmissionAsync(Guid? id, int Year)
         {
+
             var devices = await _context.Devices
-                .Where(x => x.isDeleted == 0)
-                .Where(x => x.AreaId == id)
+                .Where(x => x.isDeleted == 0 && x.AreaId == id && x.year == Year)
                 .Include(x => x.Areas)
                 .ToListAsync();
+            var Emission = await _context.emissions.Where(x => x.AreaId == id && x.Year == Year).ToListAsync();
             var toCreate = new Emission();
             float sum_hardlymove = 0, sum_move = 0, sum_escape = 0, sum_process = 0, sum_electricity = 0,
                 sum1_CO2 = 0, sum2_CO2 = 0, sum_CH4 = 0, sum_N2O = 0, sum_HFCS = 0, sum_PFCS = 0,
@@ -32,7 +34,7 @@ namespace Carbon_inventory_platform.Controllers
 
             foreach (var item in devices)
             {
-                switch (item.EmissionPattern)
+                switch (item.EmissionPattern) //計算各排放型式
                 {
                     case "固定": sum_hardlymove += item.Emissions; break;
                     case "移動": sum_move += item.Emissions; break;
@@ -41,7 +43,7 @@ namespace Carbon_inventory_platform.Controllers
                     case "外購電力": sum_electricity += item.Emissions; break;
                 }
 
-                if (item.Scope == "類別一")
+                if (item.Scope == "類別一") //計算類別一各溫室氣體排放量
                 {
                     sum1_CO2 += item.CO2;
                     sum_CH4 += item.CH4;
@@ -51,7 +53,7 @@ namespace Carbon_inventory_platform.Controllers
                     sum_SF6 += item.SF6;
                     sum_NF3 += item.NF3;
                 }
-                else if (item.Scope == "類別二")
+                else if (item.Scope == "類別二") //計算類別二各溫室氣體排放量
                 {
                     sum2_CO2 += item.CO2;
                 }
@@ -78,53 +80,59 @@ namespace Carbon_inventory_platform.Controllers
 
             all_ULL = (float)(Math.Pow(all_countULL, 0.5) / sum_Uncertainty);
             all_UUL = (float)(Math.Pow(all_countUUL, 0.5) / sum_Uncertainty);
-            if (_context.emissions.Where(x => x.AreaId == id).ToList().Count != 0)
+            bool sumMatch = Emission.Any(x => x.All != sum_all.ToString("F3"));
+            bool gradeMatch = Emission.Any(x => x.avg_Grade != avg_Grade.ToString("F2"));
+            if (Emission.Count != 0 )
             {
-                toCreate = await _context.emissions.FindAsync(id);
-                toCreate.Scope1_CO2 = sum1_CO2.ToString("F4");
-                toCreate.CO2 = (sum1_CO2 + sum2_CO2).ToString("F4");
-                toCreate.CH4 = sum_CH4.ToString("F4");
-                toCreate.N2O = sum_N2O.ToString("F4");
-                toCreate.HFCS = sum_HFCS.ToString("F4");
-                toCreate.PFCS = sum_PFCS.ToString("F4");
-                toCreate.SF6 = sum_SF6.ToString("F4");
-                toCreate.NF3 = sum_NF3.ToString("F4");
-                toCreate.Scope1 = sum_Scope1.ToString("F4");
-                toCreate.Scope2 = sum_Scope2.ToString("F4");
-                toCreate.All = sum_all.ToString("F3");
-                toCreate.non_move = sum_hardlymove.ToString("F4");
-                toCreate.move = sum_move.ToString("F4");
-                toCreate.escape = sum_escape.ToString("F4");
-                toCreate.process = sum_process.ToString("F4");
-                toCreate.percentage1_CO2 = (sum1_CO2 / sum_Scope1 * 100).ToString("F2") + "%";
-                toCreate.percentage1_CH4 = (sum_CH4 / sum_Scope1 * 100).ToString("F2") + "%";
-                toCreate.percentage1_N2O = (sum_N2O / sum_Scope1 * 100).ToString("F2") + "%";
-                toCreate.percentage1_HFCS = (sum_HFCS / sum_Scope1 * 100).ToString("F2") + "%";
-                toCreate.percentage1_PFCS = (sum_PFCS / sum_Scope1 * 100).ToString("F2") + "%";
-                toCreate.percentage1_SF6 = (sum_SF6 / sum_Scope1 * 100).ToString("F2") + "%";
-                toCreate.percentage1_NF3 = (sum_NF3 / sum_Scope1 * 100).ToString("F2") + "%";
-                toCreate.percentage2_CO2 = ((sum1_CO2 + sum2_CO2) / sum_all * 100).ToString("F2") + "%";
-                toCreate.percentage2_CH4 = (sum_CH4 / sum_all * 100).ToString("F2") + "%";
-                toCreate.percentage2_N2O = (sum_N2O / sum_all * 100).ToString("F2") + "%";
-                toCreate.percentage2_HFCS = (sum_HFCS / sum_all * 100).ToString("F2") + "%";
-                toCreate.percentage2_PFCS = (sum_PFCS / sum_all * 100).ToString("F2") + "%";
-                toCreate.percentage2_SF6 = (sum_SF6 / sum_all * 100).ToString("F2") + "%";
-                toCreate.percentage2_NF3 = (sum_NF3 / sum_all * 100).ToString("F2") + "%";
-                toCreate.percentage_nonMove = (sum_hardlymove / sum_all * 100).ToString("F2") + "%";
-                toCreate.percentage_Move = (sum_move / sum_all * 100).ToString("F2") + "%";
-                toCreate.percentage_Escape = (sum_escape / sum_all * 100).ToString("F2") + "%";
-                toCreate.percentage_Process = (sum_process / sum_all * 100).ToString("F2") + "%";
-                toCreate.percentage_Scope1 = (sum_Scope1 / sum_all * 100).ToString("F2") + "%";
-                toCreate.percentage_Scope2 = (sum_Scope2 / sum_all * 100).ToString("F2") + "%";
-                toCreate.cal_all = sum_Uncertainty.ToString("F4");
-                toCreate.no1_Grade = no1_Grade.ToString();
-                toCreate.no2_Grade = no2_Grade.ToString();
-                toCreate.no3_Grade = no3_Grade.ToString();
-                toCreate.avg_Grade = avg_Grade.ToString("F2");
-                toCreate.all_Grade = avg_Grade < 10 ? "第一級" : (avg_Grade < 19 ? "第二級" : "第三級");
-                toCreate.percentage_CalAll = (sum_Uncertainty / sum_all * 100).ToString("F2") + "%";
-                toCreate.ULL = "-" + all_ULL.ToString("P2");
-                toCreate.UUL = "+" + all_UUL.ToString("P2");
+                if(sumMatch || gradeMatch) //如果總量和總分有差，則修正進資料庫。
+                {
+                    toCreate = await _context.emissions.FindAsync(id);
+                    toCreate.Scope1_CO2 = sum1_CO2.ToString("F4");
+                    toCreate.CO2 = (sum1_CO2 + sum2_CO2).ToString("F4");
+                    toCreate.CH4 = sum_CH4.ToString("F4");
+                    toCreate.N2O = sum_N2O.ToString("F4");
+                    toCreate.HFCS = sum_HFCS.ToString("F4");
+                    toCreate.PFCS = sum_PFCS.ToString("F4");
+                    toCreate.SF6 = sum_SF6.ToString("F4");
+                    toCreate.NF3 = sum_NF3.ToString("F4");
+                    toCreate.Scope1 = sum_Scope1.ToString("F4");
+                    toCreate.Scope2 = sum_Scope2.ToString("F4");
+                    toCreate.All = sum_all.ToString("F3");
+                    toCreate.non_move = sum_hardlymove.ToString("F4");
+                    toCreate.move = sum_move.ToString("F4");
+                    toCreate.escape = sum_escape.ToString("F4");
+                    toCreate.process = sum_process.ToString("F4");
+                    toCreate.percentage1_CO2 = (sum1_CO2 / sum_Scope1 * 100).ToString("F2") + "%";
+                    toCreate.percentage1_CH4 = (sum_CH4 / sum_Scope1 * 100).ToString("F2") + "%";
+                    toCreate.percentage1_N2O = (sum_N2O / sum_Scope1 * 100).ToString("F2") + "%";
+                    toCreate.percentage1_HFCS = (sum_HFCS / sum_Scope1 * 100).ToString("F2") + "%";
+                    toCreate.percentage1_PFCS = (sum_PFCS / sum_Scope1 * 100).ToString("F2") + "%";
+                    toCreate.percentage1_SF6 = (sum_SF6 / sum_Scope1 * 100).ToString("F2") + "%";
+                    toCreate.percentage1_NF3 = (sum_NF3 / sum_Scope1 * 100).ToString("F2") + "%";
+                    toCreate.percentage2_CO2 = ((sum1_CO2 + sum2_CO2) / sum_all * 100).ToString("F2") + "%";
+                    toCreate.percentage2_CH4 = (sum_CH4 / sum_all * 100).ToString("F2") + "%";
+                    toCreate.percentage2_N2O = (sum_N2O / sum_all * 100).ToString("F2") + "%";
+                    toCreate.percentage2_HFCS = (sum_HFCS / sum_all * 100).ToString("F2") + "%";
+                    toCreate.percentage2_PFCS = (sum_PFCS / sum_all * 100).ToString("F2") + "%";
+                    toCreate.percentage2_SF6 = (sum_SF6 / sum_all * 100).ToString("F2") + "%";
+                    toCreate.percentage2_NF3 = (sum_NF3 / sum_all * 100).ToString("F2") + "%";
+                    toCreate.percentage_nonMove = (sum_hardlymove / sum_all * 100).ToString("F2") + "%";
+                    toCreate.percentage_Move = (sum_move / sum_all * 100).ToString("F2") + "%";
+                    toCreate.percentage_Escape = (sum_escape / sum_all * 100).ToString("F2") + "%";
+                    toCreate.percentage_Process = (sum_process / sum_all * 100).ToString("F2") + "%";
+                    toCreate.percentage_Scope1 = (sum_Scope1 / sum_all * 100).ToString("F2") + "%";
+                    toCreate.percentage_Scope2 = (sum_Scope2 / sum_all * 100).ToString("F2") + "%";
+                    toCreate.cal_all = sum_Uncertainty.ToString("F4");
+                    toCreate.no1_Grade = no1_Grade.ToString();
+                    toCreate.no2_Grade = no2_Grade.ToString();
+                    toCreate.no3_Grade = no3_Grade.ToString();
+                    toCreate.avg_Grade = avg_Grade.ToString("F2");
+                    toCreate.all_Grade = avg_Grade < 10 ? "第一級" : (avg_Grade < 19 ? "第二級" : "第三級");
+                    toCreate.percentage_CalAll = (sum_Uncertainty / sum_all * 100).ToString("F2") + "%";
+                    toCreate.ULL = "-" + all_ULL.ToString("P2");
+                    toCreate.UUL = "+" + all_UUL.ToString("P2");
+                    toCreate.Year = Year;
+                }
             }
             else
             {
@@ -173,30 +181,31 @@ namespace Carbon_inventory_platform.Controllers
                 toCreate.all_Grade = avg_Grade < 10 ? "第一級" : (avg_Grade < 19 ? "第二級" : "第三級");
                 toCreate.ULL = "-" + all_ULL.ToString("P2");
                 toCreate.UUL = "+" + all_UUL.ToString("P2");
+                toCreate.Year = Year;
                 _context.Add(toCreate);
             }
 
             await _context.SaveChangesAsync();
             return toCreate;
         }
-        public async Task<IActionResult> HardWordAsync(Guid id)
+        public async Task<IActionResult> WordAsync(Guid id, int Year)
         {
-            var CountEmission = await CountEmissionAsync(id);
+            var CountEmission = await CountEmissionAsync(id, Year);
             // 這裡要替換成你 MVC 應用程式中正確的檔案路徑
             var data = await _context.Areas.Where(x => x.Id == id).Include(x => x.Company).FirstOrDefaultAsync();
-            var device = await _context.Devices.Where(x => x.AreaId == id).Where(x => x.isDeleted == 0).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
-            var scope1_device = await _context.Devices.Where(x => x.AreaId == id).Where(x => x.isDeleted == 0).Where(x => x.Scope != "類別二").OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
+            var device = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0 && x.year == Year).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
+            var scope1_device = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0 && x.year == Year && x.Scope != "類別二").OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
             var Material = await _context.Materials.ToListAsync();
             var emission = await _context.emissions.Where(x => x.AreaId == id).FirstOrDefaultAsync();
-            var nonMove = device.Where(d => d.EmissionPattern == "固定").Where(x => x.isDeleted == 0).Select(d => d.Name).ToList();
-            var move = device.Where(d => d.EmissionPattern == "移動").Where(x => x.isDeleted == 0).Select(d => d.Name).ToList();
-            var escape = device.Where(d => d.EmissionPattern == "逸散").Where(x => x.isDeleted == 0).Select(d => d.Name).ToList();
-            var process = device.Where(d => d.EmissionPattern == "製程").Where(x => x.isDeleted == 0).Select(d => d.Name).ToList();
+            var nonMove = device.Where(x => x.EmissionPattern == "固定" && x.isDeleted == 0 && x.year == Year).Select(d => d.Name).ToList();
+            var move = device.Where(x => x.EmissionPattern == "移動" && x.isDeleted == 0 && x.year == Year).Where(x => x.isDeleted == 0).Select(d => d.Name).ToList();
+            var escape = device.Where(x => x.EmissionPattern == "逸散" && x.isDeleted == 0 && x.year == Year).Select(d => d.Name).ToList();
+            var process = device.Where(x => x.EmissionPattern == "製程" && x.isDeleted == 0 && x.year == Year).Select(d => d.Name).ToList();
 
             string Name = data.Company.Name;
 
-            string filePath = "C:\\報告書\\複雜溫盤報告書範本.docx";
-            string newFilePath = "C:\\報告書\\" + Name + "-溫室氣體盤查報告書" + ".docx";
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", "複雜溫盤報告書範本.docx");
+            string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", Year + Name + "-溫室氣體盤查報告書.docx");
 
             // 複製文件
             using (DocX doc = DocX.Load(filePath))
@@ -556,13 +565,14 @@ namespace Carbon_inventory_platform.Controllers
                 // 保存新文檔
                 doc.SaveAs(newFilePath);
             }
-            TempData["Finish"] = "已產生" + data.Company.Name + "報告書";
             // 返回一個視圖或其他操作，根據你的需求
-            return RedirectToAction("Index", "Home");
+            var fileBytes = System.IO.File.ReadAllBytes(newFilePath);
+            var fileName = Year + Name + "-溫室氣體盤查報告書.docx"; // 可以自行定義檔名
+            return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         }
-        public async Task<IActionResult> IndexAsync(Guid? id)
+        public async Task<IActionResult> IndexAsync(Guid? id, int Year)
         {
-            var CountEmission = await CountEmissionAsync(id);
+            var CountEmission = await CountEmissionAsync(id, Year);
             TempData["Company"] = await _context.Areas
             .Where(a => a.Id == id)
             .Include(a => a.Company)
@@ -580,10 +590,10 @@ namespace Carbon_inventory_platform.Controllers
 
 
             ViewBag.sum_HFCS = emissions.HFCS;
-            
+
 
             ViewBag.sum_PFCS = emissions.PFCS;
-           
+
 
             ViewBag.sum_SF6 = emissions.SF6;
 
@@ -592,7 +602,7 @@ namespace Carbon_inventory_platform.Controllers
             ViewBag.sum_Scope1 = emissions.Scope1;
 
             ViewBag.sum_Scope2 = emissions.Scope2;
-            
+
             ViewBag.sum_All = emissions.All;
 
             ViewBag.sum_non_move = emissions.non_move;
@@ -660,5 +670,32 @@ namespace Carbon_inventory_platform.Controllers
 
 
         }
+
+        public IActionResult DownloadFile(string fileName)
+{
+    // 設定要下載的檔案路徑
+    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", fileName);
+
+    // 檢查檔案是否存在
+    if (!System.IO.File.Exists(filePath))
+    {
+        return NotFound();
+    }
+
+    // 讀取檔案內容
+    var fileContent = System.IO.File.ReadAllBytes(filePath);
+
+    // 指定檔案型別
+    var contentType = "application/octet-stream";
+
+    // 建立一個 FileResult 物件
+    var fileResult = new FileContentResult(fileContent, contentType)
+    {
+        FileDownloadName = fileName
+    };
+
+    return fileResult;
+}
+
     }
 }

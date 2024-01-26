@@ -21,12 +21,12 @@ namespace Carbon_inventory_platform.Controllers
         }
 
         // GET: Areas
-        public async Task<IActionResult> Index() //非同步方法
+        public async Task<IActionResult> Index(Guid Id) //非同步方法
         {
             return _context.Areas != null ? //如果有抓到資料表Null
                           View(await _context.Areas
-                          .Where(x=>x.isDeleted==0) //抓出資料表裡面沒被刪除的
-                          .Include(x=> x.Company)
+                          .Include(x => x.Company)
+                          .Where(x=>x.isDeleted==0 && x.CompanyId==Id) //抓出資料表裡面沒被刪除的
                           .OrderBy(x=>x.CreateTime)
                           .ToListAsync()) : //非同步方法
                           Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
@@ -52,9 +52,9 @@ namespace Carbon_inventory_platform.Controllers
         }
 
         // GET: Areas/Create
-        public IActionResult Create()
+        public IActionResult Create(Guid Id)
         {
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name");
+            TempData["comanyId"] = Id;
             return View();
         }
 
@@ -63,26 +63,35 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,PostalCode,City,District,Address,FactorCode,UniqueCode,Year,Type")] Area area)
+        public async Task<IActionResult> Create([Bind("Id,Name,PostalCode,FactorCode,UniqueCode,FullAddress,Year,Type")] Area area)
         {
             if (ModelState.IsValid)
             {
-                var toCreate = new Area()
+                string City = area.FullAddress;
+                string District = area.FullAddress;
+                string Address = area.FullAddress;
+                var companyId = TempData["comanyId"] as Guid?;
+                var toCreate = new Area();
                 {
-                    Id = Guid.NewGuid(),
-                    Name = area.Name,
-                    PostalCode = area.PostalCode,
-                    City = area.City,
-                    District = area.District,
-                    Address = area.Address,
-                    FactorCode = area.FactorCode,
-                    UniqueCode = area.UniqueCode,
-                    Year = area.Year,
-                    Type = area.Type,
-                    isDeleted = 0,
-                    CreateTime = DateTime.Now
-                };
-                _context.Add(area);
+                    if (companyId.HasValue)
+                    {
+                        toCreate.CompanyId = companyId.Value;
+                    }
+                    toCreate.Id = Guid.NewGuid();
+                    toCreate.Name = "test";
+                    //PostalCode = area.PostalCode,
+                    toCreate.FullAddress = area.FullAddress;
+                    toCreate.City = GetCity(City);
+                    toCreate.District = GetDistrict(District);
+                    toCreate.Address = GetAddress(Address);
+                    //FactorCode = area.FactorCode,
+                    //UniqueCode = area.UniqueCode,
+                    toCreate.Year = area.Year;
+                    toCreate.Type = area.Type;
+                    toCreate.isDeleted = 0;
+                    toCreate.CreateTime = DateTime.Now;
+                }
+                _context.Add(toCreate);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -132,13 +141,13 @@ namespace Carbon_inventory_platform.Controllers
                     {
                         toUpdate.CompanyId = area.CompanyId;
                         toUpdate.Name = area.Name;
-                        toUpdate.PostalCode = area.PostalCode;
+                        //toUpdate.PostalCode = area.PostalCode;
                         toUpdate.FullAddress = area.FullAddress;
                         toUpdate.City = GetCity(City);
                         toUpdate.District = GetDistrict(District);
                         toUpdate.Address = GetAddress(Address);
-                        toUpdate.FactorCode = area.FactorCode;
-                        toUpdate.UniqueCode = area.UniqueCode;
+                        //toUpdate.FactorCode = area.FactorCode;
+                        //toUpdate.UniqueCode = area.UniqueCode;
                         toUpdate.Year = area.Year;
                         toUpdate.Type = area.Type;
                         toUpdate.ModifiedTime = DateTime.Now;

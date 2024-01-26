@@ -12,34 +12,41 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CompanyId" class="control-label">公司名稱</label>
-                <select asp-for="CompanyId" class ="form-control" asp-items="ViewBag.CompanyId"></select>
+            
+            @* <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+            </div> *@
+            @*<div class="form-group">
+                <label asp-for="UniqueCode" class="control-label"></label>
+                <input asp-for="UniqueCode" class="form-control" />
+                <span asp-validation-for="UniqueCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PostalCode" class="control-label"></label>
-                <input asp-for="PostalCode" class="form-control" />
-                <span asp-validation-for="PostalCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+                <label asp-for="FactorCode" class="control-label"></label>
+                <input asp-for="FactorCode" class="form-control" />
+                <span asp-validation-for="FactorCode" class="text-danger"></span>
+            </div>*@
+            <div class="form-group" style="display: none;">
                 <label asp-for="City" class="control-label"></label>
                 <input asp-for="City" class="form-control" />
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display: none;">
                 <label asp-for="District" class="control-label"></label>
                 <input asp-for="District" class="form-control" />
                 <span asp-validation-for="District" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display: none;">
                 <label asp-for="Address" class="control-label"></label>
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FullAddress" class="control-label"></label>
+                <input asp-for="FullAddress" class="form-control" />
+                <span asp-validation-for="FullAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Year" class="control-label"></label>
@@ -52,8 +59,8 @@
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="新增" class="btn btn-primary" />|
-                <a asp-action="Index" class="btn btn-secondary">返回</a>
+                <input type="submit" value="儲存" class="btn btn-primary" />|
+                <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">返回</a>
             </div>
         </form>
     </div>
