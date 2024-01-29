@@ -1,0 +1,42 @@
+﻿@model Carbon_inventory_platform.Models.Year
+
+<h1>盤查年新增</h1>
+
+@if (@TempData.Peek("areaName") != null)
+{
+    <h3>@TempData.Peek("companyName")-@TempData.Peek("areaName")</h3>
+}
+else
+{
+    <h3>@TempData.Peek("companyName")</h3>
+}
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div style="display:none">
+                <input asp-for="AreaId" value="@TempData.Peek("areaId")"  class="control-label">
+            </div>
+            <div class="form-group">
+                <label asp-for="Company" class="control-label"></label>
+                <input asp-for="Company" class="form-control" />
+                <span asp-validation-for="Company" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Num" class="control-label"></label>
+                <input asp-for="Num" class="form-control" />
+                <span asp-validation-for="Num" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="確認" class="btn btn-primary" />|
+                <a class="btn btn-secondary" asp-controller="Years" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

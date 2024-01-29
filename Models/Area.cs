@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 
 namespace Carbon_inventory_platform.Models
 {
@@ -9,11 +10,11 @@ namespace Carbon_inventory_platform.Models
         public Guid Id { get; set; }
 
         [Display(Name = "公司別")]
-        public Guid CompanyId { get; set; } //使用者公司代號自動帶入 不須選擇
+        public Guid CompanyId { get; set; } //公司代號自動帶入 不須選擇
 
         [MaxLength(20)]
         [Display(Name = "廠區名稱")]
-        public string Name { get; set; } = "";
+        public string? Name { get; set; } 
 
         [Display(Name = "郵遞區號")]
         public int PostalCode { get; set; }
@@ -41,7 +42,7 @@ namespace Carbon_inventory_platform.Models
         public string FullAddress { get; set; } = "";
 
         [Display(Name = "基準年")]
-        public int Year { get; set; }
+        public int Year { get; set; } 
 
         [MaxLength(10)]
         [Display(Name = "產業別")]
@@ -62,12 +63,12 @@ namespace Carbon_inventory_platform.Models
         //Navigation導覽屬性
         [ForeignKey("CompanyId")]
         public Company? Company { get; set; }
-        public ICollection<Device> Devices { get; set; } = null!;
+        public ICollection<Year>? Years { get; set; }
 
-        public Area()
-        {
-            Id = Guid.NewGuid();
-            Devices = new List<Device>();
-        }
+        //public Area()
+        //{
+        //    Id = Guid.NewGuid();
+        //    Devices = new List<Device>();
+        //}
     }
 }

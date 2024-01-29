@@ -7,7 +7,9 @@ namespace Carbon_inventory_platform.Models
     {
         [Key]
         public string Name { get; set; }
-        public float? Num { get; set; } = null;
+
+        [Column(TypeName = "decimal(18, 10)")]
+        public decimal Num { get; set; } = 0;
         public int GWP_Year { get; set; }
 
     }

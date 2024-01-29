@@ -23,6 +23,11 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Areas
         public async Task<IActionResult> Index(Guid Id) //非同步方法
         {
+            TempData["companyId"] = Id; //暫存進入畫面所查詢的CompanyId
+            TempData["companyName"] = await _context.Companies // 暫存目前所在的公司名稱 顯示在畫面上方
+           .Where(a => a.Id == Id)
+           .Select(a => a.Name)
+           .FirstOrDefaultAsync();
             return _context.Areas != null ? //如果有抓到資料表Null
                           View(await _context.Areas
                           .Include(x => x.Company)
@@ -54,7 +59,6 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Areas/Create
         public IActionResult Create(Guid Id)
         {
-            TempData["comanyId"] = Id;
             return View();
         }
 
@@ -63,29 +67,28 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,PostalCode,FactorCode,UniqueCode,FullAddress,Year,Type")] Area area)
+        public async Task<IActionResult> Create([Bind("Name,FullAddress,Year,Type")] Area area)
         {
             if (ModelState.IsValid)
             {
-                string City = area.FullAddress;
-                string District = area.FullAddress;
-                string Address = area.FullAddress;
-                var companyId = TempData["comanyId"] as Guid?;
+                var companyId = TempData.Peek("companyId") as Guid?;
                 var toCreate = new Area();
                 {
-                    if (companyId.HasValue)
-                    {
-                        toCreate.CompanyId = companyId.Value;
-                    }
+
+                    toCreate.CompanyId = companyId.Value;
                     toCreate.Id = Guid.NewGuid();
-                    toCreate.Name = "test";
-                    //PostalCode = area.PostalCode,
+                    toCreate.Name = area.Name;
                     toCreate.FullAddress = area.FullAddress;
-                    toCreate.City = GetCity(City);
-                    toCreate.District = GetDistrict(District);
-                    toCreate.Address = GetAddress(Address);
-                    //FactorCode = area.FactorCode,
-                    //UniqueCode = area.UniqueCode,
+                    if(area.FullAddress.Length > 6)
+                    {
+                        toCreate.City = GetCity(area.FullAddress);
+                        toCreate.District = GetDistrict(area.FullAddress);
+                        toCreate.Address = GetAddress(area.FullAddress);
+                    }
+                    else
+                    {
+                        toCreate.Address = area.FullAddress;
+                    }
                     toCreate.Year = area.Year;
                     toCreate.Type = area.Type;
                     toCreate.isDeleted = 0;
@@ -93,9 +96,8 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 _context.Add(toCreate);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = companyId });
             }
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", area.CompanyId);
             return View(area);
         }
 
@@ -110,8 +112,6 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return NotFound();
             }
-
-            ViewBag.CompanyId = new SelectList(_context.Companies, "Id", "Name", area.CompanyId);
             return View(area);
         }
 
@@ -121,33 +121,31 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,CompanyId,Name,PostalCode,FactorCode,UniqueCode,FullAddress,Year,Type")] Area area)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,FullAddress,Year,Type")] Area area)
         {
             if (id != area.Id)
             {
                 return NotFound();
             }
-
-            string City = area.FullAddress;
-            string District = area.FullAddress;
-            string Address = area.FullAddress;
             if (ModelState.IsValid)
             {
                 try
                 {
                     var toUpdate = await _context.Areas.FindAsync(id);
-
                     if (toUpdate != null)
                     {
-                        toUpdate.CompanyId = area.CompanyId;
                         toUpdate.Name = area.Name;
-                        //toUpdate.PostalCode = area.PostalCode;
                         toUpdate.FullAddress = area.FullAddress;
-                        toUpdate.City = GetCity(City);
-                        toUpdate.District = GetDistrict(District);
-                        toUpdate.Address = GetAddress(Address);
-                        //toUpdate.FactorCode = area.FactorCode;
-                        //toUpdate.UniqueCode = area.UniqueCode;
+                        if (area.FullAddress.Length > 6)
+                        {
+                            toUpdate.City = GetCity(area.FullAddress);
+                            toUpdate.District = GetDistrict(area.FullAddress);
+                            toUpdate.Address = GetAddress(area.FullAddress);
+                        }
+                        else
+                        {
+                            toUpdate.Address = area.FullAddress;
+                        }
                         toUpdate.Year = area.Year;
                         toUpdate.Type = area.Type;
                         toUpdate.ModifiedTime = DateTime.Now;
@@ -165,9 +163,9 @@ namespace Carbon_inventory_platform.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index","Home");
+                var companyId = TempData.Peek("companyId") as Guid?;
+                return RedirectToAction(nameof(Index), new { id = companyId });
             }
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", area.CompanyId);
             return View(area);
         }
 
@@ -200,16 +198,17 @@ namespace Carbon_inventory_platform.Controllers
                 return Problem("沒有找到資料");
             }
             var toDelete = await _context.Areas.FindAsync(id);  
-            if (toDelete.Address == "Default")
+            if (toDelete.ModifiedTime == null)
             {
                 _context.Areas.Remove(toDelete);
-            }else if (toDelete != null)
+            }else
             {
                 toDelete.isDeleted = 1;
                 toDelete.DeleteTime = DateTime.Now;
             }
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var companyId = TempData.Peek("companyId") as Guid?;
+            return RedirectToAction(nameof(Index), new { id = companyId });
         }
 
         private bool AreaExists(Guid id)

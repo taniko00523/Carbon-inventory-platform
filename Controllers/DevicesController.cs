@@ -16,6 +16,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Microsoft.Office.Interop.Word;
 using System.Runtime.InteropServices.JavaScript;
 using Microsoft.CodeAnalysis.Elfie.Model.Structures;
+using System.ComponentModel.Design;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -36,44 +37,20 @@ namespace Carbon_inventory_platform.Controllers
         string[] level = { "連續監測", "定期採樣", "自行評估" };
         string[] correction = { "每年外校一次以上量測", "每年外校不到一次量測", "非量測所得知數據" };
         //GET: Devices
-        public async Task<IActionResult> Index(Guid id)
+        public async Task<IActionResult> Index(Guid Id)
         {
-            TempData["SelectedAreaId"] = id; //暫存目前所在的廠區ID
-            TempData["Company"] = await _context.Areas //暫存目前所在的公司名稱
-            .Where(a => a.Id == id)
-            .Include(a => a.Company)
-            .Select(a => a.Company.Name)
-            .FirstOrDefaultAsync();
-            ViewData["Year"] = new SelectList(await _context.Devices.Select(x => x.year).Distinct().ToListAsync()); //抓出排放源資料庫的所有盤查年份
-         //   bool yearSelectedFlag = TempData["yearSelectedFlag"] != null && (bool)TempData["yearSelectedFlag"];
-         //   if (yearSelectedFlag) //如果有標記(新增、修改、刪除、新增活動數據) 則回到該盤查年份的排放源鑑別
-         //   {
-         //       var devicesForSelectedYear = await _context.Devices
-         //.Where(x => x.isDeleted != 1 && x.AreaId == id && x.year == Convert.ToInt32(TempData.Peek("yearSelected").ToString()))
-         //.OrderBy(x => x.Name)
-         //.ToListAsync();
-         //       TempData["yearSelectedFlag"] = false;
-         //       return View(devicesForSelectedYear);
-         //   }
-            var device = new Device();
-            return View(new List<Device> { device }); //將空的device包裝至集合中 返回至Index 
-        }
-
-        // 新增用於處理下拉選單變更的 Action
-        [HttpPost]
-        public async Task<IActionResult> Index(Guid id, int Year)
-        {
-            ViewData["Year"] = new SelectList(await _context.Devices.Select(x => x.year).Distinct().ToListAsync()); //抓出排放源資料庫的所有盤查年份
-            bool abc = true;
-            TempData["yearSelected"] = Year;
-            //TempData["yearSelectedFlag"] = true; // 新增一個已選擇年份的標記
-            // 查詢Device 下拉選單回傳的盤查年度 排放源資料
-            var devicesForSelectedYear = await _context.Devices
-         .Where(x => x.isDeleted != 1 && x.AreaId == id && x.year == Year)
-         .OrderBy(x => x.Name)
-         .ToListAsync();
-
-            return View(devicesForSelectedYear);
+            TempData["yearId"] = Id; // 暫存目前所在的廠區年度ID
+            TempData["year"] = await _context.Years // 暫存目前所在的公司名稱 顯示在畫面上方
+           .Where(a => a.Id == Id)
+           .Select(a => a.Num)
+           .FirstOrDefaultAsync();
+            return _context.Devices != null ? //如果有抓到資料表Null
+                         View(await _context.Devices
+                         .Where(x => x.isDeleted == 0 && x.YearId == Id) //抓出資料表裡面沒被刪除的
+                         .Include(x => x.GHGs)
+                         .OrderBy(x => x.CreateTime)
+                         .ToListAsync()) : //非同步方法
+                         Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
         }
 
         //GET: Devices/Details/5
@@ -85,7 +62,7 @@ namespace Carbon_inventory_platform.Controllers
             }
 
             var device = await _context.Devices
-                .Include(d => d.Areas)
+                .Include(d => d.Year)
                 .Include(d => d.Material)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (device == null)
@@ -113,58 +90,28 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AreaId,AssetNo,Name,Provess,Scope,EmissionPattern,Material,year")] Device device)
+        public async Task<IActionResult> Create([Bind("Id,YearId,AssetNo,Name,Provess,Scope,EmissionPattern,Material")] Device device)
         {
             if (ModelState.IsValid)
             {
-                var toCreate = new Device();
+                var deviceId = Guid.NewGuid();
+                var toCreate = new Device
                 {
-                    toCreate.Id = Guid.NewGuid();
-                    toCreate.AreaId = device.AreaId;
-                    toCreate.AssetNo = device.AssetNo;
-                    toCreate.Name = device.Name;
-                    toCreate.Provess = device.Provess;
-                    toCreate.Scope = device.Scope;
-                    toCreate.EmissionPattern = device.EmissionPattern;
-                    toCreate.Material = device.Material;
-                    toCreate.isDeleted = 0;
-                    toCreate.CreateTime = DateTime.Now;
-                    toCreate.year = device.year;
-
-                    if (_context.Materials
-    .Where(x => x.Name == device.Material)
-    .Select(x => x.CO2CEF)
-    .FirstOrDefault() != 0)
-                    {
-                        toCreate.CO2_Emission = true;
-                    }
-                    if (_context.Materials
-    .Where(x => x.Name == device.Material)
-    .Select(x => x.CH4CEF)
-    .FirstOrDefault() != 0)
-                    {
-                        toCreate.CH4_Emission = true;
-                    }
-                    if (_context.Materials
-    .Where(x => x.Name == device.Material)
-    .Select(x => x.N2OCEF)
-    .FirstOrDefault() != 0)
-                    {
-                        toCreate.N2O_Emission = true;
-                    }
-                    else if (_context.GWPs
-    .Where(x => x.Name == device.Material)
-    .Select(x => x.Num)
-    .FirstOrDefault() != null)
-                    {
-                        toCreate.HFCS_Emission = true;
-                    }
-                }
+                    Id = deviceId,
+                    YearId = device.YearId,
+                    AssetNo = device.AssetNo,
+                    Name = device.Name,
+                    Provess = device.Provess,
+                    Scope = device.Scope,
+                    EmissionPattern = device.EmissionPattern,
+                    Material = device.Material,
+                    isDeleted = 0,
+                    CreateTime = DateTime.Now,
+                };
                 _context.Add(toCreate);
-                var AreaID = device.AreaId;
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Devices", new { id = AreaID });
-
+                await GHGCheckAsync(deviceId, device.Name, device.Material, device.Scope, device.EmissionPattern);
+                return RedirectToAction("Index", "Devices", new { id = device.YearId });
             }
             ViewData["name"] = new SelectList(name);
             ViewData["Material"] = new SelectList(await _context.Materials.Where(x => x.EmissionPattern == "固定").ToListAsync(), "Name", "Name");
@@ -186,14 +133,19 @@ namespace Carbon_inventory_platform.Controllers
                 .FirstOrDefault();
 
             // 假設有一個名為 emission 的屬性，將其包含在回應中
-            var result = new
+            if (device != null)
             {
-                level = deviceData?.Level,
-                correction = deviceData?.Correction,
-                unit = deviceData?.unit,
-                num = device.Num
-            };
-            return Json(result);
+                var result = new
+                {
+                    level = deviceData?.Level,
+                    correction = deviceData?.Correction,
+                    unit = deviceData?.unit,
+                    num = device.Num
+                };
+                return Json(result);
+            }
+
+            return Json(null);
         }
 
         [HttpGet]
@@ -307,20 +259,13 @@ namespace Carbon_inventory_platform.Controllers
 
                     if (toUpdate != null)
                     {
-                        toUpdate.AreaId = device.AreaId;
+                        toUpdate.YearId = device.YearId;
                         toUpdate.AssetNo = device.AssetNo;
                         toUpdate.Name = device.Name;
                         toUpdate.Provess = device.Provess;
                         toUpdate.Scope = device.Scope;
                         toUpdate.EmissionPattern = device.EmissionPattern;
                         toUpdate.Material = device.Material;
-                        toUpdate.CO2_Emission = device.CO2_Emission;
-                        toUpdate.CH4_Emission = device.CH4_Emission;
-                        toUpdate.N2O_Emission = device.N2O_Emission;
-                        toUpdate.HFCS_Emission = device.HFCS_Emission;
-                        toUpdate.PFCS_Emission = device.PFCS_Emission;
-                        toUpdate.SF6_Emission = device.SF6_Emission;
-                        toUpdate.NF3_Emission = device.NF3_Emission;
                         toUpdate.ModifiedTime = DateTime.Now;
                     }
                     await _context.SaveChangesAsync();
@@ -336,8 +281,8 @@ namespace Carbon_inventory_platform.Controllers
                         throw;
                     }
                 }
-                var AreaID = device.AreaId;
-                return RedirectToAction("Index", "Devices", new { id = AreaID });
+                var YearID = device.YearId;
+                return RedirectToAction("Index", "Devices", new { id = YearID });
             }
             ViewData["name"] = new SelectList(name);
             ViewData["Material"] = new SelectList(await _context.Materials.Where(x => x.EmissionPattern == "固定").ToListAsync(), "Name", "Name");
@@ -356,7 +301,7 @@ namespace Carbon_inventory_platform.Controllers
             }
 
             var device = await _context.Devices
-                .Include(d => d.Areas)
+                .Include(d => d.Year)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (device == null)
             {
@@ -376,18 +321,22 @@ namespace Carbon_inventory_platform.Controllers
                 return Problem("沒有找到資料");
             }
             var toDelete = await _context.Devices.FindAsync(id);
-            if (toDelete.Num == 0)
+            if (toDelete != null)
             {
-                _context.Devices.Remove(toDelete);
+                if (toDelete.Num == 0)
+                {
+                    _context.Devices.Remove(toDelete);
+                }
+                else if (toDelete != null)
+                {
+                    toDelete.isDeleted = 1;
+                    toDelete.DeleteTime = DateTime.Now;
+                }
+                await _context.SaveChangesAsync();
+
             }
-            else if (toDelete != null)
-            {
-                toDelete.isDeleted = 1;
-                toDelete.DeleteTime = DateTime.Now;
-            }
-            await _context.SaveChangesAsync();
-            var AreaID = toDelete.AreaId;
-            return RedirectToAction("Index", "Devices", new { id = AreaID });
+            var YearID = toDelete.YearId;
+            return RedirectToAction("Index", "Devices", new { id = YearID });
         }
 
         private bool DeviceExists(Guid id)
@@ -419,178 +368,164 @@ namespace Carbon_inventory_platform.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddActivityData(Guid? id, [Bind("Id,Num,Unit,Source,Dept,Level,Correction,Material,Emissions")] Device activityData)
+        public async Task<IActionResult> AddActivityData(Guid? id, [Bind("Id,Num,Unit,Data_Correction,Device_Correction")] Device activityData)
         {
             ViewData["DataCorrection"] = new SelectList(_context.dataCorrections, "Id", "Name");
             ViewData["DataLevel"] = new SelectList(_context.dataLevels, "Id", "Name");
 
-            var toUpdate = await _context.Devices.FindAsync(id);
+            var GHG = await _context.GHGs.Where(x => x.DeviceId == id).ToListAsync(); //抓出需要算排放量的排放源中的溫室氣體
+            var Device = await _context.Devices.FindAsync(id);
 
-            float all = 0;
-            float CO2 = 0;
-            float CH4 = 0;
-            float N2O = 0;
-            float HFCS = 0;
-            int Grade = 0;
-            float CO2ULL = 0;
-            float CO2UUL = 0;
-            float CH4ULL = 0;
-            float CH4UUL = 0;
-            float N2OULL = 0;
-            float N2OUUL = 0;
-            float UUL = 0;
-            float ULL = 0;
-            float count_ULL = 0;
-            float count_UUL = 0;
-            if (toUpdate.CO2_Emission == true && toUpdate.CH4_Emission == true && toUpdate.N2O_Emission == true) //固定移動
+            decimal all_Emission = 0;
+
+            decimal GHG1 = 0;
+            decimal GHG2 = 0;
+            decimal GHG3 = 0;
+            decimal GHG1ULL = 0;
+            decimal GHG1UUL = 0;
+            decimal GHG2ULL = 0;
+            decimal GHG2UUL = 0;
+            decimal GHG3ULL = 0;
+            decimal GHG3UUL = 0;
+
+
+            if(GHG!=null && Device != null)
             {
-                var materialsData = await _context.Materials//區分固定與移動
-                    .Where(x => x.EmissionPattern == toUpdate.EmissionPattern)
-                    .Where(x => x.Name == toUpdate.Material)
-                    .FirstOrDefaultAsync();// 抓取對應的Materials 數據
-
-                float CH4_GWP = (float)(await _context.GWPs.Where(x => x.Name == "CH4").FirstOrDefaultAsync()).Num;
-                float N2O_GWP = (float)(await _context.GWPs.Where(x => x.Name == "N2O").FirstOrDefaultAsync()).Num;
-
-                // 如果找到 Materials 数据，计算 Emissions
-                if (materialsData != null)
+                if(ModelState.IsValid)
                 {
-                    CO2 = (float)Math.Round(Math.Round(activityData.Num / 1000.0, 4) * materialsData.CO2CEF * 1, 4);
-                    CH4 = (float)Math.Round(Math.Round(activityData.Num / 1000.0, 4) * materialsData.CH4CEF * 1, 4);
-                    N2O = (float)Math.Round(Math.Round(activityData.Num / 1000.0, 4) * materialsData.N2OCEF * 1, 4);
-                    Grade = 3 * activityData.Level * activityData.Correction;
-                    all = (float)Math.Round(CO2 + CH4 + N2O, 4);
-                }
-                CO2ULL = (float)CalculateRoundDistance(-0.01F, materialsData.CO2ULL);//單排放源CO2排放95%信賴區間下限
-                CO2UUL = (float)CalculateRoundDistance(0.01F, materialsData.CO2UUL);//單排放源CO2排放95%信賴區間上限
-                CH4ULL = (float)CalculateRoundDistance(-0.01F, materialsData.CH4ULL);//單排放源CH4排放95%信賴區間下限
-                CH4UUL = (float)CalculateRoundDistance(0.01F, materialsData.CH4UUL);//單排放源CH4排放95%信賴區間上限
-                N2OULL = (float)CalculateRoundDistance(-0.01F, materialsData.N2OULL);//單排放源N2O排放95%信賴區間下限
-                N2OUUL = (float)CalculateRoundDistance(0.01F, materialsData.N2OUUL);//單排放源N2O排放95%信賴區間上限
-                UUL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2UUL, CH4UUL, N2OUUL);//單排放源排放95%信賴區間下限
-                ULL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2ULL, CH4ULL, N2OULL);//單排放源排放95%信賴區間上限
-                count_UUL = (float)(Math.Pow((UUL * all), 2));
-                count_ULL = (float)(Math.Pow((ULL * all), 2));
-            }
-            else if (toUpdate.HFCS_Emission == true)
-            {
-                var materialsData = await _context.Materials
-                    .Where(x => x.Name == toUpdate.Name)
-                    .FirstOrDefaultAsync();
-
-                var GWPData = await _context.GWPs.Where(x => x.Name == toUpdate.Material).FirstOrDefaultAsync();
-                if (materialsData != null)
-                {
-                    HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * materialsData.HFCSCEF), 4);
-                }
-                else //其他都用工業冷媒計算
-                {
-                    HFCS = (float)Math.Round((double)(Math.Round(activityData.Num / 1000.0, 4) * GWPData.Num * 0.16), 4);
-                }
-                Grade = 3 * activityData.Level * activityData.Correction;
-                all = (float)Math.Round(HFCS, 4);
-            }
-            else if (toUpdate.CH4_Emission == true) //化糞池 廢水處理
-            {
-                var materialsData = await _context.Materials
-                    .Where(x => x.Name == toUpdate.Material)
-                    .FirstOrDefaultAsync();//
-                var GWPData = await _context.GWPs.Where(x => x.Name == "CH4").FirstOrDefaultAsync();
-
-                // 如果找到 Materials 数据，计算 Emissions
-                if (GWPData != null)
-                {
-                    CH4 = (float)(Math.Round(activityData.Num , 4) * materialsData.CH4CEF * GWPData.Num);
-                    Grade = 3 * activityData.Level * activityData.Correction;
-                    all = (float)Math.Round(CH4, 4);
-                }
-            }
-            else if (toUpdate.CO2_Emission == true) //外購電力及製程
-            {
-                var AreaData = await _context.Areas.Where(x => x.Id == toUpdate.AreaId).FirstOrDefaultAsync(); //抓取廠區資料來比對基準年
-                var materialsData = await _context.Materials.Where(x => x.Name == toUpdate.Material).FirstOrDefaultAsync();// 抓取對應的Materials 數據
-                var eletronicData = await _context.Materials.OrderByDescending(x=>x.Year).Where(x => x.Name == toUpdate.Material && x.Year <= toUpdate.year).FirstOrDefaultAsync(); // 以遞減抓取電力排放係數年分，若小於或為該盤查年的排放係數，則採用
-
-                // 如果找到 Materials 数据，计算 Emissions
-                if (eletronicData != null)
-                {
-                    if (toUpdate.Material == "外購電力")
+                    int i = 1;
+                    foreach (var item in GHG)
                     {
-                        CO2 = CO2 = (float)Math.Round((Math.Round(activityData.Num / 1000.0, 4) * eletronicData.CO2CEF), 4);
-                        Grade = 3 * activityData.Level * activityData.Correction;
-                        all = CO2;
-                        CO2ULL = (float)CalculateRoundDistance(-0.01F, eletronicData.CO2ULL);//單排放源CO2排放95%信賴區間下限
-                        CO2UUL = (float)CalculateRoundDistance(0.01F, eletronicData.CO2UUL);//單排放源CO2排放95%信賴區間上限
-                        CH4ULL = (float)CalculateRoundDistance(-0.01F, eletronicData.CH4ULL);//單排放源CH4排放95%信賴區間下限
-                        CH4UUL = (float)CalculateRoundDistance(0.01F, eletronicData.CH4UUL);//單排放源CH4排放95%信賴區間上限
-                        N2OULL = (float)CalculateRoundDistance(-0.01F, eletronicData.N2OULL);//單排放源N2O排放95%信賴區間下限
-                        N2OUUL = (float)CalculateRoundDistance(0.01F, eletronicData.N2OUUL);//單排放源N2O排放95%信賴區間上限
-                        UUL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2UUL, CH4UUL, N2OUUL);//單排放源排放95%信賴區間下限
-                        ULL = (float)CalculateAHorAG(CO2, CH4, N2O, CO2ULL, CH4ULL, N2OULL);//單排放源排放95%信賴區間上限
-                        count_UUL = (float)(Math.Pow((UUL * all), 2));
-                        count_ULL = (float)(Math.Pow((ULL * all), 2));
+                        item.Emission = item.CEF * activityData.Num / 1000;
+                        item.ModifiedTime = DateTime.Now;
+                        if (i == 1)
+                        {
+                            GHG1 += item.Emission;
+                            all_Emission += item.Emission;
+                            GHG1ULL += item.all_ULL;
+                            GHG1UUL += item.all_UUL;
+                        }
+                        if (i == 2)
+                        {
+                            GHG2 += item.Emission;
+                            all_Emission += item.Emission;
+                            GHG2ULL += item.all_ULL;
+                            GHG2UUL += item.all_UUL;
+                        }
+                        if (i == 3)
+                        {
+                            GHG3 += item.Emission;
+                            all_Emission += item.Emission;
+                            GHG3ULL += item.all_ULL;
+                            GHG3UUL += item.all_UUL;
+                        }
+                        i++;
                     }
-                }
-                else if (materialsData != null) //製程
-                {
-                    CO2 = CO2 = (float)Math.Round((Math.Round(activityData.Num / 1000.0, 4) * materialsData.CO2CEF), 4);
-                    Grade = 1 * activityData.Level * activityData.Correction;
-                    all = (float)Math.Round(CO2, 4);
+                    decimal Device_allUUL = Calculate95U(GHG1, GHG2, GHG3, GHG1UUL, GHG2UUL, GHG3UUL);
+                    decimal Device_allULL = Calculate95U(GHG1, GHG2, GHG3, GHG1ULL, GHG2ULL, GHG3ULL);
+                    Device.Num = activityData.Num;
+                    Device.Unit = activityData.Unit;
+                    Device.Emissions = all_Emission;
+                    Device.Data_Correction = activityData.Data_Correction;
+                    Device.Device_Correction = activityData.Device_Correction;
+                    Device.Grade = activityData.CEF_Correction * activityData.Data_Correction * activityData.Device_Correction;
+                    Device.all_UUL = Device_allUUL;
+                    Device.all_ULL = Device_allULL;
+                    Device.ModifiedTime = DateTime.Now;
+                    Device.count_UUL = Device_allUUL * all_Emission * Device_allUUL * all_Emission;
+                    Device.count_ULL = Device_allULL * all_Emission * Device_allULL * all_Emission;
+
+                    ViewData["Unit"] = new SelectList(unit);
+                    ViewData["Source"] = new SelectList(source);
+                    ViewData["Level"] = new SelectList(level);
+                    ViewData["Correction"] = new SelectList(correction);
+                    await _context.SaveChangesAsync();
                 }
             }
-
-            if (toUpdate != null)
-            {
-                toUpdate.Num = activityData.Num;
-                toUpdate.Unit = activityData.Unit;
-                toUpdate.Source = activityData.Source;
-                toUpdate.Dept = activityData.Dept;
-                toUpdate.Level = activityData.Level;
-                toUpdate.Correction = activityData.Correction;
-                toUpdate.CO2 = CO2;
-                toUpdate.CH4 = CH4;
-                toUpdate.N2O = N2O;
-                toUpdate.HFCS = HFCS;
-                toUpdate.Emissions = all;
-                toUpdate.Grade = Grade;
-                toUpdate.UUL = UUL;
-                toUpdate.ULL = ULL;
-                toUpdate.count_UUL = count_UUL;
-                toUpdate.count_ULL = count_ULL;
-                toUpdate.ModifiedTime = DateTime.Now;
-            }
-
-
-            ViewData["Unit"] = new SelectList(unit);
-            ViewData["Source"] = new SelectList(source);
-            ViewData["Level"] = new SelectList(level);
-            ViewData["Correction"] = new SelectList(correction);
-            await _context.SaveChangesAsync();
-            var AreaID = toUpdate.AreaId;
-            return RedirectToAction("Index", "Devices", new { id = AreaID });
+            var yearID = TempData.Peek("yearId");
+            return RedirectToAction("Index", "Devices", new { id = yearID });
         }
 
-
-        static double CalculateRoundDistance(float num1, float num2) // 計算兩數平方和的平方根，並四捨五入到小數點後5位
+        static decimal CalculateRoundDistance(decimal num1, decimal num2) // 計算兩數平方和的平方根，並四捨五入到小數點後5位
         {
             if (num1 != 0 && num2 != 0)
             {
-                double distance = Math.Sqrt(Math.Pow(num1, 2) + Math.Pow(num2, 2));
+                decimal distance = DecimalSqrt(num1 * num1 + num2 * num2);
                 return Math.Round(distance, 5);
             }
             return 0;
         }
-        static double CalculateAHorAG(double J, double R, double Z, double value1, double value2, double value3)
-        {
-            double numerator = Math.Sqrt(Math.Pow(J * value1, 2) + Math.Pow(R * value2, 2) + Math.Pow(Z * value3, 2));
-            double denominator = J + R + Z;
 
-            if (denominator != 0)
+        static decimal Calculate95U(decimal GHG1, decimal GHG2, decimal GHG3, decimal GHG1UUL, decimal GHG2UUL, decimal GHG3UUL) //計算95%信賴區間 
+        {
+            decimal count;
+            decimal allGHG;
+
+            if (GHG1 != 0 && GHG1UUL != 0)
             {
-                return numerator / denominator;
+                if (GHG2 != 0 && GHG2UUL != 0)
+                {
+                    if (GHG3 != 0 && GHG3UUL != 0)
+                    {
+                        count = DecimalSqrt((GHG1 * GHG1UUL * GHG1 * GHG1UUL) + (GHG2 * GHG2UUL * GHG2 * GHG2UUL) + (GHG3 * GHG3UUL * GHG3 * GHG3UUL));
+                        allGHG = GHG1 + GHG2 + GHG3;
+
+                        if (allGHG != 0)
+                        {
+                            return count / allGHG;
+                        }
+
+                    }
+                    count = DecimalSqrt((GHG1 * GHG1UUL * GHG1 * GHG1UUL) + (GHG2 * GHG2UUL * GHG2 * GHG2UUL));
+                    allGHG = GHG1 + GHG2;
+
+                    if (allGHG != 0)
+                    {
+                        return count / allGHG;
+                    }
+                }
+                else if (GHG3 != 0 && GHG3UUL != 0)
+                {
+                    if (GHG2 != 0 && GHG2UUL != 0)
+                    {
+                        count = DecimalSqrt((GHG1 * GHG1UUL * GHG1 * GHG1UUL) + (GHG2 * GHG2UUL * GHG2 * GHG2UUL) + (GHG3 * GHG3UUL * GHG3 * GHG3UUL));
+                        allGHG = GHG1 + GHG2 + GHG3;
+
+                        if (allGHG != 0)
+                        {
+                            return count / allGHG;
+                        }
+
+                    }
+                    count = DecimalSqrt((GHG1 * GHG1UUL * GHG1 * GHG1UUL) + (GHG3 * GHG3UUL * GHG3 * GHG3UUL));
+                    allGHG = GHG1 + GHG3;
+
+                    if (allGHG != 0)
+                    {
+                        return count / allGHG;
+                    }
+                }
+
+                return GHG1UUL;
             }
 
-            return value1;
+            return 0;
+        }
+
+        public static decimal DecimalSqrt(decimal value, int iterations = 20) //用牛頓法逼近Decimal的平方根
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException("不能計算負數的平方根");
+            }
+
+            decimal guess = value / 2;
+            for (int i = 0; i < iterations; i++)
+            {
+                guess = 0.5m * (guess + value / guess);
+            }
+
+            return guess;
         }
 
         public IActionResult DownloadFile(string fileName)
@@ -619,137 +554,223 @@ namespace Carbon_inventory_platform.Controllers
             return fileResult;
         }
 
-        public async Task<IActionResult> Default(Guid id, int year)
+        public async Task<IActionResult> Default(Guid id)
         {
+            var defaultDevice = await _context.defaultDevices.ToListAsync();
+            foreach (var device in defaultDevice)
+            {
+                var deviceID = Guid.NewGuid();
+                string Name = device.Name;
+                string Material = device.Material;
+                string Scope = device.Scope;
+                string EmissionPattern = device.EmissionPattern;
+                await _context.Devices.AddAsync(new Device()
+                {
+                    Id = deviceID,
+                    Area = await _context.Years.Where(x => x.Id == id).Select(x => x.Area.Name).FirstAsync(),
+                    YearId = id,
+                    Name = Name,
+                    Material = Material,
+                    Scope = Scope,
+                    EmissionPattern = EmissionPattern,
+                    CreateTime = DateTime.Now,
+                });
+                await _context.SaveChangesAsync();
+                await GHGCheckAsync(deviceID, Name, Material, Scope, EmissionPattern);
+            }
+
+            var areaId = TempData.Peek("SelectedAreaId") as Guid?;
+
+
+            return RedirectToAction(nameof(Index), new { id = id });
+        }
+
+        public async Task<GHG> GHGCheckAsync(Guid id, string name, string material, string scope, string emisspatern) //排放源Id, 排放源名稱, 物料名稱, 類別, 排放型式
+        {
+            var Device = await _context.Devices.FindAsync(id);
+            var GWP = await _context.GWPs.ToListAsync();
+            var Material = await _context.Materials.Where(x => x.Name == material && x.Scope == scope && x.EmissionPattern == emisspatern).FirstOrDefaultAsync();
+            var otherMaterial = await _context.Materials.Where(x => x.Name == name && x.Scope == scope && x.EmissionPattern == emisspatern).FirstOrDefaultAsync(); //目前只有冷媒設備，但我包含了PFCS以防萬一
+            if(ModelState.IsValid)
+            {
+                if (Material != null)
+                {
+                    if (Material.CO2CEF != 0)
+                    {
+                        var toCreateCO2 = new GHG();
+                        toCreateCO2.Id = Guid.NewGuid();
+                        toCreateCO2.Name = "CO2";
+                        toCreateCO2.DeviceId = id;
+                        toCreateCO2.CEF = Material.CO2CEF;
+                        toCreateCO2.CEF_UUL = Material.CO2UUL;
+                        toCreateCO2.CEF_ULL = Material.CO2ULL;
+                        toCreateCO2.GWP = GWP.Where(x => x.Name == "CO2").Select(x => x.Num).FirstOrDefault();
+                        toCreateCO2.all_UUL = CalculateRoundDistance(Material.CO2UUL, Material.DataUUL);
+                        toCreateCO2.all_ULL = CalculateRoundDistance(Material.CO2ULL, Material.DataULL);
+                        toCreateCO2.CreateTime = DateTime.Now;
+                        _context.AddRange(toCreateCO2);
+                        Device.CEF_Correction = Material.CEF_Correction;
+                        Device.data_UUL = Material.DataUUL;
+                        Device.data_ULL = Material.DataULL;
+
+                    }
+                    if (Material.CH4CEF != 0)
+                    {
+                        var toCreateCH4 = new GHG();
+                        toCreateCH4.Id = Guid.NewGuid();
+                        toCreateCH4.Name = "CH4";
+                        toCreateCH4.DeviceId = id;
+                        toCreateCH4.CEF = Material.CH4CEF;
+                        toCreateCH4.CEF_UUL = Material.CH4UUL;
+                        toCreateCH4.CEF_ULL = Material.CH4ULL;
+                        toCreateCH4.GWP = GWP.Where(x => x.Name == "CH4").Select(x => x.Num).FirstOrDefault();
+                        toCreateCH4.all_UUL = CalculateRoundDistance(Material.CH4UUL, Material.DataUUL);
+                        toCreateCH4.all_ULL = CalculateRoundDistance(Material.CH4ULL, Material.DataULL);
+                        toCreateCH4.CreateTime = DateTime.Now;
+                        _context.Add(toCreateCH4);
+                        Device.CEF_Correction = Material.CEF_Correction;
+                        Device.data_UUL = Material.DataUUL;
+                        Device.data_ULL = Material.DataULL;
+                    }
+                    if (Material.N2OCEF != 0)
+                    {
+                        var toCreateN2O = new GHG();
+                        toCreateN2O.Id = Guid.NewGuid();
+                        toCreateN2O.Name = "N2O";
+                        toCreateN2O.DeviceId = id;
+                        toCreateN2O.CEF = Material.N2OCEF;
+                        toCreateN2O.CEF_UUL = Material.N2OUUL;
+                        toCreateN2O.CEF_ULL = Material.N2OULL;
+                        toCreateN2O.GWP = GWP.Where(x => x.Name == "N2O").Select(x => x.Num).FirstOrDefault();
+                        toCreateN2O.all_UUL = CalculateRoundDistance(Material.N2OUUL, Material.DataUUL);
+                        toCreateN2O.all_ULL = CalculateRoundDistance(Material.N2OULL, Material.DataULL);
+                        toCreateN2O.CreateTime = DateTime.Now;
+                        _context.Add(toCreateN2O);
+                        Device.CEF_Correction = Material.CEF_Correction;
+                        Device.data_UUL = Material.DataUUL;
+                        Device.data_ULL = Material.DataULL;
+                    }
+                    if (Material.HFCSCEF != 0)
+                    {
+                        var toCreateHFCS = new GHG();
+                        toCreateHFCS.Id = Guid.NewGuid();
+                        toCreateHFCS.Name = "HFCS";
+                        toCreateHFCS.DeviceId = id;
+                        toCreateHFCS.CEF = Material.HFCSCEF;
+                        toCreateHFCS.CEF_UUL = Material.HFCSUUL;
+                        toCreateHFCS.CEF_ULL = Material.HFCSULL;
+                        toCreateHFCS.GWP = GWP.Where(x => x.Name == material).Select(x => x.Num).FirstOrDefault();
+                        toCreateHFCS.all_UUL = CalculateRoundDistance(Material.HFCSUUL, Material.DataUUL);
+                        toCreateHFCS.all_ULL = CalculateRoundDistance(Material.HFCSULL, Material.DataULL);
+                        toCreateHFCS.CreateTime = DateTime.Now;
+                        _context.Add(toCreateHFCS);
+                        Device.CEF_Correction = Material.CEF_Correction;
+                        Device.data_UUL = Material.DataUUL;
+                        Device.data_ULL = Material.DataULL;
+                    }
+                    if (Material.PFCSCEF != 0)
+                    {
+                        var toCreatePFCS = new GHG();
+                        toCreatePFCS.Id = Guid.NewGuid();
+                        toCreatePFCS.Name = "PFCS";
+                        toCreatePFCS.DeviceId = id;
+                        toCreatePFCS.CEF = Material.PFCSCEF;
+                        toCreatePFCS.CEF_UUL = Material.PFCSUUL;
+                        toCreatePFCS.CEF_ULL = Material.PFCSULL;
+                        toCreatePFCS.GWP = GWP.Where(x => x.Name == material).Select(x => x.Num).FirstOrDefault();
+                        toCreatePFCS.all_UUL = CalculateRoundDistance(Material.PFCSUUL, Material.DataUUL);
+                        toCreatePFCS.all_ULL = CalculateRoundDistance(Material.PFCSULL, Material.DataULL);
+                        toCreatePFCS.CreateTime = DateTime.Now;
+                        _context.Add(toCreatePFCS);
+                        Device.CEF_Correction = Material.CEF_Correction;
+                        Device.data_UUL = Material.DataUUL;
+                        Device.data_ULL = Material.DataULL;
+                    }
+                    if (Material.SF6CEF != 0)
+                    {
+                        var toCreateSF6 = new GHG();
+                        toCreateSF6.Id = Guid.NewGuid();
+                        toCreateSF6.Name = "SF6";
+                        toCreateSF6.DeviceId = id;
+                        toCreateSF6.CEF = Material.SF6CEF;
+                        toCreateSF6.CEF_UUL = Material.SF6UUL;
+                        toCreateSF6.CEF_ULL = Material.SF6ULL;
+                        toCreateSF6.GWP = GWP.Where(x => x.Name == "SF6").Select(x => x.Num).FirstOrDefault();
+                        toCreateSF6.all_UUL = CalculateRoundDistance(Material.SF6UUL, Material.DataUUL);
+                        toCreateSF6.all_ULL = CalculateRoundDistance(Material.SF6ULL, Material.DataULL);
+                        toCreateSF6.CreateTime = DateTime.Now;
+                        _context.Add(toCreateSF6);
+                        Device.CEF_Correction = Material.CEF_Correction;
+                        Device.data_UUL = Material.DataUUL;
+                        Device.data_ULL = Material.DataULL;
+                    }
+                    if (Material.NF3CEF != 0)
+                    {
+                        var toCreateNF3 = new GHG();
+                        toCreateNF3.Id = Guid.NewGuid();
+                        toCreateNF3.Name = "NF3";
+                        toCreateNF3.DeviceId = id;
+                        toCreateNF3.CEF = Material.NF3CEF;
+                        toCreateNF3.CEF_UUL = Material.NF3UUL;
+                        toCreateNF3.CEF_ULL = Material.NF3ULL;
+                        toCreateNF3.GWP = GWP.Where(x => x.Name == "NF3").Select(x => x.Num).FirstOrDefault();
+                        toCreateNF3.all_UUL = CalculateRoundDistance(Material.NF3UUL, Material.DataUUL);
+                        toCreateNF3.all_ULL = CalculateRoundDistance(Material.NF3ULL, Material.DataULL);
+                        toCreateNF3.CreateTime = DateTime.Now;
+                        _context.Add(toCreateNF3);
+                        Device.CEF_Correction = Material.CEF_Correction;
+                        Device.data_UUL = Material.DataUUL;
+                        Device.data_ULL = Material.DataULL;
+                    }
+                }
+                else if (otherMaterial != null) //目前只有冷媒設備，但我包含了PFCS以防萬一
+                {
+                    if (otherMaterial.HFCSCEF != 0)
+                    {
+                        var toCreateHFCS = new GHG();
+                        toCreateHFCS.Id = Guid.NewGuid();
+                        toCreateHFCS.Name = "HFCS";
+                        toCreateHFCS.DeviceId = id;
+                        toCreateHFCS.CEF = otherMaterial.HFCSCEF;
+                        toCreateHFCS.CEF_UUL = otherMaterial.HFCSUUL;
+                        toCreateHFCS.CEF_ULL = otherMaterial.HFCSULL;
+                        toCreateHFCS.GWP = GWP.Where(x => x.Name == material).Select(x => x.Num).FirstOrDefault();
+                        toCreateHFCS.all_UUL = CalculateRoundDistance(otherMaterial.HFCSUUL, otherMaterial.DataUUL);
+                        toCreateHFCS.all_ULL = CalculateRoundDistance(otherMaterial.HFCSULL, otherMaterial.DataULL);
+                        toCreateHFCS.CreateTime = DateTime.Now;
+                        _context.Add(toCreateHFCS);
+                        Device.CEF_Correction = otherMaterial.CEF_Correction;
+                        Device.data_UUL = otherMaterial.DataUUL;
+                        Device.data_ULL = otherMaterial.DataULL;
+                    }
+                    if (otherMaterial.PFCSCEF != 0)
+                    {
+                        var toCreatePFCS = new GHG();
+                        toCreatePFCS.Id = Guid.NewGuid();
+                        toCreatePFCS.Name = "PFCS";
+                        toCreatePFCS.DeviceId = id;
+                        toCreatePFCS.CEF = otherMaterial.PFCSCEF;
+                        toCreatePFCS.CEF_UUL = otherMaterial.PFCSUUL;
+                        toCreatePFCS.CEF_ULL = otherMaterial.PFCSULL;
+                        toCreatePFCS.GWP = GWP.Where(x => x.Name == material).Select(x => x.Num).FirstOrDefault();
+                        toCreatePFCS.all_UUL = CalculateRoundDistance(otherMaterial.PFCSUUL, otherMaterial.DataUUL);
+                        toCreatePFCS.all_ULL = CalculateRoundDistance(otherMaterial.PFCSULL, otherMaterial.DataULL);
+                        toCreatePFCS.CreateTime = DateTime.Now;
+                        _context.Add(toCreatePFCS);
+                        Device.CEF_Correction = otherMaterial.CEF_Correction;
+                        Device.data_UUL = otherMaterial.DataUUL;
+                        Device.data_ULL = otherMaterial.DataULL;
+
+                    }
+
+                }
+                await _context.SaveChangesAsync();
+
+            }
             
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = Guid.NewGuid(),
-                AreaId = id,
-                year = year,
-                Name = "緊急發電機",
-                Material = "柴油",
-                Scope = "類別一",
-                EmissionPattern = "固定",
-                CO2_Emission = true,
-                CH4_Emission = true,
-                N2O_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = id,
-                year = year,
-                Name = "公務車",
-                Material = "柴油",
-                Scope = "類別一",
-                EmissionPattern = "移動",
-                CO2_Emission = true,
-                CH4_Emission = true,
-                N2O_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = id,
-                year = year,
-                Name = "公務車",
-                Material = "車用汽油",
-                Scope = "類別一",
-                EmissionPattern = "移動",
-                CO2_Emission = true,
-                CH4_Emission = true,
-                N2O_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = id,
-                year = year,
-                Name = "冷氣機",
-                Material = "R-410A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = id,
-                year = year,
-                Name = "飲水機",
-                Material = "R-134A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = id,
-                year = year,
-                Name = "乾燥機",
-                Material = "R-134A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = id,
-                year = year,
-                Name = "冰水主機",
-                Material = "R-134A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = id,
-                year = year,
-                Name = "車用空調",
-                Material = "R-134A",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                HFCS_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = id,
-                year = year,
-                Name = "化糞池",
-                Material = "廢水處理",
-                Scope = "類別一",
-                EmissionPattern = "逸散",
-                CH4_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.Devices.AddAsync(new Device()
-            {
-                Id = new Guid(),
-                AreaId = id,
-                year = year,
-                Name = "電力",
-                Material = "外購電力",
-                Scope = "類別二",
-                EmissionPattern = "外購電力",
-                CO2_Emission = true,
-                CreateTime = DateTime.Now
-            });
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
+
+
+            return null;
         }
     }
 }

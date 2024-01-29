@@ -9,6 +9,7 @@ namespace Carbon_inventory_platform.Models
 
         [MaxLength(50)]
         [Display(Name = "公司名稱")]
+        [Required(ErrorMessage ="請輸入公司名稱")]
         public string Name { get; set; } = "";
 
         [MaxLength(10)]
@@ -17,6 +18,7 @@ namespace Carbon_inventory_platform.Models
 
         [MaxLength(100)]
         [Display(Name = "英文公司名稱")]
+        [Required(ErrorMessage = "請輸入英文公司名稱")]
         public string EnglishName { get; set; } = "";
 
         [MaxLength(100)]
@@ -27,6 +29,7 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "聯絡人")]
         public string Owner { get; set; } = "";
 
+        [EmailAddress(ErrorMessage ="電子信箱格式錯誤")]
         [MaxLength(50)]
         [Display(Name = "電子信箱")]
         public string Email { get; set; } = "";
@@ -51,7 +54,7 @@ namespace Carbon_inventory_platform.Models
          public DateTime? DeleteTime { get; set; }
 
         //Navigation Property
-        public ICollection<Area> Areas { get; set; } = null!;
+        public ICollection<Area> Areas { get; set; }
 
         public Company()
         {

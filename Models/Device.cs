@@ -10,109 +10,93 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "ID")]
         public Guid Id { get; set; }
 
+        // 排放源基本資料：
+
+        [Display(Name = "年度")]
+        public Guid YearId { get; set; }
+
         [Display(Name = "廠區名稱")]
-        public Guid AreaId { get; set; } 
-       
-        [MaxLength(20)]
-        [Display(Name = "財產編號")]
-        public string? AssetNo { get; set; }
-
-        [MaxLength(10)]
-        [Display(Name = "類別")]
-        public string Scope { get; set; } = "";
-
-        [MaxLength(10)]
-        [Display(Name = "排放型式")]
-        public string EmissionPattern { get; set; } = "";
+        public string? Area{ get; set; }
 
         [MaxLength(20)]
         [Display(Name = "排放源名稱")]
-        public string Name { get; set; } = ""; //需修改
+        public required string Name { get; set; } = "";
+
+        [MaxLength(10)]
+        [Display(Name = "類別")]
+        public required string Scope { get; set; } = "";
+
+        [MaxLength(10)]
+        [Display(Name = "排放型式")]
+        public required string EmissionPattern { get; set; } = "";
+
+        [Display(Name = "原燃物料")]
+        public required string Material { get; set; } = "";
+
+        // 不一定有的基本資料：
+
+        [MaxLength(20)]
+        [Display(Name = "排放源編號")]
+        public string? AssetNo { get; set; }
 
         [MaxLength(20)]
         [Display(Name = "製程")]
-        public string Provess { get; set; } = ""; //需修改
+        public string? Provess { get; set; }
 
-        [Display(Name = "原燃物料")] 
-        public string Material { get; set; }
+        [MaxLength(20)]
+        [Display(Name = "數據來源名稱")]
+        public string? Source { get; set; }
 
-        [Display(Name = "排放CO₂")]
-        public Boolean CO2_Emission { get; set; } = false;
+        [MaxLength(20)]
+        [Display(Name = "保存單位")]
+        public string? Dept { get; set; }
 
-        [Display(Name = "排放CH₄")]
-        public Boolean CH4_Emission { get; set; } = false;
-
-        [Display(Name = "排放N₂O")]
-        public Boolean N2O_Emission { get; set; } = false;
-
-        [Display(Name = "排放HFCₛ")]
-        public Boolean HFCS_Emission { get; set; } = false;
-
-        [Display(Name = "排放PFCₛ")]
-        public Boolean PFCS_Emission { get; set; } = false;
-
-        [Display(Name = "排放SF₆")]
-        public Boolean SF6_Emission { get; set; } = false;
-
-        [Display(Name = "排放NF₃")]
-        public Boolean NF3_Emission { get; set; } = false;
-
-        [Display(Name = "CO2排放量")]
-        public float CO2 { get; set; } = 0;
-
-        [Display(Name = "CH4排放量")]
-        public float CH4 { get; set; } = 0;
-
-        [Display(Name = "N2O排放量")]
-        public float N2O { get; set; } = 0;
-
-        [Display(Name = "HFCS排放量")]
-        public float HFCS { get; set; } = 0;
-
-        [Display(Name = "PFCS排放量")]
-        public float PFCS { get; set; } = 0;
-
-        [Display(Name = "SF6排放量")]
-        public float SF6 { get; set; } = 0;
-
-        [Display(Name = "NF3排放量")]
-        public float NF3 { get; set; } = 0;
-
-        [Display(Name = "排放量")]
-        public float Emissions { get; set; } = 0;
-
-        public float UUL { get; set; } = 0;
-        public float ULL { get; set; } = 0;
-        public float count_UUL { get; set; } = 0;
-        public float count_ULL { get; set; } = 0;
-
+        // 排放源計算過程
+        [Column(TypeName = "decimal(18, 4)")]
         [Display(Name = "活動數據")]
-        public float Num { get; set; }
+        public decimal Num { get; set; } = 0;
 
-        [Display(Name = "盤查年度")]
-        public int year { get; set; }
+        [MaxLength(20)]
+        [Display(Name = "單位")]
+        public string? Unit { get; set; }
+
+        [Display(Name = "活動數據誤差等級")]
+        public int Data_Correction { get; set; } = 3;
+
+        [Display(Name = "儀器校正等級")]
+        public int Device_Correction { get; set; } = 3;
+
+        [Display(Name = "排放係數誤差等級")]
+        public int CEF_Correction { get; set; } = 3;
 
         [Display(Name = "數據等級評分")]
         public int Grade { get; set; } = 27;
 
-        [MaxLength(20)]
-        [Display(Name = "單位")]
-        public string Unit { get; set; } = "";
+        [Column(TypeName = "decimal(18, 4)")]
+        [Display(Name = "排放量")]
+        public decimal Emissions { get; set; } = 0;
 
-        [MaxLength(20)]
-        [Display(Name = "數據來源名稱")]
-        public string Source { get; set; } = "";
+        [Column(TypeName = "decimal(18, 10)")]
+        [Display(Name = "活動數據信賴區間上限")]
+        public decimal data_UUL { get; set; } = 0;
 
-        [MaxLength(20)]
-        [Display(Name = "保存單位")]
-        public string Dept { get; set; } = "";
+        [Column(TypeName = "decimal(18, 10)")]
+        [Display(Name = "活動數據信賴區間下限")]
+        public decimal data_ULL { get; set; } = 0;
 
-        [Display(Name = "活動數據等級")]
-        public int Level { get; set; }
+        [Column(TypeName = "decimal(18, 10)")]
+        public decimal all_UUL { get; set; } = 0;
 
-        [Display(Name = "儀器校正等級")]
-        public int Correction { get; set; }
+        [Column(TypeName = "decimal(18, 10)")]
+        public decimal all_ULL { get; set; } = 0;
 
+        [Column(TypeName = "decimal(18, 10)")]
+        public decimal count_UUL { get; set; } = 0;
+
+        [Column(TypeName = "decimal(18, 10)")]
+        public decimal count_ULL { get; set; } = 0;
+
+        // 生命週期紀錄
         [Display(Name = "是否刪除")]
         public byte isDeleted { get; set; } = 0;
 
@@ -126,16 +110,9 @@ namespace Carbon_inventory_platform.Models
          public DateTime? DeleteTime { get; set; }
 
         //Navigation Property
-        [ForeignKey("AreaId")]
-        public Area? Areas { get; set; }
-        //public ICollection<Area> Areas { get; set; } *廠區名稱顯示bug
-        //[Display(Name = "使用物料")]
-         
+        [ForeignKey("YearId")]
+        public Year? Year { get; set; }
+        public ICollection<GHG>? GHGs { get; set; } = null!;
 
-        public Device()
-        {
-            Id = Guid.NewGuid();
-            //Area= new Area(); *廠區名稱顯示bug
-        }
     }
 }

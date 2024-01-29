@@ -17,7 +17,7 @@ namespace Carbon_inventory_platform.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "7.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -64,7 +64,6 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
@@ -219,111 +218,192 @@ namespace Carbon_inventory_platform.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Carbon_inventory_platform.Models.DefaultDevices", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EmissionPattern")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Material")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Scope")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("defaultDevices");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            EmissionPattern = "固定",
+                            Material = "柴油",
+                            Name = "緊急發電機",
+                            Scope = "類別一",
+                            Type = ""
+                        },
+                        new
+                        {
+                            Id = 2,
+                            EmissionPattern = "移動",
+                            Material = "柴油",
+                            Name = "公務車",
+                            Scope = "類別一",
+                            Type = ""
+                        },
+                        new
+                        {
+                            Id = 3,
+                            EmissionPattern = "移動",
+                            Material = "車用汽油",
+                            Name = "公務車",
+                            Scope = "類別一",
+                            Type = ""
+                        },
+                        new
+                        {
+                            Id = 4,
+                            EmissionPattern = "逸散",
+                            Material = "R-410A",
+                            Name = "冷氣機",
+                            Scope = "類別一",
+                            Type = ""
+                        },
+                        new
+                        {
+                            Id = 5,
+                            EmissionPattern = "逸散",
+                            Material = "R-134A",
+                            Name = "飲水機",
+                            Scope = "類別一",
+                            Type = ""
+                        },
+                        new
+                        {
+                            Id = 6,
+                            EmissionPattern = "逸散",
+                            Material = "R-134A",
+                            Name = "乾燥機",
+                            Scope = "類別一",
+                            Type = ""
+                        },
+                        new
+                        {
+                            Id = 7,
+                            EmissionPattern = "逸散",
+                            Material = "R-134A",
+                            Name = "冰水主機",
+                            Scope = "類別一",
+                            Type = ""
+                        },
+                        new
+                        {
+                            Id = 8,
+                            EmissionPattern = "逸散",
+                            Material = "R-134A",
+                            Name = "車用空調",
+                            Scope = "類別一",
+                            Type = ""
+                        },
+                        new
+                        {
+                            Id = 9,
+                            EmissionPattern = "逸散",
+                            Material = "廢水處理",
+                            Name = "化糞池",
+                            Scope = "類別一",
+                            Type = ""
+                        },
+                        new
+                        {
+                            Id = 10,
+                            EmissionPattern = "外購電力",
+                            Material = "外購電力",
+                            Name = "電力",
+                            Scope = "類別二",
+                            Type = ""
+                        });
+                });
+
             modelBuilder.Entity("Carbon_inventory_platform.Models.Device", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AreaId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Area")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AssetNo")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<float>("CH4")
-                        .HasColumnType("real");
-
-                    b.Property<bool>("CH4_Emission")
-                        .HasColumnType("bit");
-
-                    b.Property<float>("CO2")
-                        .HasColumnType("real");
-
-                    b.Property<bool>("CO2_Emission")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Correction")
+                    b.Property<int>("CEF_Correction")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Data_Correction")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("DeleteTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Dept")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("Device_Correction")
+                        .HasColumnType("int");
 
                     b.Property<string>("EmissionPattern")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<float>("Emissions")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Emissions")
+                        .HasColumnType("decimal(18, 4)");
 
                     b.Property<int>("Grade")
-                        .HasColumnType("int");
-
-                    b.Property<float>("HFCS")
-                        .HasColumnType("real");
-
-                    b.Property<bool>("HFCS_Emission")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Level")
                         .HasColumnType("int");
 
                     b.Property<string>("Material")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MaterialId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<float>("N2O")
-                        .HasColumnType("real");
-
-                    b.Property<bool>("N2O_Emission")
-                        .HasColumnType("bit");
-
-                    b.Property<float>("NF3")
-                        .HasColumnType("real");
-
-                    b.Property<bool>("NF3_Emission")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<float>("Num")
-                        .HasColumnType("real");
-
-                    b.Property<float>("PFCS")
-                        .HasColumnType("real");
-
-                    b.Property<bool>("PFCS_Emission")
-                        .HasColumnType("bit");
+                    b.Property<decimal>("Num")
+                        .HasColumnType("decimal(18, 4)");
 
                     b.Property<string>("Provess")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<float>("SF6")
-                        .HasColumnType("real");
-
-                    b.Property<bool>("SF6_Emission")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Scope")
                         .IsRequired()
@@ -331,38 +411,40 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Source")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<float>("ULL")
-                        .HasColumnType("real");
-
-                    b.Property<float>("UUL")
-                        .HasColumnType("real");
 
                     b.Property<string>("Unit")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<float>("count_ULL")
-                        .HasColumnType("real");
+                    b.Property<Guid>("YearId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<float>("count_UUL")
-                        .HasColumnType("real");
+                    b.Property<decimal>("all_ULL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("all_UUL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("count_ULL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("count_UUL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("data_ULL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("data_UUL")
+                        .HasColumnType("decimal(18, 10)");
 
                     b.Property<byte>("isDeleted")
                         .HasColumnType("tinyint");
 
-                    b.Property<int>("year")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("AreaId");
-
-                    b.HasIndex("MaterialId");
+                    b.HasIndex("YearId");
 
                     b.ToTable("Devices");
                 });
@@ -697,193 +779,57 @@ namespace Carbon_inventory_platform.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Emission", b =>
+            modelBuilder.Entity("Carbon_inventory_platform.Models.GHG", b =>
                 {
-                    b.Property<Guid>("AreaId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("All")
+                    b.Property<decimal>("CEF")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("CEF_ULL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("CEF_UUL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DeviceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Emission")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal?>("GWP")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CH4")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("all_ULL")
+                        .HasColumnType("decimal(18, 10)");
 
-                    b.Property<string>("CO2")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("all_UUL")
+                        .HasColumnType("decimal(18, 10)");
 
-                    b.Property<string>("HFCS")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte>("isDeleted")
+                        .HasColumnType("tinyint");
 
-                    b.Property<string>("N2O")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("Id");
 
-                    b.Property<string>("NF3")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("DeviceId");
 
-                    b.Property<string>("PFCS")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SF6")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Scope1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Scope1_CO2")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Scope2")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ULL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UUL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
-                    b.Property<string>("all_Grade")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("avg_Grade")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("cal_all")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("escape")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("move")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("no1_Grade")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("no2_Grade")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("no3_Grade")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("non_move")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage1_CH4")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage1_CO2")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage1_HFCS")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage1_N2O")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage1_NF3")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage1_PFCS")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage1_SF6")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage2_CH4")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage2_CO2")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage2_HFCS")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage2_N2O")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage2_NF3")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage2_PFCS")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage2_SF6")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage_CalAll")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage_Escape")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage_Move")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage_Process")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage_Scope1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage_Scope2")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("percentage_nonMove")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("process")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AreaId");
-
-                    b.ToTable("emissions");
+                    b.ToTable("GHGs");
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.GWP", b =>
@@ -894,8 +840,8 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("GWP_Year")
                         .HasColumnType("int");
 
-                    b.Property<float?>("Num")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Num")
+                        .HasColumnType("decimal(18, 10)");
 
                     b.HasKey("Name");
 
@@ -906,109 +852,109 @@ namespace Carbon_inventory_platform.Migrations
                         {
                             Name = "CO2",
                             GWP_Year = 2022,
-                            Num = 1f
+                            Num = 1m
                         },
                         new
                         {
                             Name = "CH4",
                             GWP_Year = 2022,
-                            Num = 27.9f
+                            Num = 27.9m
                         },
                         new
                         {
                             Name = "N2O",
                             GWP_Year = 2022,
-                            Num = 273f
+                            Num = 273m
                         },
                         new
                         {
                             Name = "R-12",
                             GWP_Year = 2022,
-                            Num = 12500f
+                            Num = 12500m
                         },
                         new
                         {
                             Name = "R-23",
                             GWP_Year = 2022,
-                            Num = 14600f
+                            Num = 14600m
                         },
                         new
                         {
                             Name = "R-32",
                             GWP_Year = 2022,
-                            Num = 771f
+                            Num = 771m
                         },
                         new
                         {
                             Name = "R-134A",
                             GWP_Year = 2022,
-                            Num = 1530f
+                            Num = 1530m
                         },
                         new
                         {
                             Name = "FM200",
                             GWP_Year = 2022,
-                            Num = 3600f
+                            Num = 3600m
                         },
                         new
                         {
                             Name = "R-22",
                             GWP_Year = 2022,
-                            Num = 1960f
+                            Num = 1960m
                         },
                         new
                         {
                             Name = "R-410A",
                             GWP_Year = 2022,
-                            Num = 2256f
+                            Num = 2256m
                         },
                         new
                         {
                             Name = "R-600A",
                             GWP_Year = 2022,
-                            Num = 0.006f
+                            Num = 0.006m
                         },
                         new
                         {
                             Name = "R-417A",
                             GWP_Year = 2022,
-                            Num = 2127f
+                            Num = 2127m
                         },
                         new
                         {
                             Name = "R-404A",
                             GWP_Year = 2022,
-                            Num = 4728f
+                            Num = 4728m
                         },
                         new
                         {
                             Name = "R-407C",
                             GWP_Year = 2022,
-                            Num = 1908f
+                            Num = 1908m
                         },
                         new
                         {
                             Name = "R-507A",
                             GWP_Year = 2022,
-                            Num = 4475f
+                            Num = 4475m
                         },
                         new
                         {
                             Name = "NF3",
                             GWP_Year = 2022,
-                            Num = 17400f
+                            Num = 17400m
                         },
                         new
                         {
                             Name = "SF6",
                             GWP_Year = 2022,
-                            Num = 24300f
+                            Num = 24300m
                         },
                         new
                         {
                             Name = "海龍-1211",
                             GWP_Year = 2022,
-                            Num = 1930f
+                            Num = 1930m
                         });
                 });
 
@@ -1020,45 +966,87 @@ namespace Carbon_inventory_platform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("CH4CEF")
-                        .HasColumnType("float");
+                    b.Property<int>("CEF_Correction")
+                        .HasColumnType("int");
 
-                    b.Property<float>("CH4ULL")
-                        .HasColumnType("real");
+                    b.Property<decimal>("CH4CEF")
+                        .HasColumnType("decimal(18, 10)");
 
-                    b.Property<float>("CH4UUL")
-                        .HasColumnType("real");
+                    b.Property<decimal>("CH4ULL")
+                        .HasColumnType("decimal(18, 10)");
 
-                    b.Property<double>("CO2CEF")
-                        .HasColumnType("float");
+                    b.Property<decimal>("CH4UUL")
+                        .HasColumnType("decimal(18, 10)");
 
-                    b.Property<float>("CO2ULL")
-                        .HasColumnType("real");
+                    b.Property<decimal>("CO2CEF")
+                        .HasColumnType("decimal(18, 10)");
 
-                    b.Property<float>("CO2UUL")
-                        .HasColumnType("real");
+                    b.Property<decimal>("CO2ULL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("CO2UUL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("DataULL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("DataUUL")
+                        .HasColumnType("decimal(18, 10)");
 
                     b.Property<string>("EmissionPattern")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<double>("HFCSCEF")
-                        .HasColumnType("float");
+                    b.Property<decimal>("HFCSCEF")
+                        .HasColumnType("decimal(18, 10)");
 
-                    b.Property<double>("N2OCEF")
-                        .HasColumnType("float");
+                    b.Property<decimal>("HFCSULL")
+                        .HasColumnType("decimal(18, 10)");
 
-                    b.Property<float>("N2OULL")
-                        .HasColumnType("real");
+                    b.Property<decimal>("HFCSUUL")
+                        .HasColumnType("decimal(18, 10)");
 
-                    b.Property<float>("N2OUUL")
-                        .HasColumnType("real");
+                    b.Property<decimal>("N2OCEF")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("N2OULL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("N2OUUL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("NF3CEF")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("NF3ULL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("NF3UUL")
+                        .HasColumnType("decimal(18, 10)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal>("PFCSCEF")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("PFCSULL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("PFCSUUL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("SF6CEF")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("SF6ULL")
+                        .HasColumnType("decimal(18, 10)");
+
+                    b.Property<decimal>("SF6UUL")
+                        .HasColumnType("decimal(18, 10)");
 
                     b.Property<string>("Scope")
                         .IsRequired()
@@ -1081,1159 +1069,2013 @@ namespace Carbon_inventory_platform.Migrations
                         new
                         {
                             Id = 1,
-                            CH4CEF = 2.4660252E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 2.3328598392000002,
-                            CO2ULL = 0.077167f,
-                            CO2UUL = 0.067653f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000246603m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 2.3328598392m,
+                            CO2ULL = 0.077167019m,
+                            CO2UUL = 0.067653277m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 3.6990377999999997E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000369904m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "自產煤",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 2,
-                            CH4CEF = 2.847024E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 2.6932847039999999,
-                            CO2ULL = 0.077167f,
-                            CO2UUL = 0.067653f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000284702m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 2.693284704m,
+                            CO2ULL = 0.077167019m,
+                            CO2UUL = 0.067653277m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 4.2705359999999997E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000427054m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "原料煤",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 3,
-                            CH4CEF = 2.5455744000000001E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 2.4081133823999998,
-                            CO2ULL = 0.077167f,
-                            CO2UUL = 0.067653f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000254557m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 2.4081133824m,
+                            CO2ULL = 0.077167019m,
+                            CO2UUL = 0.067653277m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 3.8183616000000002E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000381836m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "燃料煤",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 4,
-                            CH4CEF = 2.9726279999999999E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 2.922093324,
-                            CO2ULL = 0.03764f,
-                            CO2UUL = 0.027467f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000297263m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 2.922093324m,
+                            CO2ULL = 0.0376398779m,
+                            CO2UUL = 0.0274669379m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 4.4589419999999998E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000445894m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "無煙煤",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 5,
-                            CH4CEF = 2.847024E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 2.6932847039999999,
-                            CO2ULL = 0.077167f,
-                            CO2UUL = 0.067653f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000284702m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 2.693284704m,
+                            CO2ULL = 0.077167019m,
+                            CO2UUL = 0.067653277m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 4.2705359999999997E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000427054m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "焦煤",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 6,
-                            CH4CEF = 2.5455744000000001E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 2.4081133823999998,
-                            CO2ULL = 0.053911f,
-                            CO2UUL = 0.053911f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000254557m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 2.4081133824m,
+                            CO2ULL = 0.0539112051m,
+                            CO2UUL = 0.0539112051m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 3.8183616000000002E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000381836m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "煙煤",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 7,
-                            CH4CEF = 2.0515320000000001E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 1.971522252,
-                            CO2ULL = 0.034339f,
-                            CO2UUL = 0.040583f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000205153m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 1.971522252m,
+                            CO2ULL = 0.03433923m,
+                            CO2UUL = 0.0405827263m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 3.0772979999999997E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.000030773m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "亞煙煤(發電)",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 8,
-                            CH4CEF = 2.3446080000000001E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 2.2531682879999999,
-                            CO2ULL = 0.034339f,
-                            CO2UUL = 0.040583f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000234461m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 2.253168288m,
+                            CO2ULL = 0.03433923m,
+                            CO2UUL = 0.0405827263m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 3.5169120000000003E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000351691m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "亞煙煤(其他)",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 9,
-                            CH4CEF = 1.19072592E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 1.2026331792,
-                            CO2ULL = 0.1f,
-                            CO2UUL = 0.138614f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000119073m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 1.2026331792m,
+                            CO2ULL = 0.1m,
+                            CO2UUL = 0.1386138614m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 1.78608888E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000178609m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "褐煤",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 10,
-                            CH4CEF = 8.9053236000000002E-06,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 0.95286962519999996,
-                            CO2ULL = 0.157009f,
-                            CO2UUL = 0.168224f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000089053m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 0.9528696252m,
+                            CO2ULL = 0.1570093458m,
+                            CO2UUL = 0.1682242991m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 1.33579854E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.000013358m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "油頁岩",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 11,
-                            CH4CEF = 9.7678044000000006E-06,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 1.0353872663999999,
-                            CO2ULL = 0.056604f,
-                            CO2UUL = 0.018868f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000097678m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 1.0353872664m,
+                            CO2ULL = 0.0566037736m,
+                            CO2UUL = 0.0188679245m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 1.46517066E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000146517m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "泥煤",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 12,
-                            CH4CEF = 1.5909840000000001E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 1.5512094000000001,
-                            CO2ULL = 0.104615f,
-                            CO2UUL = 0.117949f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000159098m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 1.5512094m,
+                            CO2ULL = 0.1046153846m,
+                            CO2UUL = 0.1179487179m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.386476E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000238648m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "煤球",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 13,
-                            CH4CEF = 2.93076E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 3.1359132000000001,
-                            CO2ULL = 0.105607f,
-                            CO2UUL = 0.11215f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000293076m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 3.1359132m,
+                            CO2ULL = 0.1056074766m,
+                            CO2UUL = 0.1121495327m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 4.3961400000000002E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000439614m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "焦炭",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 14,
-                            CH4CEF = 0.00010299528000000001,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 3.3473465999999998,
-                            CO2ULL = 0.149744f,
-                            CO2UUL = 0.179487f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001029953m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 3.3473466m,
+                            CO2ULL = 0.1497435897m,
+                            CO2UUL = 0.1794871795m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.0599056E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000205991m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "石油焦",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 15,
-                            CH4CEF = 9.4203000000000006E-05,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.19807,
-                            CO2ULL = 0.035714f,
-                            CO2UUL = 0.042857f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.000094203m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.19807m,
+                            CO2ULL = 0.0357142857m,
+                            CO2UUL = 0.0428571429m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 1.8840600000000001E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000188406m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "航空汽油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 16,
-                            CH4CEF = 0.00010048319999999999,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.3948496000000001,
-                            CO2ULL = 0.025175f,
-                            CO2UUL = 0.040559f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001004832m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.3948496m,
+                            CO2ULL = 0.0251748252m,
+                            CO2UUL = 0.0405594406m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.0096639999999999E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000200966m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "航空燃油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 17,
-                            CH4CEF = 0.0001130436,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.7620319599999998,
-                            CO2ULL = 0.030014f,
-                            CO2UUL = 0.030014f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001130436m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.76203196m,
+                            CO2ULL = 0.0300136426m,
+                            CO2UUL = 0.0300136426m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.2608720000000001E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000226087m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "原油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 18,
-                            CH4CEF = 8.2559509200000002E-05,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.1190274028,
-                            CO2ULL = 0.1f,
-                            CO2UUL = 0.109091f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000825595m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.1190274028m,
+                            CO2ULL = 0.1m,
+                            CO2UUL = 0.1090909091m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 1.6511901839999998E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000165119m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "奧里油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 19,
-                            CH4CEF = 0.00013268806559999999,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.8395246038400002,
-                            CO2ULL = 0.0919f,
-                            CO2UUL = 0.096573f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001326881m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.8395246038m,
+                            CO2ULL = 0.0919003115m,
+                            CO2UUL = 0.0965732087m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.6537613120000002E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000265376m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "天然氣凝結油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "M3",
                             Year = 0
                         },
                         new
                         {
                             Id = 20,
-                            CH4CEF = 0.00010676339999999999,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.5587628200000001,
-                            CO2ULL = 0.015299f,
-                            CO2UUL = 0.025035f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001067634m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.55876282m,
+                            CO2ULL = 0.0152990264m,
+                            CO2UUL = 0.0250347705m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.1352679999999998E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000213527m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "煤油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 21,
-                            CH4CEF = 0.00010799431920000001,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.79456255864,
-                            CO2ULL = 0.075034f,
-                            CO2UUL = 0.080491f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001079943m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.7945625586m,
+                            CO2ULL = 0.0750341064m,
+                            CO2UUL = 0.0804911323m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.1598863839999998E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000215989m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "頁岩油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 22,
-                            CH4CEF = 0.00010550736,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.606031792,
-                            CO2ULL = 0.020243f,
-                            CO2UUL = 0.009447f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001055074m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.606031792m,
+                            CO2ULL = 0.020242915m,
+                            CO2UUL = 0.0094466937m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.1101472000000001E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000211015m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "柴油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 23,
-                            CH4CEF = 9.7971119999999996E-05,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.2631328719999999,
-                            CO2ULL = 0.025974f,
-                            CO2UUL = 0.053391f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000979711m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.263132872m,
+                            CO2ULL = 0.025974026m,
+                            CO2UUL = 0.0533910534m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 1.9594223999999998E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000195942m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "車用汽油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 24,
-                            CH4CEF = 0.00012057984,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 3.110959872,
-                            CO2ULL = 0.024548f,
-                            CO2UUL = 0.018088f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001205798m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 3.110959872m,
+                            CO2ULL = 0.0245478036m,
+                            CO2UUL = 0.0180878553m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.4115968E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.000024116m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "蒸餘油 (燃料油)",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 25,
-                            CH4CEF = 2.7779418E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 1.7528812758000001,
-                            CO2ULL = 0.023772f,
-                            CO2UUL = 0.03962f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000277794m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 1.7528812758m,
+                            CO2ULL = 0.0237717908m,
+                            CO2UUL = 0.0396196513m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.7779418000000001E-06,
-                            N2OULL = 0.7f,
-                            N2OUUL = 2f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000027779m,
+                            N2OULL = 0.7m,
+                            N2OUUL = 2m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "液化石油氣",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 26,
-                            CH4CEF = 9.7971119999999996E-05,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.393761032,
-                            CO2ULL = 0.05457f,
-                            CO2UUL = 0.040928f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000979711m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.393761032m,
+                            CO2ULL = 0.0545702592m,
+                            CO2UUL = 0.0409276944m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 1.9594223999999998E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000195942m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "石油腦",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 27,
-                            CH4CEF = 0.000125604,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 3.3787476000000001,
-                            CO2ULL = 0.095415f,
-                            CO2UUL = 0.114002f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.000125604m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 3.3787476m,
+                            CO2ULL = 0.0954151177m,
+                            CO2UUL = 0.1140024783m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.5120799999999998E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000251208m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "柏油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 28,
-                            CH4CEF = 0.00012057984,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.946167424,
-                            CO2ULL = 0.0191f,
-                            CO2UUL = 0.025921f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001205798m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.946167424m,
+                            CO2ULL = 0.0190995907m,
+                            CO2UUL = 0.0259208731m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.4115968E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.000024116m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "潤滑油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 29,
-                            CH4CEF = 0.0001130436,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.7620319599999998,
-                            CO2ULL = 0.015007f,
-                            CO2UUL = 0.015007f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001130436m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.76203196m,
+                            CO2ULL = 0.0150068213m,
+                            CO2UUL = 0.0150068213m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.2608720000000001E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000226087m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "其他油品",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 30,
-                            CH4CEF = 4.6431611999999997E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 2.8601872992000001,
-                            CO2ULL = 0.082792f,
-                            CO2UUL = 0.113636f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000464316m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 2.8601872992m,
+                            CO2ULL = 0.0827922078m,
+                            CO2UUL = 0.1136363636m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 4.6431611999999997E-06,
-                            N2OULL = 0.7f,
-                            N2OUUL = 2f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000046432m,
+                            N2OULL = 0.7m,
+                            N2OUUL = 2m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "乙烷",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 31,
-                            CH4CEF = 3.3494400000000002E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 1.87903584,
-                            CO2ULL = 0.032086f,
-                            CO2UUL = 0.039216f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000334944m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 1.87903584m,
+                            CO2ULL = 0.0320855615m,
+                            CO2UUL = 0.0392156863m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 3.3494399999999999E-06,
-                            N2OULL = 0.7f,
-                            N2OUUL = 2f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000033494m,
+                            N2OULL = 0.7m,
+                            N2OUUL = 2m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "天然氣",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "M3",
                             Year = 0
                         },
                         new
                         {
                             Id = 32,
-                            CH4CEF = 3.7681200000000001E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 2.1704371199999999,
-                            CO2ULL = 0.163194f,
-                            CO2UUL = 0.197917f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000376812m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 2.17043712m,
+                            CO2ULL = 0.1631944444m,
+                            CO2UUL = 0.1979166667m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 3.7681200000000001E-06,
-                            N2OULL = 0.7f,
-                            N2OUUL = 2f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000037681m,
+                            N2OULL = 0.7m,
+                            N2OUUL = 2m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "煉油氣",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "M3",
                             Year = 0
                         },
                         new
                         {
                             Id = 33,
-                            CH4CEF = 1.7584560000000002E-05,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 0.78075446400000004,
-                            CO2ULL = 0.15991f,
-                            CO2UUL = 0.218468f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000175846m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 0.780754464m,
+                            CO2ULL = 0.1599099099m,
+                            CO2UUL = 0.2184684685m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 1.758456E-06,
-                            N2OULL = 0.7f,
-                            N2OUUL = 2f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000017585m,
+                            N2OULL = 0.7m,
+                            N2OUUL = 2m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "焦爐氣",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "M3",
                             Year = 0
                         },
                         new
                         {
                             Id = 34,
-                            CH4CEF = 3.2531436E-06,
-                            CH4ULL = 0.7f,
-                            CH4UUL = 2f,
-                            CO2CEF = 0.84581733599999998,
-                            CO2ULL = 0.157692f,
-                            CO2UUL = 0.184615f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0000032531m,
+                            CH4ULL = 0.7m,
+                            CH4UUL = 2m,
+                            CO2CEF = 0.845817336m,
+                            CO2ULL = 0.1576923077m,
+                            CO2UUL = 0.1846153846m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 3.2531435999999998E-07,
-                            N2OULL = 0.7f,
-                            N2OUUL = 2f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000003253m,
+                            N2OULL = 0.7m,
+                            N2OUUL = 2m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "高爐氣",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "M3",
                             Year = 0
                         },
                         new
                         {
                             Id = 35,
-                            CH4CEF = 0.00025492713443999999,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 0.77922727427159999,
-                            CO2ULL = 0.200654f,
-                            CO2UUL = 0.31952f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0002549271m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 0.7792272743m,
+                            CO2ULL = 0.2006543075m,
+                            CO2UUL = 0.3195201745m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "固定",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 3.3990284592000002E-05,
-                            N2OULL = 0.625f,
-                            N2OUUL = 2.75f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000339903m,
+                            N2OULL = 0.625m,
+                            N2OUUL = 2.75m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "一般廢棄物",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "Kg",
                             Year = 0
                         },
                         new
                         {
                             Id = 36,
-                            CH4CEF = 9.4203000000000006E-05,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.19807,
-                            CO2ULL = 0.035714f,
-                            CO2UUL = 0.042857f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.000094203m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.19807m,
+                            CO2ULL = 0.0357142857m,
+                            CO2UUL = 0.0428571429m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "移動",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 1.8840600000000001E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000188406m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "航空汽油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 37,
-                            CH4CEF = 0.00010048319999999999,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.3948496000000001,
-                            CO2ULL = 0.025175f,
-                            CO2UUL = 0.040559f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001004832m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.3948496m,
+                            CO2ULL = 0.0251748252m,
+                            CO2UUL = 0.0405594406m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "移動",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.0096639999999999E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000200966m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "航空燃油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 38,
-                            CH4CEF = 0.00081642599999999998,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.44f,
-                            CO2CEF = 2.2631328719999999,
-                            CO2ULL = 0.025974f,
-                            CO2UUL = 0.053391f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.000816426m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.44m,
+                            CO2CEF = 2.263132872m,
+                            CO2ULL = 0.025974026m,
+                            CO2UUL = 0.0533910534m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
                             EmissionPattern = "移動",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 0.00026125631999999999,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0002612563m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "車用汽油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 39,
-                            CH4CEF = 0.00013715956800000001,
-                            CH4ULL = 0.589744f,
-                            CH4UUL = 1.435897f,
-                            CO2CEF = 2.606031792,
-                            CO2ULL = 0.020243f,
-                            CO2UUL = 0.009447f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001371596m,
+                            CH4ULL = 0.5897435897m,
+                            CH4UUL = 1.4358974359m,
+                            CO2CEF = 2.606031792m,
+                            CO2ULL = 0.020242915m,
+                            CO2UUL = 0.0094466937m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
                             EmissionPattern = "移動",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 0.00013715956800000001,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.076923f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0001371596m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.0769230769m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "柴油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 40,
-                            CH4CEF = 0.00010676339999999999,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.5587628200000001,
-                            CO2ULL = 0.015299f,
-                            CO2UUL = 0.025035f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001067634m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.55876282m,
+                            CO2ULL = 0.0152990264m,
+                            CO2UUL = 0.0250347705m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "移動",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.1352679999999998E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000213527m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "煤油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 41,
-                            CH4CEF = 0.00012057984,
-                            CH4ULL = 0.666667f,
-                            CH4UUL = 2.333333f,
-                            CO2CEF = 2.946167424,
-                            CO2ULL = 0.0191f,
-                            CO2UUL = 0.025921f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0001205798m,
+                            CH4ULL = 0.6666666667m,
+                            CH4UUL = 2.3333333333m,
+                            CO2CEF = 2.946167424m,
+                            CO2ULL = 0.0190995907m,
+                            CO2UUL = 0.0259208731m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "移動",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 2.4115968E-05,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 2.333333f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.000024116m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 2.3333333333m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "潤滑油",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 42,
-                            CH4CEF = 0.001722323916,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 1.7528812758000001,
-                            CO2ULL = 0.023772f,
-                            CO2UUL = 0.03962f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0017223239m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 1.7528812758m,
+                            CO2ULL = 0.0237717908m,
+                            CO2UUL = 0.0396196513m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "移動",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 5.5558836000000003E-06,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0000055559m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "液化石油氣",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "L",
                             Year = 0
                         },
                         new
                         {
                             Id = 43,
-                            CH4CEF = 0.0034666704,
-                            CH4ULL = 0.456522f,
-                            CH4UUL = 15.73913f,
-                            CO2CEF = 2.1139153199999998,
-                            CO2ULL = 0.032086f,
-                            CO2UUL = 0.039216f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0034666704m,
+                            CH4ULL = 0.4565217391m,
+                            CH4UUL = 15.7391304348m,
+                            CO2CEF = 2.11391532m,
+                            CO2ULL = 0.0320855615m,
+                            CO2UUL = 0.0392156863m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "移動",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 0.0001130436,
-                            N2OULL = 0.666667f,
-                            N2OUUL = 24.666668f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0.0001130436m,
+                            N2OULL = 0.6666666667m,
+                            N2OUUL = 24.6666666667m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "液化天然氣",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "M3",
                             Year = 0
                         },
                         new
                         {
-                            Id = 56,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.495,
-                            CO2ULL = -0.07f,
-                            CO2UUL = 0.07f,
+                            Id = 44,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.495m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
                             EmissionPattern = "外購電力",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "外購電力",
-                            Scope = "類別2",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
                             Unit = "",
-                            Year = 111
+                            Year = 0
                         },
                         new
                         {
                             Id = 57,
-                            CH4CEF = 0.0031874999999999998,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0031875000m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "逸散",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "廢水處理",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 58,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 1.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 1m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "逸散",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "二氧化碳",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 59,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 3.3841653850000002,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
+                            CEF_Correction = 1,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 3.3841653850m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "製程",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "乙炔",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 60,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 3.6666666665999998,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
+                            CEF_Correction = 1,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 3.6666666666m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "製程",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "焊條",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 61,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.0030000000000000001,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "逸散",
+                            HFCSCEF = 0.003000m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "冰箱",
-                            Scope = "",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 62,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.0030000000000000001,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "逸散",
+                            HFCSCEF = 0.003000m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "飲水機",
-                            Scope = "",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 63,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.055,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "逸散",
+                            HFCSCEF = 0.055000m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "商用冰箱",
-                            Scope = "",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 64,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.20000000000000001,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "逸散",
+                            HFCSCEF = 0.200000m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "中、大型冰箱",
-                            Scope = "",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 65,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.33000000000000002,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "逸散",
+                            HFCSCEF = 0.330000m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "低溫冷凍車",
-                            Scope = "",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 66,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.16,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "逸散",
+                            HFCSCEF = 0.160000m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "乾燥機",
-                            Scope = "",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 67,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.16,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "逸散",
+                            HFCSCEF = 0.160000m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "工業冷藏、冷凍",
-                            Scope = "",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 68,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.16,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "逸散",
+                            HFCSCEF = 0.160000m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "食品加工冷藏、冷凍",
-                            Scope = "",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 69,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.089999999999999997,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "逸散",
+                            HFCSCEF = 0.090000m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "冰水主機",
-                            Scope = "",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 70,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.029999999999999999,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "逸散",
+                            HFCSCEF = 0.030000m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "冷氣機",
-                            Scope = "",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 71,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.0,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
-                            EmissionPattern = "",
-                            HFCSCEF = 0.20000000000000001,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "逸散",
+                            HFCSCEF = 0.200000m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "車用空調",
-                            Scope = "",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 72,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 3.0259999999999998,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
+                            CEF_Correction = 1,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 3.0260000000m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
                             EmissionPattern = "製程",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "丁烷",
-                            Scope = "類別1",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
                             Unit = "",
                             Year = 0
                         },
                         new
                         {
                             Id = 73,
-                            CH4CEF = 0.0,
-                            CH4ULL = 0f,
-                            CH4UUL = 0f,
-                            CO2CEF = 0.50900000000000001,
-                            CO2ULL = 0f,
-                            CO2UUL = 0f,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.509m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
                             EmissionPattern = "外購電力",
-                            HFCSCEF = 0.0,
-                            N2OCEF = 0.0,
-                            N2OULL = 0f,
-                            N2OUUL = 0f,
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
                             Name = "外購電力",
-                            Scope = "類別2",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
                             Unit = "",
                             Year = 110
                         });
@@ -2244,54 +3086,218 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("Num")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Num")
+                        .HasColumnType("decimal(18, 10)");
 
                     b.HasKey("Name");
 
                     b.ToTable("refrigerants");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Name = "家用冷凍、冷藏裝備",
-                            Num = 0.0030000000260770321
-                        },
-                        new
-                        {
-                            Name = "獨立商用冷凍、冷藏裝備",
-                            Num = 0.054999999701976776
-                        },
-                        new
-                        {
-                            Name = "中、大型冷凍、冷藏裝備",
-                            Num = 0.20000000298023224
-                        },
-                        new
-                        {
-                            Name = "交通用冷凍、冷藏裝備",
-                            Num = 0.33000001311302185
-                        },
-                        new
-                        {
-                            Name = "工業冷凍、冷藏裝備，包括食品加工及冷藏",
-                            Num = 0.15999999642372131
-                        },
-                        new
-                        {
-                            Name = "冰水機",
-                            Num = 0.090000003576278687
-                        },
-                        new
-                        {
-                            Name = "住宅及商業建築冷氣機",
-                            Num = 0.029999999329447746
-                        },
-                        new
-                        {
-                            Name = "移動式空氣清靜機",
-                            Num = 0.20000000298023224
-                        });
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Year", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("All")
+                        .HasColumnType("decimal(18, 3)");
+
+                    b.Property<Guid>("AreaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("CH4")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("CO2")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<string>("Company")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("HFCS")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("N2O")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("NF3")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<int>("Num")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PFCS")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("SF6")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("Scope1_CH4")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1_CO2")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1_HFCS")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1_N2O")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1_NF3")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1_PFCS")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1_SF6")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_CH4")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_CO2")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_HFCS")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_N2O")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_NF3")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_PFCS")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_SF6")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("ULL")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("UUL")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("all_Grade")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("avg_Grade")
+                        .HasColumnType("real");
+
+                    b.Property<decimal>("cal_all")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("escape")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<byte>("isDeleted")
+                        .HasColumnType("tinyint");
+
+                    b.Property<decimal>("move")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<int>("no1_Grade")
+                        .HasColumnType("int");
+
+                    b.Property<int>("no2_Grade")
+                        .HasColumnType("int");
+
+                    b.Property<int>("no3_Grade")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("non_move")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("percentage1_CH4")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage1_CO2")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage1_HFCS")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage1_N2O")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage1_NF3")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage1_PFCS")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage1_SF6")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_CH4")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_CO2")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_HFCS")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_N2O")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_NF3")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_PFCS")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_SF6")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_CalAll")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_Escape")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_Move")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_Process")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_Scope1")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_Scope2")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_nonMove")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("process")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AreaId");
+
+                    b.ToTable("Years");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -2509,28 +3515,35 @@ namespace Carbon_inventory_platform.Migrations
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Device", b =>
                 {
-                    b.HasOne("Carbon_inventory_platform.Models.Area", "Areas")
+                    b.HasOne("Carbon_inventory_platform.Models.Year", "Year")
                         .WithMany("Devices")
-                        .HasForeignKey("AreaId")
+                        .HasForeignKey("YearId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Carbon_inventory_platform.Models.Material", null)
-                        .WithMany("Devices")
-                        .HasForeignKey("MaterialId");
-
-                    b.Navigation("Areas");
+                    b.Navigation("Year");
                 });
 
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Emission", b =>
+            modelBuilder.Entity("Carbon_inventory_platform.Models.GHG", b =>
                 {
-                    b.HasOne("Carbon_inventory_platform.Models.Area", "Areas")
-                        .WithMany()
+                    b.HasOne("Carbon_inventory_platform.Models.Device", "Device")
+                        .WithMany("GHGs")
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Device");
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Year", b =>
+                {
+                    b.HasOne("Carbon_inventory_platform.Models.Area", "Area")
+                        .WithMany("Years")
                         .HasForeignKey("AreaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Areas");
+                    b.Navigation("Area");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -2586,7 +3599,7 @@ namespace Carbon_inventory_platform.Migrations
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
                 {
-                    b.Navigation("Devices");
+                    b.Navigation("Years");
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Company", b =>
@@ -2594,7 +3607,12 @@ namespace Carbon_inventory_platform.Migrations
                     b.Navigation("Areas");
                 });
 
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Material", b =>
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Device", b =>
+                {
+                    b.Navigation("GHGs");
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Year", b =>
                 {
                     b.Navigation("Devices");
                 });

@@ -1,14 +1,12 @@
-﻿@model IEnumerable<Carbon_inventory_platform.Models.Area>
+﻿@model IEnumerable<Carbon_inventory_platform.Models.Company>
 
 @{
     ViewData["Title"] = "輔導廠商";
 }
+
 <div class="row">
     <div class="col">
         <h1>儀錶板</h1>
-    </div>
-    <div class="col">
-        <p class="text-danger">@TempData["Finish"]</p>
     </div>
     <div class="col-2"></div>
     <div class="col">
@@ -26,7 +24,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Company.Name)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>設定</th>
             <th>刪除</th>
@@ -38,25 +36,14 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Company.Name)
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    <a class="btn btn-primary" asp-controller="Companies" asp-action="Edit" asp-route-id="@item.CompanyId">公司資料設定</a>
-                   
-                        @if (Model.Where(x => x.CompanyId == item.CompanyId).ToList().Count() > 1)
-                        {
-                        <a class="btn btn-info" asp-area="" asp-controller="Areas" asp-action="Index" asp-route-id="@item.CompanyId">廠區資料</a>
-                        <a class="btn btn-success" asp-controller="Devices" asp-action="Index" asp-route-id="@item.Id">排放源設定</a>
-                    }
-                    else
-                    {
-                        <a class="btn btn-info" asp-area="" asp-controller="Areas" asp-action="Create" asp-route-id="@item.CompanyId">新增廠區</a>
-                        <a class="btn btn-info" asp-area="" asp-controller="Areas" asp-action="Edit" asp-route-id="@item.Id">廠區資料設定</a>
-                        <a class="btn btn-success" asp-controller="Devices" asp-action="Index" asp-route-id="@item.Id">排放源設定</a>
-                    }
+                    <a class="btn btn-primary" asp-controller="Companies" asp-action="Edit" asp-route-id="@item.Id">公司資料設定</a>
+                    <a class="btn btn-info" asp-area="" asp-controller="Areas" asp-action="Index" asp-route-id="@item.Id">廠區資料</a>
                 </td>
                 <td>
-                    <form method="post" asp-controller="Home" asp-action="Delete" asp-route-companyId="@item.CompanyId" asp-route-areaId="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">
+                    <form method="post" asp-controller="Home" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">
                         <button type="submit" class="btn btn-danger">刪除</button>
                     </form>
                 </td>

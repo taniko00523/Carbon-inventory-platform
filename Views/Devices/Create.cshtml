@@ -11,8 +11,7 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="AreaId" value="@TempData.Peek("SelectedAreaId")" />
-            <input type="hidden" asp-for="year" value="@TempData.Peek("yearSelected")" />
+            <input type="hidden" asp-for="YearId" value="@TempData.Peek("yearId")" /> 
             @* <div class="form-group">
             <label asp-for="AssetNo" class="control-label"></label>
             <input asp-for="AssetNo" class="form-control" />
@@ -220,13 +219,9 @@
                     });
                 </script>
             }
-            <div class="form-group" style="float:left">
+            <div class="form-group">
                 <input type="submit" value="新增" class="btn btn-primary" asp-controller="Devices" asp-action="Create" />|
-            </div>
-        </form>
-        <form method="post" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-Year="@TempData.Peek("yearSelected")">
-            <div class="form-group" style="float:left">
-                <button type="submit" class="btn btn-secondary">返回</button>
+                <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("yearId")">返回</a>
             </div>
         </form>
     </div>

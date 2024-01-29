@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Carbon_inventory_platform.Models
 {
@@ -19,35 +21,103 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "排放型式")]
         public string EmissionPattern { get; set; } = "";
 
+        [Column(TypeName = "decimal(18, 10)")]
         [Display(Name = "CO2排放係數")]
-        public double CO2CEF { get; set; } = 0;
+        public decimal CO2CEF { get; set; } = 0;
 
+        [Column(TypeName = "decimal(18, 10)")]
         [Display(Name = "CO2不確定性95%信賴區間下限")]
-        public float CO2ULL { get; set; } = 0;
+        public decimal CO2ULL { get; set; } = 0;
 
+        [Column(TypeName = "decimal(18, 10)")]
         [Display(Name = "CO2不確定性95%信賴區間上限")]
-        public float CO2UUL { get; set; } = 0;
+        public decimal CO2UUL { get; set; } = 0;
 
+        [Column(TypeName = "decimal(18, 10)")]
         [Display(Name = "CH4排放係數")]
-        public double CH4CEF { get; set; } = 0;
+        public decimal CH4CEF { get; set; } = 0;
 
+        [Column(TypeName = "decimal(18, 10)")]
         [Display(Name = "CH4不確定性95%信賴區間下限")]
-        public float CH4ULL { get; set; } = 0;
+        public decimal CH4ULL { get; set; } = 0;
 
+        [Column(TypeName = "decimal(18, 10)")]
         [Display(Name = "CH4不確定性95%信賴區間上限")]
-        public float CH4UUL { get; set; } = 0;
+        public decimal CH4UUL { get; set; } = 0;
 
+        [Column(TypeName = "decimal(18, 10)")]
         [Display(Name = "N2O排放係數")]
-        public double N2OCEF { get; set; } = 0;
+        public decimal N2OCEF { get; set; } = 0;
 
+        [Column(TypeName = "decimal(18, 10)")]
         [Display(Name = "N2O不確定性95%信賴區間下限")]
-        public float N2OULL { get; set; }=0;
+        public decimal N2OULL { get; set; }=0;
 
+        [Column(TypeName = "decimal(18, 10)")]
         [Display(Name = "N2O不確定性95%信賴區間上限")]
-        public float N2OUUL { get; set; } = 0;
+        public decimal N2OUUL { get; set; } = 0;
 
+        [Column(TypeName = "decimal(18, 10)")]
         [Display(Name = "HFCS排放係數")]
-        public double HFCSCEF { get; set; } = 0;
+        public decimal HFCSCEF { get; set; } = 0;
+
+        [Column(TypeName = "decimal(18, 10)")]
+        [Display(Name = "HFCS不確定性95%信賴區間下限")]
+        public decimal HFCSULL { get; set; } = 0;
+
+        [Column(TypeName = "decimal(18, 10)")]
+        [Display(Name = "HFCS不確定性95%信賴區間上限")]
+        public decimal HFCSUUL { get; set; } = 0;
+
+        [Column(TypeName = "decimal(18, 10)")]
+        [Display(Name = "PFCS排放係數")]
+        public decimal PFCSCEF { get; set; } = 0;
+
+        [Column(TypeName = "decimal(18, 10)")]
+        [Display(Name = "PFCS不確定性95%信賴區間下限")]
+        public decimal PFCSULL { get; set; } = 0;
+
+        [Column(TypeName = "decimal(18, 10)")]
+        [Display(Name = "PFCS不確定性95%信賴區間上限")]
+        public decimal PFCSUUL { get; set; } = 0;
+
+        [Column(TypeName = "decimal(18, 10)")]
+        [Display(Name = "SF6排放係數")]
+        public decimal SF6CEF { get; set; } = 0;
+
+        [Column(TypeName = "decimal(18, 10)")]
+        [Display(Name = "SF6不確定性95%信賴區間下限")]
+        public decimal SF6ULL { get; set; } = 0;
+
+        [Column(TypeName = "decimal(18, 10)")]
+        [Display(Name = "NF3不確定性95%信賴區間上限")]
+        public decimal NF3UUL { get; set; } = 0;
+
+        [Column(TypeName = "decimal(18, 10)")]
+        [Display(Name = "NF3排放係數")]
+        public decimal NF3CEF { get; set; } = 0;
+
+        [Column(TypeName = "decimal(18, 10)")]
+        [Display(Name = "NF3不確定性95%信賴區間下限")]
+        public decimal NF3ULL { get; set; } = 0;
+
+        [Column(TypeName = "decimal(18, 10)")]
+        [Display(Name = "N2O不確定性95%信賴區間上限")]
+        public decimal SF6UUL { get; set; } = 0;
+
+        [Display(Name = "排放係數誤差等級")]
+        public int CEF_Correction { get; set; } = 3;
+
+        [Display(Name = "活動數據不確定性95%信賴區間上限")]
+        [Column(TypeName = "decimal(18, 10)")]
+
+        public decimal DataUUL { get; set; } = 0;
+
+        [Display(Name = "活動數據不確定性95%信賴區間下限")]
+
+        [Column(TypeName = "decimal(18, 10)")]
+
+        public decimal DataULL { get; set; } = 0;
 
 
         [Display(Name = "年份")]
@@ -56,10 +126,5 @@ namespace Carbon_inventory_platform.Models
         [MaxLength(10)]
         [Display(Name = "單位")]
         public string Unit { get; set; } = "";
-
-        //Navigation Property
-        public ICollection<Device> Devices { get; set; } = null!;
-	
-	//物料資料庫
     }
 }

@@ -1,16 +1,14 @@
-﻿@model IEnumerable<Carbon_inventory_platform.Models.Device>
+﻿@model Carbon_inventory_platform.Models.Year
 
 @{
     ViewBag.Title = "總碳排放量";
 }
 
 <h1>總碳排放量</h1>
-<h3>@TempData["Company"]</h3>
+<h3>@TempData["companyName"]</h3>
 <p>
     <a class="btn btn-dark" asp-controller="Emission" asp-action="Word" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-year="@TempData.Peek("yearSelected")">報告書下載</a>
-    <form method="post" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-Year="@TempData.Peek("yearSelected")">
-        <button type="submit" class="btn btn-secondary">返回</button>
-    </form>
+    <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("yearId")">返回</a>
 </p>
 <h3>類別一七大溫室氣體排放量統計表</h3>
 <table class="table">
@@ -45,51 +43,51 @@
     <tbody>
         <tr>
             <td>
-                @ViewBag.Scope1_CO2
+                @Model.Scope1_CO2.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_CH4
+                @Model.Scope1_CH4.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_N2O
+                @Model.Scope1_N2O.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_HFCS
+                @Model.Scope1_HFCS.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_PFCS
+                @Model.Scope1_PFCS.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_SF6
+                @Model.Scope1_SF6.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_NF3
+                @Model.Scope1_NF3.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_Scope1
+                @Model.Scope1.ToString("N4")
             </td>
         </tr>
         <tr>
             <td>
-                @ViewBag.percentage1_CO2
+                @Model.percentage1_CO2.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage1_CH4
+                @Model.percentage1_CH4.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage1_N2O
+                @Model.percentage1_N2O.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage1_HFCS
+                @Model.percentage1_HFCS.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage1_PFCS
+                @Model.percentage1_PFCS.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage1_SF6
+                @Model.percentage1_SF6.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage1_NF3
+                @Model.percentage1_NF3.ToString("N2")%
             </td>
             <td>
                 100%
@@ -131,51 +129,51 @@
     <tbody>
         <tr>
             <td>
-                @ViewBag.sum_CO2
+                @Model.CO2.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_CH4
+                @Model.CH4.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_N2O
+                @Model.N2O.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_HFCS
+                @Model.HFCS.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_PFCS
+                @Model.PFCS.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_SF6
+                @Model.SF6.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_NF3
+                @Model.NF3.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_All
+                @Model.All.ToString("N3")
             </td>
         </tr>
         <tr>
             <td>
-                @ViewBag.percentage2_CO2
+                @Model.percentage2_CO2.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage2_CH4
+                @Model.percentage2_CH4.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage2_N2O
+                @Model.percentage2_N2O.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage2_HFCS
+                @Model.percentage2_HFCS.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage2_PFCS
+                @Model.percentage2_PFCS.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage2_SF6
+                @Model.percentage2_SF6.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage2_NF3
+                @Model.percentage2_NF3.ToString("N2")%
             </td>
             <td>
                 100%
@@ -208,36 +206,36 @@
     <tbody>
         <tr>
             <td>
-                @ViewBag.sum_non_move
+                @Model.non_move.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_move
+                @Model.move.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_escape
+                @Model.escape.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_process
+                @Model.process.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_Scope1
+                @Model.Scope1.ToString("N4")
             </td>
         </tr>
         <tr>
             <td>
-                @ViewBag.percentage_nonMove
+                @Model.percentage_nonMove.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage_move
+                @Model.percentage_Move.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage_escape
+                @Model.percentage_Escape.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage_process
+                @Model.percentage_Process.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage_Scope1
+                @Model.percentage_Scope1.ToString("N2")%
             </td>
         </tr>
     </tbody>
@@ -261,21 +259,21 @@
     <tbody>
         <tr>
             <td>
-                @ViewBag.sum_Scope1
+                @Model.Scope1.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_Scope2
+                @Model.Scope2.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_All
+                @Model.All.ToString("N3")
             </td>
         </tr>
         <tr>
             <td>
-                @ViewBag.percentage_Scope1
+                @Model.percentage_Scope1.ToString("N2")%
             </td>
             <td>
-                @ViewBag.percentage_Scope2
+                @Model.percentage_Scope2.ToString("N2")%
             </td>
             <td>
                 100%
@@ -302,13 +300,13 @@
     <tbody>
         <tr>
             <td>
-                @ViewBag.no1_Grade
+                @Model.no1_Grade
             </td>
             <td>
-                @ViewBag.no2_Grade
+                @Model.no2_Grade
             </td>
             <td>
-                @ViewBag.no3_Grade
+                @Model.no3_Grade
             </td>
         </tr>
     </tbody>
@@ -318,7 +316,7 @@
     <thead>
         <tr>
             <th>
-               清冊等級總平均分數
+                清冊等級總平均分數
             </th>
             <th>
                 清冊級別
@@ -328,10 +326,10 @@
     <tbody>
         <tr>
             <td>
-                @ViewBag.avg_Grade
+                @Model.avg_Grade
             </td>
             <td>
-                @ViewBag.all_Grade
+                @Model.all_Grade
             </td>
         </tr>
     </tbody>
@@ -351,10 +349,10 @@
     <tbody>
         <tr>
             <td>
-                @ViewBag.sum_Uncertainty
+                @Model.cal_all.ToString("N4")
             </td>
             <td>
-                @ViewBag.sum_all
+                @Model.All.ToString("N3")
             </td>
         </tr>
     </tbody>
@@ -377,13 +375,14 @@
     <tbody>
         <tr>
             <td>
-                @ViewBag.percentage_CalAll
+                @Model.percentage_CalAll.ToString("N2")%
             </td>
             <td>
-                @ViewBag.ULL
+                -@Model.ULL.ToString("N2")%
             </td>
             <td>
-                @ViewBag.UUL
+                +@Model.UUL.ToString("N2")%
             </td>
         </tr>
     </tbody>
+    </table>

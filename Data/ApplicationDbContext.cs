@@ -15,14 +15,18 @@ namespace Carbon_inventory_platform.Data
 
         public DbSet<Company> Companies { get; set; } = null!;
         public DbSet<Area> Areas { get; set; } = null!;
+        public DbSet<Year> Years { get; set; } = null!;
         public DbSet<Device> Devices { get; set; } = null!;
+        public DbSet<GHG> GHGs { get; set; } = null!;
         public DbSet<Material> Materials { get; set; } = null!;
         public DbSet<GWP> GWPs { get; set; }
         public DbSet<Refrigerant> refrigerants { get; set; } = null!;
         public DbSet<DataLevel> dataLevels { get; set; } = null!;
-        public DbSet<Emission> emissions { get; set; } = null!;
+        
         public DbSet<DataCorrection> dataCorrections { get; set; } = null!;
         public DbSet<DeviceData> deviceDatas { get; set; } = null!;
+        public DbSet<DefaultDevices> defaultDevices { get; set; } = null!;
+
 
         //public virtual DbSet<User> Users { get; set; }
         //public virtual DbSet<Staff> Staffs { get; set; }
@@ -42,94 +46,99 @@ namespace Carbon_inventory_platform.Data
             builder.Entity<Area>(entity =>
             {
                 entity.HasOne(e => e.Company);
+                entity.HasMany(e => e.Years);
+            });
+
+            builder.Entity<Year>(entity =>
+            {
+                entity.HasOne(e => e.Area);
+                entity.HasMany(e => e.Devices);
             });
 
             builder.Entity<Device>(entity =>
             {
-                //entity.HasMany(e => e.Areas);// 廠區名稱bug修改成以下
-                entity.HasOne(e => e.Areas);
-                //entity.HasOne(e => e.Material);
-            });
-            builder.Entity<Emission>(entity =>
-            {
-                entity.HasOne(e => e.Areas);
+                entity.HasOne(e => e.Year);
+                entity.HasMany(e => e.GHGs);
             });
 
-            builder.Entity<Material>(entity =>
-                {
-                    entity.HasMany(e => e.Devices);
-                });
+            builder.Entity<GHG>(entity =>
+            {
+                entity.HasOne(e => e.Device);
+            });
 
             DataSeed(builder);
         }
         private void DataSeed(ModelBuilder builder)
         {
             builder.Entity<Material>().HasData(
-                new Material { Id = 1, Name = "自產煤", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.3328598392, CO2ULL = 0.077167F, CO2UUL = 0.067653F, CH4CEF = 0.000024660252, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.000036990378, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 2, Name = "原料煤", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.693284704, CO2ULL = 0.077167F, CO2UUL = 0.067653F, CH4CEF = 0.00002847024, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.00004270536, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 3, Name = "燃料煤", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.4081133824, CO2ULL = 0.077167F, CO2UUL = 0.067653F, CH4CEF = 0.000025455744, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.000038183616, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 4, Name = "無煙煤", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.922093324, CO2ULL = 0.03764F, CO2UUL = 0.027467F, CH4CEF = 0.00002972628, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.00004458942, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 5, Name = "焦煤", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.693284704, CO2ULL = 0.077167F, CO2UUL = 0.067653F, CH4CEF = 0.00002847024, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.00004270536, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 6, Name = "煙煤", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.4081133824, CO2ULL = 0.053911F, CO2UUL = 0.053911F, CH4CEF = 0.000025455744, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.000038183616, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 7, Name = "亞煙煤(發電)", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 1.971522252, CO2ULL = 0.034339F, CO2UUL = 0.040583F, CH4CEF = 0.00002051532, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.00003077298, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 8, Name = "亞煙煤(其他)", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.253168288, CO2ULL = 0.034339F, CO2UUL = 0.040583F, CH4CEF = 0.00002344608, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.00003516912, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 9, Name = "褐煤", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 1.2026331792, CO2ULL = 0.1F, CO2UUL = 0.138614F, CH4CEF = 0.0000119072592, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.0000178608888, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 10, Name = "油頁岩", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 0.9528696252, CO2ULL = 0.157009F, CO2UUL = 0.168224F, CH4CEF = 0.0000089053236, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.0000133579854, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 11, Name = "泥煤", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 1.0353872664, CO2ULL = 0.056604F, CO2UUL = 0.018868F, CH4CEF = 0.0000097678044, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.0000146517066, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 12, Name = "煤球", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 1.5512094, CO2ULL = 0.104615F, CO2UUL = 0.117949F, CH4CEF = 0.00001590984, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.00002386476, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 13, Name = "焦炭", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 3.1359132, CO2ULL = 0.105607F, CO2UUL = 0.11215F, CH4CEF = 0.0000293076, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.0000439614, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 14, Name = "石油焦", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 3.3473466, CO2ULL = 0.149744F, CO2UUL = 0.179487F, CH4CEF = 0.00010299528, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000020599056, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 15, Name = "航空汽油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.19807, CO2ULL = 0.035714F, CO2UUL = 0.042857F, CH4CEF = 0.000094203, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.0000188406, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 16, Name = "航空燃油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.3948496, CO2ULL = 0.025175F, CO2UUL = 0.040559F, CH4CEF = 0.0001004832, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.00002009664, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 17, Name = "原油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.76203196, CO2ULL = 0.030014F, CO2UUL = 0.030014F, CH4CEF = 0.0001130436, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.00002260872, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 18, Name = "奧里油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.1190274028, CO2ULL = 0.1F, CO2UUL = 0.109091F, CH4CEF = 0.0000825595092, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.00001651190184, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 19, Name = "天然氣凝結油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.83952460384, CO2ULL = 0.0919F, CO2UUL = 0.096573F, CH4CEF = 0.0001326880656, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.00002653761312, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "M3" },
-new Material { Id = 20, Name = "煤油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.55876282, CO2ULL = 0.015299F, CO2UUL = 0.025035F, CH4CEF = 0.0001067634, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.00002135268, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 21, Name = "頁岩油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.79456255864, CO2ULL = 0.075034F, CO2UUL = 0.080491F, CH4CEF = 0.0001079943192, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.00002159886384, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "Kg" },
-new Material { Id = 22, Name = "柴油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.606031792, CO2ULL = 0.020243F, CO2UUL = 0.009447F, CH4CEF = 0.00010550736, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000021101472, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 23, Name = "車用汽油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.263132872, CO2ULL = 0.025974F, CO2UUL = 0.053391F, CH4CEF = 0.00009797112, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000019594224, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 24, Name = "蒸餘油 (燃料油)", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 3.110959872, CO2ULL = 0.024548F, CO2UUL = 0.018088F, CH4CEF = 0.00012057984, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000024115968, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 25, Name = "液化石油氣", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 1.7528812758, CO2ULL = 0.023772F, CO2UUL = 0.03962F, CH4CEF = 0.000027779418, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.0000027779418, N2OULL = 0.7F, N2OUUL = 2F, Unit = "L" },
-new Material { Id = 26, Name = "石油腦", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.393761032, CO2ULL = 0.05457F, CO2UUL = 0.040928F, CH4CEF = 0.00009797112, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000019594224, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 27, Name = "柏油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 3.3787476, CO2ULL = 0.095415F, CO2UUL = 0.114002F, CH4CEF = 0.000125604, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.0000251208, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 28, Name = "潤滑油", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.946167424, CO2ULL = 0.0191F, CO2UUL = 0.025921F, CH4CEF = 0.00012057984, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000024115968, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 29, Name = "其他油品", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.76203196, CO2ULL = 0.015007F, CO2UUL = 0.015007F, CH4CEF = 0.0001130436, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.00002260872, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 30, Name = "乙烷", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.8601872992, CO2ULL = 0.082792F, CO2UUL = 0.113636F, CH4CEF = 0.000046431612, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.0000046431612, N2OULL = 0.7F, N2OUUL = 2F, Unit = "L" },
-new Material { Id = 31, Name = "天然氣", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 1.87903584, CO2ULL = 0.032086F, CO2UUL = 0.039216F, CH4CEF = 0.0000334944, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.00000334944, N2OULL = 0.7F, N2OUUL = 2F, Unit = "M3" },
-new Material { Id = 32, Name = "煉油氣", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 2.17043712, CO2ULL = 0.163194F, CO2UUL = 0.197917F, CH4CEF = 0.0000376812, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.00000376812, N2OULL = 0.7F, N2OUUL = 2F, Unit = "M3" },
-new Material { Id = 33, Name = "焦爐氣", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 0.780754464, CO2ULL = 0.15991F, CO2UUL = 0.218468F, CH4CEF = 0.00001758456, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.000001758456, N2OULL = 0.7F, N2OUUL = 2F, Unit = "M3" },
-new Material { Id = 34, Name = "高爐氣", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 0.845817336, CO2ULL = 0.157692F, CO2UUL = 0.184615F, CH4CEF = 0.0000032531436, CH4ULL = 0.7F, CH4UUL = 2F, N2OCEF = 0.00000032531436, N2OULL = 0.7F, N2OUUL = 2F, Unit = "M3" },
-new Material { Id = 35, Name = "一般廢棄物", Scope = "類別1", EmissionPattern = "固定", CO2CEF = 0.7792272742716, CO2ULL = 0.200654F, CO2UUL = 0.31952F, CH4CEF = 0.00025492713444, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000033990284592, N2OULL = 0.625F, N2OUUL = 2.75F, Unit = "Kg" },
-new Material { Id = 36, Name = "航空汽油", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 2.19807, CO2ULL = 0.035714F, CO2UUL = 0.042857F, CH4CEF = 0.000094203, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.0000188406, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 37, Name = "航空燃油", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 2.3948496, CO2ULL = 0.025175F, CO2UUL = 0.040559F, CH4CEF = 0.0001004832, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.00002009664, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 38, Name = "車用汽油", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 2.263132872, CO2ULL = 0.025974F, CO2UUL = 0.053391F, CH4CEF = 0.000816426, CH4ULL = 0.666667F, CH4UUL = 2.44F, N2OCEF = 0.00026125632, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 39, Name = "柴油", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 2.606031792, CO2ULL = 0.020243F, CO2UUL = 0.009447F, CH4CEF = 0.000137159568, CH4ULL = 0.589744F, CH4UUL = 1.435897F, N2OCEF = 0.000137159568, N2OULL = 0.666667F, N2OUUL = 2.076923F, Unit = "L" },
-new Material { Id = 40, Name = "煤油", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 2.55876282, CO2ULL = 0.015299F, CO2UUL = 0.025035F, CH4CEF = 0.0001067634, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.00002135268, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 41, Name = "潤滑油", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 2.946167424, CO2ULL = 0.0191F, CO2UUL = 0.025921F, CH4CEF = 0.00012057984, CH4ULL = 0.666667F, CH4UUL = 2.333333F, N2OCEF = 0.000024115968, N2OULL = 0.666667F, N2OUUL = 2.333333F, Unit = "L" },
-new Material { Id = 42, Name = "液化石油氣", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 1.7528812758, CO2ULL = 0.023772F, CO2UUL = 0.03962F, CH4CEF = 0.001722323916, CH4ULL = 0F, CH4UUL = 0F, N2OCEF = 0.0000055558836, N2OULL = 0F, N2OUUL = 0F, Unit = "L" },
-new Material { Id = 43, Name = "液化天然氣", Scope = "類別1", EmissionPattern = "移動", CO2CEF = 2.11391532, CO2ULL = 0.032086F, CO2UUL = 0.039216F, CH4CEF = 0.0034666704, CH4ULL = 0.456522F, CH4UUL = 15.73913F, N2OCEF = 0.0001130436, N2OULL = 0.666667F, N2OUUL = 24.666667F, Unit = "M3" },
-new Material { Id = 56, Name = "外購電力", Scope = "類別2", EmissionPattern = "外購電力", CO2CEF = 0.495, CO2ULL = -0.07F, CO2UUL = 0.07F, Unit = "", Year = 111 },
-new Material { Id = 57, Name = "廢水處理", Scope = "類別1", EmissionPattern = "逸散", CH4CEF = 0.0031875000 },
-new Material { Id = 58, Name = "二氧化碳", Scope = "類別1", EmissionPattern = "逸散", CO2CEF = 1 },
-new Material { Id = 59, Name = "乙炔", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.3841653850 },
-new Material { Id = 60, Name = "焊條", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.6666666666 },
-new Material { Id = 61, Name= "冰箱", HFCSCEF= 0.003000}, //家用冷凍、冷藏裝備
-new Material { Id = 62, Name = "飲水機", HFCSCEF = 0.003000 }, //家用冷凍、冷藏裝備
-new Material { Id = 63, Name = "商用冰箱", HFCSCEF = 0.055000}, //獨立商用冷凍、冷藏裝備	
-new Material { Id = 64, Name = "中、大型冰箱", HFCSCEF = 0.200000}, //中、大型冷凍、冷藏裝備
-new Material { Id = 65, Name = "低溫冷凍車", HFCSCEF = 0.330000}, //交通用冷凍、冷藏裝備
-new Material { Id = 66, Name = "乾燥機", HFCSCEF = 0.160000}, //工業冷凍、冷藏裝備，包括食品加工及冷藏
-new Material { Id = 67, Name = "工業冷藏、冷凍", HFCSCEF = 0.160000 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
-new Material { Id = 68, Name = "食品加工冷藏、冷凍", HFCSCEF = 0.160000 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
-new Material { Id = 69, Name = "冰水主機", HFCSCEF = 0.090000}, //冰水機
-new Material { Id = 70, Name = "冷氣機", HFCSCEF = 0.030000}, //住宅及商業建築冷氣機
-new Material { Id = 71, Name = "車用空調", HFCSCEF = 0.200000 }, //移動式空氣清靜機
-new Material { Id = 72, Name = "丁烷", Scope = "類別1", EmissionPattern = "製程", CO2CEF = 3.0260000000 },
-new Material { Id = 73, Name = "外購電力", Scope = "類別2", EmissionPattern = "外購電力", CO2CEF = 0.509 ,Year=110}
+                    new Material { Id = 1, Name = "自產煤", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.3328598392M, CO2ULL = 0.077167019M, CO2UUL = 0.067653277M, CH4CEF = 0.0000246603M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000369904M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 2, Name = "原料煤", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.693284704M, CO2ULL = 0.077167019M, CO2UUL = 0.067653277M, CH4CEF = 0.0000284702M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000427054M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 3, Name = "燃料煤", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.4081133824M, CO2ULL = 0.077167019M, CO2UUL = 0.067653277M, CH4CEF = 0.0000254557M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000381836M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 4, Name = "無煙煤", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.922093324M, CO2ULL = 0.0376398779M, CO2UUL = 0.0274669379M, CH4CEF = 0.0000297263M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000445894M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 5, Name = "焦煤", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.693284704M, CO2ULL = 0.077167019M, CO2UUL = 0.067653277M, CH4CEF = 0.0000284702M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000427054M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 6, Name = "煙煤", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.4081133824M, CO2ULL = 0.0539112051M, CO2UUL = 0.0539112051M, CH4CEF = 0.0000254557M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000381836M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 7, Name = "亞煙煤(發電)", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 1.971522252M, CO2ULL = 0.03433923M, CO2UUL = 0.0405827263M, CH4CEF = 0.0000205153M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.000030773M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 8, Name = "亞煙煤(其他)", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.253168288M, CO2ULL = 0.03433923M, CO2UUL = 0.0405827263M, CH4CEF = 0.0000234461M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000351691M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 9, Name = "褐煤", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 1.2026331792M, CO2ULL = 0.1M, CO2UUL = 0.1386138614M, CH4CEF = 0.0000119073M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000178609M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 10, Name = "油頁岩", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 0.9528696252M, CO2ULL = 0.1570093458M, CO2UUL = 0.1682242991M, CH4CEF = 0.0000089053M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.000013358M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 11, Name = "泥煤", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 1.0353872664M, CO2ULL = 0.0566037736M, CO2UUL = 0.0188679245M, CH4CEF = 0.0000097678M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000146517M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 12, Name = "煤球", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 1.5512094M, CO2ULL = 0.1046153846M, CO2UUL = 0.1179487179M, CH4CEF = 0.0000159098M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000238648M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 13, Name = "焦炭", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 3.1359132M, CO2ULL = 0.1056074766M, CO2UUL = 0.1121495327M, CH4CEF = 0.0000293076M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000439614M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 14, Name = "石油焦", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 3.3473466M, CO2ULL = 0.1497435897M, CO2UUL = 0.1794871795M, CH4CEF = 0.0001029953M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000205991M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 15, Name = "航空汽油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.19807M, CO2ULL = 0.0357142857M, CO2UUL = 0.0428571429M, CH4CEF = 0.000094203M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000188406M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 16, Name = "航空燃油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.3948496M, CO2ULL = 0.0251748252M, CO2UUL = 0.0405594406M, CH4CEF = 0.0001004832M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000200966M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 17, Name = "原油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.76203196M, CO2ULL = 0.0300136426M, CO2UUL = 0.0300136426M, CH4CEF = 0.0001130436M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000226087M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 18, Name = "奧里油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.1190274028M, CO2ULL = 0.1M, CO2UUL = 0.1090909091M, CH4CEF = 0.0000825595M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000165119M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 19, Name = "天然氣凝結油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.8395246038M, CO2ULL = 0.0919003115M, CO2UUL = 0.0965732087M, CH4CEF = 0.0001326881M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000265376M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "M3" },
+new Material { Id = 20, Name = "煤油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.55876282M, CO2ULL = 0.0152990264M, CO2UUL = 0.0250347705M, CH4CEF = 0.0001067634M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000213527M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 21, Name = "頁岩油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.7945625586M, CO2ULL = 0.0750341064M, CO2UUL = 0.0804911323M, CH4CEF = 0.0001079943M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000215989M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 22, Name = "柴油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.606031792M, CO2ULL = 0.020242915M, CO2UUL = 0.0094466937M, CH4CEF = 0.0001055074M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000211015M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L", DataULL = -0.01M, DataUUL = -0.01M },
+new Material { Id = 23, Name = "車用汽油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.263132872M, CO2ULL = 0.025974026M, CO2UUL = 0.0533910534M, CH4CEF = 0.0000979711M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000195942M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" ,DataULL=-0.01M,DataUUL=-0.01M},
+new Material { Id = 24, Name = "蒸餘油 (燃料油)", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 3.110959872M, CO2ULL = 0.0245478036M, CO2UUL = 0.0180878553M, CH4CEF = 0.0001205798M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.000024116M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 25, Name = "液化石油氣", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 1.7528812758M, CO2ULL = 0.0237717908M, CO2UUL = 0.0396196513M, CH4CEF = 0.0000277794M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000027779M, N2OULL = 0.7M, N2OUUL = 2M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 26, Name = "石油腦", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.393761032M, CO2ULL = 0.0545702592M, CO2UUL = 0.0409276944M, CH4CEF = 0.0000979711M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000195942M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 27, Name = "柏油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 3.3787476M, CO2ULL = 0.0954151177M, CO2UUL = 0.1140024783M, CH4CEF = 0.000125604M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000251208M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 28, Name = "潤滑油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.946167424M, CO2ULL = 0.0190995907M, CO2UUL = 0.0259208731M, CH4CEF = 0.0001205798M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.000024116M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 29, Name = "其他油品", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.76203196M, CO2ULL = 0.0150068213M, CO2UUL = 0.0150068213M, CH4CEF = 0.0001130436M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000226087M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 30, Name = "乙烷", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.8601872992M, CO2ULL = 0.0827922078M, CO2UUL = 0.1136363636M, CH4CEF = 0.0000464316M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000046432M, N2OULL = 0.7M, N2OUUL = 2M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 31, Name = "天然氣", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 1.87903584M, CO2ULL = 0.0320855615M, CO2UUL = 0.0392156863M, CH4CEF = 0.0000334944M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000033494M, N2OULL = 0.7M, N2OUUL = 2M, CEF_Correction = 3, Unit = "M3" },
+new Material { Id = 32, Name = "煉油氣", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.17043712M, CO2ULL = 0.1631944444M, CO2UUL = 0.1979166667M, CH4CEF = 0.0000376812M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000037681M, N2OULL = 0.7M, N2OUUL = 2M, CEF_Correction = 3, Unit = "M3" },
+new Material { Id = 33, Name = "焦爐氣", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 0.780754464M, CO2ULL = 0.1599099099M, CO2UUL = 0.2184684685M, CH4CEF = 0.0000175846M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000017585M, N2OULL = 0.7M, N2OUUL = 2M, CEF_Correction = 3, Unit = "M3" },
+new Material { Id = 34, Name = "高爐氣", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 0.845817336M, CO2ULL = 0.1576923077M, CO2UUL = 0.1846153846M, CH4CEF = 0.0000032531M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000003253M, N2OULL = 0.7M, N2OUUL = 2M, CEF_Correction = 3, Unit = "M3" },
+new Material { Id = 35, Name = "一般廢棄物", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 0.7792272743M, CO2ULL = 0.2006543075M, CO2UUL = 0.3195201745M, CH4CEF = 0.0002549271M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000339903M, N2OULL = 0.625M, N2OUUL = 2.75M, CEF_Correction = 3, Unit = "Kg" },
+new Material { Id = 36, Name = "航空汽油", Scope = "類別一", EmissionPattern = "移動", CO2CEF = 2.19807M, CO2ULL = 0.0357142857M, CO2UUL = 0.0428571429M, CH4CEF = 0.000094203M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000188406M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 37, Name = "航空燃油", Scope = "類別一", EmissionPattern = "移動", CO2CEF = 2.3948496M, CO2ULL = 0.0251748252M, CO2UUL = 0.0405594406M, CH4CEF = 0.0001004832M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000200966M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 38, Name = "車用汽油", Scope = "類別一", EmissionPattern = "移動", CO2CEF = 2.263132872M, CO2ULL = 0.025974026M, CO2UUL = 0.0533910534M, CH4CEF = 0.000816426M, CH4ULL = 0.6666666667M, CH4UUL = 2.44M, N2OCEF = 0.0002612563M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L", DataULL = -0.01M, DataUUL = -0.01M },
+new Material { Id = 39, Name = "柴油", Scope = "類別一", EmissionPattern = "移動", CO2CEF = 2.606031792M, CO2ULL = 0.020242915M, CO2UUL = 0.0094466937M, CH4CEF = 0.0001371596M, CH4ULL = 0.5897435897M, CH4UUL = 1.4358974359M, N2OCEF = 0.0001371596M, N2OULL = 0.6666666667M, N2OUUL = 2.0769230769M, CEF_Correction = 3, Unit = "L", DataULL = -0.01M, DataUUL = -0.01M },
+new Material { Id = 40, Name = "煤油", Scope = "類別一", EmissionPattern = "移動", CO2CEF = 2.55876282M, CO2ULL = 0.0152990264M, CO2UUL = 0.0250347705M, CH4CEF = 0.0001067634M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000213527M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 41, Name = "潤滑油", Scope = "類別一", EmissionPattern = "移動", CO2CEF = 2.946167424M, CO2ULL = 0.0190995907M, CO2UUL = 0.0259208731M, CH4CEF = 0.0001205798M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.000024116M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 42, Name = "液化石油氣", Scope = "類別一", EmissionPattern = "移動", CO2CEF = 1.7528812758M, CO2ULL = 0.0237717908M, CO2UUL = 0.0396196513M, CH4CEF = 0.0017223239M, CH4ULL = 0M, CH4UUL = 0M, N2OCEF = 0.0000055559M, N2OULL = 0M, N2OUUL = 0M, CEF_Correction = 3, Unit = "L" },
+new Material { Id = 43, Name = "液化天然氣", Scope = "類別一", EmissionPattern = "移動", CO2CEF = 2.11391532M, CO2ULL = 0.0320855615M, CO2UUL = 0.0392156863M, CH4CEF = 0.0034666704M, CH4ULL = 0.4565217391M, CH4UUL = 15.7391304348M, N2OCEF = 0.0001130436M, N2OULL = 0.6666666667M, N2OUUL = 24.6666666667M, CEF_Correction = 3, Unit = "M3" },
+
+
+new Material {Id=44,Name="外購電力", Scope="類別二",EmissionPattern="外購電力",CO2CEF=0.495M, CO2ULL=-0.07M, CO2UUL=0.07M, CEF_Correction=3, DataULL = -0.01M, DataUUL = -0.01M },
+
+new Material { Id = 57, Name = "廢水處理", Scope = "類別一", EmissionPattern = "逸散", CH4CEF = 0.0031875000M, CEF_Correction = 3 },
+new Material { Id = 58, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", CO2CEF = 1, CEF_Correction = 3 },
+new Material { Id = 59, Name = "乙炔", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 3.3841653850M, CEF_Correction = 1 },
+new Material { Id = 60, Name = "焊條", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 3.6666666666M, CEF_Correction = 1 },
+new Material { Id = 61, Name= "冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.003000M, CEF_Correction = 3 }, //家用冷凍、冷藏裝備
+new Material { Id = 62, Name = "飲水機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.003000M , CEF_Correction = 3 }, //家用冷凍、冷藏裝備
+new Material { Id = 63, Name = "商用冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.055000M, CEF_Correction = 3 }, //獨立商用冷凍、冷藏裝備	
+new Material {Id = 64, Name = "中、大型冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.200000M , CEF_Correction = 3 }, //中、大型冷凍、冷藏裝備
+new Material {Id = 65, Name = "低溫冷凍車", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.330000M , CEF_Correction = 3 }, //交通用冷凍、冷藏裝備
+new Material {Id = 66, Name = "乾燥機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M , CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
+new Material {Id = 67, Name = "工業冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M , CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
+new Material {Id = 68, Name = "食品加工冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M , CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
+new Material {Id = 69, Name = "冰水主機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.090000M        , CEF_Correction = 3 }, //冰水機
+new Material {Id = 70, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.030000M , CEF_Correction = 3 }, //住宅及商業建築冷氣機
+new Material {Id = 71, Name = "車用空調", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.200000M , CEF_Correction = 3 }, //移動式空氣清靜機
+new Material { Id = 72, Name = "丁烷", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 3.0260000000M, CEF_Correction = 1 },
+new Material { Id = 73, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.509M , CO2ULL=-0.07M, CO2UUL=0.07M,Year=110, CEF_Correction = 3 , DataULL = -0.01M, DataUUL = -0.01M }
 );
             builder.Entity<GWP>().HasData(
 new GWP { Name = "CO2", Num = 1, GWP_Year = 2022 },
-new GWP { Name = "CH4", Num = 27.9F, GWP_Year = 2022 },
+new GWP { Name = "CH4", Num = 27.9M, GWP_Year = 2022 },
 new GWP { Name = "N2O", Num = 273, GWP_Year = 2022 },
 new GWP { Name = "R-12", Num = 12500, GWP_Year = 2022 },
 new GWP { Name = "R-23", Num = 14600, GWP_Year = 2022 },
@@ -138,7 +147,7 @@ new GWP { Name = "R-134A", Num = 1530, GWP_Year = 2022 },
 new GWP { Name = "FM200", Num = 3600, GWP_Year = 2022 },
 new GWP { Name = "R-22", Num = 1960, GWP_Year = 2022 },
 new GWP { Name = "R-410A", Num = 2256, GWP_Year = 2022 },
-new GWP { Name = "R-600A", Num = 0.006F, GWP_Year = 2022 },
+new GWP { Name = "R-600A", Num = 0.006M, GWP_Year = 2022 },
 new GWP { Name = "R-417A", Num = 2127, GWP_Year = 2022 },
 new GWP { Name = "R-404A", Num = 4728, GWP_Year = 2022 },
 new GWP { Name = "R-407C", Num = 1908, GWP_Year = 2022 },
@@ -177,16 +186,17 @@ new GWP { Name = "海龍-1211", Num = 1930, GWP_Year = 2022 }
 
     );
 
-            builder.Entity<Refrigerant>().HasData(
-new Refrigerant { Name = "家用冷凍、冷藏裝備", Num = 0.003000F },
-new Refrigerant { Name = "獨立商用冷凍、冷藏裝備", Num = 0.055000F },
-new Refrigerant { Name = "中、大型冷凍、冷藏裝備", Num = 0.200000F },
-new Refrigerant { Name = "交通用冷凍、冷藏裝備", Num = 0.33F },
-new Refrigerant { Name = "工業冷凍、冷藏裝備，包括食品加工及冷藏", Num = 0.16F },
-new Refrigerant { Name = "冰水機", Num = 0.09F },
-new Refrigerant { Name = "住宅及商業建築冷氣機", Num = 0.03F },
-new Refrigerant { Name = "移動式空氣清靜機", Num = 0.2F }
-                );
+//            builder.Entity<Refrigerant>().HasData(
+//new Refrigerant { Name = "家用冷凍、冷藏裝備", Num = 0.003000M },
+//new Refrigerant { Name = "獨立商用冷凍、冷藏裝備", Num = 0.055000F },
+//new Refrigerant { Name = "中、大型冷凍、冷藏裝備", Num = 0.200000F },
+//new Refrigerant { Name = "交通用冷凍、冷藏裝備", Num = 0.33F },
+//new Refrigerant { Name = "工業冷凍、冷藏裝備，包括食品加工及冷藏", Num = 0.16F },
+//new Refrigerant { Name = "冰水機", Num = 0.09F },
+//new Refrigerant { Name = "住宅及商業建築冷氣機", Num = 0.03F },
+//new Refrigerant { Name = "移動式空氣清靜機", Num = 0.2F }
+//                );
+
             builder.Entity<DataLevel>().HasData(
 new DataLevel { id = 1, name = "連續監測" },
 new DataLevel { id = 2, name = "定期/間歇量測" },
@@ -196,6 +206,20 @@ new DataLevel { id = 3, name = "自行/財務推估" }
 new DataCorrection { id = 1, name = "有外部校正或多組數據佐證者" },
 new DataCorrection { id = 2, name = "有內部校正或經過會計簽證等證明者" },
 new DataCorrection { id = 3, name = "未進行儀器校正或未進行紀錄彙整者" }
+                );
+            builder.Entity<DefaultDevices>().HasData(
+new DefaultDevices {Id=1, Name = "緊急發電機", Material = "柴油", Scope = "類別一", EmissionPattern = "固定" },
+new DefaultDevices {Id=2, Name = "公務車", Material = "柴油", Scope = "類別一", EmissionPattern = "移動" },
+new DefaultDevices {Id=3, Name = "公務車", Material = "車用汽油", Scope = "類別一", EmissionPattern = "移動" },
+new DefaultDevices {Id=4, Name = "冷氣機", Material = "R-410A", Scope = "類別一", EmissionPattern = "逸散" },
+new DefaultDevices{Id=5, Name = "飲水機",Material = "R-134A",Scope = "類別一",EmissionPattern = "逸散"},
+new DefaultDevices{Id=6, Name = "乾燥機",Material = "R-134A",Scope = "類別一",EmissionPattern = "逸散"},
+new DefaultDevices{Id=7, Name = "冰水主機",Material = "R-134A",Scope = "類別一",EmissionPattern = "逸散"},
+new DefaultDevices{Id=8, Name = "車用空調",Material = "R-134A",Scope = "類別一",EmissionPattern = "逸散"},
+new DefaultDevices{Id=9, Name = "化糞池",Material = "廢水處理",Scope = "類別一",EmissionPattern = "逸散"},
+new DefaultDevices{Id=10, Name = "電力",Material = "外購電力",Scope = "類別二",EmissionPattern = "外購電力"}
+
+
                 );
         }
     }

@@ -39,14 +39,14 @@
             <span asp-validation-for="Dept" class="text-danger"></span>
             </div> *@
             <div class="form-group">
-                <label asp-for="Level" class="control-label"></label>
-                <select asp-for="Level" class="form-control" id="levelDropdown" asp-items="ViewBag.DataLevel"></select>
-                <span asp-validation-for="Level" class="text-danger"></span>
+                <label asp-for="Data_Correction" class="control-label"></label>
+                <select asp-for="Data_Correction" class="form-control" id="levelDropdown" asp-items="ViewBag.DataLevel"></select>
+                <span asp-validation-for="Data_Correction" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Correction" class="control-label"></label>
-                <select asp-for="Correction" class="form-control" id="correctionDropdown" asp-items="ViewBag.DataCorrection"></select>
-                <span asp-validation-for="Correction" class="text-danger"></span>
+                <label asp-for="Device_Correction" class="control-label"></label>
+                <select asp-for="Device_Correction" class="form-control" id="correctionDropdown" asp-items="ViewBag.DataCorrection"></select>
+                <span asp-validation-for="Device_Correction" class="text-danger"></span>
             </div>
             @section scripts
                 {
@@ -84,14 +84,10 @@
 
 
 
-            <div class="form-group" style="float:left">
+            <div class="form-group">
                 <input type="hidden" asp-for="Id" id="id" />
-                <input type="submit" value="儲存" class="btn btn-primary" />|
-            </div>
-        </form>
-        <form method="post" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-Year="@TempData.Peek("yearSelected")">
-            <div class="form-group" style="float:left">
-                <button type="submit" class="btn btn-secondary">返回</button>
+                <input type="submit" value="確認" class="btn btn-primary" />|
+                <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("yearId")">返回</a>
             </div>
         </form>
     </div>

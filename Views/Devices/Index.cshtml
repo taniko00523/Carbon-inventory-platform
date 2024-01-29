@@ -3,34 +3,32 @@
 @{
     ViewData["Title"] = "設備資料維護";
 }
-<h1>排放源鑑別</h1>
-<h3>@TempData.Peek("Company")</h3>
-@* 新增廠區名稱 *@
-<p>
-    @if(Model.Count() < 1)
-    {
-        <a class="btn btn-primary" asp-action="Default" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-year="@TempData.Peek("yearSelected")">導入預設</a>
-    }
-    @if (Model.Count() > 1)
-    {
-        <a class="btn btn-primary" asp-action="Create">新增設備</a>
-        <a class="btn btn-danger" asp-controller="Emission" asp-action="Index" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-year="@TempData.Peek("yearSelected")">總排放量</a>
-        <a class="btn btn-dark" asp-controller="Emission" asp-action="Word" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-year="@TempData.Peek("yearSelected")">報告書下載</a>
-    }
-    <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">返回</a>
-</p>
-@using (Html.BeginForm("Index", "Devices", FormMethod.Post))
-{
-    
-    <div class="row justify-content-start">
-        <div class="col-1">
-            <label for="Year">選擇年份:</label>
-        </div>
-        <div class="col-3">
-            @Html.DropDownList("Year", ViewData["Year"] as SelectList, "請選擇盤查年度", new { @class = "form-select", onchange = "this.form.submit();" })
-        </div>
+<div class="row">
+    <div class="col">
+        <h1>排放源鑑別</h1>
+        @if (@TempData.Peek("areaName") != null)
+        {
+            <h3>@TempData.Peek("companyName")-@TempData.Peek("areaName")-@TempData.Peek("year")</h3>
+        }
+        else
+        {
+            <h3>@TempData.Peek("companyName")-@TempData.Peek("year")</h3>
+        }
+        <p>
+            @if (Model.Count() < 1)
+            {
+                <a class="btn btn-primary" asp-action="Default" asp-route-id="@TempData.Peek("yearId")">導入預設</a>
+            }
+            <a class="btn btn-primary" asp-action="Create">新增設備</a>
+            @if (Model.Count() > 1)
+            {
+                <a class="btn btn-danger" asp-controller="Emission" asp-action="Index" asp-route-id="@TempData.Peek("yearId")">總排放量</a>
+                <a class="btn btn-dark" asp-controller="Emission" asp-action="Word" asp-route-id="@TempData.Peek("SelectedAreaId")" asp-route-year="@TempData.Peek("yearSelected")">報告書下載</a>
+            }
+            <a class="btn btn-secondary" asp-controller="Years" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
+        </p>
     </div>
-}
+</div>
 
 <div class="table-responsive">
     <table class="table">
@@ -58,348 +56,119 @@
                     @Html.DisplayNameFor(model => model.Material)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CO2_Emission)
+                    CO2
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CH4_Emission)
+                    CH4
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.N2O_Emission)
+                    N2O
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.HFCS_Emission)
+                    HFCS
                 </th>
-                @* <th>
-                @Html.DisplayNameFor(model => model.PFCS_Emission)
-                </th> *@
-                @* <th>
-                @Html.DisplayNameFor(model => model.SF6_Emission)
-                </th> *@
-                @* <th>
-                @Html.DisplayNameFor(model => model.NF3_Emission)
-                </th>  *@
+                <th>
+                    PFCS
+                </th>
+                <th>
+                    SF6
+                </th>
+                <th>
+                    NF3
+                </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Num)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Emissions)
                 </th>
+                <th>設定</th>
                 <th></th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var item in Model)
+        @for (int i = 0; i <= 4; i++)
+        {
+            string EmissPattern = "";
+            string style = "";
+            switch (i)
             {
-                if (item.EmissionPattern == "固定")
-                {
-                    <tr class="table-info">
-                        @* <td>
-                @Html.DisplayFor(modelItem => item.Areas.Name)
-                </td>
-                <td>
-                @Html.DisplayFor(modelItem => item.AssetNo)
-                </td> *@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        @* <td>
-                @Html.DisplayFor(modelItem => item.Provess)
-                </td> *@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Scope)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EmissionPattern)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Material)
-                        </td>
-                        <td>
-                            @if (item.CO2_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.CH4_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.N2O_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.HFCS_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        @* <td>
-                @if (item.PFCS_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        @* <td>
-                @if (item.SF6_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        @* <td>
-                @if (item.NF3_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        <td>
-                            @if (item.Num != 0)
-                            {
-                                string displayUnit;
-                                switch (item.Unit)
-                                {
-                                    case "公斤":
-                                        displayUnit = "公噸";
-                                        break;
-                                    case "公升":
-                                        displayUnit = "公秉";
-                                        break;
-                                    case "立方公尺":
-                                        displayUnit = "千立方公尺";
-                                        break;
-                                    case "度":
-                                        displayUnit = "千度";
-                                        break;
-                                    default:
-                                        displayUnit = item.Unit;
-                                        break;
-                                }
-                                <p>@($"{(decimal)item.Num / 1000:F4} {displayUnit}")</p>
-                            }
-                            else
-                            {
-                                <p>未填寫</p>
-                            }
-                        </td>
-                        <td>
-                            <p>@item.Emissions 噸CO₂e<p />
-                        </td>
-                        <td>
-                            @if (item.Num != 0)
-                            {
-                                <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">修改活動數據</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
-                            }
-                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
-                        </td>
-                    </tr>
-                }
-
+                case 0: EmissPattern = "固定"; style = "warning"; break;
+                case 1: EmissPattern = "移動"; style = "secondary"; break;
+                case 2: EmissPattern = "逸散"; style = "success"; break;
+                case 3: EmissPattern = "製程"; style = "danger"; break;
+                case 4: EmissPattern = "外購電力"; style = "primary"; break;
             }
-        </tbody>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                if (item.EmissionPattern == "移動")
+            <tbody>
+                @foreach (var item in Model)
                 {
-                    <tr class="table-success">
-                        @* <td>
+                    if (item.EmissionPattern == EmissPattern)
+                    {
+                        <tr class="table-@style">
+                            @* <td>
                 @Html.DisplayFor(modelItem => item.Areas.Name)
                 </td>
                 <td>
                 @Html.DisplayFor(modelItem => item.AssetNo)
                 </td> *@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        @* <td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            @* <td>
                 @Html.DisplayFor(modelItem => item.Provess)
                 </td> *@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Scope)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EmissionPattern)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Material)
-                        </td>
-                        <td>
-                            @if (item.CO2_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.CH4_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.N2O_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.HFCS_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        @* <td>
-                @if (item.PFCS_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        @* <td>
-                @if (item.SF6_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        @* <td>
-                @if (item.NF3_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        <td>
-                            @if (item.Num != 0)
-                            {
-                                string displayUnit;
-                                switch (item.Unit)
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Scope)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmissionPattern)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Material)
+                            </td>
+                            <td>
+                                @if (item.GHGs.Where(x => x.Name == "CO2").FirstOrDefault() != null)
                                 {
-                                    case "公斤":
-                                        displayUnit = "公噸";
-                                        break;
-                                    case "公升":
-                                        displayUnit = "公秉";
-                                        break;
-                                    case "立方公尺":
-                                        displayUnit = "千立方公尺";
-                                        break;
-                                    case "度":
-                                        displayUnit = "千度";
-                                        break;
-                                    default:
-                                        displayUnit = item.Unit;
-                                        break;
+                                    <p>Y</p>
                                 }
-                                <p>@($"{(decimal)item.Num / 1000:F4} {displayUnit}")</p>
-                            }
-                            else
-                            {
-                                <p>未填寫</p>
-                            }
-                        </td>
-                        <td>
-                            <p>@item.Emissions 噸CO₂e<p />
-                        </td>
-                        <td>
-                            @if (item.Num != 0)
-                            {
-                                <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">修改活動數據</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
-                            }
-                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
-                        </td>
-                    </tr>
-                }
-
-            }
-        </tbody>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                if (item.EmissionPattern == "逸散")
-                {
-                    <tr class="table-warning">
-                        @* <td>
-                @Html.DisplayFor(modelItem => item.Areas.Name)
-                </td>
-                <td>
-                @Html.DisplayFor(modelItem => item.AssetNo)
-                </td> *@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        @* <td>
-                @Html.DisplayFor(modelItem => item.Provess)
-                </td> *@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Scope)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EmissionPattern)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Material)
-                        </td>
-                        <td>
-                            @if (item.CO2_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.CH4_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.N2O_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.HFCS_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        @* <td>
-                @if (item.PFCS_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        @* <td>
-                @if (item.SF6_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        @* <td>
-                @if (item.NF3_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        <td>
-                            @if (item.Num != 0)
-                            {
-                                @if (item.Unit == "人")
+                            </td>
+                            <td>
+                                @if (item.GHGs.Where(x => x.Name == "CH4").FirstOrDefault() != null)
                                 {
-                                    <p>@item.Num@item.Unit</p>
+                                    <p>Y</p>
                                 }
-                                else
+                            </td>
+                            <td>
+                                @if (item.GHGs.Where(x => x.Name == "N2O").FirstOrDefault() != null)
+                                {
+                                    <p>Y</p>
+                                }
+                            </td>
+                            <td>
+                                @if (item.GHGs.Where(x => x.Name == "HFCS").FirstOrDefault() != null)
+                                {
+                                    <p>Y</p>
+                                }
+                            </td>
+                            <td>
+                                @if (item.GHGs.Where(x => x.Name == "PFCS").FirstOrDefault() != null)
+                                {
+                                    <p>Y</p>
+                                }
+                            </td>
+                            <td>
+                                @if (item.GHGs.Where(x => x.Name == "SF6").FirstOrDefault() != null)
+                                {
+                                    <p>Y</p>
+                                }
+                            </td>
+                            <td>
+                                @if (item.GHGs.Where(x => x.Name == "NF3").FirstOrDefault() != null)
+                                {
+                                    <p>Y</p>
+                                }
+                            </td>
+                            <td>
+                                @if (item.Num != 0)
                                 {
                                     string displayUnit;
                                     switch (item.Unit)
@@ -420,271 +189,39 @@
                                             displayUnit = item.Unit;
                                             break;
                                     }
-                                    <p>@($"{(decimal)item.Num / 1000:F4} {displayUnit}")</p>
+                                    <p>@($"{item.Num / 1000:F4} {displayUnit}")</p>
                                 }
-
-                            }
-                            else
-                            {
-                                <p>未填寫</p>
-                            }
-                        </td>
-                        <td>
-                            <p>@item.Emissions 噸CO₂e<p />
-                        </td>
-                        <td>
-                            @if (item.Num != 0)
-                            {
-                                <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">修改活動數據</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
-                            }
-                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
-                        </td>
-                    </tr>
-                }
-
-            }
-        </tbody>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                if (item.EmissionPattern == "製程")
-                {
-                    <tr class="table-danger">
-                        @* <td>
-                @Html.DisplayFor(modelItem => item.Areas.Name)
-                </td>
-                <td>
-                @Html.DisplayFor(modelItem => item.AssetNo)
-                </td> *@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        @* <td>
-                @Html.DisplayFor(modelItem => item.Provess)
-                </td> *@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Scope)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EmissionPattern)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Material)
-                        </td>
-                        <td>
-                            @if (item.CO2_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.CH4_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.N2O_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.HFCS_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        @* <td>
-                @if (item.PFCS_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        @* <td>
-                @if (item.SF6_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        @* <td>
-                @if (item.NF3_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        <td>
-                            @if (item.Num != 0)
-                            {
-                                string displayUnit;
-                                switch (item.Unit)
+                                else
                                 {
-                                    case "公斤":
-                                        displayUnit = "公噸";
-                                        break;
-                                    case "公升":
-                                        displayUnit = "公秉";
-                                        break;
-                                    case "立方公尺":
-                                        displayUnit = "千立方公尺";
-                                        break;
-                                    case "度":
-                                        displayUnit = "千度";
-                                        break;
-                                    default:
-                                        displayUnit = item.Unit;
-                                        break;
+                                    <p>未填寫</p>
                                 }
-                                <p>@($"{(decimal)item.Num / 1000:F4} {displayUnit}")</p>
-                            }
-                            else
-                            {
-                                <p>未填寫</p>
-                            }
-                        </td>
-                        <td>
-                            <p>@item.Emissions 噸CO₂e<p />
-                        </td>
-                        <td>
-                            @if (item.Num != 0)
-                            {
-                                <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">修改活動數據</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
-                            }
-                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
-                        </td>
-                    </tr>
-                }
-
-            }
-        </tbody>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                if (item.EmissionPattern == "外購電力")
-                {
-                    <tr class="table-primary">
-                        @* <td>
-                @Html.DisplayFor(modelItem => item.Areas.Name)
-                </td>
-                <td>
-                @Html.DisplayFor(modelItem => item.AssetNo)
-                </td> *@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        @* <td>
-                @Html.DisplayFor(modelItem => item.Provess)
-                </td> *@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Scope)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EmissionPattern)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Material)
-                        </td>
-                        <td>
-                            @if (item.CO2_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.CH4_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.N2O_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.HFCS_Emission == true)
-                            {
-                                <p>Y</p>
-                            }
-                        </td>
-                        @* <td>
-                @if (item.PFCS_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        @* <td>
-                @if (item.SF6_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        @* <td>
-                @if (item.NF3_Emission == true)
-                {
-                <p>Y</p>
-                }
-                </td> *@
-                        <td>
-                            @if (item.Num != 0)
-                            {
-                                string displayUnit;
-                                switch (item.Unit)
+                            </td>
+                            <td>
+                                <p>@item.Emissions 噸CO₂e<p />
+                            </td>
+                            <td>
+                                @if (item.Num != 0)
                                 {
-                                    case "公斤":
-                                        displayUnit = "公噸";
-                                        break;
-                                    case "公升":
-                                        displayUnit = "公秉";
-                                        break;
-                                    case "立方公尺":
-                                        displayUnit = "千立方公尺";
-                                        break;
-                                    case "度":
-                                        displayUnit = "千度";
-                                        break;
-                                    default:
-                                        displayUnit = item.Unit;
-                                        break;
+                                    <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">修改活動數據</a>
                                 }
-                                <p>@($"{(decimal)item.Num / 1000:F4} {displayUnit}")</p>
-                            }
-                            else
-                            {
-                                <p>未填寫</p>
-                            }
-                        </td>
-                        <td>
-                            <p>@item.Emissions 噸CO₂e<p />
-                        </td>
-                        <td>
-                            @if (item.Num != 0)
-                            {
-                                <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">修改活動數據</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
-                            }
-                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">刪除</a>
-                        </td>
-                    </tr>
-                }
+                                else
+                                {
+                                    <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
+                                }
+                                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
+                                
+                            </td>
+                            <td>
+                                <form method="post" asp-controller="Devices" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">
+                                    <button type="submit" class="btn btn-danger">刪除</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
 
-            }
-        </tbody>
+                }
+            </tbody>
+        }
     </table>
-    
+
 </div>
