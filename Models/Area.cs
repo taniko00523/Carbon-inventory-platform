@@ -10,11 +10,12 @@ namespace Carbon_inventory_platform.Models
         public Guid Id { get; set; }
 
         [Display(Name = "公司別")]
-        public Guid CompanyId { get; set; } //公司代號自動帶入 不須選擇
+        public Guid CompanyId { get; set; } 
 
         [MaxLength(20)]
         [Display(Name = "廠區名稱")]
-        public string? Name { get; set; } 
+        [Required(ErrorMessage = "請輸入廠區名稱")]
+        public string Name { get; set; } 
 
         [Display(Name = "郵遞區號")]
         public int PostalCode { get; set; }
@@ -39,13 +40,16 @@ namespace Carbon_inventory_platform.Models
 
         [MaxLength(100)]
         [Display(Name = "地址")]
+        [Required(ErrorMessage = "請輸入地址")]
         public string FullAddress { get; set; } = "";
 
         [Display(Name = "基準年")]
+        [Required(ErrorMessage = "請輸入基準年")]
         public int Year { get; set; } 
 
         [MaxLength(10)]
         [Display(Name = "產業別")]
+        [Required(ErrorMessage = "請輸入產業別")]
         public string? Type { get; set; } = "";
 
         [Display(Name = "是否刪除")]

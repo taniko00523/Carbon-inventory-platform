@@ -541,7 +541,6 @@ D:\C#\Carbon-inventory-platform\bin\Release\net7.0\win-x64\createdump.exe
 D:\C#\Carbon-inventory-platform\bin\Release\net7.0\win-x64\hostfxr.dll
 D:\C#\Carbon-inventory-platform\bin\Release\net7.0\win-x64\hostpolicy.dll
 D:\C#\Carbon-inventory-platform\bin\Release\net7.0\win-x64\mscordaccore.dll
-D:\C#\Carbon-inventory-platform\bin\Release\net7.0\win-x64\mscordaccore_amd64_amd64_7.0.1423.51910.dll
 D:\C#\Carbon-inventory-platform\bin\Release\net7.0\win-x64\mscordbi.dll
 D:\C#\Carbon-inventory-platform\bin\Release\net7.0\win-x64\mscorrc.dll
 D:\C#\Carbon-inventory-platform\bin\Release\net7.0\win-x64\msquic.dll
@@ -572,3 +571,4 @@ D:\C#\Carbon-inventory-platform\obj\Release\net7.0\win-x64\refint\Carbon_invento
 D:\C#\Carbon-inventory-platform\obj\Release\net7.0\win-x64\Carbon_inventory_platform.pdb
 D:\C#\Carbon-inventory-platform\obj\Release\net7.0\win-x64\Carbon_inventory_platform.genruntimeconfig.cache
 D:\C#\Carbon-inventory-platform\obj\Release\net7.0\win-x64\ref\Carbon_inventory_platform.dll
+D:\C#\Carbon-inventory-platform\bin\Release\net7.0\win-x64\mscordaccore_amd64_amd64_7.0.1523.57226.dll

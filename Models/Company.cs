@@ -27,18 +27,22 @@ namespace Carbon_inventory_platform.Models
 
         [MaxLength(20)]
         [Display(Name = "聯絡人")]
+        [Required(ErrorMessage = "請輸入聯絡人")]
         public string Owner { get; set; } = "";
 
         [EmailAddress(ErrorMessage ="電子信箱格式錯誤")]
         [MaxLength(50)]
         [Display(Name = "電子信箱")]
+        [Required(ErrorMessage = "請輸入電子信箱")]
         public string Email { get; set; } = "";
 
         [MaxLength(20)]
         [Display(Name = "電話號碼")]
+        [Required(ErrorMessage = "請輸入手機號碼")]
         public string Phone { get; set; } =null!;
 
         [Display(Name = "公司簡介")]
+        [Required(ErrorMessage = "請輸入公司簡介")]
         public string Information { get; set; } = "";
 
         [Display(Name = "是否刪除")]

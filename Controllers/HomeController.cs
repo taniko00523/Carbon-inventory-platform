@@ -32,15 +32,7 @@ namespace Carbon_inventory_platform.Controllers
             del = TempData["yearId"];
             del = TempData["year"];
             del = TempData["companyName"];
-            var AllArea = await _context.Areas
-    .Where(x => x.isDeleted == 0)
-    .Include(x => x.Company)
-    .OrderBy(x => x.CreateTime)
-    .ToListAsync();
-
-            var filteredAreas = AllArea.GroupBy(x => x.CompanyId) //篩選掉重複CompanyId的資料
-                .Select(group => group.First())
-                .ToList();
+           
             var company = await _context.Companies.Where(x => x.isDeleted == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
 
             return View(company);
@@ -71,6 +63,7 @@ namespace Carbon_inventory_platform.Controllers
                 await _context.Areas.AddAsync(new Area()
                 {
                     Id = Area_id,
+                    Name = "OO廠",
                     CompanyId = Company_id,
                     Year = DateTime.Now.Year - 1912, //減去1911取得民國年 在減1取去年當基準年
                     CreateTime = DateTime.Now

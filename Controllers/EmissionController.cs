@@ -23,7 +23,7 @@ namespace Carbon_inventory_platform.Controllers
                 .Where(x => x.isDeleted == 0 && x.YearId == id)
                 .ToListAsync();
             var GHGs = await _context.GHGs
-                .Include(x=>x.Device)
+                .Include(x => x.Device)
                 .Where(x => x.isDeleted == 0 && x.Device.YearId == id)
                 .ToListAsync();
             var Emission = await _context.Years.Where(x => x.Id == id).ToListAsync();
@@ -75,7 +75,7 @@ namespace Carbon_inventory_platform.Controllers
                     case "製程": sum_process += device.Emissions; break;
                     case "外購電力": sum_electricity += device.Emissions; break;
                 }
-                               
+
 
                 if (device.Grade < 10 && device.Grade > 0) no1_Grade++;
                 else if (device.Grade < 19) no2_Grade++;
@@ -91,11 +91,11 @@ namespace Carbon_inventory_platform.Controllers
             }
             decimal CO2 = sum1_CO2 + sum2_CO2;
             decimal CH4 = sum1_CH4 + sum2_CH4;
-            decimal N2O = sum1_N2O + sum2_N2O ;
-            decimal HFCS = sum1_HFCS + sum2_HFCS ;
-            decimal PFCS = sum1_PFCS + sum2_PFCS ;
-            decimal SF6 = sum1_SF6 + sum2_SF6 ;
-            decimal NF3 = sum1_NF3 + sum2_SF6 ;
+            decimal N2O = sum1_N2O + sum2_N2O;
+            decimal HFCS = sum1_HFCS + sum2_HFCS;
+            decimal PFCS = sum1_PFCS + sum2_PFCS;
+            decimal SF6 = sum1_SF6 + sum2_SF6;
+            decimal NF3 = sum1_NF3 + sum2_SF6;
 
             sum_Scope1 = sum1_CO2 + sum1_CH4 + sum1_N2O + sum1_HFCS + sum1_PFCS + sum1_NF3 + sum1_SF6;
             sum_Scope2 = sum2_CO2 + sum2_CH4 + sum2_N2O + sum2_HFCS + sum2_PFCS + sum2_NF3 + sum2_SF6;
@@ -104,11 +104,15 @@ namespace Carbon_inventory_platform.Controllers
             {
                 avg_Grade += (float)Math.Round((float)(Math.Round(item.Emissions / sum_all, 4) * item.Grade), 2);
             }
-            all_UUL = DecimalSqrt(all_countUUL) / sum_Uncertainty;
-            all_ULL = DecimalSqrt(all_countULL) / sum_Uncertainty;
+            if (sum_Uncertainty != 0)
+            {
+                all_UUL = DecimalSqrt(all_countUUL) / sum_Uncertainty;
+                all_ULL = DecimalSqrt(all_countULL) / sum_Uncertainty;
+            }
+            
 
-            bool sumMatch = Emission.Any(x => x.All != Math.Round(sum_all,3));
-            bool uncertaintyMatch = Emission.Any(x => x.ULL != Math.Round(all_ULL,2));
+            bool sumMatch = Emission.Any(x => x.All != Math.Round(sum_all, 3));
+            bool uncertaintyMatch = Emission.Any(x => x.ULL != Math.Round(all_ULL, 2));
             if (Emission.Count != 0)
             {
                 if (sumMatch || uncertaintyMatch) //如果總量和不確定性上限有差，則修正進資料庫。
@@ -265,33 +269,41 @@ namespace Carbon_inventory_platform.Controllers
                 throw new ArgumentException("不能計算負數的平方根");
             }
 
-            decimal guess = value / 2;
-            for (int i = 0; i < iterations; i++)
+            if(value != 0)
             {
-                guess = 0.5m * (guess + value / guess);
-            }
+                decimal guess = value / 2;
+                for (int i = 0; i < iterations; i++)
+                {
+                    guess = 0.5m * (guess + value / guess);
+                }
 
-            return guess;
+                return guess;
+            }
+            else
+            {
+                return 0;
+            }
+            
         }
 
-        //public async Task<IActionResult> WordAsync(Guid id, int Year)
+        //public async Task<IActionResult> WordAsync(Guid id)
         //{
-        //    var CountEmission = await CountEmissionAsync(id, Year);
+        //    await CountEmissionAsync(id);
         //    // 這裡要替換成你 MVC 應用程式中正確的檔案路徑
         //    var data = await _context.Areas.Where(x => x.Id == id).Include(x => x.Company).FirstOrDefaultAsync();
-        //    var device = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0 && x.year == Year).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
-        //    var scope1_device = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0 && x.year == Year && x.Scope != "類別二").OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
+        //    var device = await _context.Devices.Where(x => x.YearId == id && x.isDeleted == 0).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
+        //    var scope1_device = await _context.Devices.Where(x => x.YearId == id && x.isDeleted == 0 && x.Scope != "類別二").OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
         //    var Material = await _context.Materials.ToListAsync();
-        //    var emission = await _context.emissions.Where(x => x.AreaId == id).FirstOrDefaultAsync();
-        //    var nonMove = device.Where(x => x.EmissionPattern == "固定" && x.isDeleted == 0 && x.year == Year).Select(d => d.Name).ToList();
-        //    var move = device.Where(x => x.EmissionPattern == "移動" && x.isDeleted == 0 && x.year == Year).Where(x => x.isDeleted == 0).Select(d => d.Name).ToList();
-        //    var escape = device.Where(x => x.EmissionPattern == "逸散" && x.isDeleted == 0 && x.year == Year).Select(d => d.Name).ToList();
-        //    var process = device.Where(x => x.EmissionPattern == "製程" && x.isDeleted == 0 && x.year == Year).Select(d => d.Name).ToList();
+        //    var emission = await _context.Years.Where(x => x.AreaId == id).FirstOrDefaultAsync();
+        //    var nonMove = device.Where(x => x.EmissionPattern == "固定" && x.isDeleted == 0).Select(d => d.Name).ToList();
+        //    var move = device.Where(x => x.EmissionPattern == "移動" && x.isDeleted == 0).Where(x => x.isDeleted == 0).Select(d => d.Name).ToList();
+        //    var escape = device.Where(x => x.EmissionPattern == "逸散" && x.isDeleted == 0).Select(d => d.Name).ToList();
+        //    var process = device.Where(x => x.EmissionPattern == "製程" && x.isDeleted == 0).Select(d => d.Name).ToList();
 
-        //    string Name = data.Company.Name;
 
-        //    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", "複雜溫盤報告書範本.docx");
-        //    string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", Year + Name + "-溫室氣體盤查報告書.docx");
+
+        //    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", "溫盤報告書範本.docx");
+        //    string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", TempData.Peek("year").ToString() + TempData.Peek("companyName").ToString() + "-溫室氣體盤查報告書.docx");
 
         //    // 複製文件
         //    using (DocX doc = DocX.Load(filePath))
@@ -349,51 +361,51 @@ namespace Carbon_inventory_platform.Controllers
         //                paragraph.ReplaceText("組織邊界內在製程中化學反應產生的溫室氣體排放源。", "組織邊界內在製程中化學反應產生的溫室氣體排放源，如" + string.Join(", ", process) + "。");
         //            }
         //            paragraph.ReplaceText("基準年補充", (data.Year + 1911).ToString() + "年");
-        //            paragraph.ReplaceText("類別一CO2排放", emission.Scope1_CO2);
-        //            paragraph.ReplaceText("CO2排放", emission.CO2);
-        //            paragraph.ReplaceText("CH4排放", emission.CH4);
-        //            paragraph.ReplaceText("N2O排放", emission.N2O);
-        //            paragraph.ReplaceText("HFCS排放", emission.HFCS);
-        //            paragraph.ReplaceText("PFCS排放", emission.PFCS);
-        //            paragraph.ReplaceText("SF6排放", emission.SF6);
-        //            paragraph.ReplaceText("NF3排放", emission.NF3);
-        //            paragraph.ReplaceText("類別一CO2占比", emission.percentage1_CO2);
-        //            paragraph.ReplaceText("類別一CH4占比", emission.percentage1_CH4);
-        //            paragraph.ReplaceText("類別一N2O占比", emission.percentage1_N2O);
-        //            paragraph.ReplaceText("類別一HFCS占比", emission.percentage1_HFCS);
-        //            paragraph.ReplaceText("類別一PFCS占比", emission.percentage1_PFCS);
-        //            paragraph.ReplaceText("類別一SF6占比", emission.percentage1_SF6);
-        //            paragraph.ReplaceText("類別一NF3占比", emission.percentage2_NF3);
-        //            paragraph.ReplaceText("類別一CO2排放", emission.Scope1);
-        //            paragraph.ReplaceText("CO2占比", emission.percentage2_CO2);
-        //            paragraph.ReplaceText("CH4占比", emission.percentage2_CH4);
-        //            paragraph.ReplaceText("N2O占比", emission.percentage2_N2O);
-        //            paragraph.ReplaceText("HFCS占比", emission.percentage2_HFCS);
-        //            paragraph.ReplaceText("PFCS占比", emission.percentage2_PFCS);
-        //            paragraph.ReplaceText("SF6占比", emission.percentage2_SF6);
-        //            paragraph.ReplaceText("NF3占比", emission.percentage2_NF3);
-        //            paragraph.ReplaceText("總排放當量", emission.All);
-        //            paragraph.ReplaceText("固定排放量", emission.non_move);
-        //            paragraph.ReplaceText("移動排放量", emission.move);
-        //            paragraph.ReplaceText("製程排放量", emission.process);
-        //            paragraph.ReplaceText("逸散排放量", emission.escape);
-        //            paragraph.ReplaceText("固定排放比例", emission.percentage_nonMove);
-        //            paragraph.ReplaceText("製程排放比例", emission.percentage_Process);
-        //            paragraph.ReplaceText("移動排放比例", emission.percentage_Move);
-        //            paragraph.ReplaceText("逸散排放比例", emission.percentage_Escape);
-        //            paragraph.ReplaceText("類別一占比", emission.percentage_Scope1);
-        //            paragraph.ReplaceText("類別二占比", emission.percentage_Scope2);
-        //            paragraph.ReplaceText("類別一總排放", emission.Scope1);
-        //            paragraph.ReplaceText("類別二總排放", emission.Scope2);
-        //            paragraph.ReplaceText("進行評估排放當量", emission.cal_all);
-        //            paragraph.ReplaceText("不確定性評估占比", emission.percentage_CalAll);
-        //            paragraph.ReplaceText("第1級評分", emission.no1_Grade);
-        //            paragraph.ReplaceText("第2級評分", emission.no2_Grade);
-        //            paragraph.ReplaceText("第3級評分", emission.no3_Grade);
-        //            paragraph.ReplaceText("清冊等級分數補充", emission.avg_Grade);
-        //            paragraph.ReplaceText("清冊級別補充", emission.all_Grade);
-        //            paragraph.ReplaceText("95上", emission.UUL);
-        //            paragraph.ReplaceText("95下", emission.ULL);
+        //            paragraph.ReplaceText("類別一CO2排放", emission.Scope1_CO2.ToString());
+        //            paragraph.ReplaceText("CO2排放", emission.CO2.ToString());
+        //            paragraph.ReplaceText("CH4排放", emission.CH4.ToString());
+        //            paragraph.ReplaceText("N2O排放", emission.N2O.ToString());
+        //            paragraph.ReplaceText("HFCS排放", emission.HFCS.ToString());
+        //            paragraph.ReplaceText("PFCS排放", emission.PFCS.ToString());
+        //            paragraph.ReplaceText("SF6排放", emission.SF6.ToString());
+        //            paragraph.ReplaceText("NF3排放", emission.NF3.ToString());
+        //            paragraph.ReplaceText("類別一CO2占比", emission.percentage1_CO2.ToString());
+        //            paragraph.ReplaceText("類別一CH4占比", emission.percentage1_CH4.ToString());
+        //            paragraph.ReplaceText("類別一N2O占比", emission.percentage1_N2O.ToString());
+        //            paragraph.ReplaceText("類別一HFCS占比", emission.percentage1_HFCS.ToString());
+        //            paragraph.ReplaceText("類別一PFCS占比", emission.percentage1_PFCS.ToString());
+        //            paragraph.ReplaceText("類別一SF6占比", emission.percentage1_SF6.ToString());
+        //            paragraph.ReplaceText("類別一NF3占比", emission.percentage2_NF3.ToString());
+        //            paragraph.ReplaceText("類別一CO2排放", emission.Scope1.ToString());
+        //            paragraph.ReplaceText("CO2占比", emission.percentage2_CO2.ToString());
+        //            paragraph.ReplaceText("CH4占比", emission.percentage2_CH4.ToString());
+        //            paragraph.ReplaceText("N2O占比", emission.percentage2_N2O.ToString());
+        //            paragraph.ReplaceText("HFCS占比", emission.percentage2_HFCS.ToString());
+        //            paragraph.ReplaceText("PFCS占比", emission.percentage2_PFCS.ToString());
+        //            paragraph.ReplaceText("SF6占比", emission.percentage2_SF6.ToString());
+        //            paragraph.ReplaceText("NF3占比", emission.percentage2_NF3.ToString());
+        //            paragraph.ReplaceText("總排放當量", emission.All.ToString());
+        //            paragraph.ReplaceText("固定排放量", emission.non_move.ToString());
+        //            paragraph.ReplaceText("移動排放量", emission.move.ToString());
+        //            paragraph.ReplaceText("製程排放量", emission.process.ToString());
+        //            paragraph.ReplaceText("逸散排放量", emission.escape.ToString());
+        //            paragraph.ReplaceText("固定排放比例", emission.percentage_nonMove.ToString());
+        //            paragraph.ReplaceText("製程排放比例", emission.percentage_Process.ToString());
+        //            paragraph.ReplaceText("移動排放比例", emission.percentage_Move.ToString());
+        //            paragraph.ReplaceText("逸散排放比例", emission.percentage_Escape.ToString());
+        //            paragraph.ReplaceText("類別一占比", emission.percentage_Scope1.ToString());
+        //            paragraph.ReplaceText("類別二占比", emission.percentage_Scope2.ToString());
+        //            paragraph.ReplaceText("類別一總排放", emission.Scope1.ToString());
+        //            paragraph.ReplaceText("類別二總排放", emission.Scope2.ToString());
+        //            paragraph.ReplaceText("進行評估排放當量", emission.cal_all.ToString());
+        //            paragraph.ReplaceText("不確定性評估占比", emission.percentage_CalAll.ToString());
+        //            paragraph.ReplaceText("第1級評分", emission.no1_Grade.ToString());
+        //            paragraph.ReplaceText("第2級評分", emission.no2_Grade.ToString());
+        //            paragraph.ReplaceText("第3級評分", emission.no3_Grade.ToString());
+        //            paragraph.ReplaceText("清冊等級分數補充", emission.avg_Grade.ToString());
+        //            paragraph.ReplaceText("清冊級別補充", emission.all_Grade.ToString());
+        //            paragraph.ReplaceText("95上", emission.UUL.ToString());
+        //            paragraph.ReplaceText("95下", emission.ULL.ToString());
         //            paragraph.ReplaceText("補充姓名", data.Company.Owner);
         //            paragraph.ReplaceText("補充電話", data.Company.Phone);
         //            paragraph.ReplaceText("補充電子信箱", data.Company.Email);
@@ -656,41 +668,240 @@ namespace Carbon_inventory_platform.Controllers
         //    var fileName = Year + Name + "-溫室氣體盤查報告書.docx"; // 可以自行定義檔名
         //    return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         //}
-        public async Task<IActionResult> IndexAsync(Guid? id)
+
+        public async Task<IActionResult> Word3Async(Guid id)
         {
             await CountEmissionAsync(id);
-            
+            // 這裡要替換成你 MVC 應用程式中正確的檔案路徑
+            var data = await _context.Years.Where(x => x.Id == id).Include(x => x.Area).ThenInclude(x => x.Company).FirstOrDefaultAsync();
+            var device = await _context.Devices.Where(x => x.YearId == id && x.isDeleted == 0).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
+
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", "溫盤報告書範本3.docx");
+            string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\output\\", data.Num + "-" + data.Area.Name + "-" + data.Area.Company.Name + "-溫室氣體盤查報告書.docx");
+
+            // 複製文件
+            using (DocX doc = DocX.Load(filePath))
+            {
+
+                List<Xceed.Document.NET.Paragraph> paragraphsToUpdate = new List<Xceed.Document.NET.Paragraph>();
+
+                // 設定要查找和替換的文本
+                foreach (var paragraph in doc.Paragraphs)
+                {
+                    if (paragraph.Text.Contains("[類別一表]"))
+                    {
+                        paragraphsToUpdate.Add(paragraph);
+                    }
+                    if (paragraph.Text.Contains("[類別二表]"))
+                    {
+                        paragraphsToUpdate.Add(paragraph);
+                    }
+
+                    string Scope1 = "";
+                    int i = 0;
+                    foreach (var item in device)
+                    {
+
+                        if (item.Scope == "類別一")
+                        {
+                            i++;
+                            Scope1 += i + "." + item.Name + "(" + item.Material + ")" + "\n";
+                        }
+                    }
+
+                    paragraph.ReplaceText("[直接排放源]", Scope1.Trim());
+                    paragraph.ReplaceText("[公司中文名稱]", data.Area.Company.Name);
+                    paragraph.ReplaceText("[公司基本資料]", data.Area.Company.Information);
+                    paragraph.ReplaceText("[西元盤查年度]", (data.Num + 1911).ToString());
+                    paragraph.ReplaceText("[民國盤查年份]", (data.Num).ToString());
+                    paragraph.ReplaceText("[廠區名稱]", data.Area.Name.ToString());
+                    
+                    paragraph.ReplaceText("[盤查月]", DateTime.Now.Month.ToString());
+                    paragraph.ReplaceText("[盤查日]", DateTime.Now.Day.ToString());
+                    paragraph.ReplaceText("[地址]", data.Area.FullAddress);                   
+                    paragraph.ReplaceText("[民國基準年]", data.Area.Year.ToString());
+                    
+                    paragraph.ReplaceText("[電力使用量]", (device.Find(x=>x.Name=="電力").Num/1000).ToString());
+                    paragraph.ReplaceText("[類別一CO2排放]", data.Scope1_CO2.ToString());
+                    paragraph.ReplaceText("[類別一CH4排放]", data.Scope1_CH4.ToString());
+                    paragraph.ReplaceText("[類別一N2O排放]", data.Scope1_N2O.ToString());
+                    paragraph.ReplaceText("[類別一HFCS排放]", data.Scope1_HFCS.ToString());
+                    paragraph.ReplaceText("[類別一PFCS排放]", data.Scope1_PFCS.ToString());
+                    paragraph.ReplaceText("[類別一SF6排放]", data.Scope1_SF6.ToString());
+                    paragraph.ReplaceText("[類別一NF3排放]", data.Scope1_NF3.ToString());
+
+                    paragraph.ReplaceText("[類別一CO2占比]", data.percentage1_CO2.ToString() + "%");
+                    paragraph.ReplaceText("[類別一CH4占比]", data.percentage1_CH4.ToString() + "%");
+                    paragraph.ReplaceText("[類別一N2O占比]", data.percentage1_N2O.ToString() + "%");
+                    paragraph.ReplaceText("[類別一HFCS占比]", data.percentage1_HFCS.ToString() + "%");
+                    paragraph.ReplaceText("[類別一PFCS占比]", data.percentage1_PFCS.ToString() + "%");
+                    paragraph.ReplaceText("[類別一SF6占比]", data.percentage1_SF6.ToString() + "%");
+                    paragraph.ReplaceText("[類別一NF3占比]", data.percentage2_NF3.ToString() + "%");
+
+                    paragraph.ReplaceText("[CO2排放]", data.CO2.ToString());
+                    paragraph.ReplaceText("[CH4排放]", data.CH4.ToString());
+                    paragraph.ReplaceText("[N2O排放]", data.N2O.ToString());
+                    paragraph.ReplaceText("[HFCS排放]", data.HFCS.ToString());
+                    paragraph.ReplaceText("[PFCS排放]", data.PFCS.ToString());
+                    paragraph.ReplaceText("[SF6排放]", data.SF6.ToString());
+                    paragraph.ReplaceText("[NF3排放]", data.NF3.ToString());
+
+                    paragraph.ReplaceText("[CO2占比]", data.percentage2_CO2.ToString() + "%");
+                    paragraph.ReplaceText("[CH4占比]", data.percentage2_CH4.ToString() + "%");
+                    paragraph.ReplaceText("[N2O占比]", data.percentage2_N2O.ToString() + "%");
+                    paragraph.ReplaceText("[HFCS占比]", data.percentage2_HFCS.ToString() + "%");
+                    paragraph.ReplaceText("[PFCS占比]", data.percentage2_PFCS.ToString() + "%");
+                    paragraph.ReplaceText("[SF6占比]", data.percentage2_SF6.ToString() + "%");
+                    paragraph.ReplaceText("[NF3占比]", data.percentage2_NF3.ToString() + "%");
+                    paragraph.ReplaceText("[總排放當量]", data.All.ToString());
+                    paragraph.ReplaceText("[固定排放量]", data.non_move.ToString());
+                    paragraph.ReplaceText("[移動排放量]", data.move.ToString());
+                    paragraph.ReplaceText("[製程排放量]", data.process.ToString());
+                    paragraph.ReplaceText("[逸散排放量]", data.escape.ToString());
+                    paragraph.ReplaceText("[固定排放比例]", data.percentage_nonMove.ToString() + "%");
+                    paragraph.ReplaceText("[製程排放比例]", data.percentage_Process.ToString() + "%");
+                    paragraph.ReplaceText("[移動排放比例]", data.percentage_Move.ToString() + "%");
+                    paragraph.ReplaceText("[逸散排放比例]", data.percentage_Escape.ToString() + "%");
+                    paragraph.ReplaceText("[類別一占比]", data.percentage_Scope1.ToString() + "%");
+                    paragraph.ReplaceText("[類別二占比]", data.percentage_Scope2.ToString() + "%");
+                    paragraph.ReplaceText("[類別一總排放]", data.Scope1.ToString());
+                    paragraph.ReplaceText("[類別二總排放]", data.Scope2.ToString());
+                }
+
+                foreach (var paragraphToUpdate in paragraphsToUpdate) //類別一表
+                {
+                    Xceed.Document.NET.Table table = doc.AddTable(device.Where(x => x.Scope == "類別一").Count() + 1, 10); //需扣除電力一行，行數不須加一
+                    // 填充表格標題
+                    table.Rows[0].Cells[0].Paragraphs.First().Append("類別");
+                    table.Rows[0].Cells[1].Paragraphs.First().Append("型式");
+                    table.Rows[0].Cells[2].Paragraphs.First().Append("排放源");
+                    table.Rows[0].Cells[3].Paragraphs.First().Append("CO₂");
+                    table.Rows[0].Cells[4].Paragraphs.First().Append("CH₄");
+                    table.Rows[0].Cells[5].Paragraphs.First().Append("N₂O");
+                    table.Rows[0].Cells[6].Paragraphs.First().Append("HFCs");
+                    table.Rows[0].Cells[7].Paragraphs.First().Append("PFCs");
+                    table.Rows[0].Cells[8].Paragraphs.First().Append("SF₆");
+                    table.Rows[0].Cells[9].Paragraphs.First().Append("NF₃");
+                    int rowIndex = 1;
+                    foreach (var item in device.Where(x=>x.Scope == "類別一"))
+                    {
+                        var GHGs = _context.GHGs.Where(ghg => ghg.DeviceId == item.Id);
+                        table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(item.Scope);
+                        table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(item.EmissionPattern);
+                        table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(item.Name + "(" + item.Material + ")");
+                        foreach (var GHG in GHGs)
+                        {
+                            switch (GHG.Name)
+                            {
+                                case "CO2":
+                                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("v");
+                                    break;
+                                case "CH4":
+                                    table.Rows[rowIndex].Cells[4].Paragraphs.First().Append("v");
+                                    break;
+                                case "N2O":
+                                    table.Rows[rowIndex].Cells[5].Paragraphs.First().Append("v");
+                                    break;
+                                case "HFCS":
+                                    table.Rows[rowIndex].Cells[6].Paragraphs.First().Append("v");
+                                    break;
+                                case "PFCS":
+                                    table.Rows[rowIndex].Cells[7].Paragraphs.First().Append("v");
+                                    break;
+                                case "SF6":
+                                    table.Rows[rowIndex].Cells[8].Paragraphs.First().Append("v");
+                                    break;
+                                case "NF3":
+                                    table.Rows[rowIndex].Cells[9].Paragraphs.First().Append("v");
+                                    break;
+                            }
+                        }
+
+                        rowIndex++;
+                    }
+
+                    // 在 doc 中替換段落
+                    doc.ReplaceTextWithObject("[類別一表]", table);
+                }
+                foreach (var paragraphToUpdate in paragraphsToUpdate) //類別二表
+                {
+                    Xceed.Document.NET.Table table = doc.AddTable(device.Where(x=>x.Scope == "類別二").Count()+1, 10); 
+                    // 填充表格標題
+                    table.Rows[0].Cells[0].Paragraphs.First().Append("類別");
+                    table.Rows[0].Cells[1].Paragraphs.First().Append("型式");
+                    table.Rows[0].Cells[2].Paragraphs.First().Append("排放源");
+                    table.Rows[0].Cells[3].Paragraphs.First().Append("CO₂");
+                    table.Rows[0].Cells[4].Paragraphs.First().Append("CH₄");
+                    table.Rows[0].Cells[5].Paragraphs.First().Append("N₂O");
+                    table.Rows[0].Cells[6].Paragraphs.First().Append("HFCs");
+                    table.Rows[0].Cells[7].Paragraphs.First().Append("PFCs");
+                    table.Rows[0].Cells[8].Paragraphs.First().Append("SF₆");
+                    table.Rows[0].Cells[9].Paragraphs.First().Append("NF₃");
+                    int rowIndex = 1;
+                    foreach (var item in device.Where(x => x.Scope == "類別二"))
+                    {
+                        var GHGs = _context.GHGs.Where(ghg => ghg.DeviceId == item.Id);
+                        table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(item.Scope);
+                        table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(item.EmissionPattern);
+                        table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(item.Name + "(" + item.Material + ")");
+                        foreach (var GHG in GHGs)
+                        {
+                            switch (GHG.Name)
+                            {
+                                case "CO2":
+                                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("v");
+                                    break;
+                                case "CH4":
+                                    table.Rows[rowIndex].Cells[4].Paragraphs.First().Append("v");
+                                    break;
+                                case "N2O":
+                                    table.Rows[rowIndex].Cells[5].Paragraphs.First().Append("v");
+                                    break;
+                                case "HFCS":
+                                    table.Rows[rowIndex].Cells[6].Paragraphs.First().Append("v");
+                                    break;
+                                case "PFCS":
+                                    table.Rows[rowIndex].Cells[7].Paragraphs.First().Append("v");
+                                    break;
+                                case "SF6":
+                                    table.Rows[rowIndex].Cells[8].Paragraphs.First().Append("v");
+                                    break;
+                                case "NF3":
+                                    table.Rows[rowIndex].Cells[9].Paragraphs.First().Append("v");
+                                    break;
+                            }
+                        }
+
+                        rowIndex++;
+                    }
+
+                    // 在 doc 中替換段落
+                    doc.ReplaceTextWithObject("[類別二表]", table);
+                }
+
+
+
+
+                // 保存新文檔
+                doc.SaveAs(newFilePath);
+            }
+            // 返回一個視圖或其他操作，根據你的需求
+            var fileBytes = System.IO.File.ReadAllBytes(newFilePath);
+            var fileName = data.Num + "-" + data.Area.Name + "-" + data.Area.Company.Name + "-溫室氣體盤查報告書.docx"; // 可以自行定義檔名
+            return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+
+        public async Task<IActionResult> IndexAsync(Guid? id)
+        {
+            TempData["yearId"] = id;
+            await CountEmissionAsync(id);
+
             var emissions = await _context.Years
                 .FindAsync(id);
             return View(emissions);
 
         }
 
-        public IActionResult DownloadFile(string fileName)
-{
-    // 設定要下載的檔案路徑
-    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", fileName);
-
-    // 檢查檔案是否存在
-    if (!System.IO.File.Exists(filePath))
-    {
-        return NotFound();
-    }
-
-    // 讀取檔案內容
-    var fileContent = System.IO.File.ReadAllBytes(filePath);
-
-    // 指定檔案型別
-    var contentType = "application/octet-stream";
-
-    // 建立一個 FileResult 物件
-    var fileResult = new FileContentResult(fileContent, contentType)
-    {
-        FileDownloadName = fileName
-    };
-
-    return fileResult;
-}
 
     }
 }

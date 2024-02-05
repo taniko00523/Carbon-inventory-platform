@@ -13,6 +13,7 @@ namespace Carbon_inventory_platform.Models
         public string? Company { get; set; }
         [Range(1,10000)]
         [Display(Name ="盤查年度")]
+        [Required(ErrorMessage = "請輸入盤查年度")]
         public int Num { get; set; }
         //類別一各溫室氣體排放量
         [Column(TypeName = "decimal(18, 4)")]

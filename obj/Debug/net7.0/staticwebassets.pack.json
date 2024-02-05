@@ -9,28 +9,12 @@
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\doc\\0元琪生化科技有限公司-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\doc\\0元琪生化科技有限公司-溫室氣體盤查報告書.docx"
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\doc\\溫盤報告書範本.docx",
+      "PackagePath": "staticwebassets\\doc\\溫盤報告書範本.docx"
     },
     {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\doc\\0勤凱科技股份有限公司-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\doc\\0勤凱科技股份有限公司-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\doc\\0南台科技大學-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\doc\\0南台科技大學-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\doc\\112Default-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\doc\\112Default-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\doc\\Default-溫室氣體盤查報告書112.docx",
-      "PackagePath": "staticwebassets\\doc\\Default-溫室氣體盤查報告書112.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\doc\\複雜溫盤報告書範本.docx",
-      "PackagePath": "staticwebassets\\doc\\複雜溫盤報告書範本.docx"
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\doc\\溫盤報告書範本3.docx",
+      "PackagePath": "staticwebassets\\doc\\溫盤報告書範本3.docx"
     },
     {
       "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\favicon.ico",
@@ -267,6 +251,14 @@
     {
       "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\111-1-新增公司-溫室氣體盤查報告書.docx",
+      "PackagePath": "staticwebassets\\output\\111-1-新增公司-溫室氣體盤查報告書.docx"
+    },
+    {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\111-台南廠-南台科技大學股份有限公司-溫室氣體盤查報告書.docx",
+      "PackagePath": "staticwebassets\\output\\111-台南廠-南台科技大學股份有限公司-溫室氣體盤查報告書.docx"
     },
     {
       "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.Carbon_inventory_platform.Microsoft.AspNetCore.StaticWebAssets.props",

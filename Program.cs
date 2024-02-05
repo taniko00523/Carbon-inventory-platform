@@ -46,12 +46,12 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-//await app.StartAsync();
+await app.StartAsync();
 
-//// Open the Electron-Window here
-//await Electron.WindowManager.CreateWindowAsync();
+// Open the Electron-Window here
+await Electron.WindowManager.CreateWindowAsync();
 
-//app.WaitForShutdown();
+app.WaitForShutdown();
 
 
 app.Run();
