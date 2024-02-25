@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "sc3q8RZBHiNQPRCUL6AWg5dlC++xcpZtezz94+PDdsY=",
+  "Hash": "cbrT/Y6jHnIhMIcCbYGwz2sMro4k+0dn/Q/E7AbVMUY=",
   "Source": "Carbon_inventory_platform",
   "BasePath": "_content/Carbon_inventory_platform",
   "Mode": "Default",
@@ -2447,6 +2447,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\output\\112-台南廠-南台科技大學-溫室氣體盤查報告書.docx"
+    },
+    {
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\112-南台廠-南台科技大學-溫室氣體盤查報告書.docx",
+      "SourceId": "Carbon_inventory_platform",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
+      "BasePath": "_content/Carbon_inventory_platform",
+      "RelativePath": "output/112-南台廠-南台科技大學-溫室氣體盤查報告書.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\output\\112-南台廠-南台科技大學-溫室氣體盤查報告書.docx"
     }
   ]
 }
