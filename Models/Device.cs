@@ -12,7 +12,7 @@ namespace Carbon_inventory_platform.Models
 
         // 排放源基本資料：
 
-        [Display(Name = "年度")]
+        [Display(Name = "盤查年度")]
         public Guid YearId { get; set; }
 
         [Display(Name = "廠區名稱")]

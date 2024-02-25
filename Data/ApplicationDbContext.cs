@@ -20,10 +20,6 @@ namespace Carbon_inventory_platform.Data
         public DbSet<GHG> GHGs { get; set; } = null!;
         public DbSet<Material> Materials { get; set; } = null!;
         public DbSet<GWP> GWPs { get; set; }
-        public DbSet<Refrigerant> refrigerants { get; set; } = null!;
-        public DbSet<DataLevel> dataLevels { get; set; } = null!;
-        
-        public DbSet<DataCorrection> dataCorrections { get; set; } = null!;
         public DbSet<DeviceData> deviceDatas { get; set; } = null!;
         public DbSet<DefaultDevices> defaultDevices { get; set; } = null!;
 
@@ -157,56 +153,35 @@ new GWP { Name = "SF6", Num = 24300, GWP_Year = 2022 },
 new GWP { Name = "海龍-1211", Num = 1930, GWP_Year = 2022 }
                 );
             builder.Entity<DeviceData>().HasData(
-                new DeviceData { Id = 1, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-410A" , Correction=3,Level=3 ,unit="公斤"},
-        new DeviceData { Id = 2, Name = "冰水主機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3, unit = "公斤" },
-        new DeviceData { Id = 3, Name = "冰箱", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3, unit = "公斤" },
-        new DeviceData { Id = 4, Name = "飲水機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3, unit = "公斤" },
-        new DeviceData { Id = 5, Name = "乾燥機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3 , unit = "公斤" },
-        new DeviceData { Id = 6, Name = "車用空調", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3 , unit = "公斤" },
-        new DeviceData { Id = 7, Name = "工業冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3 , unit = "公斤" },
-        new DeviceData { Id = 8, Name = "緊急發電機", Scope = "類別一", EmissionPattern = "固定", Material = "柴油", Correction = 3, Level = 3, unit = "公升" },
-                new DeviceData { Id = 9, Name = "廚房", Scope = "類別一", EmissionPattern = "固定", Material = "液化石油氣", Correction = 2, Level = 2, unit = "公斤" },
-                new DeviceData { Id = 10, Name = "公務車", Scope = "類別一", EmissionPattern = "移動", Material = "車用汽油", Correction = 2, Level = 2, unit = "公升" },
-                new DeviceData { Id = 11, Name = "堆高機", Scope = "類別一", EmissionPattern = "移動", Material = "柴油", Correction = 2, Level = 2, unit = "公升" },
-                new DeviceData { Id = 12, Name = "CO2滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Correction = 3, Level = 3 , unit = "公斤" },
-                new DeviceData { Id = 13, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Correction = 3, Level = 3 , unit = "公斤" },
-                new DeviceData { Id = 14, Name = "WD40", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Correction = 3, Level = 3 , unit = "公斤" },
-                new DeviceData { Id = 15, Name = "海龍1211", Scope = "類別一", EmissionPattern = "逸散", Material = "海龍-1211", Correction = 3, Level = 3 , unit = "公斤" },
-                new DeviceData { Id = 16, Name = "FM200", Scope = "類別一", EmissionPattern = "逸散", Material = "FM200", Correction = 3, Level = 3 , unit = "公斤" },
-                new DeviceData { Id = 17, Name = "化糞池", Scope = "類別一", EmissionPattern = "逸散", Material = "廢水處理", Correction = 3, Level = 3 , unit = "人" },
-                new DeviceData { Id = 18, Name = "電力", Scope = "類別二", EmissionPattern = "外購電力", Material = "外購電力", Correction = 1, Level = 1, unit = "度" },
-                new DeviceData { Id = 19, Name = "乙炔", Scope = "類別一", EmissionPattern = "製程", Material = "乙炔", Correction = 3, Level = 3, unit = "公斤" },
-                new DeviceData { Id = 20, Name = "焊條", Scope = "類別一", EmissionPattern = "製程", Material = "焊條", Correction = 3, Level = 3, unit = "公斤" },
-                 new DeviceData { Id = 21, Name = "工業冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3, unit = "公斤" },
-                  new DeviceData { Id = 22, Name = "商用冰箱", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3, unit = "公斤" },
-                   new DeviceData { Id = 23, Name = "中、大型冰箱", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3, unit = "公斤" },
-                    new DeviceData { Id = 24, Name = "低溫冷凍車", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3, unit = "公斤" },
-                     new DeviceData { Id = 25, Name = "食品加工冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Correction = 3, Level = 3, unit = "公斤" },
-                     new DeviceData { Id = 26, Name = "瓦斯罐", Scope = "類別一", EmissionPattern = "製程", Material = "丁烷", Correction = 3, Level = 3, unit = "公斤" }
+                new DeviceData { Id = 1, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-410A" , Device_Correction = 3,Data_Correction=3 ,unit="公斤"},
+        new DeviceData { Id = 2, Name = "冰水主機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+        new DeviceData { Id = 3, Name = "冰箱", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+        new DeviceData { Id = 4, Name = "飲水機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+        new DeviceData { Id = 5, Name = "乾燥機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
+        new DeviceData { Id = 6, Name = "車用空調", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
+        new DeviceData { Id = 7, Name = "工業冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
+        new DeviceData { Id = 8, Name = "緊急發電機", Scope = "類別一", EmissionPattern = "固定", Material = "柴油", Device_Correction = 3, Data_Correction = 3, unit = "公升" },
+                new DeviceData { Id = 9, Name = "廚房", Scope = "類別一", EmissionPattern = "固定", Material = "液化石油氣", Device_Correction = 2, Data_Correction = 2, unit = "公斤" },
+                new DeviceData { Id = 10, Name = "公務車", Scope = "類別一", EmissionPattern = "移動", Material = "車用汽油", Device_Correction = 2, Data_Correction = 2, unit = "公升" },
+                new DeviceData { Id = 11, Name = "堆高機", Scope = "類別一", EmissionPattern = "移動", Material = "柴油", Device_Correction = 2, Data_Correction = 2, unit = "公升" },
+                new DeviceData { Id = 12, Name = "CO2滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
+                new DeviceData { Id = 13, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
+                new DeviceData { Id = 14, Name = "WD40", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
+                new DeviceData { Id = 15, Name = "海龍1211", Scope = "類別一", EmissionPattern = "逸散", Material = "海龍-1211", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
+                new DeviceData { Id = 16, Name = "FM200", Scope = "類別一", EmissionPattern = "逸散", Material = "FM200", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
+                new DeviceData { Id = 17, Name = "化糞池", Scope = "類別一", EmissionPattern = "逸散", Material = "廢水處理", Device_Correction = 3, Data_Correction = 3 , unit = "人" },
+                new DeviceData { Id = 18, Name = "電力", Scope = "類別二", EmissionPattern = "外購電力", Material = "外購電力", Device_Correction = 1, Data_Correction = 1, unit = "度" },
+                new DeviceData { Id = 19, Name = "乙炔", Scope = "類別一", EmissionPattern = "製程", Material = "乙炔", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                new DeviceData { Id = 20, Name = "焊條", Scope = "類別一", EmissionPattern = "製程", Material = "焊條", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                 new DeviceData { Id = 21, Name = "工業冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                  new DeviceData { Id = 22, Name = "商用冰箱", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                   new DeviceData { Id = 23, Name = "中、大型冰箱", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                    new DeviceData { Id = 24, Name = "低溫冷凍車", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                     new DeviceData { Id = 25, Name = "食品加工冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                     new DeviceData { Id = 26, Name = "瓦斯罐", Scope = "類別一", EmissionPattern = "製程", Material = "丁烷", Device_Correction = 3, Data_Correction = 3, unit = "公斤" }
 
     );
 
-//            builder.Entity<Refrigerant>().HasData(
-//new Refrigerant { Name = "家用冷凍、冷藏裝備", Num = 0.003000M },
-//new Refrigerant { Name = "獨立商用冷凍、冷藏裝備", Num = 0.055000F },
-//new Refrigerant { Name = "中、大型冷凍、冷藏裝備", Num = 0.200000F },
-//new Refrigerant { Name = "交通用冷凍、冷藏裝備", Num = 0.33F },
-//new Refrigerant { Name = "工業冷凍、冷藏裝備，包括食品加工及冷藏", Num = 0.16F },
-//new Refrigerant { Name = "冰水機", Num = 0.09F },
-//new Refrigerant { Name = "住宅及商業建築冷氣機", Num = 0.03F },
-//new Refrigerant { Name = "移動式空氣清靜機", Num = 0.2F }
-//                );
-
-            builder.Entity<DataLevel>().HasData(
-new DataLevel { id = 1, name = "連續監測" },
-new DataLevel { id = 2, name = "定期/間歇量測" },
-new DataLevel { id = 3, name = "自行/財務推估" }
-                );
-            builder.Entity<DataCorrection>().HasData(
-new DataCorrection { id = 1, name = "有外部校正或多組數據佐證者" },
-new DataCorrection { id = 2, name = "有內部校正或經過會計簽證等證明者" },
-new DataCorrection { id = 3, name = "未進行儀器校正或未進行紀錄彙整者" }
-                );
             builder.Entity<DefaultDevices>().HasData(
 new DefaultDevices {Id=1, Name = "緊急發電機", Material = "柴油", Scope = "類別一", EmissionPattern = "固定" },
 new DefaultDevices {Id=2, Name = "公務車", Material = "柴油", Scope = "類別一", EmissionPattern = "移動" },

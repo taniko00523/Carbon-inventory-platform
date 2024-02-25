@@ -120,6 +120,7 @@ namespace Carbon_inventory_platform.Models
         [Column(TypeName = "decimal(18, 3)")]
         [Display(Name = "總排放量")]
         public decimal All { get; set; } = 0;
+        [Display(Name = "有進行定量分析的排放源總量")]
         [Column(TypeName = "decimal(18, 4)")]
         public decimal cal_all { get; set; } = 0;
         [Column(TypeName = "decimal(18, 2)")]

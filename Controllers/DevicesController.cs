@@ -120,8 +120,8 @@ namespace Carbon_inventory_platform.Controllers
             {
                 var result = new
                 {
-                    level = deviceData?.Level,
-                    correction = deviceData?.Correction,
+                    level = deviceData?.Data_Correction,
+                    correction = deviceData?.Device_Correction,
                     unit = deviceData?.unit,
                     num = device.Num
                 };
@@ -329,8 +329,23 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return View();
             }
-            ViewData["DataCorrection"] = new SelectList(await _context.dataCorrections.ToListAsync(), "id", "name");
-            ViewData["DataLevel"] = new SelectList(await _context.dataLevels.ToListAsync(), "id", "name");
+            var deviceCorrection = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "1", Text = "有外部校正或多組數據佐證者" },
+                new SelectListItem { Value = "2", Text = "有內部校正或經過會計簽證等證明者" },
+                new SelectListItem { Value = "3", Text = "未進行儀器校正或未進行紀錄彙整者" }
+            };
+
+            ViewData["DeviceCorrection"] = new SelectList(deviceCorrection, "Value", "Text");
+
+            var dataCorrections = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "1", Text = "連續監測" },
+                new SelectListItem { Value = "2", Text = "定期/間歇量測" },
+                new SelectListItem { Value = "3", Text = "自行/財務推估" }
+            };
+
+            ViewData["DataCorrections"] = new SelectList(dataCorrections, "Value", "Text");
             string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
             ViewData["Unit"] = new SelectList(unit);
             string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
@@ -343,8 +358,23 @@ namespace Carbon_inventory_platform.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddActivityData(Guid? id, [Bind("Id,Num,Unit,Data_Correction,Device_Correction")] Device activityData)
         {
-            ViewData["DataCorrection"] = new SelectList(_context.dataCorrections, "Id", "Name");
-            ViewData["DataLevel"] = new SelectList(_context.dataLevels, "Id", "Name");
+            var dataCorrections = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "1", Text = "有外部校正或多組數據佐證者" },
+                new SelectListItem { Value = "2", Text = "有內部校正或經過會計簽證等證明者" },
+                new SelectListItem { Value = "3", Text = "未進行儀器校正或未進行紀錄彙整者" }
+            };
+
+            ViewData["DataCorrection"] = new SelectList(dataCorrections, "Value", "Text");
+
+            var dataLevel = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "1", Text = "連續監測" },
+                new SelectListItem { Value = "2", Text = "定期/間歇量測" },
+                new SelectListItem { Value = "3", Text = "自行/財務推估" }
+            };
+
+            ViewData["DataLevel"] = new SelectList(dataLevel, "Value", "Text");
 
             var GHG = await _context.GHGs.Where(x => x.DeviceId == id).ToListAsync(); //抓出需要算排放量的排放源中的溫室氣體
             var Device = await _context.Devices.FindAsync(id);

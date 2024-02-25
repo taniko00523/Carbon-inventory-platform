@@ -530,7 +530,6 @@ D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Carbon_inventory_platform.dll
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Carbon_inventory_platform.pdb
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Azure.Core.dll
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Azure.Identity.dll
-D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Dapper.dll
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Humanizer.dll
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.Internal.dll
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
@@ -1070,3 +1069,5 @@ C:\Carbon-inventory-platform\obj\Debug\net7.0\Carbon_inventory_platform.sourceli
 C:\Carbon-inventory-platform\obj\Debug\net7.0\Carbon_i.473AFE5D.Up2Date
 C:\Carbon-inventory-platform\bin\Debug\net7.0\package-lock.json
 C:\Carbon-inventory-platform\bin\Debug\net7.0\package.json
+D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\package-lock.json
+D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\package.json
