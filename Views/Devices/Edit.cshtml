@@ -13,15 +13,15 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group" style="display: none;">
+            @* <div class="form-group" style="display: none;">
                 <label asp-for="YearId" class="control-label"></label>
-                <select asp-for="YearId" class="form-control" asp-items="ViewBag.AreasId"></select>
+                <select asp-for="YearId" class="form-control"></select>
                 <span asp-validation-for="YearId" class="text-danger"></span>
-            </div>
+            </div> *@
             @* <div class="form-group">
-                <label asp-for="AssetNo" class="control-label"></label>
-                <input asp-for="AssetNo" class="form-control" />
-                <span asp-validation-for="AssetNo" class="text-danger"></span>
+            <label asp-for="AssetNo" class="control-label"></label>
+            <input asp-for="AssetNo" class="form-control" />
+            <span asp-validation-for="AssetNo" class="text-danger"></span>
             </div> *@
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -30,10 +30,12 @@
                 <input asp-for="Name" class="form-control" id="OtherName" style="display:none;" /> @*隱藏的其他欄位*@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-           @*  <div class="form-group">
-                <label asp-for="Provess" class="control-label"></label>
-                <input asp-for="Provess" class="form-control" />
-                <span asp-validation-for="Provess" class="text-danger"></span>
+            <input asp-for="YearId" class="form-control" style="display:none;" /> @*隱藏的其他欄位*@
+
+            @*  <div class="form-group">
+            <label asp-for="Provess" class="control-label"></label>
+            <input asp-for="Provess" class="form-control" />
+            <span asp-validation-for="Provess" class="text-danger"></span>
             </div> *@
             <div class="form-group">
                 <label asp-for="Scope" class="control-label"></label>
@@ -60,172 +62,146 @@
                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                 <script>
                     $(document).ready(function () {
+                        // 加載頁面時立即執行的程式碼
+                        loadDeviceData();
+
+                        // nameDropdown 的 change 事件處理
                         $('#nameDropdown').change(function () {
                             var selectedName = $(this).val();
+                            // 當用戶選擇名字時，重新加載相關數據
+                            loadDeviceData();
+                        });
 
-                            // 发送 AJAX 请求获取相应的DeviceData
+                        // scopeDropdown 的 change 事件處理
+                        $('#scopeDropdown').change(function () {
+                            var selectedScope = $(this).val();
+                            // 當類別選項改變時，重新加載相關數據
+                            loadEmissionsAndMaterial(selectedScope);
+                        });
+
+                        // emissionDropdown 的 change 事件處理
+                        $('#emissionDropdown').change(function () {
+                            var selectedEmission = $(this).val();
+                            // 當排放選項改變時，重新加載相關數據
+                            loadMaterialsAndGWPNames(selectedEmission);
+                        });
+
+                        // 抓取選擇的排放源名稱
+                        function loadDeviceData() {
+                            var selectedName = $('#nameDropdown').val();
                             $.ajax({
                                 url: '/Devices/GetDeviceData',
                                 type: 'GET',
                                 data: { selectedName: selectedName },
+                                async: false,
                                 success: function (data) {
-                                    // 获取DeviceData中的Scope和EmissionPattern
-                                    var selectedScope = data.scope;
-                                    var selectedEmission = data.emissionPattern;
-                                    var selectedMaterial = data.material;
+                                    var selectedScope = data.scope; //類別
+                                    var selectedEmission = data.emissionPattern; //排放型式
+                                    var selectedMaterial = data.material; //原物料
+                                    loadEmissions(selectedScope);
+                                    loadMaterialsAndGWPNames(selectedEmission, selectedMaterial);
 
-                                    // 更新 scopeDropdown 和 emissionDropdown
-                                    $('#scopeDropdown').val(selectedScope);
-
-                                    // 发送AJAX请求获取相应的emission选项
-                                    $.ajax({
-                                        url: '/Devices/GetEmissionsByScope',
-                                        type: 'GET',
-                                        data: { scope: selectedScope },
-                                        success: function (data) {
-                                            // 清空emissionDropdown的选项
-                                            $('#emissionDropdown').empty();
-
-                                            // 添加新的emission选项
-                                            $.each(data, function (i, item) {
-                                                $('#emissionDropdown').append($('<option>', {
-                                                    value: item,
-                                                    text: item
-                                                }));
-                                            });
-
-                                            $('#emissionDropdown').val(selectedEmission);
-                                        },
-                                        error: function (error) {
-                                            console.log(error);
-                                        }
-                                    });
-
-                                    // 发送 AJAX 请求获取相应的数据
-                                    $.ajax({
-                                        url: '/Devices/GetMaterialsAndGWPNames',
-                                        type: 'GET',
-                                        data: { emissionPattern: selectedEmission },
-                                        success: function (data) {
-                                            // 清空MaterialDropdown的选项
-                                            $('#MaterialDropdown').empty();
-
-                                            // 添加新的Material选项
-                                            $.each(data.materials, function (i, item) {
-                                                $('#MaterialDropdown').append($('<option>', {
-                                                    value: item.name,
-                                                    text: item.name
-                                                }));
-                                            });
-
-                                            // 添加新的GWPNames选项
-                                            $.each(data.gwpNames, function (i, item) {
-                                                $('#MaterialDropdown').append($('<option>', {
-                                                    value: item.name,
-                                                    text: item.name
-                                                }));
-                                            });
-
-                                            // 更新 MaterialDropdown 的选中项
-                                            $('#MaterialDropdown').val(selectedMaterial);
-                                        },
-                                        error: function (error) {
-                                            console.log(error);
-                                        }
-                                    });
+                                    $('#emissionDropdown').val(selectedEmission);
+                                    //$('#MaterialDropdown').val(selectedMaterial);
                                 },
                                 error: function (error) {
                                     console.log(error);
                                 }
                             });
-                            return false;
-                        });
+                        }
 
-                        // 处理scopeDropdown的变化
-                        $('#scopeDropdown').change(function () {
-                            var selectedScope = $(this).val();
-
-                            // 发送AJAX请求获取相应的emission选项
+                        // 當類別下拉選單改變時，依據類別抓取排放源的所有排放型式
+                        function loadEmissions(selectedScope) {
                             $.ajax({
-                                url: '/Devices/GetEmissionsByScope',
+                                url: '/Devices/GetEmissions',
                                 type: 'GET',
                                 data: { scope: selectedScope },
                                 success: function (data) {
-                                    // 清空emissionDropdown的选项
-                                    $('#emissionDropdown').empty();
-
-                                    // 添加新的emission选项
+                                    $('#emissionDropdown').empty(); //清空排放源下拉選單
                                     $.each(data, function (i, item) {
                                         $('#emissionDropdown').append($('<option>', {
                                             value: item,
                                             text: item
                                         }));
                                     });
-
-                                    // 触发emissionDropdown的change事件，以便执行之后的逻辑
-                                    $('#emissionDropdown').trigger('change');
+                                    $('#scopeDropdown').val(selectedScope);
                                 },
                                 error: function (error) {
                                     console.log(error);
                                 }
                             });
-                        });
+                        }
+                        function loadEmissionsAndMaterial(selectedScope) {
+                            $.ajax({
+                                url: '/Devices/GetEmissions',
+                                type: 'GET',
+                                data: { scope: selectedScope },
+                                success: function (data) {
+                                    $('#emissionDropdown').empty(); //清空排放源下拉選單
+                                    $.each(data, function (i, item) {
+                                        $('#emissionDropdown').append($('<option>', {
+                                            value: item,
+                                            text: item
+                                        }));
+                                    });
+                                    $('#scopeDropdown').val(selectedScope);
+                                    $('#emissionDropdown').trigger('change'); //觸發排放型式下拉選項改變
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        }
 
-                        // 处理emissionDropdown的变化
-                        $('#emissionDropdown').change(function () {
-                            var selectedValue = $(this).val();
-
+                        // 當排放型式下拉選單改變時，依據排放型式抓取所有物料
+                        function loadMaterialsAndGWPNames(selectedEmission, selectedMaterial) {
                             $.ajax({
                                 url: '/Devices/GetMaterialsAndGWPNames',
                                 type: 'GET',
-                                data: { emissionPattern: selectedValue },
+                                data: { emissionPattern: selectedEmission },
                                 success: function (data) {
-                                    // 清空MaterialDropdown的选项
                                     $('#MaterialDropdown').empty();
-
-                                    // 添加新的Material选项
                                     $.each(data.materials, function (i, item) {
                                         $('#MaterialDropdown').append($('<option>', {
                                             value: item.name,
                                             text: item.name
                                         }));
                                     });
-
-                                    // 添加新的GWPNames选项
                                     $.each(data.gwpNames, function (i, item) {
                                         $('#MaterialDropdown').append($('<option>', {
                                             value: item.name,
                                             text: item.name
                                         }));
                                     });
+                                    $('#emissionDropdown').val(selectedEmission);
+                                    if (selectedMaterial!=null){
+                                        $('#MaterialDropdown').val(selectedMaterial);
+                                    }
                                 },
                                 error: function (error) {
                                     console.log(error);
                                 }
                             });
-                        });
+                        }
+
+                        // nameDropdown 的值為 "其他" 時，顯示 OtherName
                         $('#nameDropdown').change(function () {
-                            // 如果選擇了"其他"
                             if ($(this).val() === '其他') {
-                                // 顯示隱藏的輸入欄位
                                 $('#OtherName').show();
                             } else {
-                                // 否則隱藏輸入欄位
                                 $('#OtherName').hide();
                             }
                         });
 
-                        // 攔截表單提交事件
+                        // 表單提交時，如果nameDrop的值為其他，則採用OtherName欄位的值作為排放源名稱
                         $('form').submit(function () {
-                            // 如果 nameDropdown 的值是 "其他"
                             if ($('#nameDropdown').val() === '其他') {
-                                // 將 OtherName 的值設置為 nameDropdown 的值
                                 $('#nameDropdown').val($('#OtherName').val());
                             }
-                            // 繼續提交表單
                             return true;
                         });
                     });
+
                 </script>
             }
         </form>

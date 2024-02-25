@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {}
+    "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {}
   },
   "projects": {
-    "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {
+    "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
+        "projectUniqueName": "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
         "projectName": "Carbon_inventory_platform",
-        "projectPath": "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
+        "projectPath": "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
         "packagesPath": "C:\\Users\\jsj00\\.nuget\\packages\\",
-        "outputPath": "D:\\C#\\Carbon-inventory-platform\\obj\\",
+        "outputPath": "C:\\Carbon-inventory-platform\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jsj00\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -34,23 +34,24 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
-            "Dapper": {
-              "target": "Package",
-              "version": "[2.0.151, )"
-            },
             "DocX": {
               "target": "Package",
               "version": "[2.5.0, )"
             },
             "ElectronNET.API": {
               "target": "Package",
-              "version": "[23.6.1, )"
+              "version": "[23.6.2, )"
             },
             "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",
@@ -74,6 +75,18 @@
               "target": "Package",
               "version": "[7.0.15, )"
             },
+            "Microsoft.NET.ILLink.Analyzers": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.100-1.23211.1, )",
+              "autoReferenced": true
+            },
+            "Microsoft.NET.ILLink.Tasks": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.100-1.23211.1, )",
+              "autoReferenced": true
+            },
             "Microsoft.Office.Interop.Word": {
               "target": "Package",
               "version": "[15.0.4797.1004, )"
@@ -94,6 +107,24 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
+              "version": "[7.0.16, 7.0.16]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Crossgen2.win-x64",
+              "version": "[7.0.16, 7.0.16]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Runtime.win-x64",
+              "version": "[7.0.16, 7.0.16]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
+              "version": "[7.0.16, 7.0.16]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -102,7 +133,12 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win-x64": {
+          "#import": []
         }
       }
     }

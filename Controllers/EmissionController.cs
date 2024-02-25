@@ -18,7 +18,7 @@ namespace Carbon_inventory_platform.Controllers
         }
         public async Task<Year> CountEmissionAsync(Guid? id)
         {
-
+           
             var Devices = await _context.Devices
                 .Where(x => x.isDeleted == 0 && x.YearId == id)
                 .ToListAsync();
@@ -109,7 +109,7 @@ namespace Carbon_inventory_platform.Controllers
                 all_UUL = DecimalSqrt(all_countUUL) / sum_Uncertainty;
                 all_ULL = DecimalSqrt(all_countULL) / sum_Uncertainty;
             }
-            
+
 
             bool sumMatch = Emission.Any(x => x.All != Math.Round(sum_all, 3));
             bool uncertaintyMatch = Emission.Any(x => x.ULL != Math.Round(all_ULL, 2));
@@ -269,7 +269,7 @@ namespace Carbon_inventory_platform.Controllers
                 throw new ArgumentException("不能計算負數的平方根");
             }
 
-            if(value != 0)
+            if (value != 0)
             {
                 decimal guess = value / 2;
                 for (int i = 0; i < iterations; i++)
@@ -283,7 +283,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return 0;
             }
-            
+
         }
 
         //public async Task<IActionResult> WordAsync(Guid id)
@@ -673,8 +673,9 @@ namespace Carbon_inventory_platform.Controllers
         {
             await CountEmissionAsync(id);
             // 這裡要替換成你 MVC 應用程式中正確的檔案路徑
-            var data = await _context.Years.Where(x => x.Id == id).Include(x => x.Area).ThenInclude(x => x.Company).FirstOrDefaultAsync();
+            var data = await _context.Years.Where(x => x.Id == id && x.isDeleted == 0).Include(x => x.Area).ThenInclude(x => x.Company).FirstOrDefaultAsync();
             var device = await _context.Devices.Where(x => x.YearId == id && x.isDeleted == 0).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
+            var ManyGHGs = await _context.Devices.Where(x => x.isDeleted == 0).SelectMany(x => x.GHGs).ToListAsync();
 
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", "溫盤報告書範本3.docx");
             string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\output\\", data.Num + "-" + data.Area.Name + "-" + data.Area.Company.Name + "-溫室氣體盤查報告書.docx");
@@ -715,13 +716,36 @@ namespace Carbon_inventory_platform.Controllers
                     paragraph.ReplaceText("[西元盤查年度]", (data.Num + 1911).ToString());
                     paragraph.ReplaceText("[民國盤查年份]", (data.Num).ToString());
                     paragraph.ReplaceText("[廠區名稱]", data.Area.Name.ToString());
-                    
+
+                    foreach (var item in device)
+                    {
+                        if (item.EmissionPattern == "固定")
+                        {
+                            var GHGs = ManyGHGs.Where(x => x.DeviceId == item.Id).ToList();
+                            foreach (var GHG in GHGs)
+                            {
+                                switch (GHG.Name)
+                                {
+                                    case "CO2":
+                                        //固定CO2排放表 (緊急發電機)
+                                        //原燃物料、類別、排放型式、活動數據+單位、溫室氣體?、排放係數+係數單位、係數來源、排放量、GWP、排放當量(CO2e)
+                                        break;
+                                    case "CH4":
+                                        break;
+                                    case "N2O":
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                   
+
                     paragraph.ReplaceText("[盤查月]", DateTime.Now.Month.ToString());
                     paragraph.ReplaceText("[盤查日]", DateTime.Now.Day.ToString());
-                    paragraph.ReplaceText("[地址]", data.Area.FullAddress);                   
+                    paragraph.ReplaceText("[地址]", data.Area.FullAddress);
                     paragraph.ReplaceText("[民國基準年]", data.Area.Year.ToString());
-                    
-                    paragraph.ReplaceText("[電力使用量]", (device.Find(x=>x.Name=="電力").Num/1000).ToString());
+
+                    paragraph.ReplaceText("[電力使用量]", (device.Find(x => x.Name == "電力").Num / 1000).ToString());
                     paragraph.ReplaceText("[類別一CO2排放]", data.Scope1_CO2.ToString());
                     paragraph.ReplaceText("[類別一CH4排放]", data.Scope1_CH4.ToString());
                     paragraph.ReplaceText("[類別一N2O排放]", data.Scope1_N2O.ToString());
@@ -783,7 +807,7 @@ namespace Carbon_inventory_platform.Controllers
                     table.Rows[0].Cells[8].Paragraphs.First().Append("SF₆");
                     table.Rows[0].Cells[9].Paragraphs.First().Append("NF₃");
                     int rowIndex = 1;
-                    foreach (var item in device.Where(x=>x.Scope == "類別一"))
+                    foreach (var item in device.Where(x => x.Scope == "類別一"))
                     {
                         var GHGs = _context.GHGs.Where(ghg => ghg.DeviceId == item.Id);
                         table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(item.Scope);
@@ -825,7 +849,7 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 foreach (var paragraphToUpdate in paragraphsToUpdate) //類別二表
                 {
-                    Xceed.Document.NET.Table table = doc.AddTable(device.Where(x=>x.Scope == "類別二").Count()+1, 10); 
+                    Xceed.Document.NET.Table table = doc.AddTable(device.Where(x => x.Scope == "類別二").Count() + 1, 10);
                     // 填充表格標題
                     table.Rows[0].Cells[0].Paragraphs.First().Append("類別");
                     table.Rows[0].Cells[1].Paragraphs.First().Append("型式");

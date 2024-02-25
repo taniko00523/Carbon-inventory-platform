@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col">
-        <h1>盤查年設定</h1>
+        <h1>盤查年總覽</h1>
         @if (@TempData.Peek("areaName") != null)
         {
             <h3>@TempData.Peek("companyName")-@TempData.Peek("areaName")</h3>
@@ -13,9 +13,17 @@
         }
 
         <form method="post" asp-action="Create">
-            <input placeholder="請輸入民國年" type="number" name="Year" required>
-            <button class="btn btn-primary" type="submit">新增</button>
+            <div class="row">
+                <div class="col">
+                    <input class="form-control" placeholder="請輸入民國年" type="number" name="Year" required>
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary" type="submit">新增</button>
+                </div>
+                <div class="col-7"></div>
+            </div>
         </form>
+
 
         <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id=@TempData.Peek("companyId")>返回</a>
     </div>

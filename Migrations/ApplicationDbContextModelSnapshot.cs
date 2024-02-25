@@ -3145,7 +3145,7 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("decimal(18, 4)");
 
                     b.Property<decimal>("Scope1")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18, 4)");
 
                     b.Property<decimal>("Scope1_CH4")
                         .HasColumnType("decimal(18, 4)");

@@ -7,16 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
-using Microsoft.CodeAnalysis.Elfie.Serialization;
-using NuGet.ContentModel;
-using static System.Formats.Asn1.AsnWriter;
-using Xceed.Words.NET;
-using Xceed.Document.NET;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using Microsoft.Office.Interop.Word;
-using System.Runtime.InteropServices.JavaScript;
-using Microsoft.CodeAnalysis.Elfie.Model.Structures;
-using System.ComponentModel.Design;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -28,14 +18,6 @@ namespace Carbon_inventory_platform.Controllers
         {
             _context = context;
         }
-        string[] scope = { "類別一", "類別二" };
-        string[] emissionPattern = { "固定", "移動", "製程", "逸散" };
-        string[] name = {
-            "緊急發電機", "廚房", "公務車", "堆高機", "冷氣機", "冰箱","商用冰箱","中、大型冰箱","低溫冷凍車", "乾燥機", "飲水機", "冰水主機", "車用空調", "工業冷藏、冷凍","食品加工冷藏、冷凍", "CO2滅火器", "海龍-1211", "FM200", "WD40", "化糞池", "瓦斯罐","焊條","乙炔","二氧化碳", "電力", "其他" };
-        string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
-        string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
-        string[] level = { "連續監測", "定期採樣", "自行評估" };
-        string[] correction = { "每年外校一次以上量測", "每年外校不到一次量測", "非量測所得知數據" };
         //GET: Devices
         public async Task<IActionResult> Index(Guid Id)
         {
@@ -75,11 +57,12 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Devices/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["name"] = new SelectList(name);
-            ViewData["Material"] = new SelectList(await _context.Materials.Where(x => x.EmissionPattern == "固定").ToListAsync(), "Name", "Name");
+            var deviceDatas = await _context.deviceDatas.ToListAsync();
+            deviceDatas.Add(new DeviceData { Name = "其他" });
+            ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
             ViewData["AreasId"] = new SelectList(await _context.Areas.Where(x => x.isDeleted == 0).ToListAsync(), "Id", "Name");
-            ViewData["Scope"] = new SelectList(scope);
-            ViewData["EmissionPattern"] = new SelectList(emissionPattern);
+            ViewData["Scope"] = new SelectList(await _context.Materials.Select(m => m.Scope).Distinct().ToListAsync());
+            //ViewData["EmissionPattern"] = new SelectList(emissionPattern);
 
             return View();
         }
@@ -113,11 +96,11 @@ namespace Carbon_inventory_platform.Controllers
                 await GHGCheckAsync(deviceId, device.Name, device.Material, device.Scope, device.EmissionPattern);
                 return RedirectToAction("Index", "Devices", new { id = device.YearId });
             }
-            ViewData["name"] = new SelectList(name);
-            ViewData["Material"] = new SelectList(await _context.Materials.Where(x => x.EmissionPattern == "固定").ToListAsync(), "Name", "Name");
+            var deviceDatas = await _context.deviceDatas.ToListAsync();
+            deviceDatas.Add(new DeviceData { Name = "其他" });
+            ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
+            ViewData["Scope"] = new SelectList(await _context.Materials.Select(m => m.Scope).Distinct().ToListAsync());
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
-            ViewData["Scope"] = new SelectList(scope);
-            ViewData["EmissionPattern"] = new SelectList(emissionPattern);
             return View(device);
         }
 
@@ -162,60 +145,49 @@ namespace Carbon_inventory_platform.Controllers
         [HttpGet]
         public JsonResult GetMaterialsAndGWPNames(string emissionPattern)
         {
-            var materials = _context.Materials
-    .Where(x => x.EmissionPattern == emissionPattern)
-    .Select(x => new { name = x.Name })
-    .ToList();
-
             List<object> gwpNames = new List<object>();
-
+            List<object> materials = new List<object>();
+            List<string> excludedOptions = new List<string>();
             if (emissionPattern == "逸散")
             {
+                excludedOptions = new List<string> {
+                    "中、大型冰箱",
+                    "乾燥機",
+                    "低溫冷凍車",
+                    "冰水主機",
+                    "冰箱",
+                    "冷氣機",
+                    "商用冰箱",
+                    "工業冷藏、冷凍",
+                    "車用空調",
+                    "食品加工冷藏、冷凍",
+                    "飲水機"
+                };
+
                 gwpNames = _context.GWPs
                     .Select(x => new { name = x.Name })
-                    .ToList<object>(); // 將型別調整為相同的 List<object>
+                    .Distinct()
+                    .ToList<object>();
             }
 
-            return Json(new { materials, gwpNames });
-
-        }
-
-
-        [HttpGet]
-        public JsonResult GetMaterials(string emissionPattern)
-        {
-
-            var materials = _context.Materials
+            materials = _context.Materials
                 .Where(x => x.EmissionPattern == emissionPattern)
                 .Select(x => new { name = x.Name })
-                .ToList();
+                .Distinct()
+                .Where(x => !excludedOptions.Contains(x.name))
+                .ToList<object>();
 
-            return Json(materials);
+            return Json(new { gwpNames, materials });
         }
+
+
         [HttpGet]
-        public JsonResult GetEmissionsByScope(string scope)
+        public JsonResult GetEmissions(string scope)
         {
-            // 根据scope的值生成相应的emission选项，这里假设你已经有了相应的逻辑来获取这些选项
-            var emissions = GetEmissionsByScopeFromDatabase(scope);
-
-            return Json(emissions);
-        }
-
-        // 示例中的方法，根据scope获取emission选项
-        private List<string> GetEmissionsByScopeFromDatabase(string scope)
-        {
-            // 在这里添加逻辑从数据库获取emission选项
-            // 假设你有一个类似的方法，根据scope返回对应的emission选项列表
-            // 以下为示例，你需要根据你的实际情况进行修改
-            if (scope == "類別一")
-            {
-                return new List<string> { "固定", "移動", "逸散", "製程" };
-            }
-            else
-            {
-                // 其他情况的处理
-                return new List<string> { "外購電力" };
-            }
+            var emission = new List<string> { };
+            // 根據scope的值抓取相對應的emission選項
+            emission = _context.Materials.Where(x => x.Scope == scope).Select(m => m.EmissionPattern).Distinct().ToList();
+            return Json(emission);
         }
 
         // GET: Devices/Edit/5
@@ -231,11 +203,11 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return NotFound();
             }
-            ViewData["name"] = new SelectList(name);
-            ViewData["Material"] = new SelectList(await _context.Materials.Where(x => x.EmissionPattern == "固定").ToListAsync(), "Name", "Name");
+            var deviceDatas = await _context.deviceDatas.ToListAsync();
+            deviceDatas.Add(new DeviceData { Name = "其他" });
+            ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
+            ViewData["Scope"] = new SelectList(await _context.Materials.Select(m => m.Scope).Distinct().ToListAsync());
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
-            ViewData["Scope"] = new SelectList(scope);
-            ViewData["EmissionPattern"] = new SelectList(emissionPattern);
             return View(device);
         }
 
@@ -244,7 +216,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,AreaId,AssetNo,Name,Provess,Scope,EmissionPattern,Material,CO2_Emission,CH4_Emission,N2O_Emission,HFCS_Emission,PFCS_Emission,SF6_Emission,NF3_Emission")] Device device)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,AreaId,AssetNo,Name,Provess,Scope,EmissionPattern,Material,YearId")] Device device)
         {
             if (id != device.Id)
             {
@@ -284,11 +256,12 @@ namespace Carbon_inventory_platform.Controllers
                 var YearID = device.YearId;
                 return RedirectToAction("Index", "Devices", new { id = YearID });
             }
-            ViewData["name"] = new SelectList(name);
-            ViewData["Material"] = new SelectList(await _context.Materials.Where(x => x.EmissionPattern == "固定").ToListAsync(), "Name", "Name");
+            var deviceDatas = await _context.deviceDatas.ToListAsync();
+            deviceDatas.Add(new DeviceData { Name = "其他" });
+            ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
+            ViewData["Scope"] = new SelectList(await _context.Materials.Select(m => m.Scope).Distinct().ToListAsync());
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
-            ViewData["Scope"] = new SelectList(scope);
-            ViewData["EmissionPattern"] = new SelectList(emissionPattern);
+
             return View(device);
         }
 
@@ -358,10 +331,10 @@ namespace Carbon_inventory_platform.Controllers
             }
             ViewData["DataCorrection"] = new SelectList(await _context.dataCorrections.ToListAsync(), "id", "name");
             ViewData["DataLevel"] = new SelectList(await _context.dataLevels.ToListAsync(), "id", "name");
+            string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
             ViewData["Unit"] = new SelectList(unit);
+            string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
             ViewData["Source"] = new SelectList(source);
-            ViewData["Level"] = new SelectList(level);
-            ViewData["Correction"] = new SelectList(correction);
             return View(activitydata);
         }
 
@@ -389,9 +362,9 @@ namespace Carbon_inventory_platform.Controllers
             decimal GHG3UUL = 0;
 
 
-            if(GHG!=null && Device != null)
+            if (GHG != null && Device != null)
             {
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     int i = 1;
                     foreach (var item in GHG)
@@ -434,11 +407,10 @@ namespace Carbon_inventory_platform.Controllers
                     Device.ModifiedTime = DateTime.Now;
                     Device.count_UUL = Device_allUUL * all_Emission * Device_allUUL * all_Emission;
                     Device.count_ULL = Device_allULL * all_Emission * Device_allULL * all_Emission;
-
+                    string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
                     ViewData["Unit"] = new SelectList(unit);
+                    string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
                     ViewData["Source"] = new SelectList(source);
-                    ViewData["Level"] = new SelectList(level);
-                    ViewData["Correction"] = new SelectList(correction);
                     await _context.SaveChangesAsync();
                 }
             }
@@ -591,7 +563,7 @@ namespace Carbon_inventory_platform.Controllers
             var GWP = await _context.GWPs.ToListAsync();
             var Material = await _context.Materials.Where(x => x.Name == material && x.Scope == scope && x.EmissionPattern == emisspatern).FirstOrDefaultAsync();
             var otherMaterial = await _context.Materials.Where(x => x.Name == name && x.Scope == scope && x.EmissionPattern == emisspatern).FirstOrDefaultAsync(); //目前只有冷媒設備，但我包含了PFCS以防萬一
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 if (Material != null)
                 {
@@ -767,7 +739,7 @@ namespace Carbon_inventory_platform.Controllers
                 await _context.SaveChangesAsync();
 
             }
-            
+
 
 
             return null;

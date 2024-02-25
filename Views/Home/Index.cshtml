@@ -1,19 +1,15 @@
 ﻿@model IEnumerable<Carbon_inventory_platform.Models.Company>
 
-@{
-    ViewData["Title"] = "輔導廠商";
-}
-
 <div class="row">
     <div class="col">
-        <h1>儀錶板</h1>
+        <h1>公司總覽</h1>
     </div>
     <div class="col-2"></div>
     <div class="col">
-        <form class="d-flex">
+        @* <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+        </form> *@
     </div>
     <p>
         <a class="btn btn-dark" asp-controller="Home" asp-action="Create">新增公司</a>
@@ -26,8 +22,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th>設定</th>
-            <th>刪除</th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
 
@@ -39,7 +35,7 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    <a class="btn btn-primary" asp-controller="Companies" asp-action="Edit" asp-route-id="@item.Id">公司資料設定</a>
+                    <a class="btn btn-primary" asp-controller="Companies" asp-action="Edit" asp-route-id="@item.Id">修改</a>
                     <a class="btn btn-info" asp-area="" asp-controller="Areas" asp-action="Index" asp-route-id="@item.Id">廠區資料</a>
                 </td>
                 <td>

@@ -191,7 +191,20 @@
                                             displayUnit = item.Unit;
                                             break;
                                     }
-                                    <p>@($"{item.Num / 1000:F4} {displayUnit}")</p>
+
+                                    @if (displayUnit != "人")
+                                    {
+                                        <p>
+                                            @($"{item.Num / 1000:F4} {displayUnit}")
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>
+                                            @($"{item.Num:F0} {displayUnit}")
+                                        </p>
+                                    }
+
                                 }
                                 else
                                 {
@@ -211,7 +224,7 @@
                                     <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
                                 }
                                 <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
-                                
+
                             </td>
                             <td>
                                 <form method="post" asp-controller="Devices" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">

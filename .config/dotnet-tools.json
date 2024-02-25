@@ -7,6 +7,12 @@
       "commands": [
         "dotnet-ef"
       ]
+    },
+    "electronnet.cli": {
+      "version": "23.6.2",
+      "commands": [
+        "electronize"
+      ]
     }
   }
 }

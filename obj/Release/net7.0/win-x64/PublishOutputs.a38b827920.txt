@@ -1,7 +1,0 @@
-D:\C#\Carbon-inventory-platform\obj\desktop\mac\bin\appsettings.Development.json
-D:\C#\Carbon-inventory-platform\obj\desktop\mac\bin\appsettings.json
-D:\C#\Carbon-inventory-platform\obj\desktop\mac\bin\electron.manifest.json
-D:\C#\Carbon-inventory-platform\obj\desktop\mac\bin\Carbon_inventory_platform.pdb
-D:\C#\Carbon-inventory-platform\obj\desktop\mac\bin\aspnetcorev2_inprocess.dll
-D:\C#\Carbon-inventory-platform\obj\desktop\mac\bin\Microsoft.Data.SqlClient.SNI.dll
-D:\C#\Carbon-inventory-platform\obj\desktop\mac\bin\Carbon_inventory_platform.exe
