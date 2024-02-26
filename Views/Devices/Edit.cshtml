@@ -99,7 +99,9 @@
                                     var selectedEmission = data.emissionPattern; //排放型式
                                     var selectedMaterial = data.material; //原物料
                                     loadEmissions(selectedScope);
-                                    loadMaterialsAndGWPNames(selectedEmission, selectedMaterial);
+                                    setTimeout(() => {
+                                        loadMaterialsAndGWPNames(selectedEmission, selectedMaterial);
+                                    },10) //設定延遲
 
                                     $('#emissionDropdown').val(selectedEmission);
                                     //$('#MaterialDropdown').val(selectedMaterial);

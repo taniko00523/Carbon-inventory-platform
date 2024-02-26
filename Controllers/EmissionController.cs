@@ -18,6 +18,16 @@ namespace Carbon_inventory_platform.Controllers
         {
             _context = context;
         }
+        public async Task<IActionResult> IndexAsync(Guid? id)
+        {
+            TempData["yearId"] = id;
+            await CountEmissionAsync(id);
+
+            var emissions = await _context.Years
+                .FindAsync(id);
+            return View(emissions);
+
+        }
         public async Task<Year> CountEmissionAsync(Guid? id)
         {
 
@@ -678,19 +688,16 @@ namespace Carbon_inventory_platform.Controllers
             var data = await _context.Years.Where(x => x.Id == id && x.isDeleted == 0).Include(x => x.Area).ThenInclude(x => x.Company).FirstOrDefaultAsync();
             var device = await _context.Devices.Where(x => x.YearId == id && x.isDeleted == 0).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
             var ManyGHGs = await _context.Devices.Where(x => x.isDeleted == 0).SelectMany(x => x.GHGs).ToListAsync();
-
+            //-----------------檔案設定
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", "溫盤報告書範本3.docx");
             string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\output\\", data.Num + "-" + data.Area.Name + "-" + data.Area.Company.Name + "-溫室氣體盤查報告書.docx");
-            
+            //-----------------檔案設定
             // 複製文件
             using (DocX doc = DocX.Load(filePath))
             {
-
                 List<Xceed.Document.NET.Paragraph> paragraphsToUpdate = new List<Xceed.Document.NET.Paragraph>();
 
                 //-----------------替換的文本
-                //doc.ReplaceText("[類別一Device]", Scope1.Trim());
-                //doc.ReplaceText("[類別二2Device]", Scope2.Trim());
                 doc.ReplaceText("[公司中文名稱]", data.Area.Company.Name);
                 doc.ReplaceText("[公司基本資料]", data.Area.Company.Information);
                 doc.ReplaceText("[西元盤查年度]", (data.Num + 1911).ToString());
@@ -778,22 +785,12 @@ namespace Carbon_inventory_platform.Controllers
                 // 保存新文檔
                 doc.SaveAs(newFilePath);
             }
-            // 返回一個視圖或其他操作，根據你的需求
             var fileBytes = System.IO.File.ReadAllBytes(newFilePath);
             var fileName = data.Num + "-" + data.Area.Name + "-" + data.Area.Company.Name + "-溫室氣體盤查報告書.docx"; // 可以自行定義檔名
             return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         }
 
-        public async Task<IActionResult> IndexAsync(Guid? id)
-        {
-            TempData["yearId"] = id;
-            await CountEmissionAsync(id);
-
-            var emissions = await _context.Years
-                .FindAsync(id);
-            return View(emissions);
-
-        }
+        
 
         // 定義生成表格的函式
         public void GenerateGHGsTable(DocX doc, List<GHG> manyGHGs, string emissionPattern, string gasName)

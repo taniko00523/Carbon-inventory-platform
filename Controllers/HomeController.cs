@@ -32,92 +32,9 @@ namespace Carbon_inventory_platform.Controllers
             del = TempData["yearId"];
             del = TempData["year"];
             del = TempData["companyName"];
-           
-            var company = await _context.Companies.Where(x => x.isDeleted == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
-
-            return View(company);
-
-        }
-
-        public IActionResult Privacy()
-        {
+          
             return View();
-        }
 
-
-
-        public async Task<IActionResult> Create()
-        {
-            var Company_id = Guid.NewGuid();
-            var Area_id = Guid.NewGuid();
-            if (ModelState.IsValid)
-            {
-                await _context.Companies.AddAsync(new Company()
-                {
-                    Id = Company_id,
-                    Name = "新增公司",
-                    Phone = "-",
-                    CreateTime = DateTime.Now
-                });
-                await _context.SaveChangesAsync();
-                await _context.Areas.AddAsync(new Area()
-                {
-                    Id = Area_id,
-                    Name = "OO廠",
-                    CompanyId = Company_id,
-                    Year = DateTime.Now.Year - 1912, //減去1911取得民國年 在減1取去年當基準年
-                    CreateTime = DateTime.Now
-                });
-                await _context.SaveChangesAsync();
-            }
-            return RedirectToAction("Index", "Home");
-        }
-
-
-
-        // POST: Companies/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            if (_context.Companies == null)
-            {
-                return Problem("沒有找到資料");
-            }
-            //抓出要刪除的資料
-            var delCompany = await _context.Companies.FindAsync(id);
-            var hasCompany = _context.Companies //如果此公司有修改過
-                .Where(c => c.Id == id)
-                .Any(c => c.ModifiedTime != null);
-
-            var hasArea = _context.Companies //如果此公司下有修改過的廠區
-    .Where(c => c.Id == id)
-    .SelectMany(c => c.Areas)
-    .Any(area => area.ModifiedTime != null);
-
-            var hasDevice = _context.Companies //如果此公司有修改過的排放源
-    .Where(c => c.Id == id)
-    .SelectMany(c => c.Areas)
-    .SelectMany(a => a.Years)
-    .SelectMany(y => y.Devices)
-    .Any(device => device.ModifiedTime != null);
-
-
-            if (hasCompany || hasArea || hasDevice) 
-            {
-                _context.Companies.Remove(delCompany);
-            }
-            else
-            {
-                delCompany.isDeleted = 1;
-                delCompany.DeleteTime = DateTime.Now;
-            }
-
-            
-
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

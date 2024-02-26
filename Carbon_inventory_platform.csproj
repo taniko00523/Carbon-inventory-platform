@@ -6,19 +6,15 @@
     <UserSecretsId>aspnet-Carbon_inventory_platform-f19a92ee-d2ab-4dcf-b9e2-42c55370b2e7</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Data\Migrations\**" />
     <Compile Remove="Models\NewFolder1\**" />
     <Compile Remove="Models\NewFolder\**" />
     <Compile Remove="Views\Area\**" />
-    <Content Remove="Data\Migrations\**" />
     <Content Remove="Models\NewFolder1\**" />
     <Content Remove="Models\NewFolder\**" />
     <Content Remove="Views\Area\**" />
-    <EmbeddedResource Remove="Data\Migrations\**" />
     <EmbeddedResource Remove="Models\NewFolder1\**" />
     <EmbeddedResource Remove="Models\NewFolder\**" />
     <EmbeddedResource Remove="Views\Area\**" />
-    <None Remove="Data\Migrations\**" />
     <None Remove="Models\NewFolder1\**" />
     <None Remove="Models\NewFolder\**" />
     <None Remove="Views\Area\**" />

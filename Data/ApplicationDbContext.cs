@@ -89,7 +89,7 @@ new Material { Id = 19, Name = "天然氣凝結油", Scope = "類別一", Emissi
 new Material { Id = 20, Name = "煤油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.55876282M, CO2ULL = 0.0152990264M, CO2UUL = 0.0250347705M, CH4CEF = 0.0001067634M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000213527M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
 new Material { Id = 21, Name = "頁岩油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.7945625586M, CO2ULL = 0.0750341064M, CO2UUL = 0.0804911323M, CH4CEF = 0.0001079943M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000215989M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "Kg" },
 new Material { Id = 22, Name = "柴油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.606031792M, CO2ULL = 0.020242915M, CO2UUL = 0.0094466937M, CH4CEF = 0.0001055074M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000211015M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L", DataULL = -0.01M, DataUUL = -0.01M },
-new Material { Id = 23, Name = "車用汽油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.263132872M, CO2ULL = 0.025974026M, CO2UUL = 0.0533910534M, CH4CEF = 0.0000979711M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000195942M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" ,DataULL=-0.01M,DataUUL=-0.01M},
+new Material { Id = 23, Name = "車用汽油", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.263132872M, CO2ULL = 0.025974026M, CO2UUL = 0.0533910534M, CH4CEF = 0.0000979711M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000195942M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L", DataULL = -0.01M, DataUUL = -0.01M },
 new Material { Id = 24, Name = "蒸餘油 (燃料油)", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 3.110959872M, CO2ULL = 0.0245478036M, CO2UUL = 0.0180878553M, CH4CEF = 0.0001205798M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.000024116M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
 new Material { Id = 25, Name = "液化石油氣", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 1.7528812758M, CO2ULL = 0.0237717908M, CO2UUL = 0.0396196513M, CH4CEF = 0.0000277794M, CH4ULL = 0.7M, CH4UUL = 2M, N2OCEF = 0.0000027779M, N2OULL = 0.7M, N2OUUL = 2M, CEF_Correction = 3, Unit = "L" },
 new Material { Id = 26, Name = "石油腦", Scope = "類別一", EmissionPattern = "固定", CO2CEF = 2.393761032M, CO2ULL = 0.0545702592M, CO2UUL = 0.0409276944M, CH4CEF = 0.0000979711M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.0000195942M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
@@ -112,25 +112,25 @@ new Material { Id = 42, Name = "液化石油氣", Scope = "類別一", EmissionP
 new Material { Id = 43, Name = "液化天然氣", Scope = "類別一", EmissionPattern = "移動", CO2CEF = 2.11391532M, CO2ULL = 0.0320855615M, CO2UUL = 0.0392156863M, CH4CEF = 0.0034666704M, CH4ULL = 0.4565217391M, CH4UUL = 15.7391304348M, N2OCEF = 0.0001130436M, N2OULL = 0.6666666667M, N2OUUL = 24.6666666667M, CEF_Correction = 3, Unit = "M3" },
 
 
-new Material {Id=44,Name="外購電力", Scope="類別二",EmissionPattern="外購電力",CO2CEF=0.495M, CO2ULL=-0.07M, CO2UUL=0.07M, CEF_Correction=3, DataULL = -0.01M, DataUUL = -0.01M },
+new Material { Id = 44, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.495M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M },
 
 new Material { Id = 57, Name = "廢水處理", Scope = "類別一", EmissionPattern = "逸散", CH4CEF = 0.0031875000M, CEF_Correction = 3 },
 new Material { Id = 58, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", CO2CEF = 1, CEF_Correction = 3 },
 new Material { Id = 59, Name = "乙炔", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 3.3841653850M, CEF_Correction = 1 },
 new Material { Id = 60, Name = "焊條", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 3.6666666666M, CEF_Correction = 1 },
-new Material { Id = 61, Name= "冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.003000M, CEF_Correction = 3 }, //家用冷凍、冷藏裝備
-new Material { Id = 62, Name = "飲水機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.003000M , CEF_Correction = 3 }, //家用冷凍、冷藏裝備
+new Material { Id = 61, Name = "冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.003000M, CEF_Correction = 3 }, //家用冷凍、冷藏裝備
+new Material { Id = 62, Name = "飲水機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.003000M, CEF_Correction = 3 }, //家用冷凍、冷藏裝備
 new Material { Id = 63, Name = "商用冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.055000M, CEF_Correction = 3 }, //獨立商用冷凍、冷藏裝備	
-new Material {Id = 64, Name = "中、大型冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.200000M , CEF_Correction = 3 }, //中、大型冷凍、冷藏裝備
-new Material {Id = 65, Name = "低溫冷凍車", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.330000M , CEF_Correction = 3 }, //交通用冷凍、冷藏裝備
-new Material {Id = 66, Name = "乾燥機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M , CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
-new Material {Id = 67, Name = "工業冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M , CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
-new Material {Id = 68, Name = "食品加工冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M , CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
-new Material {Id = 69, Name = "冰水主機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.090000M        , CEF_Correction = 3 }, //冰水機
-new Material {Id = 70, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.030000M , CEF_Correction = 3 }, //住宅及商業建築冷氣機
-new Material {Id = 71, Name = "車用空調", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.200000M , CEF_Correction = 3 }, //移動式空氣清靜機
+new Material { Id = 64, Name = "中、大型冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.200000M, CEF_Correction = 3 }, //中、大型冷凍、冷藏裝備
+new Material { Id = 65, Name = "低溫冷凍車", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.330000M, CEF_Correction = 3 }, //交通用冷凍、冷藏裝備
+new Material { Id = 66, Name = "乾燥機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M, CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
+new Material { Id = 67, Name = "工業冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M, CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
+new Material { Id = 68, Name = "食品加工冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M, CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
+new Material { Id = 69, Name = "冰水主機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.090000M, CEF_Correction = 3 }, //冰水機
+new Material { Id = 70, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.030000M, CEF_Correction = 3 }, //住宅及商業建築冷氣機
+new Material { Id = 71, Name = "車用空調", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.200000M, CEF_Correction = 3 }, //移動式空氣清靜機
 new Material { Id = 72, Name = "丁烷", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 3.0260000000M, CEF_Correction = 1 },
-new Material { Id = 73, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.509M , CO2ULL=-0.07M, CO2UUL=0.07M,Year=110, CEF_Correction = 3 , DataULL = -0.01M, DataUUL = -0.01M }
+new Material { Id = 73, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.509M, CO2ULL = -0.07M, CO2UUL = 0.07M, Year = 110, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M }
 );
             builder.Entity<GWP>().HasData(
 new GWP { Name = "CO2", Num = 1, GWP_Year = 2022 },
@@ -153,23 +153,23 @@ new GWP { Name = "SF6", Num = 24300, GWP_Year = 2022 },
 new GWP { Name = "海龍-1211", Num = 1930, GWP_Year = 2022 }
                 );
             builder.Entity<DeviceData>().HasData(
-                new DeviceData { Id = 1, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-410A" , Device_Correction = 3,Data_Correction=3 ,unit="公斤"},
+                new DeviceData { Id = 1, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-410A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
         new DeviceData { Id = 2, Name = "冰水主機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
         new DeviceData { Id = 3, Name = "冰箱", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
         new DeviceData { Id = 4, Name = "飲水機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
-        new DeviceData { Id = 5, Name = "乾燥機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
-        new DeviceData { Id = 6, Name = "車用空調", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
-        new DeviceData { Id = 7, Name = "工業冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
+        new DeviceData { Id = 5, Name = "乾燥機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+        new DeviceData { Id = 6, Name = "車用空調", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+        new DeviceData { Id = 7, Name = "工業冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
         new DeviceData { Id = 8, Name = "緊急發電機", Scope = "類別一", EmissionPattern = "固定", Material = "柴油", Device_Correction = 3, Data_Correction = 3, unit = "公升" },
                 new DeviceData { Id = 9, Name = "廚房", Scope = "類別一", EmissionPattern = "固定", Material = "液化石油氣", Device_Correction = 2, Data_Correction = 2, unit = "公斤" },
                 new DeviceData { Id = 10, Name = "公務車", Scope = "類別一", EmissionPattern = "移動", Material = "車用汽油", Device_Correction = 2, Data_Correction = 2, unit = "公升" },
                 new DeviceData { Id = 11, Name = "堆高機", Scope = "類別一", EmissionPattern = "移動", Material = "柴油", Device_Correction = 2, Data_Correction = 2, unit = "公升" },
-                new DeviceData { Id = 12, Name = "CO2滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
-                new DeviceData { Id = 13, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
-                new DeviceData { Id = 14, Name = "WD40", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
-                new DeviceData { Id = 15, Name = "海龍1211", Scope = "類別一", EmissionPattern = "逸散", Material = "海龍-1211", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
-                new DeviceData { Id = 16, Name = "FM200", Scope = "類別一", EmissionPattern = "逸散", Material = "FM200", Device_Correction = 3, Data_Correction = 3 , unit = "公斤" },
-                new DeviceData { Id = 17, Name = "化糞池", Scope = "類別一", EmissionPattern = "逸散", Material = "廢水處理", Device_Correction = 3, Data_Correction = 3 , unit = "人" },
+                new DeviceData { Id = 12, Name = "CO2滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                new DeviceData { Id = 13, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                new DeviceData { Id = 14, Name = "WD40", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                new DeviceData { Id = 15, Name = "海龍1211", Scope = "類別一", EmissionPattern = "逸散", Material = "海龍-1211", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                new DeviceData { Id = 16, Name = "FM200", Scope = "類別一", EmissionPattern = "逸散", Material = "FM200", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                new DeviceData { Id = 17, Name = "化糞池", Scope = "類別一", EmissionPattern = "逸散", Material = "廢水處理", Device_Correction = 3, Data_Correction = 3, unit = "人" },
                 new DeviceData { Id = 18, Name = "電力", Scope = "類別二", EmissionPattern = "外購電力", Material = "外購電力", Device_Correction = 1, Data_Correction = 1, unit = "度" },
                 new DeviceData { Id = 19, Name = "乙炔", Scope = "類別一", EmissionPattern = "製程", Material = "乙炔", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                 new DeviceData { Id = 20, Name = "焊條", Scope = "類別一", EmissionPattern = "製程", Material = "焊條", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
@@ -181,20 +181,17 @@ new GWP { Name = "海龍-1211", Num = 1930, GWP_Year = 2022 }
                      new DeviceData { Id = 26, Name = "瓦斯罐", Scope = "類別一", EmissionPattern = "製程", Material = "丁烷", Device_Correction = 3, Data_Correction = 3, unit = "公斤" }
 
     );
-
             builder.Entity<DefaultDevices>().HasData(
-new DefaultDevices {Id=1, Name = "緊急發電機", Material = "柴油", Scope = "類別一", EmissionPattern = "固定" },
-new DefaultDevices {Id=2, Name = "公務車", Material = "柴油", Scope = "類別一", EmissionPattern = "移動" },
-new DefaultDevices {Id=3, Name = "公務車", Material = "車用汽油", Scope = "類別一", EmissionPattern = "移動" },
-new DefaultDevices {Id=4, Name = "冷氣機", Material = "R-410A", Scope = "類別一", EmissionPattern = "逸散" },
-new DefaultDevices{Id=5, Name = "飲水機",Material = "R-134A",Scope = "類別一",EmissionPattern = "逸散"},
-new DefaultDevices{Id=6, Name = "乾燥機",Material = "R-134A",Scope = "類別一",EmissionPattern = "逸散"},
-new DefaultDevices{Id=7, Name = "冰水主機",Material = "R-134A",Scope = "類別一",EmissionPattern = "逸散"},
-new DefaultDevices{Id=8, Name = "車用空調",Material = "R-134A",Scope = "類別一",EmissionPattern = "逸散"},
-new DefaultDevices{Id=9, Name = "化糞池",Material = "廢水處理",Scope = "類別一",EmissionPattern = "逸散"},
-new DefaultDevices{Id=10, Name = "電力",Material = "外購電力",Scope = "類別二",EmissionPattern = "外購電力"}
-
-
+new DefaultDevices { Id = 1, Name = "緊急發電機", Material = "柴油", Scope = "類別一", EmissionPattern = "固定" },
+new DefaultDevices { Id = 2, Name = "公務車", Material = "柴油", Scope = "類別一", EmissionPattern = "移動" },
+new DefaultDevices { Id = 3, Name = "公務車", Material = "車用汽油", Scope = "類別一", EmissionPattern = "移動" },
+new DefaultDevices { Id = 4, Name = "冷氣機", Material = "R-410A", Scope = "類別一", EmissionPattern = "逸散" },
+new DefaultDevices { Id = 5, Name = "飲水機", Material = "R-134A", Scope = "類別一", EmissionPattern = "逸散" },
+new DefaultDevices { Id = 6, Name = "乾燥機", Material = "R-134A", Scope = "類別一", EmissionPattern = "逸散" },
+new DefaultDevices { Id = 7, Name = "冰水主機", Material = "R-134A", Scope = "類別一", EmissionPattern = "逸散" },
+new DefaultDevices { Id = 8, Name = "車用空調", Material = "R-134A", Scope = "類別一", EmissionPattern = "逸散" },
+new DefaultDevices { Id = 9, Name = "化糞池", Material = "廢水處理", Scope = "類別一", EmissionPattern = "逸散" },
+new DefaultDevices { Id = 10, Name = "電力", Material = "外購電力", Scope = "類別二", EmissionPattern = "外購電力" }
                 );
         }
     }

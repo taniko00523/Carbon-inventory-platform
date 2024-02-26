@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "5Q5nShedHUkRzhNSJsJa5TQbOvNSLYjIgnhvNFVqVNA=",
+  "Hash": "iZMGpentJxjdpTSRaiEmDr2HErOA7lY55on8oFo6gJU=",
   "Source": "Carbon_inventory_platform",
   "BasePath": "_content/Carbon_inventory_platform",
   "Mode": "Default",
@@ -1307,6 +1307,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\output\\112-台南廠-南台科技大學-溫室氣體盤查報告書.docx"
+    },
+    {
+      "Identity": "C:\\Carbon-inventory-platform\\wwwroot\\output\\112-南台廠-南台科技大學-溫室氣體盤查報告書.docx",
+      "SourceId": "Carbon_inventory_platform",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Carbon-inventory-platform\\wwwroot\\",
+      "BasePath": "_content/Carbon_inventory_platform",
+      "RelativePath": "output/112-南台廠-南台科技大學-溫室氣體盤查報告書.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\output\\112-南台廠-南台科技大學-溫室氣體盤查報告書.docx"
     },
     {
       "Identity": "C:\\Users\\jsj00\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\7.0.10\\staticwebassets\\V5\\css\\site.css",
