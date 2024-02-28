@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [Authorize]
     public class YearsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -81,7 +83,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 if (Year < 1)
                 {
-                    TempData["ErrorMessage"] = "請輸入正確的年份";
+                    TempData["ErrorMessage"] = "請填寫正確的年份";
                 }
                 else
                 {
@@ -143,7 +145,7 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     var toUpdate = await _context.Years.FindAsync(id);
 
-                    var hasYear = await _context.Areas.Where(x => x.Id == areaID).SelectMany(a => a.Years).AnyAsync(year => year.Num == year.Num);
+                    var hasYear = await _context.Areas.Where(x => x.Id == areaID).SelectMany(a => a.Years).AnyAsync(y => y.Num == year.Num);
 
                     if (toUpdate != null)
                     {

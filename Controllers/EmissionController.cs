@@ -1,6 +1,7 @@
 ﻿using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
 using ElectronNET.API;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Office.Interop.Word;
@@ -10,6 +11,7 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [Authorize]
     public class EmissionController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -699,10 +701,15 @@ namespace Carbon_inventory_platform.Controllers
 
                 //-----------------替換的文本
                 doc.ReplaceText("[公司中文名稱]", data.Area.Company.Name);
-                doc.ReplaceText("[公司基本資料]", data.Area.Company.Information);
                 doc.ReplaceText("[西元盤查年度]", (data.Num + 1911).ToString());
                 doc.ReplaceText("[民國盤查年份]", (data.Num).ToString());
                 doc.ReplaceText("[廠區名稱]", data.Area.Name.ToString());
+                doc.ReplaceText("[公司基本資料]", data.Area.Company.CompanyInformation);
+                doc.ReplaceText("[組織邊界設定]", data.Area.Company.AddressInformation);
+                doc.ReplaceText("[營運邊界]", data.Area.Company.GHGInformation);
+                doc.ReplaceText("[溫室氣體排放類型與排放量說明]", data.Area.Company.GHGInformation);
+                doc.ReplaceText("[直接溫室氣體排放說明]", data.Area.Company.Scope1Information);
+                doc.ReplaceText("[能源間接溫室氣體排放說明]", data.Area.Company.Scope2Information);
 
                 doc.ReplaceText("[盤查月]", DateTime.Now.Month.ToString());
                 doc.ReplaceText("[盤查日]", DateTime.Now.Day.ToString());

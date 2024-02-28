@@ -54,6 +54,7 @@ namespace Carbon_inventory_platform.Models
         // 排放源計算過程
         [Column(TypeName = "decimal(18, 4)")]
         [Display(Name = "活動數據")]
+        [Required(ErrorMessage = "請填寫活動數據")]
         public decimal Num { get; set; } = 0;
 
         [MaxLength(20)]

@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [Authorize]
     public class AreasController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -100,6 +102,22 @@ namespace Carbon_inventory_platform.Controllers
             }
             return View(area);
         }
+        private async Task<string> UploadImage(IFormFile image)
+        {
+            if (image != null && image.Length > 0)
+            {
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(fileStream);
+                }
+
+                return "/images/" + fileName; // 返回圖片路徑
+            }
+            return null;
+        }
 
         // GET: Areas/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
@@ -121,7 +139,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,FullAddress,Year,Type")] Area area)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,FullAddress,Year,Type,UniqueCode,FactorCode")] Area area)
         {
             if (id != area.Id)
             {
@@ -146,6 +164,8 @@ namespace Carbon_inventory_platform.Controllers
                         {
                             toUpdate.Address = area.FullAddress;
                         }
+                        toUpdate.UniqueCode =area.UniqueCode;
+                        toUpdate.FactorCode = area.FactorCode;
                         toUpdate.Year = area.Year;
                         toUpdate.Type = area.Type;
                         toUpdate.ModifiedTime = DateTime.Now;
@@ -231,5 +251,6 @@ namespace Carbon_inventory_platform.Controllers
             // 使用Substring获取从指定位置开始到字符串末尾的子串
             return input.Substring(6);
         }
+
     }
 }

@@ -8,17 +8,19 @@
     <WebStackScaffolding_IsLayoutPageSelected>True</WebStackScaffolding_IsLayoutPageSelected>
     <WebStackScaffolding_IsPartialViewSelected>False</WebStackScaffolding_IsPartialViewSelected>
     <WebStackScaffolding_IsReferencingScriptLibrariesSelected>True</WebStackScaffolding_IsReferencingScriptLibrariesSelected>
-    <WebStackScaffolding_LayoutPageFile />
     <WebStackScaffolding_DbContextTypeFullName>Carbon_inventory_platform.Data.ApplicationDbContext</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
     <WebStackScaffolding_IsViewGenerationSelected>True</WebStackScaffolding_IsViewGenerationSelected>
     <View_SelectedScaffolderID>RazorViewEmptyScaffolder</View_SelectedScaffolderID>
     <View_SelectedScaffolderCategoryPath>root/Common/MVC/View</View_SelectedScaffolderCategoryPath>
-    <WebStackScaffolding_ViewDialogWidth>650.4</WebStackScaffolding_ViewDialogWidth>
+    <WebStackScaffolding_ViewDialogWidth>800</WebStackScaffolding_ViewDialogWidth>
     <Area_SelectedScaffolderID>AreaScaffolder</Area_SelectedScaffolderID>
     <Area_SelectedScaffolderCategoryPath>root/Common</Area_SelectedScaffolderCategoryPath>
     <WebStackScaffolding_DependencyDialogWidth>650.285714285714</WebStackScaffolding_DependencyDialogWidth>
     <NameOfLastUsedPublishProfile>D:\C#\Carbon-inventory-platform\Properties\PublishProfiles\FolderProfile.pubxml</NameOfLastUsedPublishProfile>
+    <_SelectedScaffolderID>IdentityScaffolder</_SelectedScaffolderID>
+    <_SelectedScaffolderCategoryPath>root/Identity</_SelectedScaffolderCategoryPath>
+    <WebStackScaffolding_DbContextDialogWidth>650</WebStackScaffolding_DbContextDialogWidth>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>

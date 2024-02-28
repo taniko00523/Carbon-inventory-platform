@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Carbon_inventory_platform.Models
 {
@@ -7,9 +9,11 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "ID")]
         public Guid Id { get; set; }
 
+        public string UserId { get; set; } // 外來鍵屬性
+
         [MaxLength(50)]
         [Display(Name = "公司名稱")]
-        [Required(ErrorMessage ="請輸入公司名稱")]
+        [Required(ErrorMessage ="請填寫公司名稱")]
         public string Name { get; set; } = "";
 
         [MaxLength(10)]
@@ -18,7 +22,7 @@ namespace Carbon_inventory_platform.Models
 
         [MaxLength(100)]
         [Display(Name = "英文公司名稱")]
-        [Required(ErrorMessage = "請輸入英文公司名稱")]
+        [Required(ErrorMessage = "請填寫英文公司名稱")]
         public string EnglishName { get; set; } = "";
 
         [MaxLength(100)]
@@ -27,23 +31,39 @@ namespace Carbon_inventory_platform.Models
 
         [MaxLength(20)]
         [Display(Name = "聯絡人")]
-        [Required(ErrorMessage = "請輸入聯絡人")]
-        public string Owner { get; set; } = "";
+        [Required(ErrorMessage = "請填寫聯絡人")]
+        public string ContactName { get; set; } = "";
 
         [EmailAddress(ErrorMessage ="電子信箱格式錯誤")]
         [MaxLength(50)]
         [Display(Name = "電子信箱")]
-        [Required(ErrorMessage = "請輸入電子信箱")]
+        [Required(ErrorMessage = "請填寫電子信箱")]
         public string Email { get; set; } = "";
 
         [MaxLength(20)]
         [Display(Name = "電話號碼")]
-        [Required(ErrorMessage = "請輸入手機號碼")]
+        [Required(ErrorMessage = "請填寫手機號碼")]
         public string Phone { get; set; } =null!;
 
         [Display(Name = "公司簡介")]
-        [Required(ErrorMessage = "請輸入公司簡介")]
-        public string Information { get; set; } = "";
+        [Required(ErrorMessage = "請填寫公司簡介")]
+        public string CompanyInformation { get; set; } = "";
+
+        [Display(Name = "組織邊界說明")]
+        [Required(ErrorMessage = "請填寫組織邊界說明")]
+        public string AddressInformation { get; set; } = "";
+
+        [Display(Name = "溫室氣體排放類型與排放量說明")]
+        [Required(ErrorMessage = "請填寫溫室氣體排放類型與排放量說明")]
+        public string GHGInformation { get; set; } = "";
+
+        [Display(Name = "直接溫室氣體排放說明")]
+        [Required(ErrorMessage = "請填寫直接溫室氣體排放說明")]
+        public string Scope1Information { get; set; } = "";
+
+        [Display(Name = "能源間接溫室氣體排放說明")]
+        [Required(ErrorMessage = "請填寫能源間接溫室氣體排放說明")]
+        public string Scope2Information { get; set; } = "";
 
         [Display(Name = "是否刪除")]
         public byte isDeleted { get; set; } = 0;
@@ -57,7 +77,12 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "刪除時間")]
          public DateTime? DeleteTime { get; set; }
 
-        //Navigation Property
+        
+        
+
+        //Navigation導覽屬性
+
+        public ApplicationUser User { get; set; } // 外來鍵導覽屬性
         public ICollection<Area> Areas { get; set; }
 
         public Company()

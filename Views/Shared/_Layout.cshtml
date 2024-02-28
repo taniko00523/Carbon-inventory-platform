@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+<!DOCTYPE html>
 <html lang="zh-tw">
 <head>
     <meta charset="utf-8" />
@@ -19,21 +22,12 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">首頁</a>
-                        </li> *@
-                        @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">廠商資料</a>
-                        </li> *@
-                        @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Areas" asp-action="Index">廠區資料</a>
-                        </li> *@
-                        @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Emission" asp-action="Index">總碳排放量</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="Index">報告書下載</a>
-                        </li> *@
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Companies" asp-action="Index">公司總覽</a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

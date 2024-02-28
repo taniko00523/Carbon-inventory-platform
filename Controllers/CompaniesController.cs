@@ -8,30 +8,45 @@ using Microsoft.EntityFrameworkCore;
 using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.Design;
+using Microsoft.AspNetCore.Identity;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [Authorize]
     public class CompaniesController : Controller
     {
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public CompaniesController(ApplicationDbContext context)
+        public CompaniesController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         //[Authorize]
         // GET: Companies
         public async Task<IActionResult> Index()
         {
-            var company = await _context.Companies.Where(x => x.isDeleted == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
-
-            return View(company);
+            string userId = _userManager.GetUserId(User);
+            if(userId != null)
+            {
+                var company = await _context.Companies.Where(x => x.isDeleted == 0 && x.UserId == userId).OrderByDescending(x => x.CreateTime).ToListAsync();
+                return View(company);
+            }
+            else
+            {
+                return View();
+            }
+            
         }
 
 
         public async Task<IActionResult> Create()
         {
+            string userId = _userManager.GetUserId(User);
             var Company_id = Guid.NewGuid();
             var Area_id = Guid.NewGuid();
             if (ModelState.IsValid)
@@ -41,6 +56,7 @@ namespace Carbon_inventory_platform.Controllers
                     Id = Company_id,
                     Name = "新增公司",
                     Phone = "-",
+                    UserId = userId,
                     CreateTime = DateTime.Now
                 });
                 await _context.SaveChangesAsync();
@@ -89,12 +105,12 @@ namespace Carbon_inventory_platform.Controllers
 
             if (hasCompany || hasArea || hasDevice)
             {
-                _context.Companies.Remove(delCompany);
+                delCompany.isDeleted = 1;
+                delCompany.DeleteTime = DateTime.Now;
             }
             else
             {
-                delCompany.isDeleted = 1;
-                delCompany.DeleteTime = DateTime.Now;
+                _context.Companies.Remove(delCompany);
             }
 
 
@@ -125,13 +141,14 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,EasyName,Owner,Email,Phone,Information,EnglishName,EasyEnglishName")] Company company)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,EasyName,ContactName,Email,Phone,EnglishName,EasyEnglishName,UserId,CompanyInformation,AddressInformation,GHGInformation,Scope1Information,Scope2Information")] Company company)
         {
+            string userId = _userManager.GetUserId(User);
             if (id != company.Id)
             {
                 return NotFound();
             }
-
+            ModelState.Remove("User");
             if (ModelState.IsValid)
             {
                 try
@@ -143,10 +160,14 @@ namespace Carbon_inventory_platform.Controllers
                         toUpdate.EasyName = RemoveSuffixes(company.Name);
                         toUpdate.EasyEnglishName = RemoveENSuffixes(company.EnglishName);
                         toUpdate.EnglishName = company.EnglishName;
-                        toUpdate.Owner = company.Owner;
+                        toUpdate.ContactName = company.ContactName;
                         toUpdate.Email = company.Email;
                         toUpdate.Phone = company.Phone;
-                        toUpdate.Information = company.Information;
+                        toUpdate.CompanyInformation = company.CompanyInformation;
+                        toUpdate.AddressInformation = company.AddressInformation;
+                        toUpdate.GHGInformation = company.GHGInformation;
+                        toUpdate.Scope1Information = company.Scope1Information;
+                        toUpdate.Scope2Information = company.Scope2Information;
                         toUpdate.isDeleted = 0;
                         toUpdate.ModifiedTime = DateTime.Now;
                     }
@@ -163,7 +184,7 @@ namespace Carbon_inventory_platform.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index","Home");
+                return RedirectToAction(nameof(Index));
             }
             return View(company);
         }

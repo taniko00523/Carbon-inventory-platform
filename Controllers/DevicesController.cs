@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [Authorize]
     public class DevicesController : Controller
     {
         private readonly ApplicationDbContext _context;

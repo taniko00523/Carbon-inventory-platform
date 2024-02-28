@@ -14,16 +14,19 @@ namespace Carbon_inventory_platform.Models
 
         [MaxLength(20)]
         [Display(Name = "廠區名稱")]
-        [Required(ErrorMessage = "請輸入廠區名稱")]
+        [Required(ErrorMessage = "請填寫廠區名稱")]
         public string Name { get; set; } 
 
         [Display(Name = "郵遞區號")]
+        [Required(ErrorMessage = "請填寫郵遞區號")]
         public int PostalCode { get; set; }
 
         [Display(Name = "統一編號")]
+        [Required(ErrorMessage = "請填寫統一編號")]
         public int UniqueCode { get; set; }
 
         [Display(Name = "工廠登記編號")]
+        [Required(ErrorMessage = "請填寫工廠登記編號")]
         public int FactorCode { get; set; }
 
         [MaxLength(10)]
@@ -40,16 +43,16 @@ namespace Carbon_inventory_platform.Models
 
         [MaxLength(100)]
         [Display(Name = "地址")]
-        [Required(ErrorMessage = "請輸入地址")]
+        [Required(ErrorMessage = "請填寫地址")]
         public string FullAddress { get; set; } = "";
 
         [Display(Name = "基準年")]
-        [Required(ErrorMessage = "請輸入基準年")]
+        [Required(ErrorMessage = "請填寫基準年")]
         public int Year { get; set; } 
 
         [MaxLength(10)]
         [Display(Name = "產業別")]
-        [Required(ErrorMessage = "請輸入產業別")]
+        [Required(ErrorMessage = "請填寫產業別")]
         public string? Type { get; set; } = "";
 
         [Display(Name = "是否刪除")]

@@ -5,7 +5,7 @@
         <h1>邊界總覽</h1>
         <h3>@TempData.Peek("companyName")</h3>
         <a class="btn btn-primary" asp-action="Create" asp-route-id=@TempData.Peek("selectedCompanyId")>新增</a>
-        <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">返回</a>
+        <a class="btn btn-secondary" asp-controller="Companies" asp-action="Index">返回</a>
     </div>
 </div>
 
@@ -15,9 +15,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            @* <th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniqueCode)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.PostalCode)
-            </th> *@
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.FullAddress)
             </th>
@@ -39,9 +42,12 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-               @*  <td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniqueCode)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.PostalCode)
-                </td> *@
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FullAddress)
                 </td>
