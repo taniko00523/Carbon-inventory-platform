@@ -60,6 +60,9 @@ namespace Carbon_inventory_platform.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("MapImagePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
@@ -68,8 +71,14 @@ namespace Carbon_inventory_platform.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("OrganizationImagePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PostalCode")
                         .HasColumnType("int");
+
+                    b.Property<string>("ShopDrawingsPath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -304,9 +313,6 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Area")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AssetNo")
                         .HasMaxLength(20)
@@ -3054,9 +3060,6 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<decimal>("CO2")
                         .HasColumnType("decimal(18, 4)");
-
-                    b.Property<string>("Company")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");

@@ -37,11 +37,12 @@ namespace Carbon_inventory_platform.Controllers
            .FirstOrDefaultAsync();
             return _context.Years != null ? //如果有抓到資料表Null
                           View(await _context.Years
-                          .Include(x => x.Area)
-                          .Where(x => x.isDeleted == 0 && x.AreaId == Id) //抓出資料表裡面沒被刪除的
+                          .Include(d => d.Area.Company)
+                          .Where(x => x.isDeleted == 0 && x.AreaId == Id)//抓出資料表裡面沒被刪除的
                           .OrderBy(x => x.CreateTime)
                           .ToListAsync()) : //非同步方法
                           Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
+            
         }
 
         // GET: Years/Details/5
@@ -94,7 +95,6 @@ namespace Carbon_inventory_platform.Controllers
                         toCreate.Id = Guid.NewGuid();
                         toCreate.Num = Year;
                         toCreate.AreaId = areaId.Value;
-                        toCreate.Company = _context.Areas.Where(x => x.Id == areaId.Value).Select(x => x.Company.Name).FirstOrDefault();
                         toCreate.CreateTime = DateTime.Now;
                         _context.Add(toCreate);
                         await _context.SaveChangesAsync();

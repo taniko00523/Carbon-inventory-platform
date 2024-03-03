@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Office.Interop.Word;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using static System.Formats.Asn1.AsnWriter;
 
 namespace Carbon_inventory_platform.Controllers
@@ -25,8 +26,7 @@ namespace Carbon_inventory_platform.Controllers
             TempData["yearId"] = id;
             await CountEmissionAsync(id);
 
-            var emissions = await _context.Years
-                .FindAsync(id);
+            var emissions = await _context.Years.Include(y=>y.Area.Company).Where(x=>x.Id == id).FirstOrDefaultAsync();
             return View(emissions);
 
         }
@@ -38,7 +38,7 @@ namespace Carbon_inventory_platform.Controllers
                 .ToListAsync();
             var GHGs = await _context.GHGs
                 .Include(x => x.Device)
-                .Where(x => x.isDeleted == 0 && x.Device.YearId == id)
+                .Where(x => x.Device.isDeleted == 0 && x.Device.YearId == id)
                 .ToListAsync();
             var Emission = await _context.Years.Where(x => x.Id == id).ToListAsync();
             var toCreate = new Year();
@@ -689,7 +689,7 @@ namespace Carbon_inventory_platform.Controllers
             // 這裡要替換成你 MVC 應用程式中正確的檔案路徑
             var data = await _context.Years.Where(x => x.Id == id && x.isDeleted == 0).Include(x => x.Area).ThenInclude(x => x.Company).FirstOrDefaultAsync();
             var device = await _context.Devices.Where(x => x.YearId == id && x.isDeleted == 0).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
-            var ManyGHGs = await _context.Devices.Where(x => x.isDeleted == 0).SelectMany(x => x.GHGs).ToListAsync();
+            var ManyGHGs = await _context.Devices.Where(x => x.YearId == id && x.isDeleted == 0).SelectMany(x => x.GHGs).ToListAsync();
             //-----------------檔案設定
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", "溫盤報告書範本3.docx");
             string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\output\\", data.Num + "-" + data.Area.Name + "-" + data.Area.Company.Name + "-溫室氣體盤查報告書.docx");
@@ -782,12 +782,21 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     GenerateScopeTable(doc, device, "類別一");
                 }
-                // 檢查是否有足夠的類別二設備
+                // 檢查是否有類別二設備
                 if (device.Any(x => x.Scope == "類別二"))
                 {
                     GenerateScopeTable(doc, device, "類別二");
                 }
                 //--------------------------------類別表
+
+                //--------------------------------圖片
+                string mapPath = data.Area.MapImagePath;
+                string organiztionPath = data.Area.OrganizationImagePath;
+                string showDrawingPath = data.Area.ShopDrawingsPath;
+                replaceImage(doc,"[廠區圖]", showDrawingPath);
+                replaceImage(doc, "[地理位置圖]", mapPath);
+                replaceImage(doc, "[公司組織圖]", organiztionPath);
+                //--------------------------------圖片
 
                 // 保存新文檔
                 doc.SaveAs(newFilePath);
@@ -797,7 +806,7 @@ namespace Carbon_inventory_platform.Controllers
             return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         }
 
-        
+
 
         // 定義生成表格的函式
         public void GenerateGHGsTable(DocX doc, List<GHG> manyGHGs, string emissionPattern, string gasName)
@@ -836,6 +845,25 @@ namespace Carbon_inventory_platform.Controllers
 
             doc.ReplaceTextWithObject(tableName, table);
         }
+        public void replaceImage(DocX doc, string text, string imagePath)
+        {
+            foreach (var paragraph in doc.Paragraphs)
+            {
+                if (paragraph.Text.Contains(text))
+                {
+                    // 插入圖片
+                    if(imagePath != null)
+                    {
+                        var image = doc.AddImage(imagePath);
+                        var picture = image.CreatePicture(450,450);
+                        paragraph.InsertPicture(picture);
+                    }
+
+                    // 移除包含替換文字的原始內容
+                    doc.ReplaceText(text, string.Empty);
+                }
+            }
+        }
         public void GenerateScopeTable(DocX doc, List<Device> devices, string scope)
         {
             // 獲取特定類別的設備數量
@@ -848,7 +876,7 @@ namespace Carbon_inventory_platform.Controllers
             table.Rows[0].Cells[0].Paragraphs.First().Append("類別").Font(font);
             table.Rows[0].Cells[1].Paragraphs.First().Append("型式").Font(font);
             table.Rows[0].Cells[2].Paragraphs.First().Append("排放源").Font(font);
-            table.Rows[0].Cells[3].Paragraphs.First().Append("CO₂").Font(font); 
+            table.Rows[0].Cells[3].Paragraphs.First().Append("CO₂").Font(font);
             table.Rows[0].Cells[4].Paragraphs.First().Append("CH₄").Font(font);
             table.Rows[0].Cells[5].Paragraphs.First().Append("N₂O").Font(font);
             table.Rows[0].Cells[6].Paragraphs.First().Append("HFCs").Font(font);
@@ -862,7 +890,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 // 獲取特定設備的溫室氣體
                 var GHGs = _context.GHGs.Where(ghg => ghg.DeviceId == item.Id);
-                
+
                 // 填充基本資料
                 table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(item.Scope).Font(font);
                 table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(item.EmissionPattern).Font(font);
@@ -900,7 +928,7 @@ namespace Carbon_inventory_platform.Controllers
 
             doc.ReplaceTextWithObject("[" + scope + "Table]", table);
         }
-        public void ScopeDevice(DocX doc, List<Device> devices, string scope) 
+        public void ScopeDevice(DocX doc, List<Device> devices, string scope)
         {
             string Scope = "";
             int i = 0;

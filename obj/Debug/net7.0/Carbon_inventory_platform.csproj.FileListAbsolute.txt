@@ -768,9 +768,7 @@ D:\C#\Carbon-inventory-platform\obj\Debug\net7.0\staticwebassets\msbuild.buildTr
 D:\C#\Carbon-inventory-platform\obj\Debug\net7.0\staticwebassets.pack.json
 D:\C#\Carbon-inventory-platform\obj\Debug\net7.0\staticwebassets.build.json
 D:\C#\Carbon-inventory-platform\obj\Debug\net7.0\staticwebassets.development.json
-D:\C#\Carbon-inventory-platform\obj\Debug\net7.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 D:\C#\Carbon-inventory-platform\obj\Debug\net7.0\scopedcss\bundle\Carbon_inventory_platform.styles.css
-D:\C#\Carbon-inventory-platform\obj\Debug\net7.0\scopedcss\projectbundle\Carbon_inventory_platform.bundle.scp.css
 D:\C#\Carbon-inventory-platform\obj\Debug\net7.0\Carbon_inventory_platform.csproj.CopyComplete
 D:\C#\Carbon-inventory-platform\obj\Debug\net7.0\Carbon_inventory_platform.dll
 D:\C#\Carbon-inventory-platform\obj\Debug\net7.0\refint\Carbon_inventory_platform.dll
@@ -1111,3 +1109,5 @@ D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\MySql.Data.EntityFrameworkCore.
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Renci.SshNet.dll
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\SshNet.Security.Cryptography.dll
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\System.Xml.XPath.XmlDocument.dll
+D:\C#\Carbon-inventory-platform\obj\Debug\net7.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+D:\C#\Carbon-inventory-platform\obj\Debug\net7.0\scopedcss\projectbundle\Carbon_inventory_platform.bundle.scp.css

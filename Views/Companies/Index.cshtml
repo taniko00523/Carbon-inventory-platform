@@ -35,6 +35,21 @@
             <th>
                 @Html.DisplayNameFor(model => model.Phone)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CompanyInformation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressInformation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GHGInformation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Scope1Information)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Scope2Information)
+            </th>
             <th></th>
             <th></th>
         </tr>
@@ -59,8 +74,65 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Phone)
                 </td>
+                <th>
+                    @if (item.CompanyInformation != "")
+                    {
+                        <p>已填寫</p>
+                    }
+                    else
+                    {
+                        <p>未填寫</p>
+                    }
+                </th>
+                <th>
+                    @if (item.AddressInformation != "")
+                    {
+                        <p>已填寫</p>
+                    }
+                    else
+                    {
+                        <p>未填寫</p>
+                    }
+                </th>
+                <th>
+                    @if (item.GHGInformation != "")
+                    {
+                        <p>已填寫</p>
+                    }
+                    else
+                    {
+                        <p>未填寫</p>
+                    }
+                </th>
+                <th>
+                    @if (item.Scope1Information != "")
+                    {
+                        <p>已填寫</p>
+                    }
+                    else
+                    {
+                        <p>未填寫</p>
+                    }
+                </th>
+                <th>
+                    @if (item.Scope2Information != "")
+                    {
+                        <p>已填寫</p>
+                    }
+                    else
+                    {
+                        <p>未填寫</p>
+                    }
+                </th>
                 <td>
-                    <a class="btn btn-primary" asp-controller="Companies" asp-action="Edit" asp-route-id="@item.Id">修改</a>
+                    @if (item.ModifiedTime != null)
+                    {
+                        <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.Id">修改</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">填寫</a>
+                    }
                     <a class="btn btn-info" asp-area="" asp-controller="Areas" asp-action="Index" asp-route-id="@item.Id">廠區資料</a>
                 </td>
                 <td>

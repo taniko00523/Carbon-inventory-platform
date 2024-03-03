@@ -8,9 +8,6 @@ namespace Carbon_inventory_platform.Models
     {
         public Guid Id { get; set; }
         public Guid AreaId { get; set; }
-
-        [Display(Name = "公司名稱")]
-        public string? Company { get; set; }
         [Range(1, 10000)]
         [Display(Name = "盤查年度")]
         [Required(ErrorMessage = "請填寫盤查年度")]

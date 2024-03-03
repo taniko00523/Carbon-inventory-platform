@@ -10,12 +10,12 @@ namespace Carbon_inventory_platform.Models
         public Guid Id { get; set; }
 
         [Display(Name = "公司別")]
-        public Guid CompanyId { get; set; } 
+        public Guid CompanyId { get; set; }
 
         [MaxLength(20)]
         [Display(Name = "廠區名稱")]
         [Required(ErrorMessage = "請填寫廠區名稱")]
-        public string Name { get; set; } 
+        public string Name { get; set; } = "";
 
         [Display(Name = "郵遞區號")]
         [Required(ErrorMessage = "請填寫郵遞區號")]
@@ -54,6 +54,28 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "產業別")]
         [Required(ErrorMessage = "請填寫產業別")]
         public string? Type { get; set; } = "";
+        [Display(Name = "公司組織圖")]
+
+        public string? OrganizationImagePath { get; set; } = "";
+        [Display(Name = "公司地理位置圖")]
+
+        public string? MapImagePath { get; set; } = "";
+        [Display(Name = "公司廠區配置圖")]
+
+        public string? ShopDrawingsPath { get; set; } = "";
+
+        [Display(Name = "公司組織圖")]
+        [NotMapped]
+
+        public IFormFile? OrganizationImage { get; set; }
+        [Display(Name = "公司地理位置圖")]
+        [NotMapped]
+
+        public IFormFile? MapImage { get; set; }
+        [Display(Name = "公司廠區配置圖")]
+        [NotMapped]
+
+        public IFormFile? ShopDrawings { get; set; }
 
         [Display(Name = "是否刪除")]
         public byte isDeleted { get; set; } = 0;

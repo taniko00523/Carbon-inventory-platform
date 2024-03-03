@@ -9,10 +9,6 @@
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\doc\\~$盤報告書範本.docx",
-      "PackagePath": "staticwebassets\\doc\\~$盤報告書範本.docx"
-    },
-    {
       "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\doc\\溫盤報告書範本.docx",
       "PackagePath": "staticwebassets\\doc\\溫盤報告書範本.docx"
     },
@@ -269,6 +265,18 @@
       "PackagePath": "staticwebassets\\output\\111-台南廠-南台科技大學股份有限公司-溫室氣體盤查報告書.docx"
     },
     {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\112-123-123-溫室氣體盤查報告書.docx",
+      "PackagePath": "staticwebassets\\output\\112-123-123-溫室氣體盤查報告書.docx"
+    },
+    {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\112-234-新增公司-溫室氣體盤查報告書.docx",
+      "PackagePath": "staticwebassets\\output\\112-234-新增公司-溫室氣體盤查報告書.docx"
+    },
+    {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\112-OO廠-新增公司-溫室氣體盤查報告書.docx",
+      "PackagePath": "staticwebassets\\output\\112-OO廠-新增公司-溫室氣體盤查報告書.docx"
+    },
+    {
       "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\112-南台廠-南台科技大學-溫室氣體盤查報告書.docx",
       "PackagePath": "staticwebassets\\output\\112-南台廠-南台科技大學-溫室氣體盤查報告書.docx"
     },
@@ -279,6 +287,14 @@
     {
       "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\112-廠區名稱-公司名稱-溫室氣體盤查報告書.docx",
       "PackagePath": "staticwebassets\\output\\112-廠區名稱-公司名稱-溫室氣體盤查報告書.docx"
+    },
+    {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\121-OO廠-新增公司-溫室氣體盤查報告書.docx",
+      "PackagePath": "staticwebassets\\output\\121-OO廠-新增公司-溫室氣體盤查報告書.docx"
+    },
+    {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\123-123-123-溫室氣體盤查報告書.docx",
+      "PackagePath": "staticwebassets\\output\\123-123-123-溫室氣體盤查報告書.docx"
     },
     {
       "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.Carbon_inventory_platform.Microsoft.AspNetCore.StaticWebAssets.props",

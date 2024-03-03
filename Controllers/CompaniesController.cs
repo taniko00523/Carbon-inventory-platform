@@ -49,13 +49,12 @@ namespace Carbon_inventory_platform.Controllers
             string userId = _userManager.GetUserId(User);
             var Company_id = Guid.NewGuid();
             var Area_id = Guid.NewGuid();
+            var Year_id = Guid.NewGuid();
             if (ModelState.IsValid)
             {
                 await _context.Companies.AddAsync(new Company()
                 {
                     Id = Company_id,
-                    Name = "新增公司",
-                    Phone = "-",
                     UserId = userId,
                     CreateTime = DateTime.Now
                 });
@@ -63,9 +62,15 @@ namespace Carbon_inventory_platform.Controllers
                 await _context.Areas.AddAsync(new Area()
                 {
                     Id = Area_id,
-                    Name = "OO廠",
                     CompanyId = Company_id,
                     Year = DateTime.Now.Year - 1912, //減去1911取得民國年 在減1取去年當基準年
+                    CreateTime = DateTime.Now
+                });
+                await _context.Years.AddAsync(new Year()
+                {
+                    Id = Year_id,
+                    AreaId = Area_id,
+                    Num = DateTime.Now.Year - 1912, //減去1911取得民國年 在減1取去年當盤查年度
                     CreateTime = DateTime.Now
                 });
                 await _context.SaveChangesAsync();

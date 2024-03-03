@@ -15,8 +15,6 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "盤查年度")]
         public Guid YearId { get; set; }
 
-        [Display(Name = "廠區名稱")]
-        public string? Area{ get; set; }
 
         [MaxLength(20)]
         [Display(Name = "排放源名稱")]

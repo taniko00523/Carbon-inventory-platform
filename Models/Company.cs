@@ -43,7 +43,7 @@ namespace Carbon_inventory_platform.Models
         [MaxLength(20)]
         [Display(Name = "電話號碼")]
         [Required(ErrorMessage = "請填寫手機號碼")]
-        public string Phone { get; set; } =null!;
+        public string Phone { get; set; } = "";
 
         [Display(Name = "公司簡介")]
         [Required(ErrorMessage = "請填寫公司簡介")]

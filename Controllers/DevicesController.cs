@@ -32,6 +32,7 @@ namespace Carbon_inventory_platform.Controllers
                          View(await _context.Devices
                          .Where(x => x.isDeleted == 0 && x.YearId == Id) //抓出資料表裡面沒被刪除的
                          .Include(x => x.GHGs)
+                         .Include (x => x.Year.Area.Company)
                          .OrderBy(x => x.CreateTime)
                          .ToListAsync()) : //非同步方法
                          Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
@@ -295,22 +296,25 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return Problem("沒有找到資料");
             }
-            var toDelete = await _context.Devices.FindAsync(id);
-            if (toDelete != null)
+            var toDeleteDevice = await _context.Devices.FindAsync(id);
+            if (toDeleteDevice != null)
             {
-                if (toDelete.Num == 0)
+                var year = await _context.Years.FindAsync(toDeleteDevice.YearId);
+                if (toDeleteDevice.ModifiedTime == null)
                 {
-                    _context.Devices.Remove(toDelete);
+                    year.All -= toDeleteDevice.Emissions;
+                    _context.Devices.Remove(toDeleteDevice);
                 }
-                else if (toDelete != null)
+                else
                 {
-                    toDelete.isDeleted = 1;
-                    toDelete.DeleteTime = DateTime.Now;
+                    year.All -= toDeleteDevice.Emissions;
+                    toDeleteDevice.isDeleted = 1;
+                    toDeleteDevice.DeleteTime = DateTime.Now;
                 }
                 await _context.SaveChangesAsync();
 
             }
-            var YearID = toDelete.YearId;
+            var YearID = toDeleteDevice.YearId;
             return RedirectToAction("Index", "Devices", new { id = YearID });
         }
 
@@ -380,6 +384,7 @@ namespace Carbon_inventory_platform.Controllers
 
             var GHG = await _context.GHGs.Where(x => x.DeviceId == id).ToListAsync(); //抓出需要算排放量的排放源中的溫室氣體
             var Device = await _context.Devices.FindAsync(id);
+            var year = await _context.Years.FindAsync(Device.YearId);
 
             decimal all_Emission = 0;
 
@@ -431,6 +436,7 @@ namespace Carbon_inventory_platform.Controllers
                     Device.Num = activityData.Num;
                     Device.Unit = activityData.Unit;
                     Device.Emissions = all_Emission;
+                    year.All += all_Emission;
                     Device.Data_Correction = activityData.Data_Correction;
                     Device.Device_Correction = activityData.Device_Correction;
                     Device.Grade = activityData.CEF_Correction * activityData.Data_Correction * activityData.Device_Correction;
@@ -446,6 +452,7 @@ namespace Carbon_inventory_platform.Controllers
                     await _context.SaveChangesAsync();
                 }
             }
+            
             var yearID = TempData.Peek("yearId");
             return RedirectToAction("Index", "Devices", new { id = yearID });
         }
@@ -571,7 +578,6 @@ namespace Carbon_inventory_platform.Controllers
                 await _context.Devices.AddAsync(new Device()
                 {
                     Id = deviceID,
-                    Area = await _context.Years.Where(x => x.Id == id).Select(x => x.Area.Name).FirstAsync(),
                     YearId = id,
                     Name = Name,
                     Material = Material,

@@ -7,6 +7,14 @@
 <h1>總碳排放量</h1>
 <h3>@TempData.Peek("companyName")</h3>
 <p>
+    @if(Model.Area.Company.ModifiedTime!=null && Model.Area.ModifiedTime!=null && Model.All!=0)
+    {
+        <a class="btn btn-warning" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">新版報告書下載</a>
+    }
+    else
+    {
+        <a class="btn btn-warning disabled" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">新版報告書下載</a>
+    }
     <a class="btn btn-dark" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("yearId")">報告書下載</a>
     <a class="btn btn-secondary" asp-controller="Years" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
 </p>
