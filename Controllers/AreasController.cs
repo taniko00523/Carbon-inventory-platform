@@ -162,6 +162,9 @@ namespace Carbon_inventory_platform.Controllers
                         }
                         toUpdate.UniqueCode = area.UniqueCode;
                         toUpdate.FactorCode = area.FactorCode;
+                        toUpdate.OrganizationImagePath = OrganizationImagePath;
+                        toUpdate.MapImagePath = MapImagePath;
+                        toUpdate.ShopDrawingsPath = ShopDrawingsPath;
                         toUpdate.Year = area.Year;
                         toUpdate.Type = area.Type;
                         toUpdate.ModifiedTime = DateTime.Now;

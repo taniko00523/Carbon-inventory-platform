@@ -21,6 +21,30 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\Map.jpg",
+      "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\Map.jpg"
+    },
+    {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\Organization.jpg",
+      "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\Organization.jpg"
+    },
+    {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\ShopDrawings.jpg",
+      "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\ShopDrawings.jpg"
+    },
+    {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\Map.jpg",
+      "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\Map.jpg"
+    },
+    {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\Organization.jpg",
+      "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\Organization.jpg"
+    },
+    {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\ShopDrawings.jpg",
+      "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\ShopDrawings.jpg"
+    },
+    {
       "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
@@ -251,50 +275,6 @@
     {
       "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\111-1-新增公司-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\output\\111-1-新增公司-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\111-台南廠-南台科技大學-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\output\\111-台南廠-南台科技大學-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\111-台南廠-南台科技大學股份有限公司-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\output\\111-台南廠-南台科技大學股份有限公司-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\112-123-123-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\output\\112-123-123-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\112-234-新增公司-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\output\\112-234-新增公司-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\112-OO廠-新增公司-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\output\\112-OO廠-新增公司-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\112-南台廠-南台科技大學-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\output\\112-南台廠-南台科技大學-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\112-台南廠-南台科技大學-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\output\\112-台南廠-南台科技大學-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\112-廠區名稱-公司名稱-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\output\\112-廠區名稱-公司名稱-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\121-OO廠-新增公司-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\output\\121-OO廠-新增公司-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\123-123-123-溫室氣體盤查報告書.docx",
-      "PackagePath": "staticwebassets\\output\\123-123-123-溫室氣體盤查報告書.docx"
     },
     {
       "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.Carbon_inventory_platform.Microsoft.AspNetCore.StaticWebAssets.props",
