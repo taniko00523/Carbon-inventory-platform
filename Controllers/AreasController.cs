@@ -9,6 +9,7 @@ using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Hosting.Internal;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -16,10 +17,12 @@ namespace Carbon_inventory_platform.Controllers
     public class AreasController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public AreasController(ApplicationDbContext context)
+        public AreasController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         // GET: Areas
@@ -37,6 +40,41 @@ namespace Carbon_inventory_platform.Controllers
                           .OrderBy(x => x.CreateTime)
                           .ToListAsync()) : //非同步方法
                           Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Image(Guid Id, string item) //非同步方法
+        {
+            var area = _context.Areas
+                         .Where(x => x.isDeleted == 0 && x.Id == Id) //抓出資料表裡面沒被刪除的
+                         .FirstOrDefault();
+            if (item == "Map")
+            {
+                string relativePath = GetRelativePath(area.MapImagePath);
+                ViewBag.Image = relativePath;
+            }else if(item == "Organization")
+            {
+                string relativePath = GetRelativePath(area.OrganizationImagePath);
+                ViewBag.Image = relativePath;
+            }
+            else if(item == "ShopDrawings")
+            {
+                string relativePath = GetRelativePath(area.ShopDrawingsPath);
+                ViewBag.Image = relativePath;
+            }
+            return View();
+        }
+
+        private string GetRelativePath(string absolutePath) //抓取圖片資料夾的相對位置
+        {
+            string basePath = _hostingEnvironment.WebRootPath + "\\images";
+            Uri baseUri = new Uri(basePath);
+            Uri absoluteUri = new Uri(absolutePath);
+            Uri relativeUri = baseUri.MakeRelativeUri(absoluteUri);
+            string relativePath = relativeUri.ToString();
+
+            relativePath = "/" + relativePath;
+            return relativePath;
         }
 
         // GET: Areas/Details/5

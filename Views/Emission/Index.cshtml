@@ -4,7 +4,7 @@
     ViewBag.Title = "總碳排放量";
 }
 
-<h1>總碳排放量</h1>
+<h1>@ViewBag.Title</h1>
 <h3>@TempData.Peek("companyName")</h3>
 <p>
     @if(Model.Area.Company.ModifiedTime!=null && Model.Area.ModifiedTime!=null && Model.All!=0)

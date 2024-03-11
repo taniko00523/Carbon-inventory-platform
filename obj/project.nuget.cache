@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "TkjxVzSMUEJR4RrH7UV5OccX5ZPX1Ql5+s+XL6m1OJGLaBZUWlRRb0X+7t9a/h5bA3GJrhRhvniB78B7PboU4w==",
+  "dgSpecHash": "v67VBOa6SPrYXAalAZqoDS1f3hq7J7otsp2zk7gjwSRrGlB3+5gM8Hucr9EIAuCNiGP9BoHwd8NItkrY6Ndgpw==",
   "success": true,
-  "projectFilePath": "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
+  "projectFilePath": "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jsj00\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
