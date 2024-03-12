@@ -81,7 +81,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
             {
                 if (!await _userManager.CheckPasswordAsync(user, Input.Password))
                 {
-                    ModelState.AddModelError(string.Empty, "Incorrect password.");
+                    ModelState.AddModelError(string.Empty, "密碼錯誤");
                     return Page();
                 }
             }

@@ -7,36 +7,32 @@
       "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\controllers\\yearscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:controllers\\yearscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\areas\\identity\\pages\\account\\manage\\deletepersonaldata.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:areas\\identity\\pages\\account\\manage\\deletepersonaldata.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\controllers\\areascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:controllers\\areascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\areas\\identity\\pages\\account\\manage\\changepassword.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:areas\\identity\\pages\\account\\manage\\changepassword.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\views\\areas\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\areas\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\areas\\identity\\pages\\account\\manage\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:areas\\identity\\pages\\account\\manage\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\views\\areas\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\areas\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\areas\\identity\\pages\\account\\manage\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:areas\\identity\\pages\\account\\manage\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\views\\companies\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\companies\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\areas\\identity\\pages\\account\\manage\\_managenav.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:areas\\identity\\pages\\account\\manage\\_managenav.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\views\\devices\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\devices\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\areas\\identity\\pages\\account\\manage\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:areas\\identity\\pages\\account\\manage\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\views\\areas\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\areas\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\views\\areas\\image.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\areas\\image.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\views\\shared\\_loginpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\shared\\_loginpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,8 +42,86 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 6,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ChangePassword.cshtml.cs",
+              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Manage\\ChangePassword.cshtml.cs",
+              "RelativeDocumentMoniker": "Areas\\Identity\\Pages\\Account\\Manage\\ChangePassword.cshtml.cs",
+              "ToolTip": "C:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Manage\\ChangePassword.cshtml.cs",
+              "RelativeToolTip": "Areas\\Identity\\Pages\\Account\\Manage\\ChangePassword.cshtml.cs",
+              "ViewState": "AQIAAGgAAAAAAAAAAAAkwHkAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-12T09:06:57.969Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DeletePersonalData.cshtml.cs",
+              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Manage\\DeletePersonalData.cshtml.cs",
+              "RelativeDocumentMoniker": "Areas\\Identity\\Pages\\Account\\Manage\\DeletePersonalData.cshtml.cs",
+              "ToolTip": "C:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Manage\\DeletePersonalData.cshtml.cs",
+              "RelativeToolTip": "Areas\\Identity\\Pages\\Account\\Manage\\DeletePersonalData.cshtml.cs",
+              "ViewState": "AQIAAE0AAAAAAAAAAAAAAFAAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-12T09:04:33.124Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Index.cshtml.cs",
+              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Manage\\Index.cshtml.cs",
+              "RelativeDocumentMoniker": "Areas\\Identity\\Pages\\Account\\Manage\\Index.cshtml.cs",
+              "ToolTip": "C:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Manage\\Index.cshtml.cs",
+              "RelativeToolTip": "Areas\\Identity\\Pages\\Account\\Manage\\Index.cshtml.cs",
+              "ViewState": "AQIAABEAAAAAAAAAAAAkwB8AAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-12T08:58:11.845Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "_ManageNav.cshtml",
+              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
+              "RelativeDocumentMoniker": "Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
+              "ToolTip": "C:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
+              "RelativeToolTip": "Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAACMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-03-12T08:40:35.767Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Manage\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Areas\\Identity\\Pages\\Account\\Manage\\_Layout.cshtml",
+              "ToolTip": "C:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Manage\\_Layout.cshtml",
+              "RelativeToolTip": "Areas\\Identity\\Pages\\Account\\Manage\\_Layout.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-03-12T08:40:13.186Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Manage\\Index.cshtml",
+              "RelativeDocumentMoniker": "Areas\\Identity\\Pages\\Account\\Manage\\Index.cshtml",
+              "ToolTip": "C:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Manage\\Index.cshtml",
+              "RelativeToolTip": "Areas\\Identity\\Pages\\Account\\Manage\\Index.cshtml",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-03-12T08:40:21.545Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -56,107 +130,23 @@
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Carbon-inventory-platform\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAABEAAAB4AAAA",
+              "ViewState": "AQIAAFcAAAAAAAAAAAAAAGUAAAA0AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-11T08:37:06.02Z",
+              "WhenOpened": "2024-03-12T08:36:03.501Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "YearsController.cs",
-              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Controllers\\YearsController.cs",
-              "RelativeDocumentMoniker": "Controllers\\YearsController.cs",
-              "ToolTip": "C:\\Carbon-inventory-platform\\Controllers\\YearsController.cs",
-              "RelativeToolTip": "Controllers\\YearsController.cs",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAABMAAAA8AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-04T08:33:28.339Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Views\\Areas\\Create.cshtml",
-              "RelativeDocumentMoniker": "Views\\Areas\\Create.cshtml",
-              "ToolTip": "C:\\Carbon-inventory-platform\\Views\\Areas\\Create.cshtml",
-              "RelativeToolTip": "Views\\Areas\\Create.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-03-04T08:17:35.683Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AreasController.cs",
-              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Controllers\\AreasController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AreasController.cs",
-              "ToolTip": "C:\\Carbon-inventory-platform\\Controllers\\AreasController.cs",
-              "RelativeToolTip": "Controllers\\AreasController.cs",
-              "ViewState": "AQIAACQAAAAAAAAAAAAIwDgAAABQAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-04T08:07:22.642Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Image.cshtml",
-              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Views\\Areas\\Image.cshtml",
-              "RelativeDocumentMoniker": "Views\\Areas\\Image.cshtml",
-              "ToolTip": "C:\\Carbon-inventory-platform\\Views\\Areas\\Image.cshtml",
-              "RelativeToolTip": "Views\\Areas\\Image.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-03-04T08:05:11.387Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Views\\Areas\\Edit.cshtml",
-              "RelativeDocumentMoniker": "Views\\Areas\\Edit.cshtml",
-              "ToolTip": "C:\\Carbon-inventory-platform\\Views\\Areas\\Edit.cshtml",
-              "RelativeToolTip": "Views\\Areas\\Edit.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAA7AAAA",
+              "Title": "_LoginPartial.cshtml",
+              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Views\\Shared\\_LoginPartial.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_LoginPartial.cshtml",
+              "ToolTip": "C:\\Carbon-inventory-platform\\Views\\Shared\\_LoginPartial.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_LoginPartial.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-03-04T08:02:49.378Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Views\\Areas\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Areas\\Index.cshtml",
-              "ToolTip": "C:\\Carbon-inventory-platform\\Views\\Areas\\Index.cshtml",
-              "RelativeToolTip": "Views\\Areas\\Index.cshtml",
-              "ViewState": "AQIAAEIAAAAAAAAAAAAAAFwAAAAVAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-03-04T08:02:08.809Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Views\\Companies\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Companies\\Index.cshtml",
-              "ToolTip": "C:\\Carbon-inventory-platform\\Views\\Companies\\Index.cshtml",
-              "RelativeToolTip": "Views\\Companies\\Index.cshtml",
-              "ViewState": "AQIAAHgAAAAAAAAAAAAAAAEAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-03-04T08:01:41.704Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Views\\Devices\\Edit.cshtml",
-              "RelativeDocumentMoniker": "Views\\Devices\\Edit.cshtml",
-              "ToolTip": "C:\\Carbon-inventory-platform\\Views\\Devices\\Edit.cshtml",
-              "RelativeToolTip": "Views\\Devices\\Edit.cshtml",
-              "ViewState": "AQIAACoAAAAAAAAAAAAAAAMAAAAgAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-02-24T20:07:05.777Z"
+              "WhenOpened": "2024-03-12T08:35:23.246Z",
+              "EditorCaption": ""
             }
           ]
         }

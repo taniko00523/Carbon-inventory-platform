@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Carbon_inventory_platform")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a89015df0215affe0eb08077f9e20221a3489b7c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+41d16fccdfcbb5f3600ea20efea9cc16b503a045")]
 [assembly: System.Reflection.AssemblyProductAttribute("Carbon_inventory_platform")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Carbon_inventory_platform")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

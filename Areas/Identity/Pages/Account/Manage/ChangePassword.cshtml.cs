@@ -54,7 +54,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
             /// </summary>
             [Required]
             [DataType(DataType.Password)]
-            [Display(Name = "Current password")]
+            [Display(Name = "舊密碼")]
             public string OldPassword { get; set; }
 
             /// <summary>
@@ -62,9 +62,9 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "{0}必須大於{2}並小於{1}個字", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "New password")]
+            [Display(Name = "新密碼")]
             public string NewPassword { get; set; }
 
             /// <summary>
@@ -72,8 +72,8 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm new password")]
-            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+            [Display(Name = "確認新密碼")]
+            [Compare("NewPassword", ErrorMessage = "兩次輸入新密碼不吻合")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -119,7 +119,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            StatusMessage = "您的密碼已更變";
 
             return RedirectToPage();
         }

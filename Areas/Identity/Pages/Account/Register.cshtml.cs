@@ -21,6 +21,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
 {
+    [Authorize(Roles ="Admin")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
@@ -29,11 +30,13 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager; //新增RoleManager
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
+            RoleManager<IdentityRole> roleManager, //新增RoleManager
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -43,6 +46,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager; //新增RoleManager
         }
 
         /// <summary>
@@ -120,6 +124,12 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    var defaultrole = _roleManager.FindByNameAsync("User").Result;
+
+                    if (defaultrole != null)
+                    {
+                        IdentityResult roleresult = await _userManager.AddToRoleAsync(user, defaultrole.Name);
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
