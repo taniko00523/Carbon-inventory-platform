@@ -45,6 +45,18 @@
       "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\ShopDrawings.jpg"
     },
     {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\a2243e0f-d2ee-44b0-a11e-e674aba92020\\98bac0b2-6dcb-4afe-b897-14183a99af25\\Map.jpg",
+      "PackagePath": "staticwebassets\\images\\a2243e0f-d2ee-44b0-a11e-e674aba92020\\98bac0b2-6dcb-4afe-b897-14183a99af25\\Map.jpg"
+    },
+    {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\a2243e0f-d2ee-44b0-a11e-e674aba92020\\98bac0b2-6dcb-4afe-b897-14183a99af25\\Organization.jpg",
+      "PackagePath": "staticwebassets\\images\\a2243e0f-d2ee-44b0-a11e-e674aba92020\\98bac0b2-6dcb-4afe-b897-14183a99af25\\Organization.jpg"
+    },
+    {
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\a2243e0f-d2ee-44b0-a11e-e674aba92020\\98bac0b2-6dcb-4afe-b897-14183a99af25\\ShopDrawings.jpg",
+      "PackagePath": "staticwebassets\\images\\a2243e0f-d2ee-44b0-a11e-e674aba92020\\98bac0b2-6dcb-4afe-b897-14183a99af25\\ShopDrawings.jpg"
+    },
+    {
       "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\b949732f-0dda-45e7-ac57-28c921dae366\\0364a83a-eccb-4037-825a-dc4216538f75\\Map.jpg",
       "PackagePath": "staticwebassets\\images\\b949732f-0dda-45e7-ac57-28c921dae366\\0364a83a-eccb-4037-825a-dc4216538f75\\Map.jpg"
     },
