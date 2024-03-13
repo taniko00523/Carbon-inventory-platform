@@ -1,295 +1,295 @@
 {
   "Files": [
     {
-      "Id": "C:\\Carbon-inventory-platform\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\Carbon_inventory_platform.bundle.scp.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\Carbon_inventory_platform.bundle.scp.css",
       "PackagePath": "staticwebassets\\Carbon_inventory_platform.bundle.scp.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\css\\site.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\doc\\溫盤報告書範本.docx",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\doc\\溫盤報告書範本.docx",
       "PackagePath": "staticwebassets\\doc\\溫盤報告書範本.docx"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\doc\\溫盤報告書範本3.docx",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\doc\\溫盤報告書範本3.docx",
       "PackagePath": "staticwebassets\\doc\\溫盤報告書範本3.docx"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\favicon.ico",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\Map.jpg",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\Map.jpg",
       "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\Map.jpg"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\Organization.jpg",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\Organization.jpg",
       "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\Organization.jpg"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\ShopDrawings.jpg",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\ShopDrawings.jpg",
       "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\ShopDrawings.jpg"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\Map.jpg",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\Map.jpg",
       "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\Map.jpg"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\Organization.jpg",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\Organization.jpg",
       "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\Organization.jpg"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\ShopDrawings.jpg",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\ShopDrawings.jpg",
       "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\12bd59aa-552d-4cef-809e-8cd03c6f6d78\\ShopDrawings.jpg"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\images\\b949732f-0dda-45e7-ac57-28c921dae366\\0364a83a-eccb-4037-825a-dc4216538f75\\Map.jpg",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\b949732f-0dda-45e7-ac57-28c921dae366\\0364a83a-eccb-4037-825a-dc4216538f75\\Map.jpg",
       "PackagePath": "staticwebassets\\images\\b949732f-0dda-45e7-ac57-28c921dae366\\0364a83a-eccb-4037-825a-dc4216538f75\\Map.jpg"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\images\\b949732f-0dda-45e7-ac57-28c921dae366\\0364a83a-eccb-4037-825a-dc4216538f75\\Organization.jpg",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\b949732f-0dda-45e7-ac57-28c921dae366\\0364a83a-eccb-4037-825a-dc4216538f75\\Organization.jpg",
       "PackagePath": "staticwebassets\\images\\b949732f-0dda-45e7-ac57-28c921dae366\\0364a83a-eccb-4037-825a-dc4216538f75\\Organization.jpg"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\images\\b949732f-0dda-45e7-ac57-28c921dae366\\0364a83a-eccb-4037-825a-dc4216538f75\\ShopDrawings.jpg",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\b949732f-0dda-45e7-ac57-28c921dae366\\0364a83a-eccb-4037-825a-dc4216538f75\\ShopDrawings.jpg",
       "PackagePath": "staticwebassets\\images\\b949732f-0dda-45e7-ac57-28c921dae366\\0364a83a-eccb-4037-825a-dc4216538f75\\ShopDrawings.jpg"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\js\\site.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\LICENSE",
       "PackagePath": "staticwebassets\\lib\\bootstrap"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\LICENSE.txt",
       "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\dist\\jquery.js",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
-      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\output\\112-123-123-溫室氣體盤查報告書.docx",
+      "Id": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\output\\112-123-123-溫室氣體盤查報告書.docx",
       "PackagePath": "staticwebassets\\output\\112-123-123-溫室氣體盤查報告書.docx"
     },
     {

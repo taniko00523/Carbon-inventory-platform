@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {}
+    "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {}
   },
   "projects": {
-    "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {
+    "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
+        "projectUniqueName": "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
         "projectName": "Carbon_inventory_platform",
-        "projectPath": "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
+        "projectPath": "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
         "packagesPath": "C:\\Users\\jsj00\\.nuget\\packages\\",
-        "outputPath": "C:\\Carbon-inventory-platform\\obj\\",
+        "outputPath": "D:\\C#\\Carbon-inventory-platform\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jsj00\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -34,11 +34,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -111,7 +106,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }
