@@ -10,9 +10,11 @@ using Carbon_inventory_platform.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Hosting.Internal;
+using Carbon_inventory_platform.Filters;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [CheckSubscriptionData]
     [Authorize]
     public class AreasController : Controller
     {

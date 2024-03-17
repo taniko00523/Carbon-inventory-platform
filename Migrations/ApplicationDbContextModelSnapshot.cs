@@ -3443,6 +3443,9 @@ namespace Carbon_inventory_platform.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<DateTime?>("UserLimitData")
+                        .HasColumnType("TEXT");
+
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 

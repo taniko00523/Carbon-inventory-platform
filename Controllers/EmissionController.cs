@@ -1,4 +1,5 @@
 ﻿using Carbon_inventory_platform.Data;
+using Carbon_inventory_platform.Filters;
 using Carbon_inventory_platform.Models;
 using ElectronNET.API;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,7 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [CheckSubscriptionData]
     [Authorize]
     public class EmissionController : Controller
     {

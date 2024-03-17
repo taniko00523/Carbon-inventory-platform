@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {}
+    "C:\\CIP\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {}
   },
   "projects": {
-    "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {
+    "C:\\CIP\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
+        "projectUniqueName": "C:\\CIP\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
         "projectName": "Carbon_inventory_platform",
-        "projectPath": "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
-        "packagesPath": "C:\\Users\\jsj00\\.nuget\\packages\\",
-        "outputPath": "D:\\C#\\Carbon-inventory-platform\\obj\\",
+        "projectPath": "C:\\CIP\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
+        "packagesPath": "C:\\Users\\myshi\\.nuget\\packages\\",
+        "outputPath": "C:\\CIP\\Carbon-inventory-platform\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\jsj00\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\myshi\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -34,6 +34,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -106,7 +111,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -9,9 +9,11 @@ using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Microsoft.AspNetCore.Authorization;
+using Carbon_inventory_platform.Filters;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [CheckSubscriptionData]
     [Authorize]
     public class YearsController : Controller
     {

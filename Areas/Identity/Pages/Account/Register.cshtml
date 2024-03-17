@@ -1,5 +1,8 @@
 ﻿@page
+@using Carbon_inventory_platform.Models
 @model RegisterModel
+@inject UserManager<ApplicationUser> UserManager
+
 @{
     ViewData["Title"] = "新增用戶";
 }
@@ -27,6 +30,18 @@
                 <label asp-for="Input.ConfirmPassword">確認密碼</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Month" class="form-control"/>
+                <label asp-for="Input.Month"></label>
+                <span asp-validation-for="Input.Month" class="text-danger"></span>
+            </div>
+           @*  @if (User.IsInRole("Admin")) //如果是開發者，可以指定新增管理員
+            {
+                <div class="form-check">
+                    <input asp-for="Input.Manager" class="form-check-input" type="checkbox" value="true" id="Manager">
+                    <label asp-for="Input.Manager" class="form-check-label" for="flexCheckDefault">是否指派為管理員</label>
+                </div>
+            } *@
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">確認</button>
         </form>
     </div>

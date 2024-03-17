@@ -1,4 +1,5 @@
 using Carbon_inventory_platform.Data;
+using Carbon_inventory_platform.Models;
 using ElectronNET.API;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false) //Email驗證關閉
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false) //Email驗證關閉
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
@@ -85,7 +86,7 @@ using (var scope = app.Services.CreateScope())
     // Role:
     var roleManager =
         scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var roles = new[] { "Admin", "Manager", "User"};
+    var roles = new[] { "Admin", "User"};
 
     foreach (var role in roles)
     {
@@ -102,7 +103,7 @@ using (var scope = app.Services.CreateScope())
     // setting initial data in system, Role, User...
     // User:
     var UserManager =
-        scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+        scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
     string account = "Admin"; //新增一個預設的管理員帳號
     string password = "!Admin1234";
@@ -110,7 +111,7 @@ using (var scope = app.Services.CreateScope())
     if(await UserManager.FindByEmailAsync(account) == null) // 如果Admin 帳號不存在
     {
         // 建立一個Admin用戶
-        var user = new IdentityUser();
+        var user = new ApplicationUser();
         user.UserName = account;
         user.Email = account;
 

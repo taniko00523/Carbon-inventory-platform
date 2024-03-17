@@ -11,16 +11,18 @@ using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.Design;
 using Microsoft.AspNetCore.Identity;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Carbon_inventory_platform.Filters;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [CheckSubscriptionData]
     [Authorize]
     public class CompaniesController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public CompaniesController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public CompaniesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
