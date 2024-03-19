@@ -8,7 +8,6 @@
     ".NETCoreApp,Version=v7.0": {
       "Carbon_inventory_platform/1.0.0": {
         "dependencies": {
-          "DocX": "2.5.0",
           "ElectronNET.API": "23.6.2",
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "7.0.10",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "7.0.16",
@@ -16,7 +15,6 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.16",
           "Microsoft.EntityFrameworkCore.Sqlite": "7.0.16",
           "Microsoft.EntityFrameworkCore.Tools": "7.0.16",
-          "Microsoft.Office.Interop.Word": "15.0.4797.1004",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "7.0.12",
           "MySql.Data.EntityFrameworkCore": "8.0.22"
         },
@@ -68,22 +66,6 @@
           "lib/netstandard2.0/BouncyCastle.Crypto.dll": {
             "assemblyVersion": "1.8.2.0",
             "fileVersion": "1.8.18099.1"
-          }
-        }
-      },
-      "DocX/2.5.0": {
-        "dependencies": {
-          "System.Drawing.Common": "7.0.0",
-          "System.IO.Packaging": "4.5.0"
-        },
-        "runtime": {
-          "lib/net5.0/Xceed.Document.NET5.dll": {
-            "assemblyVersion": "2.5.0.0",
-            "fileVersion": "2.5.0.0"
-          },
-          "lib/net5.0/Xceed.Words.NET5.dll": {
-            "assemblyVersion": "2.5.0.0",
-            "fileVersion": "2.5.0.0"
           }
         }
       },
@@ -1602,14 +1584,6 @@
       },
       "Microsoft.NETCore.Platforms/1.1.0": {},
       "Microsoft.NETCore.Targets/1.1.0": {},
-      "Microsoft.Office.Interop.Word/15.0.4797.1004": {
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.Office.Interop.Word.dll": {
-            "assemblyVersion": "15.0.0.0",
-            "fileVersion": "15.0.4797.1003"
-          }
-        }
-      },
       "Microsoft.SqlServer.Server/1.0.0": {
         "runtime": {
           "lib/netstandard2.0/Microsoft.SqlServer.Server.dll": {
@@ -2490,14 +2464,6 @@
           "System.Runtime": "4.3.0"
         }
       },
-      "System.IO.Packaging/4.5.0": {
-        "runtime": {
-          "lib/netstandard2.0/System.IO.Packaging.dll": {
-            "assemblyVersion": "4.0.3.0",
-            "fileVersion": "4.6.26515.6"
-          }
-        }
-      },
       "System.IO.Pipelines/6.0.3": {},
       "System.Linq/4.3.0": {
         "dependencies": {
@@ -3109,13 +3075,6 @@
       "sha512": "sha512-jAy3uHN1U9DpoT/TgLqDTEhlccn/4doOVxhSmmNsnoSsGfHT9Lwr634ac9D0YFujAhNw61nWF4UIpHyzv0aQww==",
       "path": "bouncycastle.netcore/1.8.3",
       "hashPath": "bouncycastle.netcore.1.8.3.nupkg.sha512"
-    },
-    "DocX/2.5.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-GljwrWBLelooPoeGJ7BPnp5yt/VsZt6lDjxiop74BCp8+a/LQ3f4czY3e9DpcT2C2t/BgYFPMsbM6IVQTk/Y2A==",
-      "path": "docx/2.5.0",
-      "hashPath": "docx.2.5.0.nupkg.sha512"
     },
     "ElectronNET.API/23.6.2": {
       "type": "package",
@@ -3922,13 +3881,6 @@
       "path": "microsoft.netcore.targets/1.1.0",
       "hashPath": "microsoft.netcore.targets.1.1.0.nupkg.sha512"
     },
-    "Microsoft.Office.Interop.Word/15.0.4797.1004": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-lavTOrMGK/o/t3+gGr7JuVrL8XDdnS0DwPLcYv/StOiysXO4L0C36IXTVtEJo1Mh9Aoxo9a8dgGcPi+faTlv0g==",
-      "path": "microsoft.office.interop.word/15.0.4797.1004",
-      "hashPath": "microsoft.office.interop.word.15.0.4797.1004.nupkg.sha512"
-    },
     "Microsoft.SqlServer.Server/1.0.0": {
       "type": "package",
       "serviceable": true,
@@ -4488,13 +4440,6 @@
       "sha512": "sha512-6QOb2XFLch7bEc4lIcJH49nJN2HV+OC3fHDgsLVsBVBk3Y4hFAnOBGzJ2lUu7CyDDFo9IBWkSsnbkT6IBwwiMw==",
       "path": "system.io.filesystem.primitives/4.3.0",
       "hashPath": "system.io.filesystem.primitives.4.3.0.nupkg.sha512"
-    },
-    "System.IO.Packaging/4.5.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-OjtW5pGp1E7KE3ontBrzy+nSFJCM6pcbVDdo3gg4DauTfdtZKdeKvMVlADF4fSY+OfXWUp4qCvOSxIltt37LbA==",
-      "path": "system.io.packaging/4.5.0",
-      "hashPath": "system.io.packaging.4.5.0.nupkg.sha512"
     },
     "System.IO.Pipelines/6.0.3": {
       "type": "package",

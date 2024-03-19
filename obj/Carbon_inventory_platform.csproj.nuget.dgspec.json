@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\CIP\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {}
+    "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {}
   },
   "projects": {
-    "C:\\CIP\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {
+    "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\CIP\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
+        "projectUniqueName": "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
         "projectName": "Carbon_inventory_platform",
-        "projectPath": "C:\\CIP\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
-        "packagesPath": "C:\\Users\\myshi\\.nuget\\packages\\",
-        "outputPath": "C:\\CIP\\Carbon-inventory-platform\\obj\\",
+        "projectPath": "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
+        "packagesPath": "C:\\Users\\jsj00\\.nuget\\packages\\",
+        "outputPath": "C:\\Carbon-inventory-platform\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\myshi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jsj00\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -45,10 +45,6 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
-            "DocX": {
-              "target": "Package",
-              "version": "[2.5.0, )"
-            },
             "ElectronNET.API": {
               "target": "Package",
               "version": "[23.6.2, )"
@@ -78,10 +74,6 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.16, )"
-            },
-            "Microsoft.Office.Interop.Word": {
-              "target": "Package",
-              "version": "[15.0.4797.1004, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",

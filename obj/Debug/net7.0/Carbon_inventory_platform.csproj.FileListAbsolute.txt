@@ -1041,10 +1041,6 @@ D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Microsoft.Office.Interop.Word.d
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Xceed.Document.NET5.dll
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\Xceed.Words.NET5.dll
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\System.IO.Packaging.dll
-C:\Carbon-inventory-platform\bin\Debug\net7.0\Xceed.Document.NET5.dll
-C:\Carbon-inventory-platform\bin\Debug\net7.0\Xceed.Words.NET5.dll
-C:\Carbon-inventory-platform\bin\Debug\net7.0\Microsoft.Office.Interop.Word.dll
-C:\Carbon-inventory-platform\bin\Debug\net7.0\System.IO.Packaging.dll
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\ElectronNET.API.dll
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\SocketIOClient.dll
 D:\C#\Carbon-inventory-platform\bin\Debug\net7.0\SocketIOClient.Newtonsoft.Json.dll
@@ -1464,3 +1460,5 @@ C:\CIP\Carbon-inventory-platform\obj\Debug\net7.0\scopedcss\projectbundle\Carbon
 C:\CIP\Carbon-inventory-platform\obj\Debug\net7.0\Carbon_i.473AFE5D.Up2Date
 C:\CIP\Carbon-inventory-platform\obj\Debug\net7.0\Carbon_inventory_platform.genruntimeconfig.cache
 C:\CIP\Carbon-inventory-platform\obj\Debug\net7.0\ref\Carbon_inventory_platform.dll
+C:\Carbon-inventory-platform\obj\Debug\net7.0\Interop.Microsoft.Office.Interop.Word.dll
+C:\Carbon-inventory-platform\obj\Debug\net7.0\Carbon_inventory_platform.csproj.ResolveComReference.cache

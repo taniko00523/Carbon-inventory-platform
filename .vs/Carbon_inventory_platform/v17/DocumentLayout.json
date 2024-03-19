@@ -1,34 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\CIP\\Carbon-inventory-platform\\",
+  "WorkspaceRootPath": "C:\\Carbon-inventory-platform\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\CIP\\Carbon-inventory-platform\\Migrations\\20240317121113_InitalCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20240317121113_InitalCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\controllers\\emissioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:controllers\\emissioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\CIP\\Carbon-inventory-platform\\Migrations\\20240317120946_InitalCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20240317120946_InitalCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\cip\\carbon-inventory-platform\\carbon_inventory_platform.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:carbon_inventory_platform.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\cip\\carbon-inventory-platform\\views\\companies\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\companies\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\cip\\carbon-inventory-platform\\views\\shared\\_loginpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\shared\\_loginpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\cip\\carbon-inventory-platform\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\cip\\carbon-inventory-platform\\filters\\checksubscriptiondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:filters\\checksubscriptiondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Carbon-inventory-platform\\.vs\\Carbon_inventory_platform\\config\\applicationhost.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.vs\\Carbon_inventory_platform\\config\\applicationhost.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,93 +30,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "20240317121113_InitalCreate.cs",
-              "DocumentMoniker": "C:\\CIP\\Carbon-inventory-platform\\Migrations\\20240317121113_InitalCreate.cs",
-              "RelativeDocumentMoniker": "Migrations\\20240317121113_InitalCreate.cs",
-              "ToolTip": "C:\\CIP\\Carbon-inventory-platform\\Migrations\\20240317121113_InitalCreate.cs",
-              "RelativeToolTip": "Migrations\\20240317121113_InitalCreate.cs",
+              "DocumentIndex": 1,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Carbon-inventory-platform\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-17T12:11:13.309Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "20240317120946_InitalCreate.cs",
-              "DocumentMoniker": "C:\\CIP\\Carbon-inventory-platform\\Migrations\\20240317120946_InitalCreate.cs",
-              "RelativeDocumentMoniker": "Migrations\\20240317120946_InitalCreate.cs",
-              "ToolTip": "C:\\CIP\\Carbon-inventory-platform\\Migrations\\20240317120946_InitalCreate.cs",
-              "RelativeToolTip": "Migrations\\20240317120946_InitalCreate.cs",
-              "ViewState": "AQIAAIcAAAAAAAAAAAAAAJoAAABTAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-17T12:09:46.716Z",
+              "WhenOpened": "2024-03-19T11:11:49.231Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Carbon_inventory_platform",
-              "DocumentMoniker": "C:\\CIP\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
-              "RelativeDocumentMoniker": "Carbon_inventory_platform.csproj",
-              "ToolTip": "C:\\CIP\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
-              "RelativeToolTip": "Carbon_inventory_platform.csproj",
-              "ViewState": "AQIAACoAAAAAAAAAAAAMwAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-03-17T12:04:20.241Z",
+              "Title": "applicationhost.config",
+              "DocumentMoniker": "C:\\Carbon-inventory-platform\\.vs\\Carbon_inventory_platform\\config\\applicationhost.config",
+              "RelativeDocumentMoniker": ".vs\\Carbon_inventory_platform\\config\\applicationhost.config",
+              "ToolTip": "C:\\Carbon-inventory-platform\\.vs\\Carbon_inventory_platform\\config\\applicationhost.config",
+              "RelativeToolTip": ".vs\\Carbon_inventory_platform\\config\\applicationhost.config",
+              "ViewState": "AQIAAMQBAAAAAAAAAAAAAMQBAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2024-03-19T11:10:36.359Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "C:\\CIP\\Carbon-inventory-platform\\Views\\Companies\\Edit.cshtml",
-              "RelativeDocumentMoniker": "Views\\Companies\\Edit.cshtml",
-              "ToolTip": "C:\\CIP\\Carbon-inventory-platform\\Views\\Companies\\Edit.cshtml",
-              "RelativeToolTip": "Views\\Companies\\Edit.cshtml",
-              "ViewState": "AQIAAEQAAAAAAAAAAAAAAFQAAABDAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-03-17T12:02:56.562Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "_LoginPartial.cshtml",
-              "DocumentMoniker": "C:\\CIP\\Carbon-inventory-platform\\Views\\Shared\\_LoginPartial.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\_LoginPartial.cshtml",
-              "ToolTip": "C:\\CIP\\Carbon-inventory-platform\\Views\\Shared\\_LoginPartial.cshtml",
-              "RelativeToolTip": "Views\\Shared\\_LoginPartial.cshtml",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-03-17T11:32:05.554Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "C:\\CIP\\Carbon-inventory-platform\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "C:\\CIP\\Carbon-inventory-platform\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-03-17T11:32:04.694Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "CheckSubscriptionData.cs",
-              "DocumentMoniker": "C:\\CIP\\Carbon-inventory-platform\\Filters\\CheckSubscriptionData.cs",
-              "RelativeDocumentMoniker": "Filters\\CheckSubscriptionData.cs",
-              "ToolTip": "C:\\CIP\\Carbon-inventory-platform\\Filters\\CheckSubscriptionData.cs",
-              "RelativeToolTip": "Filters\\CheckSubscriptionData.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAowBQAAAAwAAAA",
+              "DocumentIndex": 0,
+              "Title": "EmissionController.cs",
+              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Controllers\\EmissionController.cs",
+              "RelativeDocumentMoniker": "Controllers\\EmissionController.cs",
+              "ToolTip": "C:\\Carbon-inventory-platform\\Controllers\\EmissionController.cs",
+              "RelativeToolTip": "Controllers\\EmissionController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-17T11:26:39.317Z",
+              "WhenOpened": "2024-03-19T08:12:24.228Z",
               "EditorCaption": ""
             }
           ]

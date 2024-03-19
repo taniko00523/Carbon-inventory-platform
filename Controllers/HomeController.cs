@@ -4,10 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
-
-using Xceed.Words.NET;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using Xceed.Document.NET;
 using System.Net;
 using System.ComponentModel.Design;
 

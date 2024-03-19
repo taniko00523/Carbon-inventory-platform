@@ -64,21 +64,6 @@
           }
         }
       },
-      "DocX/2.5.0": {
-        "type": "package",
-        "dependencies": {
-          "System.Drawing.Common": "5.0.2",
-          "System.IO.Packaging": "4.5.0"
-        },
-        "compile": {
-          "lib/net5.0/Xceed.Document.NET5.dll": {},
-          "lib/net5.0/Xceed.Words.NET5.dll": {}
-        },
-        "runtime": {
-          "lib/net5.0/Xceed.Document.NET5.dll": {},
-          "lib/net5.0/Xceed.Words.NET5.dll": {}
-        }
-      },
       "ElectronNET.API/23.6.2": {
         "type": "package",
         "dependencies": {
@@ -2083,15 +2068,6 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.Office.Interop.Word/15.0.4797.1004": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Microsoft.Office.Interop.Word.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.Office.Interop.Word.dll": {}
-        }
-      },
       "Microsoft.SqlServer.Server/1.0.0": {
         "type": "package",
         "compile": {
@@ -3452,17 +3428,6 @@
           "lib/netstandard1.3/System.IO.FileSystem.Primitives.dll": {}
         }
       },
-      "System.IO.Packaging/4.5.0": {
-        "type": "package",
-        "compile": {
-          "ref/netstandard2.0/System.IO.Packaging.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/System.IO.Packaging.dll": {}
-        }
-      },
       "System.IO.Pipelines/6.0.3": {
         "type": "package",
         "compile": {
@@ -4727,26 +4692,6 @@
         "lib/netstandard2.0/BouncyCastle.Crypto.xml",
         "lib/xamarinios/BouncyCastle.Crypto.dll",
         "lib/xamarinios/BouncyCastle.Crypto.xml"
-      ]
-    },
-    "DocX/2.5.0": {
-      "sha512": "GljwrWBLelooPoeGJ7BPnp5yt/VsZt6lDjxiop74BCp8+a/LQ3f4czY3e9DpcT2C2t/BgYFPMsbM6IVQTk/Y2A==",
-      "type": "package",
-      "path": "docx/2.5.0",
-      "hasTools": true,
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE.txt",
-        "Xceed_Logo_Retina-400x400.png",
-        "docs/readme.md",
-        "docx.2.5.0.nupkg.sha512",
-        "docx.nuspec",
-        "lib/net40/Xceed.Document.NET.dll",
-        "lib/net40/Xceed.Words.NET.dll",
-        "lib/net5.0/Xceed.Document.NET5.dll",
-        "lib/net5.0/Xceed.Words.NET5.dll",
-        "tools/install.ps1"
       ]
     },
     "ElectronNET.API/23.6.2": {
@@ -7445,19 +7390,6 @@
         "runtime.json"
       ]
     },
-    "Microsoft.Office.Interop.Word/15.0.4797.1004": {
-      "sha512": "lavTOrMGK/o/t3+gGr7JuVrL8XDdnS0DwPLcYv/StOiysXO4L0C36IXTVtEJo1Mh9Aoxo9a8dgGcPi+faTlv0g==",
-      "type": "package",
-      "path": "microsoft.office.interop.word/15.0.4797.1004",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net20/Microsoft.Office.Interop.Word.dll",
-        "lib/netstandard2.0/Microsoft.Office.Interop.Word.dll",
-        "microsoft.office.interop.word.15.0.4797.1004.nupkg.sha512",
-        "microsoft.office.interop.word.nuspec"
-      ]
-    },
     "Microsoft.SqlServer.Server/1.0.0": {
       "sha512": "N4KeF3cpcm1PUHym1RmakkzfkEv3GRMyofVv40uXsQhCQeglr2OHNcUk2WOG51AKpGO8ynGpo9M/kFXSzghwug==",
       "type": "package",
@@ -10044,30 +9976,6 @@
         "ref/xamarinwatchos10/_._",
         "system.io.filesystem.primitives.4.3.0.nupkg.sha512",
         "system.io.filesystem.primitives.nuspec"
-      ]
-    },
-    "System.IO.Packaging/4.5.0": {
-      "sha512": "OjtW5pGp1E7KE3ontBrzy+nSFJCM6pcbVDdo3gg4DauTfdtZKdeKvMVlADF4fSY+OfXWUp4qCvOSxIltt37LbA==",
-      "type": "package",
-      "path": "system.io.packaging/4.5.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
-        "lib/net46/System.IO.Packaging.dll",
-        "lib/netstandard1.3/System.IO.Packaging.dll",
-        "lib/netstandard2.0/System.IO.Packaging.dll",
-        "ref/net46/System.IO.Packaging.dll",
-        "ref/net46/System.IO.Packaging.xml",
-        "ref/netstandard1.3/System.IO.Packaging.dll",
-        "ref/netstandard1.3/System.IO.Packaging.xml",
-        "ref/netstandard2.0/System.IO.Packaging.dll",
-        "ref/netstandard2.0/System.IO.Packaging.xml",
-        "system.io.packaging.4.5.0.nupkg.sha512",
-        "system.io.packaging.nuspec",
-        "useSharedDesignerContext.txt",
-        "version.txt"
       ]
     },
     "System.IO.Pipelines/6.0.3": {
@@ -13062,7 +12970,6 @@
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "DocX >= 2.5.0",
       "ElectronNET.API >= 23.6.2",
       "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore >= 7.0.10",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 7.0.16",
@@ -13070,25 +12977,24 @@
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.16",
       "Microsoft.EntityFrameworkCore.Sqlite >= 7.0.16",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.16",
-      "Microsoft.Office.Interop.Word >= 15.0.4797.1004",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 7.0.12",
       "MySql.Data.EntityFrameworkCore >= 8.0.22"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\myshi\\.nuget\\packages\\": {}
+    "C:\\Users\\jsj00\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\CIP\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
+      "projectUniqueName": "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
       "projectName": "Carbon_inventory_platform",
-      "projectPath": "C:\\CIP\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
-      "packagesPath": "C:\\Users\\myshi\\.nuget\\packages\\",
-      "outputPath": "C:\\CIP\\Carbon-inventory-platform\\obj\\",
+      "projectPath": "C:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
+      "packagesPath": "C:\\Users\\jsj00\\.nuget\\packages\\",
+      "outputPath": "C:\\Carbon-inventory-platform\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\myshi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\jsj00\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -13119,10 +13025,6 @@
       "net7.0": {
         "targetAlias": "net7.0",
         "dependencies": {
-          "DocX": {
-            "target": "Package",
-            "version": "[2.5.0, )"
-          },
           "ElectronNET.API": {
             "target": "Package",
             "version": "[23.6.2, )"
@@ -13152,10 +13054,6 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[7.0.16, )"
-          },
-          "Microsoft.Office.Interop.Word": {
-            "target": "Package",
-            "version": "[15.0.4797.1004, )"
           },
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",

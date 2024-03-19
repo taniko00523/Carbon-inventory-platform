@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Carbon_inventory_platform.Models.ApplicationUser>
+
+<h2>用戶總覽</h2>
+<a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">新增用戶</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>用戶名稱</th>
+            <th>電子郵件</th>
+            <th>使用期限</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@(user.UserLimitData.HasValue ? user.UserLimitData.Value.ToString("yyyy-MM-dd") : "未設定")</td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal_@user.Id">
+                        編輯
+                    </button>
+                    <!-- 編輯用戶資料的模態框 -->
+                    <div class="modal fade" id="editModal_@user.Id" tabindex="-1" role="dialog" aria-labelledby="editModalLabel_@user.Id" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editModalLabel_@user.Id">編輯用戶資料</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="modal-body">
+                                        <form id="editUserForm_@user.Id">
+                                            <div class="form-group">
+                                                <label for="editUserLimitData">使用期限：</label>
+                                                <input type="date" class="form-control" id="editUserLimitData" name="editUserLimitData" value="@user.UserLimitData?.ToString("yyyy-MM-dd")">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                    <button type="button" class="btn btn-primary">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
