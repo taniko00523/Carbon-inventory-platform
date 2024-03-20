@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "iw8phMZynLABFdu/RjTG+dANwU/nY5ykMuOk2RQfU1w=",
+  "Hash": "29AexFxa0nKR4/DHdDYkmLIYdvNTZrCWj7UL5uXZnF8=",
   "Source": "Carbon_inventory_platform",
   "BasePath": "_content/Carbon_inventory_platform",
   "Mode": "Default",
@@ -72,25 +72,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
-    },
-    {
-      "Identity": "C:\\Carbon-inventory-platform\\wwwroot\\doc\\~$報告書範本3.docx",
-      "SourceId": "Carbon_inventory_platform",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Carbon-inventory-platform\\wwwroot\\",
-      "BasePath": "_content/Carbon_inventory_platform",
-      "RelativePath": "doc/~$報告書範本3.docx",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\doc\\~$報告書範本3.docx"
     },
     {
       "Identity": "C:\\Carbon-inventory-platform\\wwwroot\\doc\\溫盤報告書範本.docx",

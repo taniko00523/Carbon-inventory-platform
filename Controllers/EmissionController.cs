@@ -700,7 +700,9 @@ namespace Carbon_inventory_platform.Controllers
             string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\output\\", data.Num + "-" + data.Area.Name + "-" + data.Area.Company.Name + "-溫室氣體盤查報告書.docx");
             //-----------------檔案設定
             Application wordApp = new Application();
-            Document doc = wordApp.Documents.Open(filePath);
+            //Document doc = wordApp.Documents.Open(filePath);
+            Document doc = wordApp.Documents.Add(filePath);
+            doc.ActiveWindow.Visible = true;
 
             //-----------------替換的文本
             ReplaceText(doc, "[公司中文名稱]", data.Area.Company.Name);
@@ -780,34 +782,43 @@ namespace Carbon_inventory_platform.Controllers
             GenerateGHGsTable(doc, ManyGHGs, "製程", "CO2");
             GenerateGHGsTable(doc, ManyGHGs, "外購電力", "CO2");
             //--------------------------------排放源溫室氣體表表
-
-            // 儲存並關閉文件
-            doc.SaveAs2(newFilePath);
+            //--------------------------------類別表
+            if (device.Any(x => x.Scope == "類別一"))
+            {
+                GenerateScopeTable(doc, device, "類別一");
+            }
+            // 檢查是否有類別二設備
+            if (device.Any(x => x.Scope == "類別二"))
+            {
+                GenerateScopeTable(doc, device, "類別二");
+            }
+            //--------------------------------類別表
+            //--------------------------------圖片
+            string mapPath = data.Area.MapImagePath;
+            string organiztionPath = data.Area.OrganizationImagePath;
+            string showDrawingPath = data.Area.ShopDrawingsPath;
+            if(mapPath !=  null)
+            {
+                replaceImage(doc, wordApp, "地理位置圖", mapPath);
+            }
+            if(organiztionPath != null)
+            {
+                replaceImage(doc, wordApp, "公司組織圖", organiztionPath);
+            }
+            if(showDrawingPath != null)
+            {
+                replaceImage(doc, wordApp, "廠區圖", showDrawingPath);
+            }
+            //--------------------------------圖片
+            // 儲存為Word檔
+            doc.SaveAs(newFilePath);
+            // 儲存為PDF檔
+            // doc.SaveAs2(newFilePath, WdSaveFormat.wdFormatPDF);
+            // 關閉文件
             doc.Close();
 
             // 關閉 Word 應用程式
             wordApp.Quit();
-
-            //    //--------------------------------類別表
-            //    if (device.Any(x => x.Scope == "類別一"))
-            //    {
-            //        GenerateScopeTable(doc, device, "類別一");
-            //    }
-            //    // 檢查是否有類別二設備
-            //    if (device.Any(x => x.Scope == "類別二"))
-            //    {
-            //        GenerateScopeTable(doc, device, "類別二");
-            //    }
-            //    //--------------------------------類別表
-
-            //    //--------------------------------圖片
-            //    string mapPath = data.Area.MapImagePath;
-            //    string organiztionPath = data.Area.OrganizationImagePath;
-            //    string showDrawingPath = data.Area.ShopDrawingsPath;
-            //    replaceImage(doc,"[廠區圖]", showDrawingPath);
-            //    replaceImage(doc, "[地理位置圖]", mapPath);
-            //    replaceImage(doc, "[公司組織圖]", organiztionPath);
-            //    //--------------------------------圖片
 
             var fileBytes = System.IO.File.ReadAllBytes(newFilePath);
             var fileName = data.Num + "-" + data.Area.Name + "-" + data.Area.Company.Name + "-溫室氣體盤查報告書.docx"; // 可以自行定義檔名
@@ -818,158 +829,144 @@ namespace Carbon_inventory_platform.Controllers
 
         static void GenerateGHGsTable(Document doc, List<GHG> manyGHGs, string emissionPattern, string gasName)
         {
-            string ReplaceText = $"[{emissionPattern}{gasName}]";
-            var range = FindRange(doc, ReplaceText);
-            while (range.Find.Found)
+            string ReplaceText = $"{emissionPattern}{gasName}";
+            int num = manyGHGs.Count(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName);
+            foreach (Bookmark bookmark in doc.Bookmarks)
             {
-                int num = manyGHGs.Count(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName);
-                //var font = doc.Application.Selection.Font;
-                //font.Name = "標楷體"; // 設置字型
-
-                // 插入表格
-                Table table = doc.Tables.Add(range, num + 1, 9);
-                table.Borders.Enable = 1;
-                //table.Design = WdTableStyle.wdTableStyleMediumShading1Accent3;
-
-                // 填充表格標題
-                table.Cell(1, 1).Range.Text = "類別";
-                table.Cell(1, 2).Range.Text = "排放型式";
-                table.Cell(1, 3).Range.Text = "活動數據";
-                table.Cell(1, 4).Range.Text = "溫室氣體";
-                table.Cell(1, 5).Range.Text = "排放係數";
-                table.Cell(1, 6).Range.Text = "係數來源";
-                table.Cell(1, 7).Range.Text = "排放量\n(公噸/年)";
-                table.Cell(1, 8).Range.Text = "GWP";
-                table.Cell(1, 9).Range.Text = "排放當量\n(公噸CO2e/年)";
-
-                int rowIndex = 2;
-
-                // 填充表格內容
-                foreach (var GHG in manyGHGs)
+                if (bookmark.Name == ReplaceText)
                 {
-                    if (GHG.Device.EmissionPattern == emissionPattern && GHG.Name == gasName)
+                    Microsoft.Office.Interop.Word.Range range = bookmark.Range;
+                    range.Tables.Add(range, num + 1, 9);
+                    Table table = range.Tables[1];
+                    table.Borders.Enable = 1;
+                    //table.set_Style(WdBuiltinStyle.);
+
+                    // 填充表格標題
+                    table.Cell(1, 1).Range.Text = "類別";
+                    table.Cell(1, 2).Range.Text = "排放型式";
+                    table.Cell(1, 3).Range.Text = "活動數據";
+                    table.Cell(1, 4).Range.Text = "溫室氣體";
+                    table.Cell(1, 5).Range.Text = "排放係數";
+                    table.Cell(1, 6).Range.Text = "係數來源";
+                    table.Cell(1, 7).Range.Text = "排放量\n(公噸/年)";
+                    table.Cell(1, 8).Range.Text = "GWP";
+                    table.Cell(1, 9).Range.Text = "排放當量\n(公噸CO2e/年)";
+
+                    int rowIndex = 2;
+
+                    // 填充表格內容
+                    foreach (var GHG in manyGHGs)
                     {
-                        table.Cell(rowIndex, 1).Range.Text = GHG.Device.Scope;
-                        table.Cell(rowIndex, 2).Range.Text = GHG.Device.EmissionPattern;
-                        table.Cell(rowIndex, 3).Range.Text = GHG.Device.Num.ToString() + GHG.Device.Unit;
-                        table.Cell(rowIndex, 4).Range.Text = GHG.Name;
-                        table.Cell(rowIndex, 5).Range.Text = GHG.CEF.ToString() + "公噸/" + GHG.Device.Unit;
-                        table.Cell(rowIndex, 6).Range.Text = "係數來源";
-                        table.Cell(rowIndex, 7).Range.Text = "排放量\n(公噸/年)";
-                        table.Cell(rowIndex, 8).Range.Text = GHG.GWP.ToString();
-                        table.Cell(rowIndex, 9).Range.Text = GHG.Emission.ToString();
-                        rowIndex++;
+                        if (GHG.Device.EmissionPattern == emissionPattern && GHG.Name == gasName)
+                        {
+                            table.Cell(rowIndex, 1).Range.Text = GHG.Device.Scope;
+                            table.Cell(rowIndex, 2).Range.Text = GHG.Device.EmissionPattern;
+                            table.Cell(rowIndex, 3).Range.Text = GHG.Device.Num.ToString() + GHG.Device.Unit;
+                            table.Cell(rowIndex, 4).Range.Text = GHG.Name;
+                            table.Cell(rowIndex, 5).Range.Text = GHG.CEF.ToString() + "公噸/" + GHG.Device.Unit;
+                            table.Cell(rowIndex, 6).Range.Text = "係數來源";
+                            table.Cell(rowIndex, 7).Range.Text = "排放量\n(公噸/年)";
+                            table.Cell(rowIndex, 8).Range.Text = GHG.GWP.ToString();
+                            table.Cell(rowIndex, 9).Range.Text = GHG.Emission.ToString();
+                            rowIndex++;
+                        }
                     }
                 }
-                ReplaceTable(range, ReplaceText);
+            }
+        }
+
+        public void replaceImage(Document doc, Application app, string ReplaceText, string imagePath)
+        {
+            foreach (Bookmark bookmark in doc.Bookmarks)
+            {
+                if (bookmark.Name == ReplaceText)
+                {
+                    bookmark.Select();
+                    Selection sel = app.Selection;
+                    sel.InlineShapes.AddPicture(imagePath);
+                }
+            }
+        }
+
+        public void GenerateScopeTable(Document doc, List<Device> devices, string scope)
+        {
+            string ReplaceText = scope + "Table";
+            int numDevices = devices.FindAll(x => x.Scope == scope).Count;
+            foreach (Bookmark bookmark in doc.Bookmarks)
+            {
+                if (bookmark.Name == ReplaceText)
+                {
+                    Microsoft.Office.Interop.Word.Range range = bookmark.Range;
+                    range.Tables.Add(range, numDevices + 1, 10);
+                    Table table = range.Tables[1];
+
+                    // 設定表格風格
+                    table.Borders.Enable = 1; // 表格邊框可見
+                                              //table.Shading.BackgroundPatternColor = WdColor.wdColorLightBlue; // 表格背景顏色
+
+                    var font = doc.Application.Selection.Font;
+                    font.Name = "標楷體"; // 設置字型
+
+                    // 填充表格標題
+                    table.Cell(1, 1).Range.Text = "類別";
+                    table.Cell(1, 2).Range.Text = "型式";
+                    table.Cell(1, 3).Range.Text = "排放源";
+                    table.Cell(1, 4).Range.Text = "CO₂";
+                    table.Cell(1, 5).Range.Text = "CH₄";
+                    table.Cell(1, 6).Range.Text = "N₂O";
+                    table.Cell(1, 7).Range.Text = "HFCs";
+                    table.Cell(1, 8).Range.Text = "PFCs";
+                    table.Cell(1, 9).Range.Text = "SF₆";
+                    table.Cell(1, 10).Range.Text = "NF₃";
+
+                    int rowIndex = 2;
+
+                    // 遍歷設備列表，填充表格內容
+                    foreach (var item in devices)
+                    {
+                        if (item.Scope == scope)
+                        {
+                            // 填充基本資料
+                            table.Cell(rowIndex, 1).Range.Text = item.Scope;
+                            table.Cell(rowIndex, 2).Range.Text = item.EmissionPattern;
+                            table.Cell(rowIndex, 3).Range.Text = item.Name + "(" + item.Material + ")";
+
+                            // 填充溫室氣體選項欄位
+                            foreach (var GHG in _context.GHGs.Where(ghg => ghg.DeviceId == item.Id))
+                            {
+                                switch (GHG.Name)
+                                {
+                                    case "CO2":
+                                        table.Cell(rowIndex, 4).Range.Text = "v";
+                                        break;
+                                    case "CH4":
+                                        table.Cell(rowIndex, 5).Range.Text = "v";
+                                        break;
+                                    case "N2O":
+                                        table.Cell(rowIndex, 6).Range.Text = "v";
+                                        break;
+                                    case "HFCS":
+                                        table.Cell(rowIndex, 7).Range.Text = "v";
+                                        break;
+                                    case "PFCS":
+                                        table.Cell(rowIndex, 8).Range.Text = "v";
+                                        break;
+                                    case "SF6":
+                                        table.Cell(rowIndex, 9).Range.Text = "v";
+                                        break;
+                                    case "NF3":
+                                        table.Cell(rowIndex, 10).Range.Text = "v";
+                                        break;
+                                }
+                            }
+
+                            rowIndex++;
+                        }
+                    }
+                }
             }
 
         }
-
-
-
-
-        static Microsoft.Office.Interop.Word.Range FindRange(Document doc, string replaceText)
-        {
-            Microsoft.Office.Interop.Word.Range range = doc.Content;
-            range.Find.ClearFormatting();
-            range.Find.Execute(FindText: replaceText);
-            return range;
-        }
-
-        static void ReplaceTable(Microsoft.Office.Interop.Word.Range range, string replaceText)
-        {
-            // 移動 range 到表格後面的位置，以繼續尋找下一個要替換的文字
-            //range = NewTable.Range;
-            range.Collapse(WdCollapseDirection.wdCollapseEnd);
-            range.Find.Execute(FindText: replaceText);
-        }
-
-
-        //public void replaceImage(DocX doc, string text, string imagePath)
-        //    {
-        //        foreach (var paragraph in doc.Paragraphs)
-        //        {
-        //            if (paragraph.Text.Contains(text))
-        //            {
-        //                // 插入圖片
-        //                if (imagePath != null)
-        //                {
-        //                    var image = doc.AddImage(imagePath);
-        //                    var picture = image.CreatePicture(450, 450);
-        //                    paragraph.InsertPicture(picture);
-        //                }
-
-        //                // 移除包含替換文字的原始內容
-        //                doc.ReplaceText(text, string.Empty);
-        //            }
-        //        }
-        //    }
-
-        //public void GenerateScopeTable(DocX doc, List<Device> devices, string scope)
-        //{
-        //    // 獲取特定類別的設備數量
-        //    int numDevices = devices.Where(x => x.Scope == scope).Count();
-        //    // 創建表格，行數為設備數量 + 1
-        //    Xceed.Document.NET.Table table = doc.AddTable(numDevices + 1, 10);
-        //    table.Design = TableDesign.MediumShading1Accent3;
-        //    var font = new Xceed.Document.NET.Font("標楷體");
-        //    // 填充表格標題
-        //    table.Rows[0].Cells[0].Paragraphs.First().Append("類別").Font(font);
-        //    table.Rows[0].Cells[1].Paragraphs.First().Append("型式").Font(font);
-        //    table.Rows[0].Cells[2].Paragraphs.First().Append("排放源").Font(font);
-        //    table.Rows[0].Cells[3].Paragraphs.First().Append("CO₂").Font(font);
-        //    table.Rows[0].Cells[4].Paragraphs.First().Append("CH₄").Font(font);
-        //    table.Rows[0].Cells[5].Paragraphs.First().Append("N₂O").Font(font);
-        //    table.Rows[0].Cells[6].Paragraphs.First().Append("HFCs").Font(font);
-        //    table.Rows[0].Cells[7].Paragraphs.First().Append("PFCs").Font(font);
-        //    table.Rows[0].Cells[8].Paragraphs.First().Append("SF₆").Font(font);
-        //    table.Rows[0].Cells[9].Paragraphs.First().Append("NF₃").Font(font);
-
-        //    // 遍歷設備列表，填充表格內容
-        //    int rowIndex = 1;
-        //    foreach (var item in devices.Where(x => x.Scope == scope))
-        //    {
-        //        // 獲取特定設備的溫室氣體
-        //        var GHGs = _context.GHGs.Where(ghg => ghg.DeviceId == item.Id);
-
-        //        // 填充基本資料
-        //        table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(item.Scope).Font(font);
-        //        table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(item.EmissionPattern).Font(font);
-        //        table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(item.Name + "(" + item.Material + ")").Font(font);
-        //        // 填充溫室氣體選項欄位
-        //        foreach (var GHG in GHGs)
-        //        {
-        //            switch (GHG.Name)
-        //            {
-        //                case "CO2":
-        //                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("v").Font(font);
-        //                    break;
-        //                case "CH4":
-        //                    table.Rows[rowIndex].Cells[4].Paragraphs.First().Append("v").Font(font);
-        //                    break;
-        //                case "N2O":
-        //                    table.Rows[rowIndex].Cells[5].Paragraphs.First().Append("v").Font(font);
-        //                    break;
-        //                case "HFCS":
-        //                    table.Rows[rowIndex].Cells[6].Paragraphs.First().Append("v").Font(font);
-        //                    break;
-        //                case "PFCS":
-        //                    table.Rows[rowIndex].Cells[7].Paragraphs.First().Append("v").Font(font);
-        //                    break;
-        //                case "SF6":
-        //                    table.Rows[rowIndex].Cells[8].Paragraphs.First().Append("v").Font(font);
-        //                    break;
-        //                case "NF3":
-        //                    table.Rows[rowIndex].Cells[9].Paragraphs.First().Append("v").Font(font);
-        //                    break;
-        //            }
-        //        }
-        //        rowIndex++;
-        //    }
-
-        //    doc.ReplaceTextWithObject("[" + scope + "Table]", table);
-        //}
 
         public void ScopeDevice(Document doc, List<Device> devices, string scope)
         {
@@ -977,7 +974,6 @@ namespace Carbon_inventory_platform.Controllers
             int i = 0;
             foreach (var item in devices)
             {
-
                 if (item.Scope == scope)
                 {
                     i++;
