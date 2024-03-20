@@ -699,7 +699,7 @@ namespace Carbon_inventory_platform.Controllers
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", "溫盤報告書範本3.docx");
             string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\output\\", data.Num + "-" + data.Area.Name + "-" + data.Area.Company.Name + "-溫室氣體盤查報告書.docx");
             //-----------------檔案設定
-            Application wordApp = new Application();
+            Application wordApp = new();
             //Document doc = wordApp.Documents.Open(filePath);
             Document doc = wordApp.Documents.Add(filePath);
             doc.ActiveWindow.Visible = true;
@@ -794,21 +794,32 @@ namespace Carbon_inventory_platform.Controllers
             }
             //--------------------------------類別表
             //--------------------------------圖片
-            string mapPath = data.Area.MapImagePath;
-            string organiztionPath = data.Area.OrganizationImagePath;
-            string showDrawingPath = data.Area.ShopDrawingsPath;
-            if(mapPath !=  null)
+            if (data.Area.MapImagePath != null)
             {
-                replaceImage(doc, wordApp, "地理位置圖", mapPath);
+                string mapPath = data.Area.MapImagePath;
+                if (mapPath != null)
+                {
+                    ReplaceImage(doc, wordApp, "地理位置圖", mapPath);
+                }
             }
-            if(organiztionPath != null)
+            if (data.Area.OrganizationImagePath != null)
             {
-                replaceImage(doc, wordApp, "公司組織圖", organiztionPath);
+                string organiztionPath = data.Area.OrganizationImagePath;
+                if (organiztionPath != null)
+                {
+                    ReplaceImage(doc, wordApp, "公司組織圖", organiztionPath);
+                }
             }
-            if(showDrawingPath != null)
+            if (data.Area.ShopDrawingsPath != null)
             {
-                replaceImage(doc, wordApp, "廠區圖", showDrawingPath);
+                string showDrawingPath = data.Area.ShopDrawingsPath;
+                if (showDrawingPath != null)
+                {
+                    ReplaceImage(doc, wordApp, "廠區圖", showDrawingPath);
+                }
             }
+
+
             //--------------------------------圖片
             // 儲存為Word檔
             doc.SaveAs(newFilePath);
@@ -875,7 +886,7 @@ namespace Carbon_inventory_platform.Controllers
             }
         }
 
-        public void replaceImage(Document doc, Application app, string ReplaceText, string imagePath)
+        public void ReplaceImage(Document doc, Application app, string ReplaceText, string imagePath)
         {
             foreach (Bookmark bookmark in doc.Bookmarks)
             {

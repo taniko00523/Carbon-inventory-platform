@@ -1,28 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Carbon-inventory-platform\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\controllers\\emissioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:controllers\\emissioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\controllers\\areascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:controllers\\areascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\views\\devices\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\devices\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|c:\\carbon-inventory-platform\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Carbon-inventory-platform\\.vs\\Carbon_inventory_platform\\config\\applicationhost.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.vs\\Carbon_inventory_platform\\config\\applicationhost.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -30,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -39,68 +18,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AreasController.cs",
-              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Controllers\\AreasController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AreasController.cs",
-              "ToolTip": "C:\\Carbon-inventory-platform\\Controllers\\AreasController.cs",
-              "RelativeToolTip": "Controllers\\AreasController.cs",
-              "ViewState": "AQIAAC8AAAAAAAAAAIA6wD8AAAA2AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-20T13:08:34.616Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "EmissionController.cs",
-              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Controllers\\EmissionController.cs",
-              "RelativeDocumentMoniker": "Controllers\\EmissionController.cs",
-              "ToolTip": "C:\\Carbon-inventory-platform\\Controllers\\EmissionController.cs",
-              "RelativeToolTip": "Controllers\\EmissionController.cs",
-              "ViewState": "AQIAAMMDAAAAAAAAAAAAABIAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-19T08:12:24.228Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Views\\Devices\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Devices\\Index.cshtml",
-              "ToolTip": "C:\\Carbon-inventory-platform\\Views\\Devices\\Index.cshtml",
-              "RelativeToolTip": "Views\\Devices\\Index.cshtml",
-              "ViewState": "AQIAABIAAAAAAAAAAAAAACoAAAAMAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-03-20T07:03:20.912Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
-              "ToolTip": "C:\\Carbon-inventory-platform\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "Controllers\\HomeController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-19T11:11:49.231Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "applicationhost.config",
-              "DocumentMoniker": "C:\\Carbon-inventory-platform\\.vs\\Carbon_inventory_platform\\config\\applicationhost.config",
-              "RelativeDocumentMoniker": ".vs\\Carbon_inventory_platform\\config\\applicationhost.config",
-              "ToolTip": "C:\\Carbon-inventory-platform\\.vs\\Carbon_inventory_platform\\config\\applicationhost.config",
-              "RelativeToolTip": ".vs\\Carbon_inventory_platform\\config\\applicationhost.config",
-              "ViewState": "AQIAAMQBAAAAAAAAAAAAAMQBAAAjAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2024-03-19T11:10:36.359Z"
             }
           ]
         }

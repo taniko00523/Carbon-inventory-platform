@@ -21,6 +21,18 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\images\\217d9cdf-e162-4997-b89f-707f9642bc53\\17d99b11-8b45-4ba3-982b-7f875937a865\\Map.jpg",
+      "PackagePath": "staticwebassets\\images\\217d9cdf-e162-4997-b89f-707f9642bc53\\17d99b11-8b45-4ba3-982b-7f875937a865\\Map.jpg"
+    },
+    {
+      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\images\\217d9cdf-e162-4997-b89f-707f9642bc53\\17d99b11-8b45-4ba3-982b-7f875937a865\\Organization.jpg",
+      "PackagePath": "staticwebassets\\images\\217d9cdf-e162-4997-b89f-707f9642bc53\\17d99b11-8b45-4ba3-982b-7f875937a865\\Organization.jpg"
+    },
+    {
+      "Id": "C:\\Carbon-inventory-platform\\wwwroot\\images\\217d9cdf-e162-4997-b89f-707f9642bc53\\17d99b11-8b45-4ba3-982b-7f875937a865\\ShopDrawings.jpg",
+      "PackagePath": "staticwebassets\\images\\217d9cdf-e162-4997-b89f-707f9642bc53\\17d99b11-8b45-4ba3-982b-7f875937a865\\ShopDrawings.jpg"
+    },
+    {
       "Id": "C:\\Carbon-inventory-platform\\wwwroot\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\Map.jpg",
       "PackagePath": "staticwebassets\\images\\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\\00000000-0000-0000-0000-000000000000\\Map.jpg"
     },

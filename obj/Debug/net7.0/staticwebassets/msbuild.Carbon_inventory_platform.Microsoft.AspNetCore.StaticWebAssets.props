@@ -80,6 +80,54 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\favicon.ico))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\217d9cdf-e162-4997-b89f-707f9642bc53\17d99b11-8b45-4ba3-982b-7f875937a865\Map.jpg))">
+      <SourceType>Package</SourceType>
+      <SourceId>Carbon_inventory_platform</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Carbon_inventory_platform</BasePath>
+      <RelativePath>images/217d9cdf-e162-4997-b89f-707f9642bc53/17d99b11-8b45-4ba3-982b-7f875937a865/Map.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\217d9cdf-e162-4997-b89f-707f9642bc53\17d99b11-8b45-4ba3-982b-7f875937a865\Map.jpg))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\217d9cdf-e162-4997-b89f-707f9642bc53\17d99b11-8b45-4ba3-982b-7f875937a865\Organization.jpg))">
+      <SourceType>Package</SourceType>
+      <SourceId>Carbon_inventory_platform</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Carbon_inventory_platform</BasePath>
+      <RelativePath>images/217d9cdf-e162-4997-b89f-707f9642bc53/17d99b11-8b45-4ba3-982b-7f875937a865/Organization.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\217d9cdf-e162-4997-b89f-707f9642bc53\17d99b11-8b45-4ba3-982b-7f875937a865\Organization.jpg))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\217d9cdf-e162-4997-b89f-707f9642bc53\17d99b11-8b45-4ba3-982b-7f875937a865\ShopDrawings.jpg))">
+      <SourceType>Package</SourceType>
+      <SourceId>Carbon_inventory_platform</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Carbon_inventory_platform</BasePath>
+      <RelativePath>images/217d9cdf-e162-4997-b89f-707f9642bc53/17d99b11-8b45-4ba3-982b-7f875937a865/ShopDrawings.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\217d9cdf-e162-4997-b89f-707f9642bc53\17d99b11-8b45-4ba3-982b-7f875937a865\ShopDrawings.jpg))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\92729dde-ac5b-4dc7-9b7e-7f3e2c3afc85\00000000-0000-0000-0000-000000000000\Map.jpg))">
       <SourceType>Package</SourceType>
       <SourceId>Carbon_inventory_platform</SourceId>

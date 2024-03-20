@@ -20,18 +20,9 @@ namespace Carbon_inventory_platform.Controllers
         }
 
         // GET: Companies
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-
-            var del = TempData["companyId"];
-            del = TempData["areaId"];
-            del = TempData["areaName"];
-            del = TempData["yearId"];
-            del = TempData["year"];
-            del = TempData["companyName"];
-          
             return View();
-
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

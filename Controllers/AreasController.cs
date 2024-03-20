@@ -47,31 +47,45 @@ namespace Carbon_inventory_platform.Controllers
         [HttpPost]
         public async Task<IActionResult> Image(Guid Id, string item) //非同步方法
         {
-            var area = _context.Areas
+            var area = await _context.Areas
                          .Where(x => x.isDeleted == 0 && x.Id == Id) //抓出資料表裡面沒被刪除的
-                         .FirstOrDefault();
-            if (item == "Map")
+                         .FirstOrDefaultAsync();
+            if (area != null)
             {
-                string relativePath = GetRelativePath(area.MapImagePath);
-                ViewBag.Image = relativePath;
-            }else if(item == "Organization")
-            {
-                string relativePath = GetRelativePath(area.OrganizationImagePath);
-                ViewBag.Image = relativePath;
+                if (item == "Map")
+                {
+                    if (area.MapImagePath != null)
+                    {
+                        string relativePath = GetRelativePath(area.MapImagePath);
+                        ViewBag.Image = relativePath;
+                    }
+                }
+                else if (item == "Organization")
+                {
+                    if (area.OrganizationImagePath != null)
+                    {
+                        string relativePath = GetRelativePath(area.OrganizationImagePath);
+                        ViewBag.Image = relativePath;
+                    }
+                }
+                else if (item == "ShopDrawings")
+                {
+                    if (area.ShopDrawingsPath != null)
+                    {
+                        string relativePath = GetRelativePath(area.ShopDrawingsPath);
+                        ViewBag.Image = relativePath;
+                    }
+                }
             }
-            else if(item == "ShopDrawings")
-            {
-                string relativePath = GetRelativePath(area.ShopDrawingsPath);
-                ViewBag.Image = relativePath;
-            }
+
             return View();
         }
 
         private string GetRelativePath(string absolutePath) //抓取圖片資料夾的相對位置
         {
             string basePath = _hostingEnvironment.WebRootPath + "\\images";
-            Uri baseUri = new Uri(basePath);
-            Uri absoluteUri = new Uri(absolutePath);
+            Uri baseUri = new(basePath);
+            Uri absoluteUri = new(absolutePath);
             Uri relativeUri = baseUri.MakeRelativeUri(absoluteUri);
             string relativePath = relativeUri.ToString();
 
@@ -99,7 +113,7 @@ namespace Carbon_inventory_platform.Controllers
         }
 
         // GET: Areas/Create
-        public IActionResult Create(Guid Id)
+        public IActionResult Create()
         {
             return View();
         }
@@ -114,9 +128,7 @@ namespace Carbon_inventory_platform.Controllers
             if (ModelState.IsValid)
             {
                 var companyId = TempData.Peek("companyId") as Guid?;
-                string OrganizationImagePath = await SaveImage(area.OrganizationImage, companyId.ToString(), area.Id.ToString(), "Organization.jpg");
-                string MapImagePath = await SaveImage(area.MapImage, companyId.ToString(), area.Id.ToString(), "Map.jpg");
-                string ShopDrawingsPath = await SaveImage(area.ShopDrawings, companyId.ToString(), area.Id.ToString(), "ShopDrawings.jpg");
+                              
                 var toCreate = new Area();
                 {
                     toCreate.CompanyId = companyId.Value;
@@ -135,9 +147,21 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     toCreate.Year = area.Year;
                     toCreate.Type = area.Type;
-                    toCreate.OrganizationImagePath = OrganizationImagePath;
-                    toCreate.MapImagePath = MapImagePath;
-                    toCreate.ShopDrawingsPath = ShopDrawingsPath;
+                    if (area.OrganizationImage != null)
+                    {
+                        string OrganizationImagePath = await SaveImage(area.OrganizationImage, companyId.ToString(), area.Id.ToString(), "Organization.jpg");
+                        toCreate.OrganizationImagePath = OrganizationImagePath;
+                    }
+                    if (area.MapImage != null)
+                    {
+                        string MapImagePath = await SaveImage(area.MapImage, companyId.ToString(), area.Id.ToString(), "Map.jpg");
+                        toCreate.MapImagePath = MapImagePath;
+                    }
+                    if (area.ShopDrawings != null)
+                    {
+                        string ShopDrawingsPath = await SaveImage(area.ShopDrawings, companyId.ToString(), area.Id.ToString(), "ShopDrawings.jpg");
+                        toCreate.ShopDrawingsPath = ShopDrawingsPath;
+                    }
                     toCreate.isDeleted = 0;
                     toCreate.CreateTime = DateTime.Now;
                 }
@@ -180,9 +204,6 @@ namespace Carbon_inventory_platform.Controllers
             var companyId = TempData.Peek("companyId") as Guid?;
             if (ModelState.IsValid)
             {
-                string OrganizationImagePath = await SaveImage(area.OrganizationImage, companyId.ToString(), area.Id.ToString(), "Organization.jpg");
-                string MapImagePath = await SaveImage(area.MapImage, companyId.ToString(), area.Id.ToString(), "Map.jpg");
-                string ShopDrawingsPath = await SaveImage(area.ShopDrawings, companyId.ToString(), area.Id.ToString(), "ShopDrawings.jpg");
                 try
                 {
                     var toUpdate = await _context.Areas.FindAsync(id);
@@ -202,9 +223,21 @@ namespace Carbon_inventory_platform.Controllers
                         }
                         toUpdate.UniqueCode = area.UniqueCode;
                         toUpdate.FactorCode = area.FactorCode;
-                        toUpdate.OrganizationImagePath = OrganizationImagePath;
-                        toUpdate.MapImagePath = MapImagePath;
-                        toUpdate.ShopDrawingsPath = ShopDrawingsPath;
+                        if (area.OrganizationImage != null)
+                        {
+                            string OrganizationImagePath = await SaveImage(area.OrganizationImage, companyId.ToString(), area.Id.ToString(), "Organization.jpg");
+                            toUpdate.OrganizationImagePath = OrganizationImagePath;
+                        }
+                        if (area.MapImage != null)
+                        {
+                            string MapImagePath = await SaveImage(area.MapImage, companyId.ToString(), area.Id.ToString(), "Map.jpg");
+                            toUpdate.MapImagePath = MapImagePath;
+                        }
+                        if (area.ShopDrawings != null)
+                        {
+                            string ShopDrawingsPath = await SaveImage(area.ShopDrawings, companyId.ToString(), area.Id.ToString(), "ShopDrawings.jpg");
+                            toUpdate.ShopDrawingsPath = ShopDrawingsPath;
+                        }
                         toUpdate.Year = area.Year;
                         toUpdate.Type = area.Type;
                         toUpdate.ModifiedTime = DateTime.Now;
@@ -256,16 +289,19 @@ namespace Carbon_inventory_platform.Controllers
                 return Problem("沒有找到資料");
             }
             var toDelete = await _context.Areas.FindAsync(id);
-            if (toDelete.ModifiedTime == null)
+            if (toDelete != null)
             {
-                _context.Areas.Remove(toDelete);
+                if (toDelete.ModifiedTime == null)
+                {
+                    _context.Areas.Remove(toDelete);
+                }
+                else
+                {
+                    toDelete.isDeleted = 1;
+                    toDelete.DeleteTime = DateTime.Now;
+                }
+                await _context.SaveChangesAsync();
             }
-            else
-            {
-                toDelete.isDeleted = 1;
-                toDelete.DeleteTime = DateTime.Now;
-            }
-            await _context.SaveChangesAsync();
             var companyId = TempData.Peek("companyId") as Guid?;
             return RedirectToAction(nameof(Index), new { id = companyId });
         }
@@ -277,7 +313,7 @@ namespace Carbon_inventory_platform.Controllers
 
         static string GetCity(string input)
         {
-            return input.Substring(0, 3);
+            return input.Substring(3);
         }
         static string GetDistrict(string input)
         {
@@ -288,7 +324,7 @@ namespace Carbon_inventory_platform.Controllers
             return input.Substring(6);
         }
 
-        private async Task<string> SaveImage(IFormFile file, string companyId, string areaId, string fileName)
+        private static async Task<string> SaveImage(IFormFile file, string companyId, string areaId, string fileName)
         {
             if (file != null && file.Length > 0)
             {

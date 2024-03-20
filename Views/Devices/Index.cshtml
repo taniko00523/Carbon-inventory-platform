@@ -139,84 +139,90 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Material)
                             </td>
-                            <td>
-                                @if (item.GHGs.Where(x => x.Name == "CO2").FirstOrDefault() != null)
-                                {
-                                    <p>Y</p>
-                                }
-                            </td>
-                            <td>
-                                @if (item.GHGs.Where(x => x.Name == "CH4").FirstOrDefault() != null)
-                                {
-                                    <p>Y</p>
-                                }
-                            </td>
-                            <td>
-                                @if (item.GHGs.Where(x => x.Name == "N2O").FirstOrDefault() != null)
-                                {
-                                    <p>Y</p>
-                                }
-                            </td>
-                            <td>
-                                @if (item.GHGs.Where(x => x.Name == "HFCS").FirstOrDefault() != null)
-                                {
-                                    <p>Y</p>
-                                }
-                            </td>
-                            <td>
-                                @if (item.GHGs.Where(x => x.Name == "PFCS").FirstOrDefault() != null)
-                                {
-                                    <p>Y</p>
-                                }
-                            </td>
-                            <td>
-                                @if (item.GHGs.Where(x => x.Name == "SF6").FirstOrDefault() != null)
-                                {
-                                    <p>Y</p>
-                                }
-                            </td>
-                            <td>
-                                @if (item.GHGs.Where(x => x.Name == "NF3").FirstOrDefault() != null)
-                                {
-                                    <p>Y</p>
-                                }
-                            </td>
+                            @if (item.GHGs != null)
+                            {
+                                <td>
+                                    @if (item.GHGs.Where(x => x.Name == "CO2").FirstOrDefault() != null)
+                                    {
+                                        <p>Y</p>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.GHGs.Where(x => x.Name == "CH4").FirstOrDefault() != null)
+                                    {
+                                        <p>Y</p>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.GHGs.Where(x => x.Name == "N2O").FirstOrDefault() != null)
+                                    {
+                                        <p>Y</p>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.GHGs.Where(x => x.Name == "HFCS").FirstOrDefault() != null)
+                                    {
+                                        <p>Y</p>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.GHGs.Where(x => x.Name == "PFCS").FirstOrDefault() != null)
+                                    {
+                                        <p>Y</p>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.GHGs.Where(x => x.Name == "SF6").FirstOrDefault() != null)
+                                    {
+                                        <p>Y</p>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.GHGs.Where(x => x.Name == "NF3").FirstOrDefault() != null)
+                                    {
+                                        <p>Y</p>
+                                    }
+                                </td>
+                            }
+
                             <td>
                                 @if (item.Num != 0)
                                 {
                                     string displayUnit;
-                                    switch (item.Unit)
+                                    @if (item.Unit != null)
                                     {
-                                        case "公斤":
-                                            displayUnit = "公噸";
-                                            break;
-                                        case "公升":
-                                            displayUnit = "公秉";
-                                            break;
-                                        case "立方公尺":
-                                            displayUnit = "千立方公尺";
-                                            break;
-                                        case "度":
-                                            displayUnit = "千度";
-                                            break;
-                                        default:
-                                            displayUnit = item.Unit;
-                                            break;
-                                    }
+                                        switch (item.Unit)
+                                        {
+                                            case "公斤":
+                                                displayUnit = "公噸";
+                                                break;
+                                            case "公升":
+                                                displayUnit = "公秉";
+                                                break;
+                                            case "立方公尺":
+                                                displayUnit = "千立方公尺";
+                                                break;
+                                            case "度":
+                                                displayUnit = "千度";
+                                                break;
+                                            default:
+                                                displayUnit = item.Unit;
+                                                break;
+                                        }
 
-                                    @if (displayUnit != "人")
-                                    {
-                                        <p>
-                                            @($"{item.Num / 1000:F4} {displayUnit}")
-                                        </p>
+                                        @if (displayUnit != "人")
+                                        {
+                                            <p>
+                                                @($"{item.Num / 1000:F4} {displayUnit}")
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p>
+                                                @($"{item.Num:F0} {displayUnit}")
+                                            </p>
+                                        }
                                     }
-                                    else
-                                    {
-                                        <p>
-                                            @($"{item.Num:F0} {displayUnit}")
-                                        </p>
-                                    }
-
                                 }
                                 else
                                 {
