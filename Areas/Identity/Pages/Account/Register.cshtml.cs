@@ -103,7 +103,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Display(Name = "使用期限")]
-            public int Month { get; set; }
+            public int Year { get; set; }
 
             [Display(Name = "是否為管理員")]
             public bool Manager { get; set; }
@@ -137,9 +137,9 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
 
                     if (role != null)
                     {
-                        IdentityResult roleresult = await _userManager.AddToRoleAsync(user, role.Name);
+                        await _userManager.AddToRoleAsync(user, role.Name);
                     }
-                    user.UserLimitData = DateTime.UtcNow.AddMonths(Input.Month);
+                    user.UserLimitData = DateTime.UtcNow.AddYears(Input.Year);
                     await _userManager.UpdateAsync(user);
                     //if(Input.Manager == true)
                     //{

@@ -1,7 +1,20 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Carbon-inventory-platform\\",
-  "Documents": [],
+  "WorkspaceRootPath": "D:\\Carbon-inventory-platform\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|d:\\carbon-inventory-platform\\filters\\checksubscriptiondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:filters\\checksubscriptiondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|d:\\carbon-inventory-platform\\areas\\identity\\pages\\account\\register.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:areas\\identity\\pages\\account\\register.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|d:\\carbon-inventory-platform\\areas\\identity\\pages\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:areas\\identity\\pages\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -18,6 +31,45 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CheckSubscriptionData.cs",
+              "DocumentMoniker": "D:\\Carbon-inventory-platform\\Filters\\CheckSubscriptionData.cs",
+              "RelativeDocumentMoniker": "Filters\\CheckSubscriptionData.cs",
+              "ToolTip": "D:\\Carbon-inventory-platform\\Filters\\CheckSubscriptionData.cs",
+              "RelativeToolTip": "Filters\\CheckSubscriptionData.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAADwvxcAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-25T03:18:32.241Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Register.cshtml.cs",
+              "DocumentMoniker": "D:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
+              "RelativeDocumentMoniker": "Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
+              "ToolTip": "D:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
+              "RelativeToolTip": "Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
+              "ViewState": "AQIAAJQAAAAAAAAAAAAtwKgAAAAyAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-25T03:12:44.333Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "D:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Register.cshtml",
+              "RelativeDocumentMoniker": "Areas\\Identity\\Pages\\Account\\Register.cshtml",
+              "ToolTip": "D:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Register.cshtml",
+              "RelativeToolTip": "Areas\\Identity\\Pages\\Account\\Register.cshtml",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAAAoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-03-25T03:09:59.838Z",
+              "EditorCaption": ""
             }
           ]
         }

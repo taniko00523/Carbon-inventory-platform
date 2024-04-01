@@ -31,9 +31,9 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.Month" class="form-control"/>
-                <label asp-for="Input.Month"></label>
-                <span asp-validation-for="Input.Month" class="text-danger"></span>
+                <input asp-for="Input.Year" class="form-control" autocomplete="Year" aria-required="true" placeholder="使用期限" />
+                <label asp-for="Input.Year">使用期限</label>
+                <span asp-validation-for="Input.Year" class="text-danger"></span>
             </div>
            @*  @if (User.IsInRole("Admin")) //如果是開發者，可以指定新增管理員
             {
