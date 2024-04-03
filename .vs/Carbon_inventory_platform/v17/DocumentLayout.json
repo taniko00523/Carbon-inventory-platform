@@ -3,6 +3,12 @@
   "WorkspaceRootPath": "D:\\Carbon-inventory-platform\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Carbon-inventory-platform\\Controllers\\EmissionController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Carbon-inventory-platform\\Controllers\\DevicesController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|d:\\carbon-inventory-platform\\filters\\checksubscriptiondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:filters\\checksubscriptiondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -35,6 +41,28 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "EmissionController.cs",
+              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Controllers\\EmissionController.cs",
+              "ToolTip": "C:\\Carbon-inventory-platform\\Controllers\\EmissionController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-03T09:39:47.321Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DevicesController.cs",
+              "DocumentMoniker": "C:\\Carbon-inventory-platform\\Controllers\\DevicesController.cs",
+              "ToolTip": "C:\\Carbon-inventory-platform\\Controllers\\DevicesController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-03T09:39:47.193Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "CheckSubscriptionData.cs",
               "DocumentMoniker": "D:\\Carbon-inventory-platform\\Filters\\CheckSubscriptionData.cs",
               "RelativeDocumentMoniker": "Filters\\CheckSubscriptionData.cs",
@@ -47,7 +75,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Register.cshtml.cs",
               "DocumentMoniker": "D:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
               "RelativeDocumentMoniker": "Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
@@ -55,12 +83,11 @@
               "RelativeToolTip": "Areas\\Identity\\Pages\\Account\\Register.cshtml.cs",
               "ViewState": "AQIAAJQAAAAAAAAAAAAtwKgAAAAyAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-25T03:12:44.333Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-25T03:12:44.333Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Register.cshtml",
               "DocumentMoniker": "D:\\Carbon-inventory-platform\\Areas\\Identity\\Pages\\Account\\Register.cshtml",
               "RelativeDocumentMoniker": "Areas\\Identity\\Pages\\Account\\Register.cshtml",
@@ -68,8 +95,7 @@
               "RelativeToolTip": "Areas\\Identity\\Pages\\Account\\Register.cshtml",
               "ViewState": "AQIAAA8AAAAAAAAAAAAAAAoAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-03-25T03:09:59.838Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-25T03:09:59.838Z"
             }
           ]
         }

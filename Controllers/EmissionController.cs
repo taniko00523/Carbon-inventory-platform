@@ -165,14 +165,16 @@ namespace Carbon_inventory_platform.Controllers
                     toCreate.move = sum_move;
                     toCreate.escape = sum_escape;
                     toCreate.process = sum_process;
-
-                    toCreate.percentage1_CO2 = (sum1_CO2 / sum_Scope1 * 100);
-                    toCreate.percentage1_CH4 = (sum1_CH4 / sum_Scope1 * 100);
-                    toCreate.percentage1_N2O = (sum1_N2O / sum_Scope1 * 100);
-                    toCreate.percentage1_HFCS = (sum1_HFCS / sum_Scope1 * 100);
-                    toCreate.percentage1_PFCS = (sum1_PFCS / sum_Scope1 * 100);
-                    toCreate.percentage1_SF6 = (sum1_SF6 / sum_Scope1 * 100);
-                    toCreate.percentage1_NF3 = (sum1_NF3 / sum_Scope1 * 100);
+                    if (sum_Scope1 != 0)
+                    {
+                        toCreate.percentage1_CO2 = (sum1_CO2 / sum_Scope1 * 100);
+                        toCreate.percentage1_CH4 = (sum1_CH4 / sum_Scope1 * 100);
+                        toCreate.percentage1_N2O = (sum1_N2O / sum_Scope1 * 100);
+                        toCreate.percentage1_HFCS = (sum1_HFCS / sum_Scope1 * 100);
+                        toCreate.percentage1_PFCS = (sum1_PFCS / sum_Scope1 * 100);
+                        toCreate.percentage1_SF6 = (sum1_SF6 / sum_Scope1 * 100);
+                        toCreate.percentage1_NF3 = (sum1_NF3 / sum_Scope1 * 100);
+                    }                    
 
                     toCreate.percentage2_CO2 = (CO2 / sum_all * 100);
                     toCreate.percentage2_CH4 = (CH4 / sum_all * 100);
@@ -794,7 +796,7 @@ namespace Carbon_inventory_platform.Controllers
             }
             //--------------------------------類別表
             //--------------------------------圖片
-            if (data.Area.MapImagePath != null)
+             if (data.Area.MapImagePath != null && data.Area.MapImagePath != "")
             {
                 string mapPath = data.Area.MapImagePath;
                 if (mapPath != null)
@@ -802,7 +804,7 @@ namespace Carbon_inventory_platform.Controllers
                     ReplaceImage(doc, wordApp, "地理位置圖", mapPath);
                 }
             }
-            if (data.Area.OrganizationImagePath != null)
+            if (data.Area.OrganizationImagePath != null && data.Area.OrganizationImagePath != "")
             {
                 string organiztionPath = data.Area.OrganizationImagePath;
                 if (organiztionPath != null)
@@ -810,7 +812,7 @@ namespace Carbon_inventory_platform.Controllers
                     ReplaceImage(doc, wordApp, "公司組織圖", organiztionPath);
                 }
             }
-            if (data.Area.ShopDrawingsPath != null)
+            if (data.Area.ShopDrawingsPath != null && data.Area.ShopDrawingsPath != "")
             {
                 string showDrawingPath = data.Area.ShopDrawingsPath;
                 if (showDrawingPath != null)

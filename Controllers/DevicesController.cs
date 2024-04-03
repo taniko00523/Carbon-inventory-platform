@@ -408,7 +408,8 @@ namespace Carbon_inventory_platform.Controllers
                     int i = 1;
                     foreach (var item in GHG)
                     {
-                        item.Emission = item.CEF * activityData.Num / 1000;
+                        decimal GWP = _context.GWPs.Where(x => x.Name == item.Name).FirstOrDefault().Num;
+                        item.Emission = item.CEF * activityData.Num / 1000 * GWP;
                         item.ModifiedTime = DateTime.Now;
                         if (i == 1)
                         {
