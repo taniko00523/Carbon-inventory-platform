@@ -20,6 +20,10 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "排放源名稱")]
         public required string Name { get; set; } = "";
 
+        [MaxLength(20)]
+        [Display(Name = "自訂排放源名稱")]
+        public string? OtherName { get; set; } 
+
         [MaxLength(10)]
         [Display(Name = "類別")]
         public required string Scope { get; set; } = "";
@@ -30,6 +34,9 @@ namespace Carbon_inventory_platform.Models
 
         [Display(Name = "原燃物料")]
         public required string Material { get; set; } = "";
+
+        [Display(Name ="自訂排放係數")]
+        public bool Customize { get; set; } = false;
 
         // 不一定有的基本資料：
 

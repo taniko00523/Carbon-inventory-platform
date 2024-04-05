@@ -9,6 +9,7 @@ using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Carbon_inventory_platform.Filters;
+using Carbon_inventory_platform.ViewModel;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -34,7 +35,7 @@ namespace Carbon_inventory_platform.Controllers
                          View(await _context.Devices
                          .Where(x => x.isDeleted == 0 && x.YearId == Id) //抓出資料表裡面沒被刪除的
                          .Include(x => x.GHGs)
-                         .Include (x => x.Year.Area.Company)
+                         .Include(x => x.Year.Area.Company)
                          .OrderBy(x => x.CreateTime)
                          .ToListAsync()) : //非同步方法
                          Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
@@ -78,7 +79,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,YearId,AssetNo,Name,Provess,Scope,EmissionPattern,Material")] Device device)
+        public async Task<IActionResult> Create([Bind("Id,YearId,AssetNo,Name,OtherName,Provess,Scope,EmissionPattern,Material,Customize,CO2CEF,CH4CEF,N2OCEF,HFCSCEF,PFCSCEF,NF3CEF,SF6CEF")] DeviceViewModel device)
         {
             if (ModelState.IsValid)
             {
@@ -89,16 +90,63 @@ namespace Carbon_inventory_platform.Controllers
                     YearId = device.YearId,
                     AssetNo = device.AssetNo,
                     Name = device.Name,
+                    OtherName = device.OtherName,
                     Provess = device.Provess,
                     Scope = device.Scope,
                     EmissionPattern = device.EmissionPattern,
                     Material = device.Material,
+                    Customize = device.Customize,
                     isDeleted = 0,
                     CreateTime = DateTime.Now,
                 };
                 _context.Add(toCreate);
                 await _context.SaveChangesAsync();
-                await GHGCheckAsync(deviceId, device.Name, device.Material, device.Scope, device.EmissionPattern);
+
+                if (device.Customize == true) // 自訂排放係數被勾選
+                {
+                    if (device.CO2CEF != null || // 至少有一個欄位不為 null，執行原有的程式碼
+                        device.CH4CEF != null ||
+                        device.N2OCEF != null ||
+                        device.HFCSCEF != null ||
+                        device.PFCSCEF != null ||
+                        device.SF6CEF != null ||
+                        device.NF3CEF != null)
+                    {
+                        if (device.CO2CEF != null && device.CO2CEF != 0)
+                        {
+                            await CEFAddAsync(toCreate, "CO2", device.CO2CEF);
+                        }
+                        if (device.CH4CEF != null && device.CH4CEF !=0)
+                        {
+                            await CEFAddAsync(toCreate, "CH4", device.CH4CEF);
+                        }
+                        if (device.N2OCEF != null && device.N2OCEF != 0)
+                        {
+                            await CEFAddAsync(toCreate, "N2O", device.N2OCEF);
+                        }
+                        if (device.HFCSCEF != null && device.HFCSCEF != 0)
+                        {
+                            await CEFAddAsync(toCreate, "HFCS", device.HFCSCEF);
+                        }
+                        if (device.PFCSCEF != null && device.PFCSCEF != 0)
+                        {
+                            await CEFAddAsync(toCreate, "PFCS", device.PFCSCEF);
+                        }
+                        if (device.NF3CEF != null && device.NF3CEF != 0)
+                        {
+                            await CEFAddAsync(toCreate, "NF3", device.NF3CEF);
+                        }
+                        if (device.SF6CEF != null && device.SF6CEF != 0)
+                        {
+                            await CEFAddAsync(toCreate, "SF6", device.SF6CEF);
+                        }
+                    }
+                }
+                else
+                {
+                    await GHGCheckAsync(deviceId, device.Name, device.Material, device.Scope, device.EmissionPattern);
+                }
+
                 return RedirectToAction("Index", "Devices", new { id = device.YearId });
             }
             var deviceDatas = await _context.deviceDatas.ToListAsync();
@@ -204,6 +252,67 @@ namespace Carbon_inventory_platform.Controllers
             }
 
             var device = await _context.Devices.FindAsync(id);
+            var GHGs = await _context.GHGs.Where(x => x.DeviceId == id).ToListAsync();
+            var deviceViewModel = new DeviceViewModel
+            {
+                Id = device.Id,
+                Name = device.Name,
+                OtherName = device.OtherName,
+                YearId = device.YearId,
+                AssetNo = device.AssetNo,
+                Provess = device.Provess,
+                Scope = device.Scope,
+                EmissionPattern = device.EmissionPattern,
+                Material = device.Material,
+                Customize = device.Customize
+            };
+
+            var CO2 = GHGs.Where(x => x.Name == "CO2").FirstOrDefault();
+            if (CO2 != null)
+            {
+                deviceViewModel.CO2CEF = CO2.CEF;
+            }
+
+            var CH4 = GHGs.Where(x => x.Name == "CH4").FirstOrDefault();
+            if (CH4 != null)
+            {
+                deviceViewModel.CH4CEF = CH4.CEF;
+            }
+
+
+            var N2O = GHGs.Where(x => x.Name == "N2O").FirstOrDefault();
+            if (N2O != null)
+            {
+                deviceViewModel.N2OCEF = N2O.CEF;
+            }
+
+
+            var HFCS = GHGs.Where(x => x.Name == "HFCS").FirstOrDefault();
+            if (HFCS != null)
+            {
+                deviceViewModel.HFCSCEF = HFCS.CEF;
+            }
+
+            var PFCS = GHGs.Where(x => x.Name == "PFCS").FirstOrDefault();
+            if (PFCS != null)
+            {
+                deviceViewModel.PFCSCEF = PFCS.CEF;
+            }
+
+            var NF3 = GHGs.Where(x => x.Name == "NF3").FirstOrDefault();
+            if (NF3 != null)
+            {
+                deviceViewModel.NF3CEF = NF3.CEF;
+            }
+
+            var SF6 = GHGs.Where(x => x.Name == "SF6").FirstOrDefault();
+            if (SF6 != null)
+            {
+                deviceViewModel.SF6CEF = SF6.CEF;
+            }
+
+
+
             if (device == null)
             {
                 return NotFound();
@@ -213,7 +322,7 @@ namespace Carbon_inventory_platform.Controllers
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
             ViewData["Scope"] = new SelectList(await _context.Materials.Select(m => m.Scope).Distinct().ToListAsync());
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
-            return View(device);
+            return View(deviceViewModel);
         }
 
         // POST: Devices/Edit/5
@@ -221,7 +330,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,AreaId,AssetNo,Name,Provess,Scope,EmissionPattern,Material,YearId")] Device device)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,AreaId,AssetNo,Name,OtherName,Provess,Scope,EmissionPattern,Material,YearId,Customize,CO2CEF,CH4CEF,N2OCEF,HFCSCEF,PFCSCEF,NF3CEF,SF6CEF")] DeviceViewModel device)
         {
             if (id != device.Id)
             {
@@ -232,18 +341,132 @@ namespace Carbon_inventory_platform.Controllers
             {
                 try
                 {
-                    var toUpdate = await _context.Devices.FindAsync(id);
+                    var deviceUpdate = await _context.Devices.FindAsync(id);
+                    var ghgUpdate = await _context.GHGs.Where(x => x.DeviceId == device.Id).ToListAsync();
 
-                    if (toUpdate != null)
+                    if (deviceUpdate != null)
                     {
-                        toUpdate.YearId = device.YearId;
-                        toUpdate.AssetNo = device.AssetNo;
-                        toUpdate.Name = device.Name;
-                        toUpdate.Provess = device.Provess;
-                        toUpdate.Scope = device.Scope;
-                        toUpdate.EmissionPattern = device.EmissionPattern;
-                        toUpdate.Material = device.Material;
-                        toUpdate.ModifiedTime = DateTime.Now;
+                        deviceUpdate.YearId = device.YearId;
+                        deviceUpdate.AssetNo = device.AssetNo;
+                        deviceUpdate.Name = device.Name;
+                        deviceUpdate.OtherName = device.OtherName;
+                        deviceUpdate.Provess = device.Provess;
+                        deviceUpdate.Scope = device.Scope;
+                        deviceUpdate.EmissionPattern = device.EmissionPattern;
+                        deviceUpdate.Material = device.Material;
+                        deviceUpdate.ModifiedTime = DateTime.Now;
+                        if (deviceUpdate.Customize != device.Customize) // 改變自訂排放係數勾選選項
+                        {
+                            if (device.Customize == true) // 自訂排放係數
+                            {
+                                if (device.CO2CEF != null || // 至少有一個欄位不為 null，執行原有的程式碼
+                                    device.CH4CEF != null ||
+                                    device.N2OCEF != null ||
+                                    device.HFCSCEF != null ||
+                                    device.PFCSCEF != null ||
+                                    device.SF6CEF != null ||
+                                    device.NF3CEF != null)
+                                {
+                                    if (ghgUpdate != null)
+                                    {
+                                        foreach (var item in ghgUpdate)
+                                        {
+                                            _context.GHGs.Remove(item);
+                                        }
+                                    }
+                                    if (device.CO2CEF != null && device.CO2CEF != 0)
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "CO2", device.CO2CEF);
+                                    }
+                                    if (device.CH4CEF != null && device.CH4CEF != 0)
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "CH4", device.CH4CEF);
+                                    }
+                                    if (device.N2OCEF != null && device.N2OCEF != 0)
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "N2O", device.N2OCEF);
+                                    }
+                                    if (device.HFCSCEF != null && device.HFCSCEF != 0)
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "HFCS", device.HFCSCEF);
+                                    }
+                                    if (device.PFCSCEF != null && device.PFCSCEF != 0)
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "PFCS", device.PFCSCEF);
+                                    }
+                                    if (device.NF3CEF != null && device.NF3CEF != 0)
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "NF3", device.NF3CEF);
+                                    }
+                                    if (device.SF6CEF != null && device.SF6CEF != 0)
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "SF6", device.SF6CEF);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (ghgUpdate != null)
+                                {
+                                    foreach (var item in ghgUpdate)
+                                    {
+                                        _context.GHGs.Remove(item);
+                                    }
+                                }
+                                await GHGCheckAsync(id, device.Name, device.Material, device.Scope, device.EmissionPattern);
+                            }
+                        }
+                        else
+                        {
+                            if (device.Customize == true) // 自訂排放係數
+                            {
+                                if (device.CO2CEF != null || // 至少有一個欄位不為 null，執行原有的程式碼
+                                    device.CH4CEF != null ||
+                                    device.N2OCEF != null ||
+                                    device.HFCSCEF != null ||
+                                    device.PFCSCEF != null ||
+                                    device.SF6CEF != null ||
+                                    device.NF3CEF != null)
+                                {
+                                    if (ghgUpdate != null)
+                                    {
+                                        foreach (var item in ghgUpdate)
+                                        {
+                                            _context.GHGs.Remove(item);
+                                        }
+                                    }
+                                    if (device.CO2CEF != null && device.CO2CEF != 0)
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "CO2", device.CO2CEF);
+                                    }
+                                    if (device.CH4CEF != null && device.CH4CEF != 0)
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "CH4", device.CH4CEF);
+                                    }
+                                    if (device.N2OCEF != null && device.N2OCEF != 0)
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "N2O", device.N2OCEF);
+                                    }
+                                    if (device.HFCSCEF != null && device.HFCSCEF != 0)
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "HFCS", device.HFCSCEF);
+                                    }
+                                    if (device.PFCSCEF != null && device.PFCSCEF != 0)
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "PFCS", device.PFCSCEF);
+                                    }
+                                    if (device.NF3CEF != null && device.NF3CEF != 0)
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "NF3", device.NF3CEF);
+                                    }
+                                    if (device.SF6CEF != null && device.SF6CEF != 0 )
+                                    {
+                                        await CEFAddAsync(deviceUpdate, "SF6", device.SF6CEF);
+                                    }
+                                }
+                            }
+                        }
+                        deviceUpdate.Customize = device.Customize;
                     }
                     await _context.SaveChangesAsync();
                 }
@@ -361,7 +584,6 @@ namespace Carbon_inventory_platform.Controllers
             return View(activitydata);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddActivityData(Guid? id, [Bind("Id,Num,Unit,Data_Correction,Device_Correction")] Device activityData)
@@ -408,8 +630,7 @@ namespace Carbon_inventory_platform.Controllers
                     int i = 1;
                     foreach (var item in GHG)
                     {
-                        decimal GWP = _context.GWPs.Where(x => x.Name == item.Name).FirstOrDefault().Num;
-                        item.Emission = item.CEF * activityData.Num / 1000 * GWP;
+                        item.Emission = item.CEF * activityData.Num / 1000 * item.GWP;
                         item.ModifiedTime = DateTime.Now;
                         if (i == 1)
                         {
@@ -455,7 +676,7 @@ namespace Carbon_inventory_platform.Controllers
                     await _context.SaveChangesAsync();
                 }
             }
-            
+
             var yearID = TempData.Peek("yearId");
             return RedirectToAction("Index", "Devices", new { id = yearID });
         }
@@ -542,32 +763,6 @@ namespace Carbon_inventory_platform.Controllers
             return guess;
         }
 
-        public IActionResult DownloadFile(string fileName)
-        {
-            // 設定要下載的檔案路徑
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", fileName);
-
-            // 檢查檔案是否存在
-            if (!System.IO.File.Exists(filePath))
-            {
-                return NotFound();
-            }
-
-            // 讀取檔案內容
-            var fileContent = System.IO.File.ReadAllBytes(filePath);
-
-            // 指定檔案型別
-            var contentType = "application/octet-stream";
-
-            // 建立一個 FileResult 物件
-            var fileResult = new FileContentResult(fileContent, contentType)
-            {
-                FileDownloadName = fileName
-            };
-
-            return fileResult;
-        }
-
         public async Task<IActionResult> Default(Guid id)
         {
             var defaultDevice = await _context.defaultDevices.ToListAsync();
@@ -598,9 +793,10 @@ namespace Carbon_inventory_platform.Controllers
             return RedirectToAction(nameof(Index), new { id = id });
         }
 
-        public async Task<GHG> GHGCheckAsync(Guid id, string name, string material, string scope, string emisspatern) //排放源Id, 排放源名稱, 物料名稱, 類別, 排放型式
+        public async Task<GHG?> GHGCheckAsync(Guid id, string name, string material, string scope, string emisspatern) //排放源Id, 排放源名稱, 物料名稱, 類別, 排放型式
         {
             var Device = await _context.Devices.FindAsync(id);
+            //var GWP = await _context.GWPs.OrderBy(x => x.GWP_Year).Where(x => x.GWP_Year <= Device.Year.Num).ToListAsync();
             var GWP = await _context.GWPs.ToListAsync();
             var Material = await _context.Materials.Where(x => x.Name == material && x.Scope == scope && x.EmissionPattern == emisspatern).FirstOrDefaultAsync();
             var otherMaterial = await _context.Materials.Where(x => x.Name == name && x.Scope == scope && x.EmissionPattern == emisspatern).FirstOrDefaultAsync(); //目前只有冷媒設備，但我包含了PFCS以防萬一
@@ -781,7 +977,29 @@ namespace Carbon_inventory_platform.Controllers
 
             }
 
+            return null;
+        }
 
+        public async Task<GHG?> CEFAddAsync(Device device, string GHG, decimal? CEF) //排放源Id, 排放源名稱, 物料名稱, 類別, 排放型式
+        {
+
+            //var GWP = await _context.GWPs.OrderBy(x => x.GWP_Year).Where(x => x.GWP_Year <= device.Year.Num).ToListAsync();
+            var GWP = await _context.GWPs.ToListAsync();
+            if (ModelState.IsValid)
+            {
+
+                var toCreate = new GHG();
+                toCreate.Id = Guid.NewGuid();
+                toCreate.Name = GHG;
+                toCreate.DeviceId = device.Id;
+                toCreate.CEF = (decimal)CEF;
+                toCreate.GWP = GWP.Where(x => x.Name == GHG).Select(x => x.Num).FirstOrDefault();
+                toCreate.CreateTime = DateTime.Now;
+                device.CEF_Correction = 3;//輸入?
+                _context.Add(toCreate);
+                await _context.SaveChangesAsync();
+
+            }
 
             return null;
         }

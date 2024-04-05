@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Office.Interop.Word;
+using System.Text;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using static System.Formats.Asn1.AsnWriter;
 
@@ -880,7 +881,7 @@ namespace Carbon_inventory_platform.Controllers
                             table.Cell(rowIndex, 6).Range.Text = "係數來源";
                             table.Cell(rowIndex, 7).Range.Text = "排放量\n(公噸/年)";
                             table.Cell(rowIndex, 8).Range.Text = GHG.GWP.ToString();
-                            table.Cell(rowIndex, 9).Range.Text = GHG.Emission.ToString();
+                            table.Cell(rowIndex, 9).Range.Text = GHG.Emission.ToString("F4");
                             rowIndex++;
                         }
                     }
@@ -990,10 +991,37 @@ namespace Carbon_inventory_platform.Controllers
                 if (item.Scope == scope)
                 {
                     i++;
-                    Scope += i + "." + item.Name + "(" + item.Material + ")" + Environment.NewLine;
+                    Scope += i + "." + item.Name + "(" + item.Material + ")" + ((char)13) + ((char)10);
                 }
             }
             ReplaceText(doc, "[" + scope + "Device]", Scope.Trim());
         }
+
+        //public void ScopeDevice(Document doc, List<Device> devices, string scope)
+        //{
+        //    // 在此處將替換的文字分成多個片段，每次替換一小部分文本
+        //    int batchSize = 10; // 每次替換的文本片段大小
+        //    int totalDevices = devices.Count;
+        //    int totalBatches = (totalDevices + batchSize - 1) / batchSize; // 計算需要的批次數量
+
+        //    // 進行批次替換
+        //    for (int batchIndex = 0; batchIndex < totalBatches; batchIndex++)
+        //    {
+        //        // 構建這個批次的替換文本
+        //        StringBuilder batchText = new StringBuilder();
+        //        for (int i = batchIndex * batchSize; i < Math.Min((batchIndex + 1) * batchSize, totalDevices); i++)
+        //        {
+        //            var item = devices[i];
+        //            if (item.Scope == scope)
+        //            {
+        //                int deviceNumber = i + 1;
+        //                batchText.AppendLine(deviceNumber + "." + item.Name + "(" + item.Material + ")");
+        //            }
+        //        }
+
+        //        // 替換這個批次的文本
+        //        ReplaceText(doc, "[" + scope + "Device]", batchText.ToString().Trim());
+        //    }
+        //}
     }
 }

@@ -253,6 +253,10 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "D:\\Carbon-inventory-platform\\wwwroot\\output\\112-123-123-溫室氣體盤查報告書.docx",
+      "PackagePath": "staticwebassets\\output\\112-123-123-溫室氣體盤查報告書.docx"
+    },
+    {
       "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.Carbon_inventory_platform.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

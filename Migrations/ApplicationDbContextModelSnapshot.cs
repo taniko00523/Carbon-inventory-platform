@@ -15,7 +15,7 @@ namespace Carbon_inventory_platform.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.16");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.17");
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
                 {
@@ -317,6 +317,9 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Customize")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Data_Correction")
                         .HasColumnType("INTEGER");
 
@@ -355,6 +358,10 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<decimal>("Num")
                         .HasColumnType("decimal(18, 4)");
+
+                    b.Property<string>("OtherName")
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Provess")
                         .HasMaxLength(20)
@@ -759,7 +766,7 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<decimal>("Emission")
                         .HasColumnType("decimal(18, 10)");
 
-                    b.Property<decimal?>("GWP")
+                    b.Property<decimal>("GWP")
                         .HasColumnType("decimal(18, 10)");
 
                     b.Property<DateTime?>("ModifiedTime")

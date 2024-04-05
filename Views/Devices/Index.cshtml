@@ -125,7 +125,14 @@
                 @Html.DisplayFor(modelItem => item.AssetNo)
                 </td> *@
                             <td>
-                                @Html.DisplayFor(modelItem => item.Name)
+                                @if (item.Name == "其他")
+                                {
+                                    @Html.DisplayFor(modelItem => item.OtherName)
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                }
                             </td>
                             @* <td>
                 @Html.DisplayFor(modelItem => item.Provess)

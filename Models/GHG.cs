@@ -14,7 +14,7 @@ namespace Carbon_inventory_platform.Models
 
         [Column(TypeName = "decimal(18, 10)")]
         [Display(Name = "GWP值")]
-        public decimal? GWP { get; set; }
+        public decimal GWP { get; set; }
 
         [Column(TypeName = "decimal(18, 10)")]
         [Display(Name = "排放係數")]

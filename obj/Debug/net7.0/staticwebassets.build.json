@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "xUEw8IwPoLxWL5GJ/Mg+fnLpJbvu2tsV2h0sLoDdVuE=",
+  "Hash": "olr4tZDiO2PKVRaFvV6qjOPFwbviOh/M0HSGeTCrD64=",
   "Source": "Carbon_inventory_platform",
   "BasePath": "_content/Carbon_inventory_platform",
   "Mode": "Default",
@@ -2371,6 +2371,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "D:\\Carbon-inventory-platform\\wwwroot\\output\\112-123-123-溫室氣體盤查報告書.docx",
+      "SourceId": "Carbon_inventory_platform",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Carbon-inventory-platform\\wwwroot\\",
+      "BasePath": "_content/Carbon_inventory_platform",
+      "RelativePath": "output/112-123-123-溫室氣體盤查報告書.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\output\\112-123-123-溫室氣體盤查報告書.docx"
     }
   ]
 }
