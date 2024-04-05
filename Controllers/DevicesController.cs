@@ -26,38 +26,18 @@ namespace Carbon_inventory_platform.Controllers
         //GET: Devices
         public async Task<IActionResult> Index(Guid Id)
         {
-            TempData["yearId"] = Id; // 暫存目前所在的廠區年度ID
-            TempData["year"] = await _context.Years // 暫存目前所在的公司名稱 顯示在畫面上方
-           .Where(a => a.Id == Id)
-           .Select(a => a.Num)
-           .FirstOrDefaultAsync();
+            TempData["areaId"] = Id; // 暫存目前所在的廠區年度ID
+           // TempData["year"] = await _context.Emissions // 暫存目前所在的公司名稱 顯示在畫面上方
+           //.Where(a => a.Id == Id)
+           //.FirstOrDefaultAsync();
             return _context.Devices != null ? //如果有抓到資料表Null
                          View(await _context.Devices
-                         .Where(x => x.isDeleted == 0 && x.YearId == Id) //抓出資料表裡面沒被刪除的
+                         .Where(x => x.isDeleted == 0 && x.AreaId == Id) //抓出資料表裡面沒被刪除的
                          .Include(x => x.GHGs)
-                         .Include(x => x.Year.Area.Company)
+                         .Include(x => x.Area.Company)
                          .OrderBy(x => x.CreateTime)
                          .ToListAsync()) : //非同步方法
                          Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
-        }
-
-        //GET: Devices/Details/5
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null || _context.Devices == null)
-            {
-                return NotFound();
-            }
-
-            var device = await _context.Devices
-                .Include(d => d.Year)
-                .Include(d => d.Material)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (device == null)
-            {
-                return NotFound();
-            }
-            return View(device);
         }
 
         // GET: Devices/Create
@@ -79,7 +59,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,YearId,AssetNo,Name,OtherName,Provess,Scope,EmissionPattern,Material,Customize,CO2CEF,CH4CEF,N2OCEF,HFCSCEF,PFCSCEF,NF3CEF,SF6CEF")] DeviceViewModel device)
+        public async Task<IActionResult> Create([Bind("Id,AreaId,AssetNo,Name,OtherName,Provess,Scope,EmissionPattern,Material,Customize,CO2CEF,CH4CEF,N2OCEF,HFCSCEF,PFCSCEF,NF3CEF,SF6CEF")] DeviceViewModel device)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +67,7 @@ namespace Carbon_inventory_platform.Controllers
                 var toCreate = new Device
                 {
                     Id = deviceId,
-                    YearId = device.YearId,
+                    AreaId = device.AreaId,
                     AssetNo = device.AssetNo,
                     Name = device.Name,
                     OtherName = device.OtherName,
@@ -147,7 +127,7 @@ namespace Carbon_inventory_platform.Controllers
                     await GHGCheckAsync(deviceId, device.Name, device.Material, device.Scope, device.EmissionPattern);
                 }
 
-                return RedirectToAction("Index", "Devices", new { id = device.YearId });
+                return RedirectToAction("Index", "Devices", new { id = device.AreaId });
             }
             var deviceDatas = await _context.deviceDatas.ToListAsync();
             deviceDatas.Add(new DeviceData { Name = "其他" });
@@ -267,7 +247,7 @@ namespace Carbon_inventory_platform.Controllers
                 Id = device.Id,
                 Name = device.Name,
                 OtherName = device.OtherName,
-                YearId = device.YearId,
+                AreaId = device.AreaId,
                 AssetNo = device.AssetNo,
                 Provess = device.Provess,
                 Scope = device.Scope,
@@ -339,7 +319,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,AreaId,AssetNo,Name,OtherName,Provess,Scope,EmissionPattern,Material,YearId,Customize,CO2CEF,CH4CEF,N2OCEF,HFCSCEF,PFCSCEF,NF3CEF,SF6CEF")] DeviceViewModel device)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,AreaId,AssetNo,Name,OtherName,Provess,Scope,EmissionPattern,Material,Customize,CO2CEF,CH4CEF,N2OCEF,HFCSCEF,PFCSCEF,NF3CEF,SF6CEF")] DeviceViewModel device)
         {
             if (id != device.Id)
             {
@@ -361,7 +341,7 @@ namespace Carbon_inventory_platform.Controllers
 
                     if (deviceUpdate != null)
                     {
-                        deviceUpdate.YearId = device.YearId;
+                        deviceUpdate.AreaId = device.AreaId;
                         deviceUpdate.AssetNo = device.AssetNo;
                         deviceUpdate.Name = device.Name;
                         deviceUpdate.OtherName = device.OtherName;
@@ -497,8 +477,8 @@ namespace Carbon_inventory_platform.Controllers
                         throw;
                     }
                 }
-                var YearID = device.YearId;
-                return RedirectToAction("Index", "Devices", new { id = YearID });
+                var areaId = device.AreaId;
+                return RedirectToAction("Index", "Devices", new { id = areaId });
             }
             var deviceDatas = await _context.deviceDatas.ToListAsync();
             deviceDatas.Add(new DeviceData { Name = "其他" });
@@ -509,24 +489,24 @@ namespace Carbon_inventory_platform.Controllers
             return View(device);
         }
 
-        // GET: Devices/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
-        {
-            if (id == null || _context.Devices == null)
-            {
-                return NotFound();
-            }
+        //// GET: Devices/Delete/5
+        //public async Task<IActionResult> Delete(Guid? id)
+        //{
+        //    if (id == null || _context.Devices == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var device = await _context.Devices
-                .Include(d => d.Year)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (device == null)
-            {
-                return NotFound();
-            }
+        //    var device = await _context.Devices
+        //        .Include(d => d.Year)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (device == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(device);
-        }
+        //    return View(device);
+        //}
 
         // POST: Devices/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -540,23 +520,29 @@ namespace Carbon_inventory_platform.Controllers
             var toDeleteDevice = await _context.Devices.FindAsync(id);
             if (toDeleteDevice != null)
             {
-                var year = await _context.Years.FindAsync(toDeleteDevice.YearId);
+                var emission = await _context.Areas.FindAsync(toDeleteDevice.AreaId);
                 if (toDeleteDevice.ModifiedTime == null)
                 {
-                    year.All -= toDeleteDevice.Emissions;
-                    _context.Devices.Remove(toDeleteDevice);
+                    if (emission != null)
+                    {
+                        emission.All -= toDeleteDevice.Emissions;
+                        _context.Devices.Remove(toDeleteDevice);
+                    }   
                 }
                 else
                 {
-                    year.All -= toDeleteDevice.Emissions;
-                    toDeleteDevice.isDeleted = 1;
-                    toDeleteDevice.DeleteTime = DateTime.Now;
+                    if (emission != null)
+                    {
+                        emission.All -= toDeleteDevice.Emissions;
+                        toDeleteDevice.isDeleted = 1;
+                        toDeleteDevice.DeleteTime = DateTime.Now;
+                    }                    
                 }
                 await _context.SaveChangesAsync();
 
             }
-            var YearID = toDeleteDevice.YearId;
-            return RedirectToAction("Index", "Devices", new { id = YearID });
+            var areaId = toDeleteDevice.AreaId;
+            return RedirectToAction("Index", "Devices", new { id = areaId });
         }
 
         private bool DeviceExists(Guid id)
@@ -624,7 +610,7 @@ namespace Carbon_inventory_platform.Controllers
 
             var GHG = await _context.GHGs.Where(x => x.DeviceId == id).ToListAsync(); //抓出需要算排放量的排放源中的溫室氣體
             var Device = await _context.Devices.FindAsync(id);
-            var year = await _context.Years.FindAsync(Device.YearId);
+            var emission = await _context.Areas.FindAsync(Device.AreaId);
 
             decimal all_Emission = 0;
 
@@ -676,7 +662,7 @@ namespace Carbon_inventory_platform.Controllers
                     Device.Num = activityData.Num;
                     Device.Unit = activityData.Unit;
                     Device.Emissions = all_Emission;
-                    year.All += all_Emission;
+                    emission.All += all_Emission;
                     Device.Data_Correction = activityData.Data_Correction;
                     Device.Device_Correction = activityData.Device_Correction;
                     Device.Grade = activityData.CEF_Correction * activityData.Data_Correction * activityData.Device_Correction;
@@ -693,8 +679,8 @@ namespace Carbon_inventory_platform.Controllers
                 }
             }
 
-            var yearID = TempData.Peek("yearId");
-            return RedirectToAction("Index", "Devices", new { id = yearID });
+            var areaId = TempData.Peek("areaId");
+            return RedirectToAction("Index", "Devices", new { id = areaId });
         }
 
         static decimal CalculateRoundDistance(decimal num1, decimal num2) // 計算兩數平方和的平方根，並四捨五入到小數點後5位
@@ -792,7 +778,7 @@ namespace Carbon_inventory_platform.Controllers
                 await _context.Devices.AddAsync(new Device()
                 {
                     Id = deviceID,
-                    YearId = id,
+                    AreaId = id,
                     Name = Name,
                     Material = Material,
                     Scope = Scope,

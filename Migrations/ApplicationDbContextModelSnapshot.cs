@@ -28,6 +28,18 @@ namespace Carbon_inventory_platform.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("All")
+                        .HasColumnType("decimal(18, 3)");
+
+                    b.Property<bool>("BaseYear")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("CH4")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("CO2")
+                        .HasColumnType("decimal(18, 4)");
+
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -55,11 +67,20 @@ namespace Carbon_inventory_platform.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("HFCS")
+                        .HasColumnType("decimal(18, 4)");
+
                     b.Property<string>("MapImagePath")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("TEXT");
+
+                    b.Property<decimal>("N2O")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("NF3")
+                        .HasColumnType("decimal(18, 4)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -69,8 +90,62 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<string>("OrganizationImagePath")
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("PFCS")
+                        .HasColumnType("decimal(18, 4)");
+
                     b.Property<int>("PostalCode")
                         .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("SF6")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1_CH4")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1_CO2")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1_HFCS")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1_N2O")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1_NF3")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1_PFCS")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope1_SF6")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_CH4")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_CO2")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_HFCS")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_N2O")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_NF3")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_PFCS")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("Scope2_SF6")
+                        .HasColumnType("decimal(18, 4)");
 
                     b.Property<string>("ShopDrawingsPath")
                         .HasColumnType("TEXT");
@@ -80,14 +155,114 @@ namespace Carbon_inventory_platform.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("ULL")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("UUL")
+                        .HasColumnType("decimal(18, 2)");
+
                     b.Property<int>("UniqueCode")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Year")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("all_Grade")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("avg_Grade")
+                        .HasColumnType("REAL");
+
+                    b.Property<decimal>("cal_all")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("escape")
+                        .HasColumnType("decimal(18, 4)");
+
                     b.Property<byte>("isDeleted")
                         .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("move")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<int>("no1_Grade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("no2_Grade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("no3_Grade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("non_move")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<decimal>("percentage1_CH4")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage1_CO2")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage1_HFCS")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage1_N2O")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage1_NF3")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage1_PFCS")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage1_SF6")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_CH4")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_CO2")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_HFCS")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_N2O")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_NF3")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_PFCS")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage2_SF6")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_CalAll")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_Escape")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_Move")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_Process")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_Scope1")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_Scope2")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("percentage_nonMove")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("process")
+                        .HasColumnType("decimal(18, 4)");
 
                     b.HasKey("Id");
 
@@ -311,6 +486,9 @@ namespace Carbon_inventory_platform.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("AreaId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("AssetNo")
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
@@ -384,9 +562,6 @@ namespace Carbon_inventory_platform.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("YearId")
-                        .HasColumnType("TEXT");
-
                     b.Property<decimal>("all_ULL")
                         .HasColumnType("decimal(18, 10)");
 
@@ -410,7 +585,7 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("YearId");
+                    b.HasIndex("AreaId");
 
                     b.ToTable("Devices");
                 });
@@ -3043,209 +3218,6 @@ namespace Carbon_inventory_platform.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Year", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("All")
-                        .HasColumnType("decimal(18, 3)");
-
-                    b.Property<Guid>("AreaId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("CH4")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("CO2")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DeleteTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("HFCS")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<DateTime?>("ModifiedTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("N2O")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("NF3")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<int>("Num")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("PFCS")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("SF6")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope1")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope1_CH4")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope1_CO2")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope1_HFCS")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope1_N2O")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope1_NF3")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope1_PFCS")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope1_SF6")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope2")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope2_CH4")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope2_CO2")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope2_HFCS")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope2_N2O")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope2_NF3")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope2_PFCS")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("Scope2_SF6")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("ULL")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("UUL")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<string>("all_Grade")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<float>("avg_Grade")
-                        .HasColumnType("REAL");
-
-                    b.Property<decimal>("cal_all")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("escape")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<byte>("isDeleted")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("move")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<int>("no1_Grade")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("no2_Grade")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("no3_Grade")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("non_move")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.Property<decimal>("percentage1_CH4")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage1_CO2")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage1_HFCS")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage1_N2O")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage1_NF3")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage1_PFCS")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage1_SF6")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage2_CH4")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage2_CO2")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage2_HFCS")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage2_N2O")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage2_NF3")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage2_PFCS")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage2_SF6")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage_CalAll")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage_Escape")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage_Move")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage_Process")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage_Scope1")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage_Scope2")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("percentage_nonMove")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<decimal>("process")
-                        .HasColumnType("decimal(18, 4)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AreaId");
-
-                    b.ToTable("Years");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -3484,13 +3456,13 @@ namespace Carbon_inventory_platform.Migrations
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Device", b =>
                 {
-                    b.HasOne("Carbon_inventory_platform.Models.Year", "Year")
+                    b.HasOne("Carbon_inventory_platform.Models.Area", "Area")
                         .WithMany("Devices")
-                        .HasForeignKey("YearId")
+                        .HasForeignKey("AreaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Year");
+                    b.Navigation("Area");
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.GHG", b =>
@@ -3502,17 +3474,6 @@ namespace Carbon_inventory_platform.Migrations
                         .IsRequired();
 
                     b.Navigation("Device");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Year", b =>
-                {
-                    b.HasOne("Carbon_inventory_platform.Models.Area", "Area")
-                        .WithMany("Years")
-                        .HasForeignKey("AreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Area");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -3568,7 +3529,7 @@ namespace Carbon_inventory_platform.Migrations
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
                 {
-                    b.Navigation("Years");
+                    b.Navigation("Devices");
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Company", b =>
@@ -3579,11 +3540,6 @@ namespace Carbon_inventory_platform.Migrations
             modelBuilder.Entity("Carbon_inventory_platform.Models.Device", b =>
                 {
                     b.Navigation("GHGs");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.Year", b =>
-                {
-                    b.Navigation("Devices");
                 });
 #pragma warning restore 612, 618
         }

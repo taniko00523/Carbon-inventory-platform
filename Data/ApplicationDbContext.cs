@@ -15,7 +15,6 @@ namespace Carbon_inventory_platform.Data
 
         public DbSet<Company> Companies { get; set; } = null!;
         public DbSet<Area> Areas { get; set; } = null!;
-        public DbSet<Year> Years { get; set; } = null!;
         public DbSet<Device> Devices { get; set; } = null!;
         public DbSet<GHG> GHGs { get; set; } = null!;
         public DbSet<Material> Materials { get; set; } = null!;
@@ -36,18 +35,12 @@ namespace Carbon_inventory_platform.Data
             builder.Entity<Area>(entity =>
             {
                 entity.HasOne(e => e.Company);
-                entity.HasMany(e => e.Years);
-            });
-
-            builder.Entity<Year>(entity =>
-            {
-                entity.HasOne(e => e.Area);
                 entity.HasMany(e => e.Devices);
             });
 
             builder.Entity<Device>(entity =>
             {
-                entity.HasOne(e => e.Year);
+                entity.HasOne(e => e.Area);
                 entity.HasMany(e => e.GHGs);
             });
 

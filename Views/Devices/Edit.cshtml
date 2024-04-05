@@ -12,7 +12,7 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" id="id" />
-            <input type="hidden" asp-for="YearId" class="form-control" /> @*隱藏的其他欄位*@
+            <input type="hidden" asp-for="AreaId" class="form-control" /> 
             @* <div class="form-group" style="display: none;">
             <label asp-for="YearId" class="control-label"></label>
             <select asp-for="YearId" class="form-control"></select>
@@ -63,7 +63,7 @@
 
             <div class="form-group">
                 <input type="submit" value="確認" class="btn btn-primary" id="submitBtn" />|
-                <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("yearId")">返回</a>
+                <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
 
             </div>
         </form>

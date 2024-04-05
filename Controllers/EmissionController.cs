@@ -27,22 +27,22 @@ namespace Carbon_inventory_platform.Controllers
             TempData["yearId"] = id;
             await CountEmissionAsync(id);
 
-            var emissions = await _context.Years.Include(y => y.Area.Company).Where(x => x.Id == id).FirstOrDefaultAsync();
+            var emissions = await _context.Areas.Include(y => y.Company).Where(x => x.Id == id).FirstOrDefaultAsync();
             return View(emissions);
 
         }
-        public async Task<Year> CountEmissionAsync(Guid? id)
+        public async Task<Area> CountEmissionAsync(Guid? id)
         {
 
             var Devices = await _context.Devices
-                .Where(x => x.isDeleted == 0 && x.YearId == id)
+                .Where(x => x.isDeleted == 0 && x.AreaId == id)
                 .ToListAsync();
             var GHGs = await _context.GHGs
                 .Include(x => x.Device)
-                .Where(x => x.Device.isDeleted == 0 && x.Device.YearId == id)
+                .Where(x => x.Device.isDeleted == 0 && x.Device.AreaId == id)
                 .ToListAsync();
-            var Emission = await _context.Years.Where(x => x.Id == id).ToListAsync();
-            var toCreate = new Year();
+            var Emission = await _context.Areas.Where(x => x.Id == id).FirstOrDefaultAsync();
+
             decimal sum_hardlymove = 0, sum_move = 0, sum_escape = 0, sum_process = 0, sum_electricity = 0,
                 sum1_CO2 = 0, sum2_CO2 = 0, sum1_CH4 = 0, sum2_CH4 = 0, sum1_N2O = 0, sum2_N2O = 0, sum1_HFCS = 0, sum2_HFCS = 0, sum1_PFCS = 0, sum2_PFCS = 0,
                 sum1_SF6 = 0, sum2_SF6 = 0, sum1_NF3 = 0, sum2_NF3 = 0, sum_Scope1 = 0, sum_Scope2 = 0, sum_all = 0;
@@ -126,157 +126,83 @@ namespace Carbon_inventory_platform.Controllers
             }
 
 
-            bool sumMatch = Emission.Any(x => x.All != Math.Round(sum_all, 3));
-            bool uncertaintyMatch = Emission.Any(x => x.ULL != Math.Round(all_ULL, 2));
-            if (Emission.Count != 0)
+            bool sumMatch = Emission.All != Math.Round(sum_all, 3);
+            bool uncertaintyMatch = Emission.ULL!= Math.Round(all_ULL, 2);
+            if (sumMatch || uncertaintyMatch) //如果總量和不確定性上限有差，則修正進資料庫。
             {
-                if (sumMatch || uncertaintyMatch) //如果總量和不確定性上限有差，則修正進資料庫。
-                {
-                    toCreate = await _context.Years.FindAsync(id);
-                    toCreate.Scope1_CO2 = sum1_CO2;
-                    toCreate.Scope1_CH4 = sum1_CH4;
-                    toCreate.Scope1_N2O = sum1_N2O;
-                    toCreate.Scope1_HFCS = sum1_HFCS;
-                    toCreate.Scope1_PFCS = sum1_PFCS;
-                    toCreate.Scope1_SF6 = sum1_SF6;
-                    toCreate.Scope1_NF3 = sum1_NF3;
 
-                    toCreate.Scope2_CO2 = sum2_CO2;
-                    toCreate.Scope2_CH4 = sum2_CH4;
-                    toCreate.Scope2_N2O = sum2_N2O;
-                    toCreate.Scope2_HFCS = sum2_HFCS;
-                    toCreate.Scope2_PFCS = sum2_PFCS;
-                    toCreate.Scope2_SF6 = sum2_SF6;
-                    toCreate.Scope2_NF3 = sum2_NF3;
+                Emission.Scope1_CO2 = sum1_CO2;
+                Emission.Scope1_CH4 = sum1_CH4;
+                Emission.Scope1_N2O = sum1_N2O;
+                Emission.Scope1_HFCS = sum1_HFCS;
+                Emission.Scope1_PFCS = sum1_PFCS;
+                Emission.Scope1_SF6 = sum1_SF6;
+                Emission.Scope1_NF3 = sum1_NF3;
 
-                    toCreate.CO2 = CO2;
-                    toCreate.CH4 = CH4;
-                    toCreate.N2O = N2O;
-                    toCreate.HFCS = HFCS;
-                    toCreate.PFCS = PFCS;
-                    toCreate.SF6 = SF6;
-                    toCreate.NF3 = NF3;
+                Emission.Scope2_CO2 = sum2_CO2;
+                Emission.Scope2_CH4 = sum2_CH4;
+                Emission.Scope2_N2O = sum2_N2O;
+                Emission.Scope2_HFCS = sum2_HFCS;
+                Emission.Scope2_PFCS = sum2_PFCS;
+                Emission.Scope2_SF6 = sum2_SF6;
+                Emission.Scope2_NF3 = sum2_NF3;
 
-                    toCreate.Scope1 = sum_Scope1;
-                    toCreate.Scope2 = sum_Scope2;
+                Emission.CO2 = CO2;
+                Emission.CH4 = CH4;
+                Emission.N2O = N2O;
+                Emission.HFCS = HFCS;
+                Emission.PFCS = PFCS;
+                Emission.SF6 = SF6;
+                Emission.NF3 = NF3;
 
-                    toCreate.All = sum_all;
+                Emission.Scope1 = sum_Scope1;
+                Emission.Scope2 = sum_Scope2;
 
-                    toCreate.non_move = sum_hardlymove;
-                    toCreate.move = sum_move;
-                    toCreate.escape = sum_escape;
-                    toCreate.process = sum_process;
-                    if (sum_Scope1 != 0)
-                    {
-                        toCreate.percentage1_CO2 = (sum1_CO2 / sum_Scope1 * 100);
-                        toCreate.percentage1_CH4 = (sum1_CH4 / sum_Scope1 * 100);
-                        toCreate.percentage1_N2O = (sum1_N2O / sum_Scope1 * 100);
-                        toCreate.percentage1_HFCS = (sum1_HFCS / sum_Scope1 * 100);
-                        toCreate.percentage1_PFCS = (sum1_PFCS / sum_Scope1 * 100);
-                        toCreate.percentage1_SF6 = (sum1_SF6 / sum_Scope1 * 100);
-                        toCreate.percentage1_NF3 = (sum1_NF3 / sum_Scope1 * 100);
-                    }                    
+                Emission.All = sum_all;
 
-                    toCreate.percentage2_CO2 = (CO2 / sum_all * 100);
-                    toCreate.percentage2_CH4 = (CH4 / sum_all * 100);
-                    toCreate.percentage2_N2O = (N2O / sum_all * 100);
-                    toCreate.percentage2_HFCS = (HFCS / sum_all * 100);
-                    toCreate.percentage2_PFCS = (PFCS / sum_all * 100);
-                    toCreate.percentage2_SF6 = (SF6 / sum_all * 100);
-                    toCreate.percentage2_NF3 = (NF3 / sum_all * 100);
+                Emission.non_move = sum_hardlymove;
+                Emission.move = sum_move;
+                Emission.escape = sum_escape;
+                Emission.process = sum_process;
 
-                    toCreate.percentage_nonMove = (sum_hardlymove / sum_all * 100);
-                    toCreate.percentage_Move = (sum_move / sum_all * 100);
-                    toCreate.percentage_Escape = (sum_escape / sum_all * 100);
-                    toCreate.percentage_Process = (sum_process / sum_all * 100);
-                    toCreate.percentage_Scope1 = (sum_Scope1 / sum_all * 100);
-                    toCreate.percentage_Scope2 = (sum_Scope2 / sum_all * 100);
+                Emission.percentage1_CO2 = (sum1_CO2 / sum_Scope1 * 100);
+                Emission.percentage1_CH4 = (sum1_CH4 / sum_Scope1 * 100);
+                Emission.percentage1_N2O = (sum1_N2O / sum_Scope1 * 100);
+                Emission.percentage1_HFCS = (sum1_HFCS / sum_Scope1 * 100);
+                Emission.percentage1_PFCS = (sum1_PFCS / sum_Scope1 * 100);
+                Emission.percentage1_SF6 = (sum1_SF6 / sum_Scope1 * 100);
+                Emission.percentage1_NF3 = (sum1_NF3 / sum_Scope1 * 100);
 
-                    toCreate.cal_all = sum_Uncertainty;
-                    toCreate.no1_Grade = no1_Grade;
-                    toCreate.no2_Grade = no2_Grade;
-                    toCreate.no3_Grade = no3_Grade;
-                    toCreate.avg_Grade = avg_Grade;
-                    toCreate.all_Grade = avg_Grade < 10 ? "第一級" : (avg_Grade < 19 ? "第二級" : "第三級");
-                    toCreate.percentage_CalAll = (sum_Uncertainty / sum_all * 100);
-                    toCreate.ULL = all_ULL;
-                    toCreate.UUL = all_UUL;
-                }
+                Emission.percentage2_CO2 = (CO2 / sum_all * 100);
+                Emission.percentage2_CH4 = (CH4 / sum_all * 100);
+                Emission.percentage2_N2O = (N2O / sum_all * 100);
+                Emission.percentage2_HFCS = (HFCS / sum_all * 100);
+                Emission.percentage2_PFCS = (PFCS / sum_all * 100);
+                Emission.percentage2_SF6 = (SF6 / sum_all * 100);
+                Emission.percentage2_NF3 = (NF3 / sum_all * 100);
+
+                Emission.percentage_nonMove = (sum_hardlymove / sum_all * 100);
+                Emission.percentage_Move = (sum_move / sum_all * 100);
+                Emission.percentage_Escape = (sum_escape / sum_all * 100);
+                Emission.percentage_Process = (sum_process / sum_all * 100);
+                Emission.percentage_Scope1 = (sum_Scope1 / sum_all * 100);
+                Emission.percentage_Scope2 = (sum_Scope2 / sum_all * 100);
+
+                Emission.cal_all = sum_Uncertainty;
+                Emission.no1_Grade = no1_Grade;
+                Emission.no2_Grade = no2_Grade;
+                Emission.no3_Grade = no3_Grade;
+                Emission.avg_Grade = avg_Grade;
+                Emission.all_Grade = avg_Grade < 10 ? "第一級" : (avg_Grade < 19 ? "第二級" : "第三級");
+                Emission.percentage_CalAll = (sum_Uncertainty / sum_all * 100);
+                Emission.ULL = all_ULL;
+                Emission.UUL = all_UUL;
             }
-            else
-            {
-                toCreate.AreaId = (Guid)id;
-                toCreate.Scope1_CO2 = sum1_CO2;
-                toCreate.Scope1_CH4 = sum1_CH4;
-                toCreate.Scope1_N2O = sum1_N2O;
-                toCreate.Scope1_HFCS = sum1_HFCS;
-                toCreate.Scope1_PFCS = sum1_PFCS;
-                toCreate.Scope1_SF6 = sum1_SF6;
-                toCreate.Scope1_NF3 = sum1_NF3;
 
-                toCreate.Scope2_CO2 = sum2_CO2;
-                toCreate.Scope2_CH4 = sum2_CH4;
-                toCreate.Scope2_N2O = sum2_N2O;
-                toCreate.Scope2_HFCS = sum2_HFCS;
-                toCreate.Scope2_PFCS = sum2_PFCS;
-                toCreate.Scope2_SF6 = sum2_SF6;
-                toCreate.Scope2_NF3 = sum2_NF3;
 
-                toCreate.CO2 = CO2;
-                toCreate.CH4 = CH4;
-                toCreate.N2O = N2O;
-                toCreate.HFCS = HFCS;
-                toCreate.PFCS = PFCS;
-                toCreate.SF6 = SF6;
-                toCreate.NF3 = NF3;
-
-                toCreate.Scope1 = sum_Scope1;
-                toCreate.Scope2 = sum_Scope2;
-
-                toCreate.All = sum_all;
-
-                toCreate.non_move = sum_hardlymove;
-                toCreate.move = sum_move;
-                toCreate.escape = sum_escape;
-                toCreate.process = sum_process;
-
-                toCreate.percentage1_CO2 = (sum1_CO2 / sum_Scope1 * 100);
-                toCreate.percentage1_CH4 = (sum1_CH4 / sum_Scope1 * 100);
-                toCreate.percentage1_N2O = (sum1_N2O / sum_Scope1 * 100);
-                toCreate.percentage1_HFCS = (sum1_HFCS / sum_Scope1 * 100);
-                toCreate.percentage1_PFCS = (sum1_PFCS / sum_Scope1 * 100);
-                toCreate.percentage1_SF6 = (sum1_SF6 / sum_Scope1 * 100);
-                toCreate.percentage1_NF3 = (sum1_NF3 / sum_Scope1 * 100);
-
-                toCreate.percentage2_CO2 = (CO2 / sum_all * 100);
-                toCreate.percentage2_CH4 = (CH4 / sum_all * 100);
-                toCreate.percentage2_N2O = (N2O / sum_all * 100);
-                toCreate.percentage2_HFCS = (HFCS / sum_all * 100);
-                toCreate.percentage2_PFCS = (PFCS / sum_all * 100);
-                toCreate.percentage2_SF6 = (SF6 / sum_all * 100);
-                toCreate.percentage2_NF3 = (NF3 / sum_all * 100);
-
-                toCreate.percentage_nonMove = (sum_hardlymove / sum_all * 100);
-                toCreate.percentage_Move = (sum_move / sum_all * 100);
-                toCreate.percentage_Escape = (sum_escape / sum_all * 100);
-                toCreate.percentage_Process = (sum_process / sum_all * 100);
-                toCreate.percentage_Scope1 = (sum_Scope1 / sum_all * 100);
-                toCreate.percentage_Scope2 = (sum_Scope2 / sum_all * 100);
-
-                toCreate.cal_all = sum_Uncertainty;
-                toCreate.no1_Grade = no1_Grade;
-                toCreate.no2_Grade = no2_Grade;
-                toCreate.no3_Grade = no3_Grade;
-                toCreate.avg_Grade = avg_Grade;
-                toCreate.all_Grade = avg_Grade < 10 ? "第一級" : (avg_Grade < 19 ? "第二級" : "第三級");
-                toCreate.percentage_CalAll = (sum_Uncertainty / sum_all * 100);
-                toCreate.ULL = all_ULL;
-                toCreate.UUL = all_UUL;
-                _context.Add(toCreate);
-            }
 
             await _context.SaveChangesAsync();
-            return toCreate;
+            return null;
         }
 
         public static decimal DecimalSqrt(decimal value, int iterations = 20) //用牛頓法逼近Decimal的平方根
@@ -695,12 +621,13 @@ namespace Carbon_inventory_platform.Controllers
         {
             await CountEmissionAsync(id);
             // 這裡要替換成你 MVC 應用程式中正確的檔案路徑
-            var data = await _context.Years.Where(x => x.Id == id && x.isDeleted == 0).Include(x => x.Area).ThenInclude(x => x.Company).FirstOrDefaultAsync();
-            var device = await _context.Devices.Where(x => x.YearId == id && x.isDeleted == 0).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
-            var ManyGHGs = await _context.Devices.Where(x => x.YearId == id && x.isDeleted == 0).SelectMany(x => x.GHGs).ToListAsync();
+            var data = await _context.Areas.Where(x => x.Id == id && x.isDeleted == 0).Include(x => x.Company).FirstOrDefaultAsync();
+            var device = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
+            string baseYear = _context.Areas.Where(x => x.CompanyId == data.CompanyId).ToList().FirstOrDefault(x => x.FullAddress == data.FullAddress && x.BaseYear).Year.ToString();
+            var ManyGHGs = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0).SelectMany(x => x.GHGs).ToListAsync();
             //-----------------檔案設定
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", "溫盤報告書範本3.docx");
-            string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\output\\", data.Num + "-" + data.Area.Name + "-" + data.Area.Company.Name + "-溫室氣體盤查報告書.docx");
+            string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\output\\", data.Year + "-" + data.Name + "-" + data.Company.Name + "-溫室氣體盤查報告書.docx");
             //-----------------檔案設定
             Application wordApp = new();
             //Document doc = wordApp.Documents.Open(filePath);
@@ -708,21 +635,21 @@ namespace Carbon_inventory_platform.Controllers
             doc.ActiveWindow.Visible = true;
 
             //-----------------替換的文本
-            ReplaceText(doc, "[公司中文名稱]", data.Area.Company.Name);
-            ReplaceText(doc, "[西元盤查年度]", (data.Num + 1911).ToString());
-            ReplaceText(doc, "[民國盤查年份]", (data.Num).ToString());
-            ReplaceText(doc, "[廠區名稱]", data.Area.Name.ToString());
-            ReplaceText(doc, "[公司基本資料]", data.Area.Company.CompanyInformation);
-            ReplaceText(doc, "[組織邊界設定]", data.Area.Company.AddressInformation);
-            ReplaceText(doc, "[營運邊界]", data.Area.Company.ReportingInformation);
-            ReplaceText(doc, "[溫室氣體排放類型與排放量說明]", data.Area.Company.GHGInformation);
-            ReplaceText(doc, "[直接溫室氣體排放說明]", data.Area.Company.Scope1Information);
-            ReplaceText(doc, "[能源間接溫室氣體排放說明]", data.Area.Company.Scope2Information);
+            ReplaceText(doc, "[公司中文名稱]", data.Company.Name);
+            ReplaceText(doc, "[西元盤查年度]", (data.Year + 1911).ToString());
+            ReplaceText(doc, "[民國盤查年份]", (data.Year).ToString());
+            ReplaceText(doc, "[廠區名稱]", data.Name.ToString());
+            ReplaceText(doc, "[公司基本資料]", data.Company.CompanyInformation);
+            ReplaceText(doc, "[組織邊界設定]", data.Company.AddressInformation);
+            ReplaceText(doc, "[營運邊界]", data.Company.ReportingInformation);
+            ReplaceText(doc, "[溫室氣體排放類型與排放量說明]", data.Company.GHGInformation);
+            ReplaceText(doc, "[直接溫室氣體排放說明]", data.Company.Scope1Information);
+            ReplaceText(doc, "[能源間接溫室氣體排放說明]", data.Company.Scope2Information);
 
             ReplaceText(doc, "[盤查月]", DateTime.Now.Month.ToString());
             ReplaceText(doc, "[盤查日]", DateTime.Now.Day.ToString());
-            ReplaceText(doc, "[地址]", data.Area.FullAddress);
-            ReplaceText(doc, "[民國基準年]", data.Area.Year.ToString());
+            ReplaceText(doc, "[地址]", data.FullAddress);
+            ReplaceText(doc, "[民國基準年]", baseYear); //待改
 
             ScopeDevice(doc, device, "類別一");
             ScopeDevice(doc, device, "類別二");
@@ -797,25 +724,25 @@ namespace Carbon_inventory_platform.Controllers
             }
             //--------------------------------類別表
             //--------------------------------圖片
-             if (data.Area.MapImagePath != null && data.Area.MapImagePath != "")
+            if (data.MapImagePath != null && data.MapImagePath != "")
             {
-                string mapPath = data.Area.MapImagePath;
+                string mapPath = data.MapImagePath;
                 if (mapPath != null)
                 {
                     ReplaceImage(doc, wordApp, "地理位置圖", mapPath);
                 }
             }
-            if (data.Area.OrganizationImagePath != null && data.Area.OrganizationImagePath != "")
+            if (data.OrganizationImagePath != null && data.OrganizationImagePath != "")
             {
-                string organiztionPath = data.Area.OrganizationImagePath;
+                string organiztionPath = data.OrganizationImagePath;
                 if (organiztionPath != null)
                 {
                     ReplaceImage(doc, wordApp, "公司組織圖", organiztionPath);
                 }
             }
-            if (data.Area.ShopDrawingsPath != null && data.Area.ShopDrawingsPath != "")
+            if (data.ShopDrawingsPath != null && data.ShopDrawingsPath != "")
             {
-                string showDrawingPath = data.Area.ShopDrawingsPath;
+                string showDrawingPath = data.ShopDrawingsPath;
                 if (showDrawingPath != null)
                 {
                     ReplaceImage(doc, wordApp, "廠區圖", showDrawingPath);
@@ -835,7 +762,7 @@ namespace Carbon_inventory_platform.Controllers
             wordApp.Quit();
 
             var fileBytes = System.IO.File.ReadAllBytes(newFilePath);
-            var fileName = data.Num + "-" + data.Area.Name + "-" + data.Area.Company.Name + "-溫室氣體盤查報告書.docx"; // 可以自行定義檔名
+            var fileName = data.Year + "-" + data.Name + "-" + data.Company.Name + "-溫室氣體盤查報告書.docx"; // 可以自行定義檔名
             return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         }
 

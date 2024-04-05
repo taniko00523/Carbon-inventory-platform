@@ -15,6 +15,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
@@ -27,7 +30,7 @@
                 @Html.DisplayNameFor(model => model.FullAddress)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Year)
+                @Html.DisplayNameFor(model => model.BaseYear)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Type)
@@ -51,6 +54,9 @@
         {
             <tr>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
@@ -63,7 +69,14 @@
                     @Html.DisplayFor(modelItem => item.FullAddress)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Year)
+                    @if (item.BaseYear == true)
+                    {
+                        <p>V</p>
+                    }
+                    else
+                    {
+               
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Type)
@@ -113,7 +126,7 @@
                     {
                         <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">填寫</a>
                     }
-                    <a class="btn btn-info" asp-controller="Years" asp-action="Index" asp-route-id="@item.Id">盤查年資料</a>
+                    <a class="btn btn-info" asp-controller="Devices" asp-action="Index" asp-route-id="@item.Id">排放源資料</a>
                 </td>
                 <td>
                     <form method="post" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">

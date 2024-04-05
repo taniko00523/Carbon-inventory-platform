@@ -17,26 +17,26 @@
         <p>
             @if (Model.Count() < 1)
             {
-                <a class="btn btn-primary" asp-action="Default" asp-route-id="@TempData.Peek("yearId")">導入預設</a>
+                <a class="btn btn-primary" asp-action="Default" asp-route-id="@TempData.Peek("areaId")">導入預設</a>
             }
             <a class="btn btn-primary" asp-action="Create">新增設備</a>
             @if (Model.Count() > 1)
             {
-                @if (Model.Any(x => x.Year.All != 0))
+                @if (Model.Any(x => x.Area.All != 0))
                 {
-                    <a class="btn btn-danger" asp-controller="Emission" asp-action="Index" asp-route-id="@TempData.Peek("yearId")">總排放量</a>
+                    <a class="btn btn-danger" asp-controller="Emission" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
                 }
                 else
                 {
-                    <a class="btn btn-danger disabled" asp-controller="Emission" asp-action="Index" asp-route-id="@TempData.Peek("yearId")">總排放量</a>
+                    <a class="btn btn-danger disabled" asp-controller="Emission" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
                 }
-                @if (Model.Any(x => x.Year.Area.Company.ModifiedTime != null) && Model.Any(x => x.Year.Area.ModifiedTime != null) && Model.Any(x => x.Year.All != 0))
+                @if (Model.Any(x => x.Area.Company.ModifiedTime != null) && Model.Any(x => x.Area.ModifiedTime != null) && Model.Any(x => x.Area.All != 0))
                 {
-                    <a class="btn btn-warning" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("yearId")">新版報告書下載</a>
+                    <a class="btn btn-warning" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">新版報告書下載</a>
                 }
                 else
                 {
-                    <a class="btn btn-warning disabled" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("yearId")">新版報告書下載</a>
+                    <a class="btn btn-warning disabled" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">新版報告書下載</a>
                 }
             }
             <a class="btn btn-secondary" asp-controller="Years" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>

@@ -13,7 +13,7 @@ namespace Carbon_inventory_platform.Models
         // 排放源基本資料：
 
         [Display(Name = "盤查年度")]
-        public Guid YearId { get; set; }
+        public Guid AreaId { get; set; }
 
 
         [MaxLength(20)]
@@ -116,8 +116,8 @@ namespace Carbon_inventory_platform.Models
          public DateTime? DeleteTime { get; set; }
 
         //Navigation Property
-        [ForeignKey("YearId")]
-        public Year? Year { get; set; }
+        [ForeignKey("AreaId")]
+        public Area? Area { get; set; }
         public ICollection<GHG>? GHGs { get; set; } = null!;
 
     }

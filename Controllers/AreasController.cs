@@ -123,12 +123,19 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,FullAddress,Year,Type,UniqueCode,FactorCode,OrganizationImage,MapImage,ShopDrawings")] Area area)
+        public async Task<IActionResult> Create([Bind("Name,FullAddress,Year,BaseYear,Type,UniqueCode,FactorCode,OrganizationImage,MapImage,ShopDrawings")] Area area)
         {
             if (ModelState.IsValid)
             {
                 var companyId = TempData.Peek("companyId") as Guid?;
-                              
+                var baseyearData = await _context.Areas.Where(x => x.CompanyId == companyId && x.FullAddress == area.FullAddress && x.BaseYear).FirstOrDefaultAsync();
+                if (baseyearData != null)
+                {
+                    baseyearData.BaseYear = false;
+                    await _context.SaveChangesAsync();
+                }
+                
+
                 var toCreate = new Area();
                 {
                     toCreate.CompanyId = companyId.Value;
@@ -146,6 +153,7 @@ namespace Carbon_inventory_platform.Controllers
                         toCreate.Address = area.FullAddress;
                     }
                     toCreate.Year = area.Year;
+                    toCreate.BaseYear = area.BaseYear;
                     toCreate.Type = area.Type;
                     if (area.OrganizationImage != null)
                     {
@@ -195,7 +203,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,FullAddress,Year,Type,UniqueCode,FactorCode,OrganizationImage,MapImage,ShopDrawings")] Area area)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,FullAddress,Year,BaseYear,Type,UniqueCode,FactorCode,OrganizationImage,MapImage,ShopDrawings")] Area area)
         {
             if (id != area.Id)
             {
@@ -206,6 +214,12 @@ namespace Carbon_inventory_platform.Controllers
             {
                 try
                 {
+                    var baseyearData = await _context.Areas.Where(x => x.CompanyId == companyId && x.FullAddress == area.FullAddress && x.BaseYear).FirstOrDefaultAsync();
+                    if (baseyearData != null)
+                    {
+                        baseyearData.BaseYear = false;
+                        await _context.SaveChangesAsync();
+                    }
                     var toUpdate = await _context.Areas.FindAsync(id);
                     if (toUpdate != null)
                     {
@@ -239,10 +253,12 @@ namespace Carbon_inventory_platform.Controllers
                             toUpdate.ShopDrawingsPath = ShopDrawingsPath;
                         }
                         toUpdate.Year = area.Year;
+                        toUpdate.BaseYear = area.BaseYear;
                         toUpdate.Type = area.Type;
                         toUpdate.ModifiedTime = DateTime.Now;
                     }
                     await _context.SaveChangesAsync();
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {

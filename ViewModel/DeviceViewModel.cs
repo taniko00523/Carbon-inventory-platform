@@ -8,8 +8,8 @@ namespace Carbon_inventory_platform.ViewModel
         [Display(Name = "ID")]
         public Guid Id { get; set; }
 
-        [Display(Name = "盤查年度")]
-        public Guid YearId { get; set; }
+        [Display(Name = "盤查邊界")]
+        public Guid AreaId { get; set; }
 
         [MaxLength(20)]
         [Display(Name = "排放源編號")]

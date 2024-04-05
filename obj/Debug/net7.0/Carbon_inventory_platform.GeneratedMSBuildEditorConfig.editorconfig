@@ -182,14 +182,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJlYXNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Carbon-inventory-platform/Views/Areas/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJlYXNcRGVsZXRlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Carbon-inventory-platform/Views/Areas/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJlYXNcRGV0YWlscy5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/Carbon-inventory-platform/Views/Areas/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJlYXNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -216,14 +208,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/Carbon-inventory-platform/Views/Devices/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2aWNlc1xDcmVhdGUuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Carbon-inventory-platform/Views/Devices/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2aWNlc1xEZWxldGUuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Carbon-inventory-platform/Views/Devices/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2aWNlc1xEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Carbon-inventory-platform/Views/Devices/Edit.cshtml]
@@ -260,14 +244,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/Carbon-inventory-platform/Views/User/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Carbon-inventory-platform/Views/Years/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcWWVhcnNcRWRpdC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Carbon-inventory-platform/Views/Years/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcWWVhcnNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Carbon-inventory-platform/Views/_ViewImports.cshtml]

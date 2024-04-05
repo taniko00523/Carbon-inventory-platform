@@ -51,7 +51,6 @@ namespace Carbon_inventory_platform.Controllers
             string userId = _userManager.GetUserId(User);
             var Company_id = Guid.NewGuid();
             var Area_id = Guid.NewGuid();
-            var Year_id = Guid.NewGuid();
             if (ModelState.IsValid)
             {
                 await _context.Companies.AddAsync(new Company()
@@ -61,18 +60,12 @@ namespace Carbon_inventory_platform.Controllers
                     CreateTime = DateTime.Now
                 });
                 await _context.SaveChangesAsync();
-                await _context.Areas.AddAsync(new Area()
+                    await _context.Areas.AddAsync(new Area()
                 {
                     Id = Area_id,
                     CompanyId = Company_id,
-                    Year = DateTime.Now.Year - 1912, //減去1911取得民國年 在減1取去年當基準年
-                    CreateTime = DateTime.Now
-                });
-                await _context.Years.AddAsync(new Year()
-                {
-                    Id = Year_id,
-                    AreaId = Area_id,
-                    Num = DateTime.Now.Year - 1912, //減去1911取得民國年 在減1取去年當盤查年度
+                    Year = DateTime.Now.Year - 1912, //減去1911取得民國年 再減去1盤去年
+                    BaseYear = true,
                     CreateTime = DateTime.Now
                 });
                 await _context.SaveChangesAsync();
@@ -105,7 +98,6 @@ namespace Carbon_inventory_platform.Controllers
             var hasDevice = _context.Companies //如果此公司有修改過的排放源
     .Where(c => c.Id == id)
     .SelectMany(c => c.Areas)
-    .SelectMany(a => a.Years)
     .SelectMany(y => y.Devices)
     .Any(device => device.ModifiedTime != null);
 
