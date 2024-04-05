@@ -53,6 +53,10 @@ namespace Carbon_inventory_platform.Models
         [Required(ErrorMessage = "請填寫組織邊界說明")]
         public string AddressInformation { get; set; } = "";
 
+        [Display(Name = "報告邊界說明")]
+        [Required(ErrorMessage = "請填寫報告邊界說明")]
+        public string ReportingInformation { get; set; } = "";
+
         [Display(Name = "溫室氣體排放類型與排放量說明")]
         [Required(ErrorMessage = "請填寫溫室氣體排放類型與排放量說明")]
         public string GHGInformation { get; set; } = "";
@@ -61,8 +65,8 @@ namespace Carbon_inventory_platform.Models
         [Required(ErrorMessage = "請填寫直接溫室氣體排放說明")]
         public string Scope1Information { get; set; } = "";
 
-        [Display(Name = "能源間接溫室氣體排放說明")]
-        [Required(ErrorMessage = "請填寫能源間接溫室氣體排放說明")]
+        [Display(Name = "間接溫室氣體排放​說明")]
+        [Required(ErrorMessage = "請填寫間接溫室氣體排放​說明")]
         public string Scope2Information { get; set; } = "";
 
         [Display(Name = "是否刪除")]

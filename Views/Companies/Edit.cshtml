@@ -43,6 +43,11 @@
                 <span asp-validation-for="AddressInformation" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ReportingInformation" class="control-label"></label>
+                <textarea asp-for="ReportingInformation" placeholder="請填報告邊界說明" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="ReportingInformation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="GHGInformation" class="control-label"></label>
                 <textarea asp-for="GHGInformation" placeholder="請填寫溫室氣體排放類型與排放量說明" class="form-control" rows="6"></textarea>
                 <span asp-validation-for="GHGInformation" class="text-danger"></span>

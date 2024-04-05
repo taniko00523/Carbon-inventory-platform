@@ -714,7 +714,7 @@ namespace Carbon_inventory_platform.Controllers
             ReplaceText(doc, "[廠區名稱]", data.Area.Name.ToString());
             ReplaceText(doc, "[公司基本資料]", data.Area.Company.CompanyInformation);
             ReplaceText(doc, "[組織邊界設定]", data.Area.Company.AddressInformation);
-            ReplaceText(doc, "[營運邊界]", data.Area.Company.GHGInformation);
+            ReplaceText(doc, "[營運邊界]", data.Area.Company.ReportingInformation);
             ReplaceText(doc, "[溫室氣體排放類型與排放量說明]", data.Area.Company.GHGInformation);
             ReplaceText(doc, "[直接溫室氣體排放說明]", data.Area.Company.Scope1Information);
             ReplaceText(doc, "[能源間接溫室氣體排放說明]", data.Area.Company.Scope2Information);

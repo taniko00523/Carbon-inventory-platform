@@ -156,6 +156,10 @@ namespace Carbon_inventory_platform.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ReportingInformation")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Scope1Information")
                         .IsRequired()
                         .HasColumnType("TEXT");

@@ -44,6 +44,9 @@
                 @Html.DisplayNameFor(model => model.AddressInformation)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.ReportingInformation)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.GHGInformation)
             </th>
             <th>
@@ -88,6 +91,16 @@
                 </th>
                 <th>
                     @if (item.AddressInformation != "")
+                    {
+                        <p>已填寫</p>
+                    }
+                    else
+                    {
+                        <p>未填寫</p>
+                    }
+                </th>
+                <th>
+                    @if (item.ReportingInformation != "")
                     {
                         <p>已填寫</p>
                     }
