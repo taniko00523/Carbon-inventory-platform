@@ -11,7 +11,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Id" id="id" />
             <input type="hidden" asp-for="YearId" class="form-control" /> @*隱藏的其他欄位*@
             @* <div class="form-group" style="display: none;">
             <label asp-for="YearId" class="control-label"></label>
@@ -56,25 +56,10 @@
             </div>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" value="True" id="CEFCustomize">
-                <input asp-for="Customize" type="text" id="CEFCustomizeHidden">
+                <input asp-for="Customize" type="hidden" id="CEFCustomizeHidden">
                 <label asp-for="Customize" class="form-check-label" for="flexCheckChecked"></label>
             </div>
-            <div class="form-group" id="CEF" style="display:none;">
-                <label asp-for="CO2CEF" class="control-label"></label>
-                <input asp-for="CO2CEF" class="form-control cef-input" id="CO2CEF" type="number" step="0.0000000001" />
-                <label asp-for="CH4CEF" class="control-label"></label>
-                <input asp-for="CH4CEF" class="form-control cef-input" id="CH4CEF" type="number" step="0.0000000001" />
-                <label asp-for="N2OCEF" class="control-label"></label>
-                <input asp-for="N2OCEF" class="form-control cef-input" id="N2OCEF" type="number" step="0.0000000001" />
-                <label asp-for="HFCSCEF" class="control-label"></label>
-                <input asp-for="HFCSCEF" class="form-control cef-input" id="HFCSCEF" type="number" step="0.0000000001" />
-                <label asp-for="PFCSCEF" class="control-label"></label>
-                <input asp-for="PFCSCEF" class="form-control cef-input" id="PFCSCEF" type="number" step="0.0000000001" />
-                <label asp-for="SF6CEF" class="control-label"></label>
-                <input asp-for="SF6CEF" class="form-control cef-input" id="SF6CEF" type="number" step="0.0000000001" />
-                <label asp-for="NF3CEF" class="control-label"></label>
-                <input asp-for="NF3CEF" class="form-control cef-input" id="NF3CEF" type="number" step="0.0000000001" />
-            </div>
+
 
             <div class="form-group">
                 <input type="submit" value="確認" class="btn btn-primary" id="submitBtn" />|
@@ -82,6 +67,23 @@
 
             </div>
         </form>
+    </div>
+
+    <div class="col-md-4" id="CEF" style="display:none;">
+        <label asp-for="CO2CEF" class="control-label"></label>
+        <input asp-for="CO2CEF" class="form-control cef-input" id="CO2CEF" type="number" step="0.0000000001" />
+        <label asp-for="CH4CEF" class="control-label"></label>
+        <input asp-for="CH4CEF" class="form-control cef-input" id="CH4CEF" type="number" step="0.0000000001" />
+        <label asp-for="N2OCEF" class="control-label"></label>
+        <input asp-for="N2OCEF" class="form-control cef-input" id="N2OCEF" type="number" step="0.0000000001" />
+        <label asp-for="HFCSCEF" class="control-label"></label>
+        <input asp-for="HFCSCEF" class="form-control cef-input" id="HFCSCEF" type="number" step="0.0000000001" />
+        <label asp-for="PFCSCEF" class="control-label"></label>
+        <input asp-for="PFCSCEF" class="form-control cef-input" id="PFCSCEF" type="number" step="0.0000000001" />
+        <label asp-for="SF6CEF" class="control-label"></label>
+        <input asp-for="SF6CEF" class="form-control cef-input" id="SF6CEF" type="number" step="0.0000000001" />
+        <label asp-for="NF3CEF" class="control-label"></label>
+        <input asp-for="NF3CEF" class="form-control cef-input" id="NF3CEF" type="number" step="0.0000000001" />
     </div>
 </div>
 
@@ -92,15 +94,14 @@
         $(document).ready(function () {
             // 加載頁面時立即執行的程式碼
             loadDeviceData();
-            checkCEF();
             OtherName();
-
+            checkCEF();
 
             // nameDropdown 的 change 事件處理
             $('#nameDropdown').change(function () {
                 var selectedName = $(this).val();
                 // 當用戶選擇名字時，重新加載相關數據
-                loadDeviceData();
+                loadDefaultDeviceData();
             });
 
             // scopeDropdown 的 change 事件處理
@@ -119,9 +120,35 @@
 
             // 抓取選擇的排放源名稱
             function loadDeviceData() {
-                var selectedName = $('#nameDropdown').val();
+                var id = $('#id').val();
                 $.ajax({
                     url: '/Devices/GetDeviceData',
+                    type: 'GET',
+                    data: { id: id },
+                    async: false,
+                    success: function (data) {
+                        var selectedScope = data.scope; //類別
+                        var selectedEmission = data.emissionPattern; //排放型式
+                        var selectedMaterial = data.material; //原物料
+                        loadEmissions(selectedScope);
+                        setTimeout(() => {
+                            loadMaterialsAndGWPNames(selectedEmission, selectedMaterial);
+                        }, 10) //設定延遲
+
+                        $('#emissionDropdown').val(selectedEmission);
+                        //$('#MaterialDropdown').val(selectedMaterial);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            // 抓取選擇的排放源名稱
+            function loadDefaultDeviceData() {
+                var selectedName = $('#nameDropdown').val();
+                $.ajax({
+                    url: '/Devices/GetDefaultDeviceData',
                     type: 'GET',
                     data: { selectedName: selectedName },
                     async: false,
@@ -259,7 +286,7 @@
                     $('#CEF').hide();
                 }
             }
-            
+
 
             $('#submitBtn').click(function () {
                 // 如果 CEFCustomize 复选框被选中，或者 CEF 区域可见

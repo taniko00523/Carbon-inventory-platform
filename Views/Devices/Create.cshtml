@@ -83,13 +83,13 @@
     <script>
         $(document).ready(function () {
             // 加載頁面時立即執行的程式碼
-            loadDeviceData();
+            loadDefaultDeviceData();
 
             // nameDropdown 的 change 事件處理
             $('#nameDropdown').change(function () {
                 var selectedName = $(this).val();
                 // 當用戶選擇名字時，重新加載相關數據
-                loadDeviceData();
+                loadDefaultDeviceData();
             });
 
             // scopeDropdown 的 change 事件處理
@@ -107,10 +107,10 @@
             });
 
             // 抓取選擇的排放源名稱
-            function loadDeviceData() {
+            function loadDefaultDeviceData() {
                 var selectedName = $('#nameDropdown').val();
                 $.ajax({
-                    url: '/Devices/GetDeviceData',
+                    url: '/Devices/GetDefaultDeviceData',
                     type: 'GET',
                     data: { selectedName: selectedName },
                     async: false,

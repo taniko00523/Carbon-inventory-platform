@@ -116,7 +116,7 @@ namespace Carbon_inventory_platform.Controllers
                         {
                             await CEFAddAsync(toCreate, "CO2", device.CO2CEF);
                         }
-                        if (device.CH4CEF != null && device.CH4CEF !=0)
+                        if (device.CH4CEF != null && device.CH4CEF != 0)
                         {
                             await CEFAddAsync(toCreate, "CH4", device.CH4CEF);
                         }
@@ -185,12 +185,21 @@ namespace Carbon_inventory_platform.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetDeviceData(string selectedName)
+        public JsonResult GetDefaultDeviceData(string selectedName)
         {
             var deviceData = _context.deviceDatas
                 .Where(x => x.Name == selectedName)
                 .FirstOrDefault();
 
+            return Json(deviceData);
+        }
+
+        [HttpGet]
+        public JsonResult GetDeviceData(Guid id)
+        {
+            var deviceData = _context.Devices
+               .Where(x => x.Id == id)
+               .FirstOrDefault();
             return Json(deviceData);
         }
 
@@ -344,6 +353,12 @@ namespace Carbon_inventory_platform.Controllers
                     var deviceUpdate = await _context.Devices.FindAsync(id);
                     var ghgUpdate = await _context.GHGs.Where(x => x.DeviceId == device.Id).ToListAsync();
 
+                    bool changeName = deviceUpdate.Name != device.Name ||
+                                        device.OtherName!= device.OtherName; //換排放源
+                    bool changeMaterial = deviceUpdate.Material != device.Material ||  //換物料
+                                            deviceUpdate.EmissionPattern != device.EmissionPattern;
+                    bool changeCEF = deviceUpdate.Customize != device.Customize; //換排放係數
+
                     if (deviceUpdate != null)
                     {
                         deviceUpdate.YearId = device.YearId;
@@ -355,7 +370,9 @@ namespace Carbon_inventory_platform.Controllers
                         deviceUpdate.EmissionPattern = device.EmissionPattern;
                         deviceUpdate.Material = device.Material;
                         deviceUpdate.ModifiedTime = DateTime.Now;
-                        if (deviceUpdate.Customize != device.Customize) // 改變自訂排放係數勾選選項
+                        deviceUpdate.Customize = device.Customize;
+
+                        if (changeCEF || changeName || changeMaterial) // 換排放源 或 換物料 或 換排放係數是否自訂勾選選項
                         {
                             if (device.Customize == true) // 自訂排放係數
                             {
@@ -416,7 +433,7 @@ namespace Carbon_inventory_platform.Controllers
                                 await GHGCheckAsync(id, device.Name, device.Material, device.Scope, device.EmissionPattern);
                             }
                         }
-                        else
+                        else 
                         {
                             if (device.Customize == true) // 自訂排放係數
                             {
@@ -459,14 +476,13 @@ namespace Carbon_inventory_platform.Controllers
                                     {
                                         await CEFAddAsync(deviceUpdate, "NF3", device.NF3CEF);
                                     }
-                                    if (device.SF6CEF != null && device.SF6CEF != 0 )
+                                    if (device.SF6CEF != null && device.SF6CEF != 0)
                                     {
                                         await CEFAddAsync(deviceUpdate, "SF6", device.SF6CEF);
                                     }
                                 }
                             }
                         }
-                        deviceUpdate.Customize = device.Customize;
                     }
                     await _context.SaveChangesAsync();
                 }
