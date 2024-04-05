@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "D:\\Carbon-inventory-platform\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|d:\\carbon-inventory-platform\\controllers\\devicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:controllers\\devicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|d:\\carbon-inventory-platform\\views\\devices\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\devices\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|d:\\carbon-inventory-platform\\views\\devices\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\devices\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|d:\\carbon-inventory-platform\\views\\devices\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\devices\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|d:\\carbon-inventory-platform\\controllers\\devicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:controllers\\devicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,17 +22,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Create.cshtml",
               "DocumentMoniker": "D:\\Carbon-inventory-platform\\Views\\Devices\\Create.cshtml",
               "RelativeDocumentMoniker": "Views\\Devices\\Create.cshtml",
               "ToolTip": "D:\\Carbon-inventory-platform\\Views\\Devices\\Create.cshtml",
               "RelativeToolTip": "Views\\Devices\\Create.cshtml",
-              "ViewState": "AQIAAGAAAAAAAAAAAAAAAIQAAAANAAAA",
+              "ViewState": "AQIAADUAAAAAAAAAAAAIwE0AAABbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-04-05T10:38:53.739Z",
               "EditorCaption": ""
@@ -45,20 +45,20 @@
               "RelativeDocumentMoniker": "Views\\Devices\\Edit.cshtml",
               "ToolTip": "D:\\Carbon-inventory-platform\\Views\\Devices\\Edit.cshtml",
               "RelativeToolTip": "Views\\Devices\\Edit.cshtml",
-              "ViewState": "AQIAABsAAAAAAAAAAAAAADoAAAA3AAAA",
+              "ViewState": "AQIAADYAAAAAAAAAAAAAAEcAAAADAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-04-05T10:13:15.21Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "DevicesController.cs",
               "DocumentMoniker": "D:\\Carbon-inventory-platform\\Controllers\\DevicesController.cs",
               "RelativeDocumentMoniker": "Controllers\\DevicesController.cs",
               "ToolTip": "D:\\Carbon-inventory-platform\\Controllers\\DevicesController.cs",
               "RelativeToolTip": "Controllers\\DevicesController.cs",
-              "ViewState": "AQIAAMcBAAAAAAAAAAAAANIBAABWAAAA",
+              "ViewState": "AQIAADsAAAAAAAAAAAAQwNIBAABWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-03T09:44:48.471Z",
               "EditorCaption": ""
