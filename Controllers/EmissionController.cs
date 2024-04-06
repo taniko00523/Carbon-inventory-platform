@@ -653,7 +653,7 @@ namespace Carbon_inventory_platform.Controllers
 
             ScopeDevice(doc, device, "類別一");
             ScopeDevice(doc, device, "類別二");
-            ReplaceText(doc, "[電力使用量]", (device.Find(x => x.Name == "電力").Num / 1000).ToString());
+            ReplaceText(doc, "[電力使用量]", (device.Find(x => x.Name == "電力").ActivityDatas.Sum(ad => ad.Num) / 1000).ToString());
             ReplaceText(doc, "[類別一CO2排放]", data.Scope1_CO2.ToString("N4"));
             ReplaceText(doc, "[類別一CH4排放]", data.Scope1_CH4.ToString("N4"));
             ReplaceText(doc, "[類別一N2O排放]", data.Scope1_N2O.ToString("N4"));
@@ -802,7 +802,7 @@ namespace Carbon_inventory_platform.Controllers
                         {
                             table.Cell(rowIndex, 1).Range.Text = GHG.Device.Scope;
                             table.Cell(rowIndex, 2).Range.Text = GHG.Device.EmissionPattern;
-                            table.Cell(rowIndex, 3).Range.Text = GHG.Device.Num.ToString() + GHG.Device.Unit;
+                            table.Cell(rowIndex, 3).Range.Text = GHG.Device.ActivityDatas.Sum(ad=>ad.Num).ToString() + GHG.Device.Unit;
                             table.Cell(rowIndex, 4).Range.Text = GHG.Name;
                             table.Cell(rowIndex, 5).Range.Text = GHG.CEF.ToString() + "公噸/" + GHG.Device.Unit;
                             table.Cell(rowIndex, 6).Range.Text = "係數來源";

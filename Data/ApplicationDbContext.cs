@@ -18,6 +18,7 @@ namespace Carbon_inventory_platform.Data
         public DbSet<Device> Devices { get; set; } = null!;
         public DbSet<GHG> GHGs { get; set; } = null!;
         public DbSet<Material> Materials { get; set; } = null!;
+        public DbSet<ActivityData> ActivityDatas { get; set; }
         public DbSet<GWP> GWPs { get; set; }
         public DbSet<DeviceData> deviceDatas { get; set; } = null!;
         public DbSet<DefaultDevices> defaultDevices { get; set; } = null!;
@@ -42,6 +43,11 @@ namespace Carbon_inventory_platform.Data
             {
                 entity.HasOne(e => e.Area);
                 entity.HasMany(e => e.GHGs);
+            });
+
+            builder.Entity<ActivityData>(entity =>
+            {
+                entity.HasOne(e => e.Device);
             });
 
             builder.Entity<GHG>(entity =>

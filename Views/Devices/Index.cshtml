@@ -91,7 +91,7 @@
                     NF3
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Num)
+                    活動數據
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Emissions)
@@ -193,7 +193,7 @@
                             }
 
                             <td>
-                                @if (item.Num != 0)
+                                @if (item.ActivityDatas.Sum(ad=>ad.Num) != 0)
                                 {
                                     string displayUnit;
                                     @if (item.Unit != null)
@@ -220,13 +220,13 @@
                                         @if (displayUnit != "人")
                                         {
                                             <p>
-                                                @($"{item.Num / 1000:F4} {displayUnit}")
+                                                @($"{item.ActivityDatas.Sum(ad=>ad.Num) / 1000:F4} {displayUnit}")
                                             </p>
                                         }
                                         else
                                         {
                                             <p>
-                                                @($"{item.Num:F0} {displayUnit}")
+                                                @($"{item.ActivityDatas.Sum(ad => ad.Num):F0} {displayUnit}")
                                             </p>
                                         }
                                     }
@@ -240,7 +240,7 @@
                                 <p>@item.Emissions.ToString("N4") 噸CO₂e<p />
                             </td>
                             <td>
-                                @if (item.Num != 0)
+                                @if (item.ModifiedTime != null)
                                 {
                                     <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">修改活動數據</a>
                                 }

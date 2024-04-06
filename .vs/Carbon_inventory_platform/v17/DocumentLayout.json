@@ -1,12 +1,54 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\Carbon-inventory-platform\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|d:\\carbon-inventory-platform\\views\\devices\\addactivitydata.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:views\\devices\\addactivitydata.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|d:\\carbon-inventory-platform\\controllers\\devicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{20823EF8-0AF9-4DD4-8066-2E68DE377EAC}|Carbon_inventory_platform.csproj|solutionrelative:controllers\\devicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AddActivityData.cshtml",
+              "DocumentMoniker": "D:\\Carbon-inventory-platform\\Views\\Devices\\AddActivityData.cshtml",
+              "RelativeDocumentMoniker": "Views\\Devices\\AddActivityData.cshtml",
+              "ToolTip": "D:\\Carbon-inventory-platform\\Views\\Devices\\AddActivityData.cshtml",
+              "RelativeToolTip": "Views\\Devices\\AddActivityData.cshtml",
+              "ViewState": "AQIAAGYAAAAAAAAAAADwv4MAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-04-06T05:30:48.279Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DevicesController.cs",
+              "DocumentMoniker": "D:\\Carbon-inventory-platform\\Controllers\\DevicesController.cs",
+              "RelativeDocumentMoniker": "Controllers\\DevicesController.cs",
+              "ToolTip": "D:\\Carbon-inventory-platform\\Controllers\\DevicesController.cs",
+              "RelativeToolTip": "Controllers\\DevicesController.cs",
+              "ViewState": "AQIAAHICAAAAAAAAAAAAwIgCAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-06T05:20:28.633Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -17,6 +17,31 @@ namespace Carbon_inventory_platform.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.17");
 
+            modelBuilder.Entity("Carbon_inventory_platform.Models.ActivityData", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("DeviceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Num")
+                        .HasColumnType("decimal(18, 4)");
+
+                    b.Property<DateTime?>("Time")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("remark")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("DeviceId");
+
+                    b.ToTable("ActivityDatas");
+                });
+
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
                 {
                     b.Property<Guid>("Id")
@@ -537,9 +562,6 @@ namespace Carbon_inventory_platform.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Num")
-                        .HasColumnType("decimal(18, 4)");
 
                     b.Property<string>("OtherName")
                         .HasMaxLength(20)
@@ -3432,6 +3454,17 @@ namespace Carbon_inventory_platform.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
+            modelBuilder.Entity("Carbon_inventory_platform.Models.ActivityData", b =>
+                {
+                    b.HasOne("Carbon_inventory_platform.Models.Device", "Device")
+                        .WithMany("ActivityDatas")
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Device");
+                });
+
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
                 {
                     b.HasOne("Carbon_inventory_platform.Models.Company", "Company")
@@ -3539,6 +3572,8 @@ namespace Carbon_inventory_platform.Migrations
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Device", b =>
                 {
+                    b.Navigation("ActivityDatas");
+
                     b.Navigation("GHGs");
                 });
 #pragma warning restore 612, 618
