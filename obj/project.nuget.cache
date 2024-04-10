@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "6C1vnQbxw2YZua3VvvgN8P5vCKjW7olFMElvtg1eRiSKh3L5JFm+KTdYGJEYzwkvr8i07Bxp/M10OEDNqXCo6Q==",
+  "dgSpecHash": "/qObXnRLxrb2ylBvJ9ugMIS/Xn7JwOGHTxr3XwDdjHUnzZwWoTULLfuCxvAQfGN339PfZhD2Eeo0QyfL02u6Lg==",
   "success": true,
-  "projectFilePath": "D:\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
+  "projectFilePath": "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jsj00\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
+    "C:\\Users\\jsj00\\.nuget\\packages\\docx\\3.0.0\\docx.3.0.0.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\electronnet.api\\23.6.2\\electronnet.api.23.6.2.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
@@ -192,6 +193,7 @@
     "C:\\Users\\jsj00\\.nuget\\packages\\system.io.filesystem\\4.3.0\\system.io.filesystem.4.3.0.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\system.io.filesystem.accesscontrol\\5.0.0\\system.io.filesystem.accesscontrol.5.0.0.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\system.io.filesystem.primitives\\4.3.0\\system.io.filesystem.primitives.4.3.0.nupkg.sha512",
+    "C:\\Users\\jsj00\\.nuget\\packages\\system.io.packaging\\4.5.0\\system.io.packaging.4.5.0.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\system.io.pipelines\\6.0.3\\system.io.pipelines.6.0.3.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\system.linq\\4.3.0\\system.linq.4.3.0.nupkg.sha512",
     "C:\\Users\\jsj00\\.nuget\\packages\\system.linq.expressions\\4.3.0\\system.linq.expressions.4.3.0.nupkg.sha512",
