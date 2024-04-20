@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Carbon_inventory_platform.Data;
@@ -30,6 +26,14 @@ namespace Carbon_inventory_platform.Controllers
                                      // TempData["year"] = await _context.Emissions // 暫存目前所在的公司名稱 顯示在畫面上方
                                      //.Where(a => a.Id == Id)
                                      //.FirstOrDefaultAsync();
+            TempData["areaName"] = await _context.Areas // 暫存目前所在的公司名稱 顯示在畫面上方
+           .Where(a => a.Id == Id)
+           .Select(a => a.Name)
+           .FirstOrDefaultAsync();
+            TempData["year"] = await _context.Areas // 暫存目前所在的公司名稱 顯示在畫面上方
+           .Where(a => a.Id == Id)
+           .Select(a => a.Year)
+           .FirstOrDefaultAsync();
             return _context.Devices != null ? //如果有抓到資料表Null
                          View(await _context.Devices
                          .Where(x => x.isDeleted == 0 && x.AreaId == Id) //抓出資料表裡面沒被刪除的
@@ -596,7 +600,7 @@ namespace Carbon_inventory_platform.Controllers
             };
 
             ViewData["DataCorrections"] = new SelectList(dataCorrections, "Value", "Text");
-            string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
+            string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "人小時", "其他" };
             ViewData["Unit"] = new SelectList(unit);
             string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
             ViewData["Source"] = new SelectList(source);
@@ -671,28 +675,37 @@ namespace Carbon_inventory_platform.Controllers
                     int i = 1;
                     foreach (var item in GHG)
                     {
+                        if (GHG.Count == 1 && device.Unit == "人小時" && Device.Name == "化糞池")
+                        {
+                            item.CEF = 0.0000015938M;
+                        }//化糞池人小時特別確認
+                        else if (GHG.Count == 1 && device.Unit == "人" && Device.Name == "化糞池")
+                        {
+                            item.CEF = 0.0031875000M;
+
+                        }
                         item.Emission = item.CEF * Num / 1000 * item.GWP;
                         item.ModifiedTime = DateTime.Now;
                         if (i == 1)
                         {
                             GHG1 += item.Emission;
                             all_Emission += item.Emission;
-                            GHG1ULL += item.all_ULL;
-                            GHG1UUL += item.all_UUL;
+                            GHG1ULL += item.all_ULL * 100;
+                            GHG1UUL += item.all_UUL * 100;
                         }
                         if (i == 2)
                         {
                             GHG2 += item.Emission;
                             all_Emission += item.Emission;
-                            GHG2ULL += item.all_ULL;
-                            GHG2UUL += item.all_UUL;
+                            GHG2ULL += item.all_ULL * 100;
+                            GHG2UUL += item.all_UUL * 100;
                         }
                         if (i == 3)
                         {
                             GHG3 += item.Emission;
                             all_Emission += item.Emission;
-                            GHG3ULL += item.all_ULL;
-                            GHG3UUL += item.all_UUL;
+                            GHG3ULL += item.all_ULL * 100;
+                            GHG3UUL += item.all_UUL * 100;
                         }
                         i++;
                     }
@@ -709,7 +722,7 @@ namespace Carbon_inventory_platform.Controllers
                     Device.ModifiedTime = DateTime.Now;
                     Device.count_UUL = Device_allUUL * all_Emission * Device_allUUL * all_Emission;
                     Device.count_ULL = Device_allULL * all_Emission * Device_allULL * all_Emission;
-                    string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
+                    string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "人小時", "其他" };
                     ViewData["Unit"] = new SelectList(unit);
                     string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
                     ViewData["Source"] = new SelectList(source);

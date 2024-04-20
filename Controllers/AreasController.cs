@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Hosting.Internal;
 using Carbon_inventory_platform.Filters;
 
 namespace Carbon_inventory_platform.Controllers
@@ -329,7 +322,7 @@ namespace Carbon_inventory_platform.Controllers
 
         static string GetCity(string input)
         {
-            return input.Substring(3);
+            return input.Substring(0,3);
         }
         static string GetDistrict(string input)
         {

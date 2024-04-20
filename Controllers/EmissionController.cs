@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Drawing;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -96,7 +97,7 @@ namespace Carbon_inventory_platform.Controllers
                 else if (device.Grade < 19) no2_Grade++;
                 else no3_Grade++;
 
-                all_countULL += device.all_ULL;
+                all_countULL += device.count_ULL;
                 all_countUUL += device.count_UUL;
 
                 if (device.all_ULL != 0) //計算有計算不確定性的排放量
@@ -127,7 +128,7 @@ namespace Carbon_inventory_platform.Controllers
 
 
             bool sumMatch = Emission.All != Math.Round(sum_all, 3);
-            bool uncertaintyMatch = Emission.ULL!= Math.Round(all_ULL, 2);
+            bool uncertaintyMatch = Emission.ULL != Math.Round(all_ULL, 2);
             if (sumMatch || uncertaintyMatch) //如果總量和不確定性上限有差，則修正進資料庫。
             {
 
@@ -164,29 +165,64 @@ namespace Carbon_inventory_platform.Controllers
                 Emission.move = sum_move;
                 Emission.escape = sum_escape;
                 Emission.process = sum_process;
+                if (sum_Scope1 != 0)
+                {
+                    Emission.percentage1_CO2 = (sum1_CO2 / sum_Scope1 * 100);
+                    Emission.percentage1_CH4 = (sum1_CH4 / sum_Scope1 * 100);
+                    Emission.percentage1_N2O = (sum1_N2O / sum_Scope1 * 100);
+                    Emission.percentage1_HFCS = (sum1_HFCS / sum_Scope1 * 100);
+                    Emission.percentage1_PFCS = (sum1_PFCS / sum_Scope1 * 100);
+                    Emission.percentage1_SF6 = (sum1_SF6 / sum_Scope1 * 100);
+                    Emission.percentage1_NF3 = (sum1_NF3 / sum_Scope1 * 100);
+                }
+                else
+                {
+                    Emission.percentage1_CO2 = 0;
+                    Emission.percentage1_CH4 = 0;
+                    Emission.percentage1_N2O = 0;
+                    Emission.percentage1_HFCS = 0;
+                    Emission.percentage1_PFCS = 0;
+                    Emission.percentage1_SF6 = 0;
+                    Emission.percentage1_NF3 = 0;
+                }
 
-                Emission.percentage1_CO2 = (sum1_CO2 / sum_Scope1 * 100);
-                Emission.percentage1_CH4 = (sum1_CH4 / sum_Scope1 * 100);
-                Emission.percentage1_N2O = (sum1_N2O / sum_Scope1 * 100);
-                Emission.percentage1_HFCS = (sum1_HFCS / sum_Scope1 * 100);
-                Emission.percentage1_PFCS = (sum1_PFCS / sum_Scope1 * 100);
-                Emission.percentage1_SF6 = (sum1_SF6 / sum_Scope1 * 100);
-                Emission.percentage1_NF3 = (sum1_NF3 / sum_Scope1 * 100);
+                if (sum_all != 0)
+                {
+                    Emission.percentage2_CO2 = (CO2 / sum_all * 100);
+                    Emission.percentage2_CH4 = (CH4 / sum_all * 100);
+                    Emission.percentage2_N2O = (N2O / sum_all * 100);
+                    Emission.percentage2_HFCS = (HFCS / sum_all * 100);
+                    Emission.percentage2_PFCS = (PFCS / sum_all * 100);
+                    Emission.percentage2_SF6 = (SF6 / sum_all * 100);
+                    Emission.percentage2_NF3 = (NF3 / sum_all * 100);
 
-                Emission.percentage2_CO2 = (CO2 / sum_all * 100);
-                Emission.percentage2_CH4 = (CH4 / sum_all * 100);
-                Emission.percentage2_N2O = (N2O / sum_all * 100);
-                Emission.percentage2_HFCS = (HFCS / sum_all * 100);
-                Emission.percentage2_PFCS = (PFCS / sum_all * 100);
-                Emission.percentage2_SF6 = (SF6 / sum_all * 100);
-                Emission.percentage2_NF3 = (NF3 / sum_all * 100);
+                    Emission.percentage_nonMove = (sum_hardlymove / sum_all * 100);
+                    Emission.percentage_Move = (sum_move / sum_all * 100);
+                    Emission.percentage_Escape = (sum_escape / sum_all * 100);
+                    Emission.percentage_Process = (sum_process / sum_all * 100);
+                    Emission.percentage_Scope1 = (sum_Scope1 / sum_all * 100);
+                    Emission.percentage_Scope2 = (sum_Scope2 / sum_all * 100);
+                }
+                else
+                {
+                    Emission.percentage2_CO2 = 0;
+                    Emission.percentage2_CH4 = 0;
+                    Emission.percentage2_N2O = 0;
+                    Emission.percentage2_HFCS = 0;
+                    Emission.percentage2_PFCS = 0;
+                    Emission.percentage2_SF6 = 0;
+                    Emission.percentage2_NF3 = 0;
 
-                Emission.percentage_nonMove = (sum_hardlymove / sum_all * 100);
-                Emission.percentage_Move = (sum_move / sum_all * 100);
-                Emission.percentage_Escape = (sum_escape / sum_all * 100);
-                Emission.percentage_Process = (sum_process / sum_all * 100);
-                Emission.percentage_Scope1 = (sum_Scope1 / sum_all * 100);
-                Emission.percentage_Scope2 = (sum_Scope2 / sum_all * 100);
+                    Emission.percentage_nonMove = 0;
+                    Emission.percentage_Move = 0;
+                    Emission.percentage_Escape = 0;
+                    Emission.percentage_Process = 0;
+                    Emission.percentage_Scope1 = 0;
+                    Emission.percentage_Scope2 = 0;
+                }
+
+
+
 
                 Emission.cal_all = sum_Uncertainty;
                 Emission.no1_Grade = no1_Grade;
@@ -228,7 +264,7 @@ namespace Carbon_inventory_platform.Controllers
             }
 
         }
-        
+
         //public async Task<IActionResult> WordAsync(Guid id)
         //{
         //    await CountEmissionAsync(id);
@@ -619,9 +655,10 @@ namespace Carbon_inventory_platform.Controllers
             var data = await _context.Areas.Where(x => x.Id == id && x.isDeleted == 0).Include(x => x.Company).FirstOrDefaultAsync();
             var device = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
             var ManyGHGs = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0).SelectMany(x => x.GHGs).ToListAsync();
+
             //-----------------檔案設定
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", "溫盤報告書範本3.docx");
-            string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\output\\", data.Year + "年度" + "-" + data.Company.Name+ "-" + data.Name  + "-溫室氣體盤查報告書.docx");
+            string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\output\\", data.Year + "年度" + "-" + data.Company.Name + "-" + data.Name + "-溫室氣體盤查報告書.docx");
             //-----------------檔案設定
             // 複製文件
             using (DocX doc = DocX.Load(filePath))
@@ -629,16 +666,172 @@ namespace Carbon_inventory_platform.Controllers
                 List<Xceed.Document.NET.Paragraph> paragraphsToUpdate = new List<Xceed.Document.NET.Paragraph>();
 
                 //-----------------替換的文本
+                doc.ReplaceText("[聯絡人姓名]", data.Company.ContactName);
+                doc.ReplaceText("[聯絡人電話]", data.Company.Phone);
+                doc.ReplaceText("[聯絡人電子信箱]", data.Company.Email);
+
                 doc.ReplaceText("[公司中文名稱]", data.Company.Name);
-                doc.ReplaceText("[西元盤查年度]", (data.Year + 1911).ToString());
+                doc.ReplaceText("[西元盤查年份]", (data.Year + 1911).ToString());
                 doc.ReplaceText("[民國盤查年份]", (data.Year).ToString());
                 doc.ReplaceText("[廠區名稱]", data.Name.ToString());
-                doc.ReplaceText("[公司基本資料]", data.Company.CompanyInformation);
-                doc.ReplaceText("[組織邊界設定]", data.Company.AddressInformation);
-                doc.ReplaceText("[營運邊界]", data.Company.ReportingInformation);
-                doc.ReplaceText("[溫室氣體排放類型與排放量說明]", data.Company.GHGInformation);
-                doc.ReplaceText("[直接溫室氣體排放說明]", data.Company.Scope1Information);
-                doc.ReplaceText("[能源間接溫室氣體排放說明]", data.Company.Scope2Information);
+                doc.ReplaceText("[進行評估排放當量]", data.cal_all.ToString("N4"));
+                doc.ReplaceText("[不確定性評估占比]", data.percentage_CalAll.ToString("N2")+"%");
+                doc.ReplaceText("[第1級評分]", data.no1_Grade.ToString());
+                doc.ReplaceText("[第2級評分]", data.no2_Grade.ToString());
+                doc.ReplaceText("[第3級評分]", data.no3_Grade.ToString());
+                doc.ReplaceText("[清冊等級分數補充]", data.avg_Grade.ToString());
+                doc.ReplaceText("[清冊級別補充]", data.all_Grade.ToString());
+                doc.ReplaceText("[95上]", "-"+data.UUL.ToString("N2")+"%");
+                doc.ReplaceText("[95下]", "+"+data.ULL.ToString("N2")+"%");
+                if (data.Company.CompanyInformation != null)
+                {
+                    doc.ReplaceText("[公司基本資料]", data.Company.CompanyInformation);
+                }
+                else
+                {
+                    doc.ReplaceText("[公司基本資料]", " ");
+                }
+
+                if (data.Company.AddressInformation != null)
+                {
+                    doc.ReplaceText("[組織邊界設定]", data.Company.AddressInformation);
+                }
+                else
+                {
+                    doc.ReplaceText("[組織邊界設定]", "本次組織邊界之設定，乃參考ISO/CNS 14064-1與環境部氣候變遷署溫室氣體盤查指引，採用營運控制權法定義。");
+                }
+                if (data.Company.ReportingInformation != null)
+                {
+                    doc.ReplaceText("[報告邊界]", data.Company.ReportingInformation);
+                }
+                else
+                {
+                    doc.ReplaceText("[報告邊界]", "");
+
+                }
+                if (data.Company.GHGInformation != null)
+                {
+                    doc.ReplaceText("[溫室氣體排放類型與排放量說明]", data.Company.GHGInformation);
+                }
+                else
+                {
+                    doc.ReplaceText("[溫室氣體排放類型與排放量說明]", "溫室氣體之種類係指上述標準定義之溫室氣體，包括二氧化碳(CO₂)、甲烷(CH₄)、氧化亞氮(N₂O)、氫氟碳化物(HFCs)、全氟碳化物(PFCs)、六氟化硫(SF₆)、三氟化氮(NF₃)以及其他經行政院環保署公告者，但不包含蒙特婁議定書規範之氟氯碳化物(CFCs)。");
+                }
+                if (data.Company.Scope1Information != null)
+                {
+                    doc.ReplaceText("[直接溫室氣體排放說明]", data.Company.Scope1Information);
+                }
+                else
+                {
+                    string text = "包含";
+
+                    var DeviceList = device.Where(x => x.EmissionPattern == "固定");
+                    if (DeviceList != null && DeviceList.Count() != 0)
+                    {
+                        int count = 0;
+                        text += "固定源燃燒的直接排放，例如：";
+                        foreach (var item in DeviceList)
+                        {
+                            count++;
+                            text += item.Material + item.Name;
+                            if (count < DeviceList.Count())
+                            {
+                                text += "、";
+                            }
+                            else
+                            {
+                                text += "，";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        text += "本公司無固定式排放源";
+                    }
+
+                    DeviceList = device.Where(x => x.EmissionPattern == "移動");
+                    if (DeviceList != null && DeviceList.Count() != 0)
+                    {
+                        int count = 0;
+                        text += "移動源燃燒的直接排放，例如：";
+                        foreach (var item in DeviceList)
+                        {
+                            count++;
+                            text += item.Material + item.Name;
+                            if (count < DeviceList.Count())
+                            {
+                                text += "、";
+                            }
+                            else
+                            {
+                                text += "，";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        text += "本公司無移動式排放源";
+                    }
+
+                    DeviceList = device.Where(x => x.EmissionPattern == "逸散");
+                    if (DeviceList != null && DeviceList.Count() != 0)
+                    {
+                        int count = 0;
+                        text += "人為活動產生的逸散排放，例如：";
+                        foreach (var item in DeviceList)
+                        {
+                            count++;
+                            text += item.Material + item.Name;
+                            if (count < DeviceList.Count())
+                            {
+                                text += "、";
+                            }
+                            else
+                            {
+                                text += "，";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        text += "本公司無逸散式排放源";
+                    }
+
+                    DeviceList = device.Where(x => x.EmissionPattern == "製程");
+                    if (DeviceList != null && DeviceList.Count() != 0)
+                    {
+                        int count = 0;
+                        text += "產生溫室氣體排放製程，例如：";
+                        foreach (var item in DeviceList)
+                        {
+                            count++;
+                            text += item.Material + item.Name;
+                            if (count < DeviceList.Count())
+                            {
+                                text += "、";
+                            }
+                            else
+                            {
+                                text += "，";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        text += "本公司無製程排放源";
+                    }
+                    text += "。此外，本次盤查範圍無土地利用變化，也無生質燃料直接排放。";
+                    doc.ReplaceText("[直接溫室氣體排放說明]", text);
+
+                }
+                if (data.Company.Scope2Information != null)
+                {
+                    doc.ReplaceText("[能源間接溫室氣體排放說明]", data.Company.Scope2Information);
+                }
+                else
+                {
+                    doc.ReplaceText("[能源間接溫室氣體排放說明]", "本廠類別二能源間接溫室氣體排放皆來自於外購電力部份。");
+                }
 
                 doc.ReplaceText("[盤查月]", DateTime.Now.Month.ToString());
                 doc.ReplaceText("[盤查日]", DateTime.Now.Day.ToString());
@@ -647,15 +840,21 @@ namespace Carbon_inventory_platform.Controllers
 
                 ScopeDevice(doc, device, "類別一");
                 ScopeDevice(doc, device, "類別二");
-                if (device.Find(x => x.Name == "電力").ActivityDatas != null)
+                if (device.Find(x => x.Name == "電力") != null)
                 {
-                    doc.ReplaceText("[電力使用量]", (device.Find(x => x.Name == "電力").ActivityDatas.Sum(ad => ad.Num) / 1000).ToString());
+                    Guid deviceId = device.Find(x => x.Name == "電力").Id;
+                    var ActivityData = await _context.ActivityDatas.Where(x => x.DeviceId == deviceId).ToListAsync();
+                    if (ActivityData != null)
+                    {
+                        doc.ReplaceText("[電力使用量]", (ActivityData.Sum(ad => ad.Num) / 1000).ToString());
+                    }
+                    else
+                    {
+                        doc.ReplaceText("[電力使用量]", "0");
+                    }
                 }
-                else
-                {
-                    doc.ReplaceText("[電力使用量]", "0");
-                }               
-                
+
+
                 doc.ReplaceText("[類別一CO2排放]", data.Scope1_CO2.ToString("N4"));
                 doc.ReplaceText("[類別一CH4排放]", data.Scope1_CH4.ToString("N4"));
                 doc.ReplaceText("[類別一N2O排放]", data.Scope1_N2O.ToString("N4"));
@@ -725,19 +924,24 @@ namespace Carbon_inventory_platform.Controllers
                     GenerateScopeTable(doc, device, "類別二");
                 }
                 //--------------------------------類別表
+                //--------------------------------報告邊界
+                GenerateReport(doc, device);
+                //--------------------------------報告邊界
+                GenerateActivityDataTable(doc,device);
 
                 //--------------------------------圖片
                 string mapPath = data.MapImagePath;
                 string organiztionPath = data.OrganizationImagePath;
                 string showDrawingPath = data.ShopDrawingsPath;
-                if(showDrawingPath != "") {
+                if (showDrawingPath != "")
+                {
                     replaceImage(doc, "[廠區圖]", showDrawingPath);
                 }
                 else
                 {
                     doc.ReplaceText("[廠區圖]", "");
                 }
-                if(organiztionPath != "")
+                if (organiztionPath != "")
                 {
                     replaceImage(doc, "[公司組織圖]", organiztionPath);
                 }
@@ -745,7 +949,7 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     doc.ReplaceText("[公司組織圖]", "");
                 }
-                if(showDrawingPath != "")
+                if (showDrawingPath != "")
                 {
                     replaceImage(doc, "[地理位置圖]", mapPath);
                 }
@@ -763,7 +967,58 @@ namespace Carbon_inventory_platform.Controllers
             return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         }
 
+        public void GenerateActivityDataTable(DocX doc, List<Device> devices)
+        {
+            Xceed.Document.NET.Table table = doc.AddTable(devices.Count() + 1, 6);
+            //table.SetWidths(new float[] { 100, 150, 200, 100 });
 
+            // 填充表格標題
+            table.Rows[0].Cells[0].Paragraphs.First().Append("類別");
+            table.Rows[0].Cells[1].Paragraphs.First().Append("排放型式");
+            table.Rows[0].Cells[2].Paragraphs.First().Append("原燃物料");
+            table.Rows[0].Cells[3].Paragraphs.First().Append("活動數據");
+            table.Rows[0].Cells[4].Paragraphs.First().Append("單位");
+            table.Rows[0].Cells[5].Paragraphs.First().Append("數據來源表單名稱");
+
+            for (int x = 0; x < devices.Count(); x++)
+            {
+                table.Rows[x + 1].Cells[0].Paragraphs.First().Append(devices[x].Scope);
+                table.Rows[x + 1].Cells[1].Paragraphs.First().Append(devices[x].EmissionPattern);
+                table.Rows[x + 1].Cells[2].Paragraphs.First().Append(devices[x].Material + "(" + devices[x].Name + ")");
+                var DeviceId = devices[x].Id;
+                var activityData = _context.ActivityDatas.Where(x=>x.DeviceId == DeviceId).ToList();
+                table.Rows[x + 1].Cells[3].Paragraphs.First().Append((activityData.Sum(x=>x.Num) / 1000).ToString("F4"));
+                if (devices[x].Unit == "人")
+                {
+                    table.Rows[x + 1].Cells[4].Paragraphs.First().Append(devices[x].Unit);
+                }
+                else
+                {
+                    string displayUnit;
+                    switch (devices[x].Unit)
+                    {
+                        case "公斤":
+                            displayUnit = "公噸";
+                            break;
+                        case "公升":
+                            displayUnit = "公秉";
+                            break;
+                        case "立方公尺":
+                            displayUnit = "千立方公尺";
+                            break;
+                        case "度":
+                            displayUnit = "千度";
+                            break;
+                        default:
+                            displayUnit = devices[x].Unit;
+                            break;
+                    }
+                    table.Rows[x + 1].Cells[4].Paragraphs.First().Append(displayUnit);
+                }
+            }
+            doc.ReplaceTextWithObject("[排放源活動數據表]", table);
+
+        }
 
         public void GenerateGHGsTable(DocX doc, List<GHG> manyGHGs, string emissionPattern, string gasName)
         {
@@ -787,15 +1042,48 @@ namespace Carbon_inventory_platform.Controllers
             {
                 table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(GHG.Device.Scope).Font(font);
                 table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(GHG.Device.EmissionPattern).Font(font);
-                if(GHG.Device.ActivityDatas!=null)
+                var ActivityData = _context.ActivityDatas.Where(x => x.DeviceId == GHG.DeviceId).ToList();
+
+                if (ActivityData != null)
                 {
-                    table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(GHG.Device.ActivityDatas.Sum(ad => ad.Num) + GHG.Device.Unit).Font(font);
+                    table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(ActivityData.Sum(ad => ad.Num) + GHG.Device.Unit).Font(font);
                 }
                 else
                 {
                     table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(0 + GHG.Device.Unit).Font(font);
                 }
-                table.Rows[rowIndex].Cells[3].Paragraphs.First().Append(GHG.Name).Font(font);
+                if (GHG.Name == "CO2")
+                {
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("CO₂").Font(font);
+                }
+                else if (GHG.Name == "CH4")
+                {
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("CH₄").Font(font);
+                }
+                else if (GHG.Name == "N2O")
+                {
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("N₂O").Font(font);
+                }
+                else if (GHG.Name == "HFCS")
+                {
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("HFCs").Font(font);
+                }
+                else if (GHG.Name == "PFCS")
+                {
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("PFCs").Font(font);
+                }
+                else if (GHG.Name == "SF6")
+                {
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("SF₆").Font(font);
+                }
+                else if (GHG.Name == "NF3")
+                {
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("NF₃").Font(font);
+                }
+                else
+                {
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append(GHG.Name).Font(font);
+                }
                 table.Rows[rowIndex].Cells[4].Paragraphs.First().Append(GHG.CEF.ToString() + "公噸/" + GHG.Device.Unit).Font(font);
                 table.Rows[rowIndex].Cells[5].Paragraphs.First().Append("係數來源").Font(font);
                 table.Rows[rowIndex].Cells[6].Paragraphs.First().Append("排放量\n(公噸/年)").Font(font);
@@ -828,7 +1116,56 @@ namespace Carbon_inventory_platform.Controllers
                 }
             }
         }
+        public void GenerateReport(DocX doc, List<Device> devices)
+        {
+            var font = new Xceed.Document.NET.Font("標楷體");
+            Xceed.Document.NET.Table table = doc.AddTable(devices.Count() + 1, 4);
+            // 填充表格標題
+            table.Rows[0].Cells[0].Paragraphs.First().Append("類別").Font(font);
+            table.Rows[0].Cells[1].Paragraphs.First().Append("型式").Font(font);
+            table.Rows[0].Cells[2].Paragraphs.First().Append("排放源").Font(font);
+            table.Rows[0].Cells[3].Paragraphs.First().Append("產生之溫室氣體").Font(font);
 
+            for (int x = 0; x < devices.Count(); x++)
+            {
+                table.Rows[x + 1].Cells[0].Paragraphs.First().Append(devices[x].Scope).Font(font);
+                table.Rows[x + 1].Cells[1].Paragraphs.First().Append(devices[x].EmissionPattern).Font(font);
+                table.Rows[x + 1].Cells[2].Paragraphs.First().Append(devices[x].Name + "(" + devices[x].Material + ")").Font(font);
+                var GHGs = _context.GHGs.Where(ghg => ghg.DeviceId == devices[x].Id);
+                string text = "";
+                foreach (var item in GHGs)
+                {
+                    switch (item.Name)
+                    {
+                        case "CO2":
+                            text += "CO₂";
+                            break;
+                        case "CH4":
+                            text += "CH₄";
+                            break;
+                        case "N2O":
+                            text += "N₂O";
+                            break;
+                        case "HFCS":
+                            text += "HFCs";
+                            break;
+                        case "PFCS":
+                            text += "PFCs";
+                            break;
+                        case "SF6":
+                            text += "SF₆";
+                            break;
+                        case "NF3":
+                            text += "NF₃";
+                            break;
+                    }
+                    text += "  ";
+                }
+                table.Rows[x + 1].Cells[3].Paragraphs.First().Append(text).Font(font);
+
+            }
+            doc.ReplaceTextWithObject("[報告邊界表]", table);
+        }
         public void GenerateScopeTable(DocX doc, List<Device> devices, string scope)
         {
             // 獲取特定類別的設備數量

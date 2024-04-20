@@ -80,7 +80,7 @@
                     @Html.DisplayFor(modelItem => item.Phone)
                 </td>
                 <th>
-                    @if (item.CompanyInformation != "")
+                    @if (item.CompanyInformation != null)
                     {
                         <p>已填寫</p>
                     }
@@ -90,7 +90,7 @@
                     }
                 </th>
                 <th>
-                    @if (item.AddressInformation != "")
+                    @if (item.AddressInformation != null)
                     {
                         <p>已填寫</p>
                     }
@@ -100,7 +100,7 @@
                     }
                 </th>
                 <th>
-                    @if (item.ReportingInformation != "")
+                    @if (item.ReportingInformation != null)
                     {
                         <p>已填寫</p>
                     }
@@ -110,7 +110,7 @@
                     }
                 </th>
                 <th>
-                    @if (item.GHGInformation != "")
+                    @if (item.GHGInformation != null)
                     {
                         <p>已填寫</p>
                     }
@@ -120,7 +120,7 @@
                     }
                 </th>
                 <th>
-                    @if (item.Scope1Information != "")
+                    @if (item.Scope1Information != null)
                     {
                         <p>已填寫</p>
                     }
@@ -130,7 +130,7 @@
                     }
                 </th>
                 <th>
-                    @if (item.Scope2Information != "")
+                    @if (item.Scope2Information != null)
                     {
                         <p>已填寫</p>
                     }

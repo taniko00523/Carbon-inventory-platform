@@ -1,12 +1,7 @@
 ﻿using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using static System.Net.Mime.MediaTypeNames;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using System.Net;
-using System.ComponentModel.Design;
 
 namespace Carbon_inventory_platform.Controllers
 {
