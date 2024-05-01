@@ -36,10 +36,10 @@
                 }
                 else
                 {
-                    <a class="btn btn-warning disabled" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">新版報告書下載</a>
+                    <a class="btn btn-warning disabled" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
                 }
             }
-            <a class="btn btn-secondary" asp-controller="Years" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
+            <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
         </p>
     </div>
 </div>
@@ -70,25 +70,25 @@
                     @Html.DisplayNameFor(model => model.Material)
                 </th>
                 <th>
-                    CO2
+                    CO₂
                 </th>
                 <th>
-                    CH4
+                    CH₄
                 </th>
                 <th>
-                    N2O
+                    N₂O
                 </th>
                 <th>
-                    HFCS
+                    HFCₛ
                 </th>
                 <th>
-                    PFCS
+                    PFCₛ
                 </th>
                 <th>
-                    SF6
+                    SF₆
                 </th>
                 <th>
-                    NF3
+                    NF₃
                 </th>
                 <th>
                     活動數據
@@ -193,7 +193,7 @@
                             }
 
                             <td>
-                                @if (item.ActivityDatas.Sum(ad=>ad.Num) != 0)
+                                @if (item.ActivityDatas.Count != 0)
                                 {
                                     string displayUnit;
                                     @if (item.Unit != null)
@@ -240,7 +240,7 @@
                                 <p>@item.Emissions.ToString("N4") 噸CO₂e<p />
                             </td>
                             <td>
-                                @if (item.ModifiedTime != null)
+                                @if (item.ActivityDatas.Count != 0)
                                 {
                                     <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">修改活動數據</a>
                                 }

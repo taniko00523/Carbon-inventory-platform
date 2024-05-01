@@ -38,7 +38,21 @@ namespace Carbon_inventory_platform.Controllers
             
         }
 
+        public async Task<IActionResult> AdminIndex()
+        {
+            string userId = _userManager.GetUserId(User);
+            if (userId != null)
+            {
+                var company = await _context.Companies.Where(x => x.isDeleted == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
+                return View(company);
+            }
+            else
+            {
+                return View();
+            }
 
+        }
+        
         public async Task<IActionResult> Create()
         {
             string userId = _userManager.GetUserId(User);
@@ -65,7 +79,6 @@ namespace Carbon_inventory_platform.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
 
 
         // POST: Companies/Delete/5
@@ -113,14 +126,22 @@ namespace Carbon_inventory_platform.Controllers
         }
 
         // GET: Companies/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit()
         {
-            if (id == null || _context.Companies == null)
+            string userId = _userManager.GetUserId(User);
+
+
+            if (userId == null || _context.Companies == null)
             {
                 return NotFound();
             }
 
-            var company = await _context.Companies.FindAsync(id);
+            var company = await _context.Companies.Where(x=>x.UserId==userId).FirstOrDefaultAsync();
+            if(company == null)
+            {
+                Create();
+                company = await _context.Companies.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+            }
             if (company == null)
             {
                 return NotFound();

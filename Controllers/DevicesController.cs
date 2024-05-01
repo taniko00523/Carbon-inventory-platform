@@ -600,7 +600,7 @@ namespace Carbon_inventory_platform.Controllers
             };
 
             ViewData["DataCorrections"] = new SelectList(dataCorrections, "Value", "Text");
-            string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "人小時", "其他" };
+            string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
             ViewData["Unit"] = new SelectList(unit);
             string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
             ViewData["Source"] = new SelectList(source);
@@ -675,15 +675,15 @@ namespace Carbon_inventory_platform.Controllers
                     int i = 1;
                     foreach (var item in GHG)
                     {
-                        if (GHG.Count == 1 && device.Unit == "人小時" && Device.Name == "化糞池")
-                        {
-                            item.CEF = 0.0000015938M;
-                        }//化糞池人小時特別確認
-                        else if (GHG.Count == 1 && device.Unit == "人" && Device.Name == "化糞池")
-                        {
-                            item.CEF = 0.0031875000M;
+                        //if (GHG.Count == 1 && device.Unit == "人小時" && Device.Name == "化糞池")
+                        //{
+                        //    item.CEF = 0.0000015938M;
+                        //}//化糞池人小時特別確認
+                        //else if (GHG.Count == 1 && device.Unit == "人" && Device.Name == "化糞池")
+                        //{
+                        //    item.CEF = 0.0031875000M;
 
-                        }
+                        //}
                         item.Emission = item.CEF * Num / 1000 * item.GWP;
                         item.ModifiedTime = DateTime.Now;
                         if (i == 1)
@@ -717,12 +717,13 @@ namespace Carbon_inventory_platform.Controllers
                     Device.Data_Correction = device.Data_Correction;
                     Device.Device_Correction = device.Device_Correction;
                     Device.Grade = device.CEF_Correction * device.Data_Correction * device.Device_Correction;
+                    Device.Source = device.Source;
                     Device.all_UUL = Device_allUUL;
                     Device.all_ULL = Device_allULL;
                     Device.ModifiedTime = DateTime.Now;
                     Device.count_UUL = Device_allUUL * all_Emission * Device_allUUL * all_Emission;
                     Device.count_ULL = Device_allULL * all_Emission * Device_allULL * all_Emission;
-                    string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "人小時", "其他" };
+                    string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
                     ViewData["Unit"] = new SelectList(unit);
                     string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
                     ViewData["Source"] = new SelectList(source);

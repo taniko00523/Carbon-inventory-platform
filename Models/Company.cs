@@ -13,7 +13,7 @@ namespace Carbon_inventory_platform.Models
 
         [MaxLength(50)]
         [Display(Name = "公司名稱")]
-        [Required(ErrorMessage ="請填寫公司名稱")]
+        [Required(ErrorMessage = "請填寫公司名稱")]
         public string Name { get; set; } = "";
 
         [MaxLength(10)]
@@ -34,7 +34,7 @@ namespace Carbon_inventory_platform.Models
         [Required(ErrorMessage = "請填寫聯絡人")]
         public string ContactName { get; set; } = "";
 
-        [EmailAddress(ErrorMessage ="電子信箱格式錯誤")]
+        [EmailAddress(ErrorMessage = "電子信箱格式錯誤")]
         [MaxLength(50)]
         [Display(Name = "電子信箱")]
         [Required(ErrorMessage = "請填寫電子信箱")]
@@ -46,23 +46,27 @@ namespace Carbon_inventory_platform.Models
         public string Phone { get; set; } = "";
 
         [Display(Name = "公司簡介")]
-        public string? CompanyInformation { get; set; } 
+        public string? CompanyInformation { get; set; }
 
         [Display(Name = "組織邊界說明")]
-        public string? AddressInformation { get; set; } 
+        public string? AddressInformation { get; set; }
 
         [Display(Name = "報告邊界說明")]
         public string? ReportingInformation { get; set; }
 
         [Display(Name = "溫室氣體排放類型與排放量說明")]
-        public string? GHGInformation { get; set; } 
+        public string? GHGInformation { get; set; }
 
         [Display(Name = "直接溫室氣體排放說明")]
-        public string? Scope1Information { get; set; } 
+        public string? Scope1Information { get; set; }
 
         [Display(Name = "間接溫室氣體排放​說明")]
-        public string? Scope2Information { get; set; } 
+        public string? Scope2Information { get; set; }
+        [Display(Name = "前言")]
+        public string? ReportOpening { get; set; }
 
+        [Display(Name = "報告用途")]
+        public string? ReportingPurposes { get; set; }
         [Display(Name = "是否刪除")]
         public byte isDeleted { get; set; } = 0;
 
@@ -73,10 +77,10 @@ namespace Carbon_inventory_platform.Models
         public DateTime? ModifiedTime { get; set; }
 
         [Display(Name = "刪除時間")]
-         public DateTime? DeleteTime { get; set; }
+        public DateTime? DeleteTime { get; set; }
 
-        
-        
+
+
 
         //Navigation導覽屬性
 

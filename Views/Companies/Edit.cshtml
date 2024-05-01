@@ -33,9 +33,19 @@
                 <span asp-validation-for="EasyEnglishName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ReportOpening" class="control-label"></label>
+                <textarea asp-for="ReportOpening" placeholder="請填寫前言" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="ReportOpening" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="CompanyInformation" class="control-label"></label>
                 <textarea asp-for="CompanyInformation" placeholder="請填寫公司簡介" class="form-control" rows="6"></textarea>
                 <span asp-validation-for="CompanyInformation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReportingPurposes" class="control-label"></label>
+                <textarea asp-for="ReportingPurposes" placeholder="請填寫預期用途" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="ReportingPurposes" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AddressInformation" class="control-label"></label>

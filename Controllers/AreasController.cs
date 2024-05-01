@@ -4,6 +4,8 @@ using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Carbon_inventory_platform.Filters;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -13,15 +15,73 @@ namespace Carbon_inventory_platform.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _hostingEnvironment;
-
-        public AreasController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public AreasController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+            _userManager = userManager;
+
         }
 
         // GET: Areas
-        public async Task<IActionResult> Index(Guid Id) //非同步方法
+        public async Task<IActionResult> Index() //非同步方法
+        {
+            string userId = _userManager.GetUserId(User);
+
+            var compnay = await _context.Companies // 暫存目前所在的公司名稱 顯示在畫面上方
+                               .Where(a => a.UserId == userId)
+                               .FirstOrDefaultAsync();
+
+            if (compnay == null)
+            {
+                CreateCompany();
+                compnay = await _context.Companies // 暫存目前所在的公司名稱 顯示在畫面上方
+                               .Where(a => a.UserId == userId)
+                               .FirstOrDefaultAsync();
+            }
+
+            Guid Id = compnay.Id;
+            TempData["companyId"] = Id; //暫存進入畫面所查詢的CompanyId
+            TempData["companyName"] = compnay.Name;
+
+            return _context.Areas != null ? //如果有抓到資料表Null
+                      View(await _context.Areas
+                      .Include(x => x.Company)
+                      .Where(x => x.isDeleted == 0 && x.CompanyId == Id) //抓出資料表裡面沒被刪除的
+                      .OrderBy(x => x.CreateTime)
+                      .ToListAsync()) : //非同步方法
+                      Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
+        }
+
+        public async Task<IActionResult> CreateCompany()
+        {
+            string userId = _userManager.GetUserId(User);
+            var Company_id = Guid.NewGuid();
+            var Area_id = Guid.NewGuid();
+            if (ModelState.IsValid)
+            {
+                await _context.Companies.AddAsync(new Company()
+                {
+                    Id = Company_id,
+                    UserId = userId,
+                    CreateTime = DateTime.Now
+                });
+                await _context.SaveChangesAsync();
+                await _context.Areas.AddAsync(new Area()
+                {
+                    Id = Area_id,
+                    CompanyId = Company_id,
+                    Year = DateTime.Now.Year - 1912, //減去1911取得民國年 再減去1盤去年
+                    BaseYear = true,
+                    CreateTime = DateTime.Now
+                });
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> AdminIndex(Guid Id) //非同步方法
         {
             TempData["companyId"] = Id; //暫存進入畫面所查詢的CompanyId
             TempData["companyName"] = await _context.Companies // 暫存目前所在的公司名稱 顯示在畫面上方
@@ -127,7 +187,7 @@ namespace Carbon_inventory_platform.Controllers
                     baseyearData.BaseYear = false;
                     await _context.SaveChangesAsync();
                 }
-                
+
 
                 var toCreate = new Area();
                 {
@@ -251,7 +311,7 @@ namespace Carbon_inventory_platform.Controllers
                         toUpdate.ModifiedTime = DateTime.Now;
                     }
                     await _context.SaveChangesAsync();
-                    
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -322,7 +382,7 @@ namespace Carbon_inventory_platform.Controllers
 
         static string GetCity(string input)
         {
-            return input.Substring(0,3);
+            return input.Substring(0, 3);
         }
         static string GetDistrict(string input)
         {

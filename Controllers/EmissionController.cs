@@ -675,14 +675,22 @@ namespace Carbon_inventory_platform.Controllers
                 doc.ReplaceText("[民國盤查年份]", (data.Year).ToString());
                 doc.ReplaceText("[廠區名稱]", data.Name.ToString());
                 doc.ReplaceText("[進行評估排放當量]", data.cal_all.ToString("N4"));
-                doc.ReplaceText("[不確定性評估占比]", data.percentage_CalAll.ToString("N2")+"%");
+                doc.ReplaceText("[不確定性評估占比]", data.percentage_CalAll.ToString("N2") + "%");
                 doc.ReplaceText("[第1級評分]", data.no1_Grade.ToString());
                 doc.ReplaceText("[第2級評分]", data.no2_Grade.ToString());
                 doc.ReplaceText("[第3級評分]", data.no3_Grade.ToString());
                 doc.ReplaceText("[清冊等級分數補充]", data.avg_Grade.ToString());
                 doc.ReplaceText("[清冊級別補充]", data.all_Grade.ToString());
-                doc.ReplaceText("[95上]", "-"+data.UUL.ToString("N2")+"%");
-                doc.ReplaceText("[95下]", "+"+data.ULL.ToString("N2")+"%");
+                doc.ReplaceText("[95上]", "-" + data.UUL.ToString("N2") + "%");
+                doc.ReplaceText("[95下]", "+" + data.ULL.ToString("N2") + "%");
+                if (data.Company.ReportOpening != null)
+                {
+                    doc.ReplaceText("[前言]", data.Company.ReportOpening);
+                }
+                else
+                {
+                    doc.ReplaceText("[前言]", "自1997年12月第三次締約國大會(COP3)簽署京都議定書後，全球先進國家均研擬因應溫室氣體減量的方法與措施，2005年2月京都議定書正式生效後，全球各國更積極建立了溫室氣體排放管制的共識，2007年12月巴里路線圖進一步強調開發中國家應推動可量測(Measurable)、報告(Reportable)及可供查證(Verifiable)之適當減緩行動，2009年12月丹麥哥本哈根會議更針對後京都世界各國溫室氣體減量提出可行方案。\r\n聯合國環境規劃署在2014年「溫室氣體排放缺口報告」指出，全球碳中和應於2055年至2070年間達成，否則地球將面臨氣候變遷災難。2015年聯合國發布「2030年永續發展方針」，公布17項永續發展目標(SDGs)，為人類和地球的「和平與繁榮」提供了現在與未來的共享藍圖。基於全球減碳趨勢，我國響應聯合國氣候變遷的目標，亦提出「2050淨零路徑里程碑」，隨後於112年1月10通過「氣候變遷因應法」，以達成節能減碳之永續發展目。\r\n" + data.Company.Name + "(以下簡稱本公司)為因應全球永續發展趨勢於 2015年底《聯合國氣候變化綱要公約》第21屆締約國(COP21)後「巴黎協議」產生，加上行政院環保署《溫室氣體減量及管理法》於 2015年7月正式公布實施，配合國家整體溫室氣體減量策略發展，以達成節能減碳之永續發展目標，特配合政府政策，持續進行公司內部溫室氣體盤查，以瞭解溫室氣體排放實況，進而訂定改善措施，以求達成二氧化碳排放減量之目標。 \r\n本公司基於關心全球氣候變遷、善用資源及善盡企業的責任，根據ISO/IEC 14064-1： 2018要求，對溫室氣體管制發展趨勢及因應未來溫室氣體減量之要求，進行系統化的溫室氣體排放盤查 與清冊建置及查證程序等推動計畫，提供日後實施有效的減量改善方案作參考。今後除將持續推動溫室氣體排放管制以降低成本外，並期盼能達成兼顧資源效率、能源節約、環境保護的永續能源發展，共同為產業朝向低碳型經濟社會來努力。\r\n");
+                }
                 if (data.Company.CompanyInformation != null)
                 {
                     doc.ReplaceText("[公司基本資料]", data.Company.CompanyInformation);
@@ -691,6 +699,14 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     doc.ReplaceText("[公司基本資料]", " ");
                 }
+                if (data.Company.ReportingPurposes != null)
+                {
+                    doc.ReplaceText("[預期用途]", data.Company.ReportingPurposes);
+                }
+                else
+                {
+                    doc.ReplaceText("[預期用途]", "為接軌國際議題，提升競爭力，以及實施社會責任，進行本報告書撰寫，以展現本公司溫室氣體盤查結果及推動減碳的決心。");
+                }
 
                 if (data.Company.AddressInformation != null)
                 {
@@ -698,7 +714,7 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 else
                 {
-                    doc.ReplaceText("[組織邊界設定]", "本次組織邊界之設定，乃參考ISO/CNS 14064-1與環境部氣候變遷署溫室氣體盤查指引，採用營運控制權法定義。");
+                    doc.ReplaceText("[組織邊界設定]", "本次組織邊界之設定，遵循ISO 14064-1:2018標準，採用營運控制權法。");
                 }
                 if (data.Company.ReportingInformation != null)
                 {
@@ -725,7 +741,9 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     string text = "包含";
 
-                    var DeviceList = device.Where(x => x.EmissionPattern == "固定");
+                    var DeviceList = device.Where(x => x.EmissionPattern == "固定")
+                                            .GroupBy(x => x.Name)
+                                            .Select(group => group.First());
                     if (DeviceList != null && DeviceList.Count() != 0)
                     {
                         int count = 0;
@@ -733,7 +751,7 @@ namespace Carbon_inventory_platform.Controllers
                         foreach (var item in DeviceList)
                         {
                             count++;
-                            text += item.Material + item.Name;
+                            text += item.Name;
                             if (count < DeviceList.Count())
                             {
                                 text += "、";
@@ -749,7 +767,9 @@ namespace Carbon_inventory_platform.Controllers
                         text += "本公司無固定式排放源";
                     }
 
-                    DeviceList = device.Where(x => x.EmissionPattern == "移動");
+                    DeviceList = device.Where(x => x.EmissionPattern == "移動")
+                                        .GroupBy(x => x.Name)
+                                        .Select(group => group.First());
                     if (DeviceList != null && DeviceList.Count() != 0)
                     {
                         int count = 0;
@@ -757,7 +777,7 @@ namespace Carbon_inventory_platform.Controllers
                         foreach (var item in DeviceList)
                         {
                             count++;
-                            text += item.Material + item.Name;
+                            text += item.Name;
                             if (count < DeviceList.Count())
                             {
                                 text += "、";
@@ -773,7 +793,9 @@ namespace Carbon_inventory_platform.Controllers
                         text += "本公司無移動式排放源";
                     }
 
-                    DeviceList = device.Where(x => x.EmissionPattern == "逸散");
+                    DeviceList = device.Where(x => x.EmissionPattern == "逸散")
+                                        .GroupBy(x => x.Name)
+                                        .Select(group => group.First());
                     if (DeviceList != null && DeviceList.Count() != 0)
                     {
                         int count = 0;
@@ -781,7 +803,7 @@ namespace Carbon_inventory_platform.Controllers
                         foreach (var item in DeviceList)
                         {
                             count++;
-                            text += item.Material + item.Name;
+                            text += item.Name;
                             if (count < DeviceList.Count())
                             {
                                 text += "、";
@@ -797,7 +819,9 @@ namespace Carbon_inventory_platform.Controllers
                         text += "本公司無逸散式排放源";
                     }
 
-                    DeviceList = device.Where(x => x.EmissionPattern == "製程");
+                    DeviceList = device.Where(x => x.EmissionPattern == "製程")
+                                        .GroupBy(x => x.Name)
+                                        .Select(group => group.First());
                     if (DeviceList != null && DeviceList.Count() != 0)
                     {
                         int count = 0;
@@ -805,7 +829,7 @@ namespace Carbon_inventory_platform.Controllers
                         foreach (var item in DeviceList)
                         {
                             count++;
-                            text += item.Material + item.Name;
+                            text += item.Name;
                             if (count < DeviceList.Count())
                             {
                                 text += "、";
@@ -927,7 +951,7 @@ namespace Carbon_inventory_platform.Controllers
                 //--------------------------------報告邊界
                 GenerateReport(doc, device);
                 //--------------------------------報告邊界
-                GenerateActivityDataTable(doc,device);
+                GenerateActivityDataTable(doc, device);
 
                 //--------------------------------圖片
                 string mapPath = data.MapImagePath;
@@ -969,28 +993,30 @@ namespace Carbon_inventory_platform.Controllers
 
         public void GenerateActivityDataTable(DocX doc, List<Device> devices)
         {
+            var font = new Xceed.Document.NET.Font("標楷體");
             Xceed.Document.NET.Table table = doc.AddTable(devices.Count() + 1, 6);
+            table.Design = TableDesign.MediumShading1Accent3;
             //table.SetWidths(new float[] { 100, 150, 200, 100 });
 
             // 填充表格標題
-            table.Rows[0].Cells[0].Paragraphs.First().Append("類別");
-            table.Rows[0].Cells[1].Paragraphs.First().Append("排放型式");
-            table.Rows[0].Cells[2].Paragraphs.First().Append("原燃物料");
-            table.Rows[0].Cells[3].Paragraphs.First().Append("活動數據");
-            table.Rows[0].Cells[4].Paragraphs.First().Append("單位");
-            table.Rows[0].Cells[5].Paragraphs.First().Append("數據來源表單名稱");
+            table.Rows[0].Cells[0].Paragraphs.First().Append("類別").Font(font).FontSize(11d);
+            table.Rows[0].Cells[1].Paragraphs.First().Append("排放型式").Font(font).FontSize(11d);
+            table.Rows[0].Cells[2].Paragraphs.First().Append("原燃物料").Font(font).FontSize(11d);
+            table.Rows[0].Cells[3].Paragraphs.First().Append("活動數據").Font(font).FontSize(11d);
+            table.Rows[0].Cells[4].Paragraphs.First().Append("單位").Font(font).FontSize(11d);
+            table.Rows[0].Cells[5].Paragraphs.First().Append("數據來源表單名稱").Font(font).FontSize(11d);
 
             for (int x = 0; x < devices.Count(); x++)
             {
-                table.Rows[x + 1].Cells[0].Paragraphs.First().Append(devices[x].Scope);
-                table.Rows[x + 1].Cells[1].Paragraphs.First().Append(devices[x].EmissionPattern);
-                table.Rows[x + 1].Cells[2].Paragraphs.First().Append(devices[x].Material + "(" + devices[x].Name + ")");
+                table.Rows[x + 1].Cells[0].Paragraphs.First().Append(devices[x].Scope).Font(font).FontSize(11d);
+                table.Rows[x + 1].Cells[1].Paragraphs.First().Append(devices[x].EmissionPattern).Font(font).FontSize(11d);
+                table.Rows[x + 1].Cells[2].Paragraphs.First().Append(devices[x].Material + "(" + devices[x].Name + ")").Font(font).FontSize(11d);
                 var DeviceId = devices[x].Id;
-                var activityData = _context.ActivityDatas.Where(x=>x.DeviceId == DeviceId).ToList();
-                table.Rows[x + 1].Cells[3].Paragraphs.First().Append((activityData.Sum(x=>x.Num) / 1000).ToString("F4"));
+                var activityData = _context.ActivityDatas.Where(x => x.DeviceId == DeviceId).ToList();
+                table.Rows[x + 1].Cells[3].Paragraphs.First().Append((activityData.Sum(x => x.Num) / 1000).ToString("F4")).Font(font).FontSize(11d);
                 if (devices[x].Unit == "人")
                 {
-                    table.Rows[x + 1].Cells[4].Paragraphs.First().Append(devices[x].Unit);
+                    table.Rows[x + 1].Cells[4].Paragraphs.First().Append(devices[x].Unit).Font(font).FontSize(11d);
                 }
                 else
                 {
@@ -1013,8 +1039,9 @@ namespace Carbon_inventory_platform.Controllers
                             displayUnit = devices[x].Unit;
                             break;
                     }
-                    table.Rows[x + 1].Cells[4].Paragraphs.First().Append(displayUnit);
+                    table.Rows[x + 1].Cells[4].Paragraphs.First().Append(displayUnit).Font(font).FontSize(11d);
                 }
+                table.Rows[x + 1].Cells[5].Paragraphs.First().Append(devices[x].Source).Font(font).FontSize(11d);
             }
             doc.ReplaceTextWithObject("[排放源活動數據表]", table);
 
@@ -1026,69 +1053,80 @@ namespace Carbon_inventory_platform.Controllers
             var font = new Xceed.Document.NET.Font("標楷體");
             Xceed.Document.NET.Table table = doc.AddTable(num + 1, 9);
             table.Design = TableDesign.MediumShading1Accent3;
-            table.Rows[0].Cells[0].Paragraphs.First().Append("類別").Font(font);
-            table.Rows[0].Cells[1].Paragraphs.First().Append("排放型式").Font(font);
-            table.Rows[0].Cells[2].Paragraphs.First().Append("活動數據").Font(font);
-            table.Rows[0].Cells[3].Paragraphs.First().Append("溫室氣體").Font(font);
-            table.Rows[0].Cells[4].Paragraphs.First().Append("排放係數").Font(font);
-            table.Rows[0].Cells[5].Paragraphs.First().Append("係數來源").Font(font);
-            table.Rows[0].Cells[6].Paragraphs.First().Append("排放量\n(公噸/年)").Font(font);
-            table.Rows[0].Cells[7].Paragraphs.First().Append("GWP").Font(font);
-            table.Rows[0].Cells[8].Paragraphs.First().Append("排放當量\n(公噸CO2e/年)\n").Font(font);
+            table.AutoFit = AutoFit.Window;
+
+            table.Rows[0].Cells[0].Paragraphs.First().Append("類別").Font(font).FontSize(9d);
+            table.Rows[0].Cells[1].Paragraphs.First().Append("排放型式").Font(font).FontSize(9d);
+            table.Rows[0].Cells[2].Paragraphs.First().Append("活動數據").Font(font).FontSize(9d);
+            table.Rows[0].Cells[3].Paragraphs.First().Append("溫室氣體").Font(font).FontSize(9d);
+            table.Rows[0].Cells[4].Paragraphs.First().Append("排放係數").Font(font).FontSize(9d);
+            table.Rows[0].Cells[5].Paragraphs.First().Append("係數來源").Font(font).FontSize(9d);
+            table.Rows[0].Cells[6].Paragraphs.First().Append("排放量\n(公噸/年)").Font(font).FontSize(9d);
+            table.Rows[0].Cells[7].Paragraphs.First().Append("GWP").Font(font).FontSize(9d);
+            table.Rows[0].Cells[8].Paragraphs.First().Append("排放當量\n(公噸CO₂e/年)").Font(font).FontSize(9d);
 
             int rowIndex = 1;
 
             foreach (var GHG in manyGHGs.Where(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName))
             {
-                table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(GHG.Device.Scope).Font(font);
-                table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(GHG.Device.EmissionPattern).Font(font);
+                table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(GHG.Device.Scope).Font(font).FontSize(9d);
+                table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(GHG.Device.EmissionPattern).Font(font).FontSize(9d);
                 var ActivityData = _context.ActivityDatas.Where(x => x.DeviceId == GHG.DeviceId).ToList();
 
                 if (ActivityData != null)
                 {
-                    table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(ActivityData.Sum(ad => ad.Num) + GHG.Device.Unit).Font(font);
+                    table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(ActivityData.Sum(ad => ad.Num) + GHG.Device.Unit).Font(font).FontSize(9d);
                 }
                 else
                 {
-                    table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(0 + GHG.Device.Unit).Font(font);
+                    table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(0 + GHG.Device.Unit).Font(font).FontSize(9d);
                 }
                 if (GHG.Name == "CO2")
                 {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("CO₂").Font(font);
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("CO₂").Font(font).FontSize(9d);
                 }
                 else if (GHG.Name == "CH4")
                 {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("CH₄").Font(font);
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("CH₄").Font(font).FontSize(9d);
                 }
                 else if (GHG.Name == "N2O")
                 {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("N₂O").Font(font);
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("N₂O").Font(font).FontSize(9d);
                 }
                 else if (GHG.Name == "HFCS")
                 {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("HFCs").Font(font);
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("HFCs").Font(font).FontSize(9d);
                 }
                 else if (GHG.Name == "PFCS")
                 {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("PFCs").Font(font);
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("PFCs").Font(font).FontSize(9d);
                 }
                 else if (GHG.Name == "SF6")
                 {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("SF₆").Font(font);
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("SF₆").Font(font).FontSize(9d);
                 }
                 else if (GHG.Name == "NF3")
                 {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("NF₃").Font(font);
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("NF₃").Font(font).FontSize(9d);
                 }
                 else
                 {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append(GHG.Name).Font(font);
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append(GHG.Name).Font(font).FontSize(9d);
                 }
-                table.Rows[rowIndex].Cells[4].Paragraphs.First().Append(GHG.CEF.ToString() + "公噸/" + GHG.Device.Unit).Font(font);
-                table.Rows[rowIndex].Cells[5].Paragraphs.First().Append("係數來源").Font(font);
-                table.Rows[rowIndex].Cells[6].Paragraphs.First().Append("排放量\n(公噸/年)").Font(font);
-                table.Rows[rowIndex].Cells[7].Paragraphs.First().Append(GHG.GWP.ToString()).Font(font);
-                table.Rows[rowIndex].Cells[8].Paragraphs.First().Append(GHG.Emission.ToString()).Font(font);
+                table.Rows[rowIndex].Cells[4].Paragraphs.First().Append(GHG.CEF.ToString("N4") + "公噸/" + GHG.Device.Unit).Font(font).FontSize(9d);
+                string CEF_Source = string.Empty;
+                if (GHG.Device.CEF_Correction == 1)
+                {
+                    CEF_Source = "自廠發展係數";
+                }
+                else
+                {
+                    CEF_Source = "溫室氣體排放係數管理表 6.0.4 版";
+                }
+                table.Rows[rowIndex].Cells[5].Paragraphs.First().Append(CEF_Source).Font(font).FontSize(9d);
+                table.Rows[rowIndex].Cells[6].Paragraphs.First().Append("排放量\n(公噸/年)").Font(font).FontSize(9d);
+                table.Rows[rowIndex].Cells[7].Paragraphs.First().Append(GHG.GWP.ToString()).Font(font).FontSize(9d);
+                table.Rows[rowIndex].Cells[8].Paragraphs.First().Append(GHG.Emission.ToString("N4")).Font(font).FontSize(9d);
                 rowIndex++;
             }
 
@@ -1107,7 +1145,7 @@ namespace Carbon_inventory_platform.Controllers
                     if (imagePath != null)
                     {
                         var image = doc.AddImage(imagePath);
-                        var picture = image.CreatePicture(450, 450);
+                        var picture = image.CreatePicture(200, 200);
                         paragraph.InsertPicture(picture);
                     }
 
@@ -1121,19 +1159,41 @@ namespace Carbon_inventory_platform.Controllers
             var font = new Xceed.Document.NET.Font("標楷體");
             Xceed.Document.NET.Table table = doc.AddTable(devices.Count() + 1, 4);
             // 填充表格標題
-            table.Rows[0].Cells[0].Paragraphs.First().Append("類別").Font(font);
-            table.Rows[0].Cells[1].Paragraphs.First().Append("型式").Font(font);
-            table.Rows[0].Cells[2].Paragraphs.First().Append("排放源").Font(font);
-            table.Rows[0].Cells[3].Paragraphs.First().Append("產生之溫室氣體").Font(font);
+            table.Rows[0].Cells[0].Paragraphs.First().Append("類別").Font(font).FontSize(11d);
+            table.Rows[0].Cells[1].Paragraphs.First().Append("型式").Font(font).FontSize(11d);
+            table.Rows[0].Cells[2].Paragraphs.First().Append("排放源").Font(font).FontSize(11d);
+            table.Rows[0].Cells[3].Paragraphs.First().Append("產生之溫室氣體").Font(font).FontSize(11d);
 
             for (int x = 0; x < devices.Count(); x++)
             {
-                table.Rows[x + 1].Cells[0].Paragraphs.First().Append(devices[x].Scope).Font(font);
-                table.Rows[x + 1].Cells[1].Paragraphs.First().Append(devices[x].EmissionPattern).Font(font);
-                table.Rows[x + 1].Cells[2].Paragraphs.First().Append(devices[x].Name + "(" + devices[x].Material + ")").Font(font);
+                table.Rows[x + 1].Cells[0].Paragraphs.First().Append(devices[x].Scope).Font(font).FontSize(11d);
+                table.Rows[x + 1].Cells[1].Paragraphs.First().Append(devices[x].EmissionPattern).Font(font).FontSize(11d);
+                table.Rows[x + 1].Cells[2].Paragraphs.First().Append(devices[x].Name + "(" + devices[x].Material + ")").Font(font).FontSize(11d);
                 var GHGs = _context.GHGs.Where(ghg => ghg.DeviceId == devices[x].Id);
+                // 定義 GHG 名稱與排序數值的映射
+                var ghgOrder = new Dictionary<string, int>
+                {
+                    { "CO2", 0 },
+                    { "CH4", 1 },
+                    { "N2O", 2 },
+                    { "HFCS", 3 },
+                    { "PFCS", 4 },
+                    { "SF6", 5 },
+                    { "NF3", 6 }
+                };
+
+                // 定義排序方法
+                int SortByGHGName(GHG ghg)
+                {
+                    // 如果 GHG 的名稱在映射中，則返回對應的排序數值，否則返回 int.MaxValue
+                    return ghgOrder.ContainsKey(ghg.Name) ? ghgOrder[ghg.Name] : int.MaxValue;
+                }
+
+                // 使用排序方法來排序 GHGs
+                var sortedGHGs = GHGs.OrderBy(SortByGHGName);
+
                 string text = "";
-                foreach (var item in GHGs)
+                foreach (var item in sortedGHGs)
                 {
                     switch (item.Name)
                     {
@@ -1161,7 +1221,7 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     text += "  ";
                 }
-                table.Rows[x + 1].Cells[3].Paragraphs.First().Append(text).Font(font);
+                table.Rows[x + 1].Cells[3].Paragraphs.First().Append(text).Font(font).FontSize(11d);
 
             }
             doc.ReplaceTextWithObject("[報告邊界表]", table);
@@ -1175,16 +1235,16 @@ namespace Carbon_inventory_platform.Controllers
             table.Design = TableDesign.MediumShading1Accent3;
             var font = new Xceed.Document.NET.Font("標楷體");
             // 填充表格標題
-            table.Rows[0].Cells[0].Paragraphs.First().Append("類別").Font(font);
-            table.Rows[0].Cells[1].Paragraphs.First().Append("型式").Font(font);
-            table.Rows[0].Cells[2].Paragraphs.First().Append("排放源").Font(font);
-            table.Rows[0].Cells[3].Paragraphs.First().Append("CO₂").Font(font);
-            table.Rows[0].Cells[4].Paragraphs.First().Append("CH₄").Font(font);
-            table.Rows[0].Cells[5].Paragraphs.First().Append("N₂O").Font(font);
-            table.Rows[0].Cells[6].Paragraphs.First().Append("HFCs").Font(font);
-            table.Rows[0].Cells[7].Paragraphs.First().Append("PFCs").Font(font);
-            table.Rows[0].Cells[8].Paragraphs.First().Append("SF₆").Font(font);
-            table.Rows[0].Cells[9].Paragraphs.First().Append("NF₃").Font(font);
+            table.Rows[0].Cells[0].Paragraphs.First().Append("類別").Font(font).FontSize(11d);
+            table.Rows[0].Cells[1].Paragraphs.First().Append("型式").Font(font).FontSize(11d);
+            table.Rows[0].Cells[2].Paragraphs.First().Append("排放源").Font(font).FontSize(11d);
+            table.Rows[0].Cells[3].Paragraphs.First().Append("CO₂").Font(font).FontSize(11d);
+            table.Rows[0].Cells[4].Paragraphs.First().Append("CH₄").Font(font).FontSize(11d);
+            table.Rows[0].Cells[5].Paragraphs.First().Append("N₂O").Font(font).FontSize(11d);
+            table.Rows[0].Cells[6].Paragraphs.First().Append("HFCs").Font(font).FontSize(11d);
+            table.Rows[0].Cells[7].Paragraphs.First().Append("PFCs").Font(font).FontSize(11d);
+            table.Rows[0].Cells[8].Paragraphs.First().Append("SF₆").Font(font).FontSize(11d);
+            table.Rows[0].Cells[9].Paragraphs.First().Append("NF₃").Font(font).FontSize(11d);
 
             // 遍歷設備列表，填充表格內容
             int rowIndex = 1;
@@ -1194,34 +1254,34 @@ namespace Carbon_inventory_platform.Controllers
                 var GHGs = _context.GHGs.Where(ghg => ghg.DeviceId == item.Id);
 
                 // 填充基本資料
-                table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(item.Scope).Font(font);
-                table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(item.EmissionPattern).Font(font);
-                table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(item.Name + "(" + item.Material + ")").Font(font);
+                table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(item.Scope).Font(font).FontSize(11d);
+                table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(item.EmissionPattern).Font(font).FontSize(11d);
+                table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(item.Name + "(" + item.Material + ")").Font(font).FontSize(11d);
                 // 填充溫室氣體選項欄位
                 foreach (var GHG in GHGs)
                 {
                     switch (GHG.Name)
                     {
                         case "CO2":
-                            table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("v").Font(font);
+                            table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("v").Font(font).FontSize(11d);
                             break;
                         case "CH4":
-                            table.Rows[rowIndex].Cells[4].Paragraphs.First().Append("v").Font(font);
+                            table.Rows[rowIndex].Cells[4].Paragraphs.First().Append("v").Font(font).FontSize(11d);
                             break;
                         case "N2O":
-                            table.Rows[rowIndex].Cells[5].Paragraphs.First().Append("v").Font(font);
+                            table.Rows[rowIndex].Cells[5].Paragraphs.First().Append("v").Font(font).FontSize(11d);
                             break;
                         case "HFCS":
-                            table.Rows[rowIndex].Cells[6].Paragraphs.First().Append("v").Font(font);
+                            table.Rows[rowIndex].Cells[6].Paragraphs.First().Append("v").Font(font).FontSize(11d);
                             break;
                         case "PFCS":
-                            table.Rows[rowIndex].Cells[7].Paragraphs.First().Append("v").Font(font);
+                            table.Rows[rowIndex].Cells[7].Paragraphs.First().Append("v").Font(font).FontSize(11d);
                             break;
                         case "SF6":
-                            table.Rows[rowIndex].Cells[8].Paragraphs.First().Append("v").Font(font);
+                            table.Rows[rowIndex].Cells[8].Paragraphs.First().Append("v").Font(font).FontSize(11d);
                             break;
                         case "NF3":
-                            table.Rows[rowIndex].Cells[9].Paragraphs.First().Append("v").Font(font);
+                            table.Rows[rowIndex].Cells[9].Paragraphs.First().Append("v").Font(font).FontSize(11d);
                             break;
                     }
                 }

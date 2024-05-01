@@ -12,7 +12,7 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "溫室氣體種類")]
         public string Name { get; set; }
 
-        [Column(TypeName = "decimal(18, 10)")]
+        [Column(TypeName = "decimal(18, 2)")]
         [Display(Name = "GWP值")]
         public decimal GWP { get; set; }
 
