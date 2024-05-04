@@ -14,46 +14,50 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" id="id" />
             <input type="hidden" asp-for="AreaId" class="form-control" />
-            @* <div class="form-group" style="display: none;">
-            <label asp-for="YearId" class="control-label"></label>
-            <select asp-for="YearId" class="form-control"></select>
-            <span asp-validation-for="YearId" class="text-danger"></span>
-            </div> *@
-            @* <div class="form-group">
-            <label asp-for="AssetNo" class="control-label"></label>
-            <input asp-for="AssetNo" class="form-control" />
-            <span asp-validation-for="AssetNo" class="text-danger"></span>
-            </div> *@
+            
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label"></label><span style="color:red">*</span>
                 <select asp-for="Name" class="form-control" id="nameDropdown" asp-items="ViewBag.Name"></select>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group" id="OtherName" style="display:none;">
-                <label asp-for="OtherName" class="control-label"></label>
+                <label asp-for="OtherName" class="control-label"></label><span style="color:red">*</span>
                 <input asp-for="OtherName" class="form-control" id="OtherNameText" />
                 <span asp-validation-for="OtherName" class="text-danger"></span>
             </div>
-
-            @*  <div class="form-group">
-            <label asp-for="Provess" class="control-label"></label>
-            <input asp-for="Provess" class="form-control" />
-            <span asp-validation-for="Provess" class="text-danger"></span>
-            </div> *@
             <div class="form-group">
-                <label asp-for="Scope" class="control-label"></label>
+                <label asp-for="NameRemark" class="control-label"></label>
+                <input asp-for="NameRemark" class="form-control" id="NameRemarkText"/>
+                <span asp-validation-for="NameRemark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Scope" class="control-label"></label><span style="color:red">*</span>
                 <select asp-for="Scope" class="form-control" id="scopeDropdown" asp-items="ViewBag.Scope"></select>
                 <span asp-validation-for="Scope" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EmissionPattern" class="control-label"></label>
+                <label asp-for="EmissionPattern" class="control-label"></label><span style="color:red">*</span>
                 <select asp-for="EmissionPattern" class="form-control" id="emissionDropdown" asp-items="ViewBag.EmissionPattern"></select>
                 <span asp-validation-for="EmissionPattern" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Material" class="control-label"></label>
+                <label asp-for="Material" class="control-label"></label><span style="color:red">*</span>
                 <select asp-for="Material" class="form-control" id="MaterialDropdown" asp-items=" ViewBag.Material"></select>
                 <span asp-validation-for="Material" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AssetNo" class="control-label"></label>
+                <input asp-for="AssetNo" class="form-control" />
+                <span asp-validation-for="AssetNo" class="text-danger"></span>
+            </div><div class="form-group">
+                <label asp-for="Provess" class="control-label"></label>
+                <input asp-for="Provess" class="form-control" />
+                <span asp-validation-for="Provess" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Provess" class="control-label"></label>
+                <input asp-for="Provess" class="form-control" />
+                <span asp-validation-for="Provess" class="text-danger"></span>
             </div>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" value="True" id="CEFCustomize">

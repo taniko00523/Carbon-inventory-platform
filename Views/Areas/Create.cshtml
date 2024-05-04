@@ -14,16 +14,16 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" placeholder="若無可填地區名稱，如高雄廠、台南廠" class="form-control" />
+                <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UniqueCode" class="control-label"></label>
+                <label asp-for="UniqueCode" class="control-label"></label><span style="color:red">*</span>
                 <input asp-for="UniqueCode" placeholder="請填寫統一編號" class="form-control" />
                 <span asp-validation-for="UniqueCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FactorCode" class="control-label"></label>
+                <label asp-for="FactorCode" class="control-label"></label><span style="color:red">*</span>
                 <input asp-for="FactorCode" placeholder="請填寫工廠登記編號" class="form-control" />
                 <span asp-validation-for="FactorCode" class="text-danger"></span>
             </div>
@@ -43,13 +43,13 @@
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FullAddress" class="control-label"></label>
-                <input asp-for="FullAddress" placeholder="請填寫地址" class="form-control" />
+                <label asp-for="FullAddress" class="control-label"></label><span style="color:red">*</span>
+                <input asp-for="FullAddress" placeholder="請填寫工廠地址" class="form-control" />
                 <span asp-validation-for="FullAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Year" class="control-label"></label>
-                <input asp-for="Year" placeholder="請填寫民國基準年" class="form-control" />
+                <label asp-for="Year" class="control-label"></label><span style="color:red">*</span>
+                <input asp-for="Year" placeholder="請填寫民國盤查年度" class="form-control" />
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
             <div class="form-group">

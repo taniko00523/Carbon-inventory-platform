@@ -20,6 +20,10 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "排放源名稱")]
         public required string Name { get; set; } = "";
 
+        [MaxLength(100)]
+        [Display(Name = "排放源名稱標註")]
+        public string? NameRemark { get; set; } 
+
         [MaxLength(20)]
         [Display(Name = "自訂排放源名稱")]
         public string? OtherName { get; set; } 
@@ -39,9 +43,11 @@ namespace Carbon_inventory_platform.Models
         public bool Customize { get; set; } = false;
 
         // 不一定有的基本資料：
+        [Display(Name = "標註")]
+        public string? Remark { get; set; }
 
         [MaxLength(20)]
-        [Display(Name = "排放源編號")]
+        [Display(Name = "設備編號")]
         public string? AssetNo { get; set; }
 
         [MaxLength(20)]
@@ -55,12 +61,6 @@ namespace Carbon_inventory_platform.Models
         [MaxLength(20)]
         [Display(Name = "保存單位")]
         public string? Dept { get; set; }
-
-        // 排放源計算過程
-        //[Column(TypeName = "decimal(18, 4)")]
-        //[Display(Name = "活動數據")]
-        //[Required(ErrorMessage = "請填寫活動數據")]
-        //public decimal Num { get; set; } = 0;
 
         [MaxLength(20)]
         [Display(Name = "單位")]

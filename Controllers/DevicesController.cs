@@ -67,7 +67,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AreaId,AssetNo,Name,OtherName,Provess,Scope,EmissionPattern,Material,Customize,CO2CEF,CH4CEF,N2OCEF,HFCSCEF,PFCSCEF,NF3CEF,SF6CEF")] DeviceViewModel device)
+        public async Task<IActionResult> Create([Bind("Id,AreaId,AssetNo,Name,OtherName,Provess,Scope,EmissionPattern,Material,Customize,CO2CEF,CH4CEF,N2OCEF,HFCSCEF,PFCSCEF,NF3CEF,SF6CEF,NameRemark")] DeviceViewModel device)
         {
             if (ModelState.IsValid)
             {
@@ -79,6 +79,7 @@ namespace Carbon_inventory_platform.Controllers
                     AssetNo = device.AssetNo,
                     Name = device.Name,
                     OtherName = device.OtherName,
+                    NameRemark = device.NameRemark,
                     Provess = device.Provess,
                     Scope = device.Scope,
                     EmissionPattern = device.EmissionPattern,
@@ -162,6 +163,7 @@ namespace Carbon_inventory_platform.Controllers
                     AreaId = areaId,
                     Name = device.Name,
                     OtherName = device.OtherName,
+                    NameRemark = device.NameRemark,
                     Scope = device.Scope,
                     EmissionPattern = device.EmissionPattern,
                     Material = device.Material,
@@ -333,6 +335,7 @@ namespace Carbon_inventory_platform.Controllers
                 Id = device.Id,
                 Name = device.Name,
                 OtherName = device.OtherName,
+                NameRemark=  device.NameRemark,
                 AreaId = device.AreaId,
                 AssetNo = device.AssetNo,
                 Provess = device.Provess,
@@ -405,7 +408,7 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,AreaId,AssetNo,Name,OtherName,Provess,Scope,EmissionPattern,Material,Customize,CO2CEF,CH4CEF,N2OCEF,HFCSCEF,PFCSCEF,NF3CEF,SF6CEF")] DeviceViewModel device)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,AreaId,AssetNo,Name,OtherName,Provess,Scope,EmissionPattern,Material,Customize,CO2CEF,CH4CEF,N2OCEF,HFCSCEF,PFCSCEF,NF3CEF,SF6CEF,NameRemark")] DeviceViewModel device)
         {
             if (id != device.Id)
             {
@@ -432,6 +435,7 @@ namespace Carbon_inventory_platform.Controllers
                         deviceUpdate.AssetNo = device.AssetNo;
                         deviceUpdate.Name = device.Name;
                         deviceUpdate.OtherName = device.OtherName;
+                        deviceUpdate.NameRemark = device.NameRemark;
                         deviceUpdate.Provess = device.Provess;
                         deviceUpdate.Scope = device.Scope;
                         deviceUpdate.EmissionPattern = device.EmissionPattern;

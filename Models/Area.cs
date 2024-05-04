@@ -14,8 +14,7 @@ namespace Carbon_inventory_platform.Models
 
         [MaxLength(20)]
         [Display(Name = "廠區名稱")]
-        [Required(ErrorMessage = "請填寫廠區名稱")]
-        public string Name { get; set; } = "";
+        public string? Name { get; set; } = "";
 
         [Display(Name = "郵遞區號")]
         [Required(ErrorMessage = "請填寫郵遞區號")]
@@ -56,7 +55,6 @@ namespace Carbon_inventory_platform.Models
 
         [MaxLength(10)]
         [Display(Name = "產業別")]
-        [Required(ErrorMessage = "請填寫產業別")]
         public string? Type { get; set; } = "";
         [Display(Name = "公司組織圖")]
 

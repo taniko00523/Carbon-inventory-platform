@@ -12,7 +12,7 @@ namespace Carbon_inventory_platform.ViewModel
         public Guid AreaId { get; set; }
 
         [MaxLength(20)]
-        [Display(Name = "排放源編號")]
+        [Display(Name = "設備編號")]
         public string? AssetNo { get; set; }
 
         [MaxLength(20)]
@@ -22,6 +22,10 @@ namespace Carbon_inventory_platform.ViewModel
         [MaxLength(20)]
         [Display(Name = "自訂排放源名稱")]
         public string? OtherName { get; set; }
+
+        [MaxLength(100)]
+        [Display(Name = "排放源名稱標註")]
+        public string? NameRemark { get; set; } = "";
 
         [MaxLength(20)]
         [Display(Name = "製程")]

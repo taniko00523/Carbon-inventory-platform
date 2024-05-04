@@ -14,7 +14,7 @@
             <input type="hidden" asp-for="Input.Id" />
             <input type="hidden" asp-for="Input.UserId" />
             <div class="form-group">
-                <label asp-for="Input.Name" class="control-label"></label>
+                <label asp-for="Input.Name" class="control-label"></label><span style="color:red">*</span>
                 <input asp-for="Input.Name" placeholder="請填寫公司名稱" class="form-control" />
                 <span asp-validation-for="Input.Name" class="text-danger"></span>
             </div>
@@ -24,27 +24,27 @@
                 <span asp-validation-for="Input.EasyName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.EnglishName" class="control-label"></label>
+                <label asp-for="Input.EnglishName" class="control-label"></label><span style="color:red">*</span>
                 <input asp-for="Input.EnglishName" placeholder="請填寫公司英文名稱" class="form-control" />
                 <span asp-validation-for="Input.EnglishName" class="text-danger"></span>
             </div>
             <div class="form-group" style="display:none">
-                <label asp-for="Input.EasyEnglishName" class="control-label"></label>
+                <label asp-for="Input.EasyEnglishName" class="control-label"></label><span style="color:red">*</span>
                 <input asp-for="Input.EasyEnglishName" class="form-control" />
                 <span asp-validation-for="Input.EasyEnglishName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.ContactName" class="control-label"></label>
+                <label asp-for="Input.ContactName" class="control-label"></label><span style="color:red">*</span>
                 <input asp-for="Input.ContactName" placeholder="請填寫聯絡人名稱" class="form-control" />
                 <span asp-validation-for="Input.ContactName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.Email" class="control-label"></label>
+                <label asp-for="Input.Email" class="control-label"></label><span style="color:red">*</span>
                 <input asp-for="Input.Email" placeholder="請填寫聯絡人Email" class="form-control" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.Phone" class="control-label"></label>
+                <label asp-for="Input.Phone" class="control-label"></label><span style="color:red">*</span>
                 <input asp-for="Input.Phone" placeholder="請填寫聯絡人手機號碼" class="form-control" />
                 <span asp-validation-for="Input.Phone" class="text-danger"></span>
             </div>
