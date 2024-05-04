@@ -1051,26 +1051,25 @@ namespace Carbon_inventory_platform.Controllers
         {
             int num = manyGHGs.Count(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName);
             var font = new Xceed.Document.NET.Font("標楷體");
-            Xceed.Document.NET.Table table = doc.AddTable(num + 1, 9);
+            Xceed.Document.NET.Table table = doc.AddTable(num + 1, 8);
             table.Design = TableDesign.MediumShading1Accent3;
             table.AutoFit = AutoFit.Window;
 
-            table.Rows[0].Cells[0].Paragraphs.First().Append("類別").Font(font).FontSize(9d);
-            table.Rows[0].Cells[1].Paragraphs.First().Append("排放型式").Font(font).FontSize(9d);
+            table.Rows[0].Cells[0].Paragraphs.First().Append("排放源名稱").Font(font).FontSize(9d);
+            table.Rows[0].Cells[1].Paragraphs.First().Append("原燃物料或產品").Font(font).FontSize(9d);
             table.Rows[0].Cells[2].Paragraphs.First().Append("活動數據").Font(font).FontSize(9d);
-            table.Rows[0].Cells[3].Paragraphs.First().Append("溫室氣體").Font(font).FontSize(9d);
-            table.Rows[0].Cells[4].Paragraphs.First().Append("排放係數").Font(font).FontSize(9d);
-            table.Rows[0].Cells[5].Paragraphs.First().Append("係數來源").Font(font).FontSize(9d);
-            table.Rows[0].Cells[6].Paragraphs.First().Append("排放量\n(公噸/年)").Font(font).FontSize(9d);
-            table.Rows[0].Cells[7].Paragraphs.First().Append("GWP").Font(font).FontSize(9d);
-            table.Rows[0].Cells[8].Paragraphs.First().Append("排放當量\n(公噸CO₂e/年)").Font(font).FontSize(9d);
+            table.Rows[0].Cells[3].Paragraphs.First().Append("排放係數").Font(font).FontSize(9d);
+            table.Rows[0].Cells[4].Paragraphs.First().Append("係數來源").Font(font).FontSize(9d);
+            table.Rows[0].Cells[5].Paragraphs.First().Append("排放量\n(公噸/年)").Font(font).FontSize(9d);
+            table.Rows[0].Cells[6].Paragraphs.First().Append("GWP").Font(font).FontSize(9d);
+            table.Rows[0].Cells[7].Paragraphs.First().Append("排放當量\n(公噸CO₂e/年)").Font(font).FontSize(9d);
 
             int rowIndex = 1;
 
             foreach (var GHG in manyGHGs.Where(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName))
             {
-                table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(GHG.Device.Scope).Font(font).FontSize(9d);
-                table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(GHG.Device.EmissionPattern).Font(font).FontSize(9d);
+                table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(GHG.Device.Name).Font(font).FontSize(9d);
+                table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(GHG.Device.Material).Font(font).FontSize(9d);
                 var ActivityData = _context.ActivityDatas.Where(x => x.DeviceId == GHG.DeviceId).ToList();
 
                 if (ActivityData != null)
@@ -1081,39 +1080,7 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(0 + GHG.Device.Unit).Font(font).FontSize(9d);
                 }
-                if (GHG.Name == "CO2")
-                {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("CO₂").Font(font).FontSize(9d);
-                }
-                else if (GHG.Name == "CH4")
-                {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("CH₄").Font(font).FontSize(9d);
-                }
-                else if (GHG.Name == "N2O")
-                {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("N₂O").Font(font).FontSize(9d);
-                }
-                else if (GHG.Name == "HFCS")
-                {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("HFCs").Font(font).FontSize(9d);
-                }
-                else if (GHG.Name == "PFCS")
-                {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("PFCs").Font(font).FontSize(9d);
-                }
-                else if (GHG.Name == "SF6")
-                {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("SF₆").Font(font).FontSize(9d);
-                }
-                else if (GHG.Name == "NF3")
-                {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append("NF₃").Font(font).FontSize(9d);
-                }
-                else
-                {
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append(GHG.Name).Font(font).FontSize(9d);
-                }
-                table.Rows[rowIndex].Cells[4].Paragraphs.First().Append(GHG.CEF.ToString("N4") + "公噸/" + GHG.Device.Unit).Font(font).FontSize(9d);
+                table.Rows[rowIndex].Cells[3].Paragraphs.First().Append(GHG.CEF.ToString("N4") + "公斤/" + GHG.Device.Unit).Font(font).FontSize(9d);
                 string CEF_Source = string.Empty;
                 if (GHG.Device.CEF_Correction == 1)
                 {
@@ -1123,10 +1090,10 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     CEF_Source = "溫室氣體排放係數管理表 6.0.4 版";
                 }
-                table.Rows[rowIndex].Cells[5].Paragraphs.First().Append(CEF_Source).Font(font).FontSize(9d);
-                table.Rows[rowIndex].Cells[6].Paragraphs.First().Append("排放量\n(公噸/年)").Font(font).FontSize(9d);
-                table.Rows[rowIndex].Cells[7].Paragraphs.First().Append(GHG.GWP.ToString()).Font(font).FontSize(9d);
-                table.Rows[rowIndex].Cells[8].Paragraphs.First().Append(GHG.Emission.ToString("N4")).Font(font).FontSize(9d);
+                table.Rows[rowIndex].Cells[4].Paragraphs.First().Append(CEF_Source).Font(font).FontSize(9d);
+                table.Rows[rowIndex].Cells[5].Paragraphs.First().Append("排放量\n(公噸/年)").Font(font).FontSize(9d);
+                table.Rows[rowIndex].Cells[6].Paragraphs.First().Append(GHG.GWP.ToString()).Font(font).FontSize(9d);
+                table.Rows[rowIndex].Cells[7].Paragraphs.First().Append(GHG.Emission.ToString("N4")).Font(font).FontSize(9d);
                 rowIndex++;
             }
 
