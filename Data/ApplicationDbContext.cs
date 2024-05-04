@@ -103,29 +103,42 @@ new Material { Id = 40, Name = "煤油", Scope = "類別一", EmissionPattern = 
 new Material { Id = 41, Name = "潤滑油", Scope = "類別一", EmissionPattern = "移動", CO2CEF = 2.946167424M, CO2ULL = 0.0190995907M, CO2UUL = 0.0259208731M, CH4CEF = 0.0001205798M, CH4ULL = 0.6666666667M, CH4UUL = 2.3333333333M, N2OCEF = 0.000024116M, N2OULL = 0.6666666667M, N2OUUL = 2.3333333333M, CEF_Correction = 3, Unit = "L" },
 new Material { Id = 42, Name = "液化石油氣", Scope = "類別一", EmissionPattern = "移動", CO2CEF = 1.7528812758M, CO2ULL = 0.0237717908M, CO2UUL = 0.0396196513M, CH4CEF = 0.0017223239M, CH4ULL = 0M, CH4UUL = 0M, N2OCEF = 0.0000055559M, N2OULL = 0M, N2OUUL = 0M, CEF_Correction = 3, Unit = "L" },
 new Material { Id = 43, Name = "液化天然氣", Scope = "類別一", EmissionPattern = "移動", CO2CEF = 2.11391532M, CO2ULL = 0.0320855615M, CO2UUL = 0.0392156863M, CH4CEF = 0.0034666704M, CH4ULL = 0.4565217391M, CH4UUL = 15.7391304348M, N2OCEF = 0.0001130436M, N2OULL = 0.6666666667M, N2OUUL = 24.6666666667M, CEF_Correction = 3, Unit = "M3" },
-
-
-new Material { Id = 44, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.495M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M },
-
-new Material { Id = 57, Name = "廢水處理", Scope = "類別一", EmissionPattern = "逸散", CH4CEF = 0.0038250000M, CEF_Correction = 3 },
-
-new Material { Id = 58, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", CO2CEF = 1, CEF_Correction = 3 },
-new Material { Id = 59, Name = "乙炔", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 3.3841653850M, CEF_Correction = 1 },
-new Material { Id = 60, Name = "焊條", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 3.6666666666M, CEF_Correction = 1 },
-new Material { Id = 61, Name = "冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.003000M, CEF_Correction = 3 }, //家用冷凍、冷藏裝備
-new Material { Id = 62, Name = "飲水機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.003000M, CEF_Correction = 3 }, //家用冷凍、冷藏裝備
-new Material { Id = 63, Name = "商用冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.055000M, CEF_Correction = 3 }, //獨立商用冷凍、冷藏裝備	
-new Material { Id = 64, Name = "中、大型冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.200000M, CEF_Correction = 3 }, //中、大型冷凍、冷藏裝備
-new Material { Id = 65, Name = "低溫冷凍車", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.330000M, CEF_Correction = 3 }, //交通用冷凍、冷藏裝備
-new Material { Id = 66, Name = "乾燥機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M, CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
-new Material { Id = 67, Name = "工業冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M, CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
-new Material { Id = 68, Name = "食品加工冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M, CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
-new Material { Id = 69, Name = "冰水主機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.090000M, CEF_Correction = 3 }, //冰水機
-new Material { Id = 70, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.030000M, CEF_Correction = 3 }, //住宅及商業建築冷氣機
-new Material { Id = 71, Name = "車用空調", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.200000M, CEF_Correction = 3 }, //移動式空氣清靜機
-new Material { Id = 72, Name = "丁烷", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 3.0260000000M, CEF_Correction = 1 },
-new Material { Id = 73, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.509M, CO2ULL = -0.07M, CO2UUL = 0.07M, Year = 110, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M },
-new Material { Id = 74, Name = "WD40", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 0.025M, CEF_Correction = 3 }
+new Material { Id = 44, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.555M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 94 },
+new Material { Id = 45, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.5625M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 95 },
+new Material { Id = 46, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.558M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 96 },
+new Material { Id = 47, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.555M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 97 },
+new Material { Id = 48, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.543M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 98 },
+new Material { Id = 49, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.534M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 99 },
+new Material { Id = 50, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.534M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 100 },
+new Material { Id = 51, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.529M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 101 },
+new Material { Id = 52, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.519M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 102 },
+new Material { Id = 53, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.518M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 103 },
+new Material { Id = 54, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.525M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 104 },
+new Material { Id = 55, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.530M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 105 },
+new Material { Id = 56, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.554M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 106 },
+new Material { Id = 57, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.533M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 107 },
+new Material { Id = 58, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.509M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 108 },
+new Material { Id = 59, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.502M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 109 },
+new Material { Id = 60, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.509M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 110 },
+new Material { Id = 61, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.495M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 111 },
+new Material { Id = 62, Name = "外購電力", Scope = "類別二", EmissionPattern = "外購電力", CO2CEF = 0.494M, CO2ULL = -0.07M, CO2UUL = 0.07M, CEF_Correction = 3, DataULL = -0.01M, DataUUL = -0.01M, Year = 112 },
+new Material { Id = 63, Name = "廢水處理", Scope = "類別一", EmissionPattern = "逸散", CH4CEF = 0.0038250000M, CEF_Correction = 3 },
+new Material { Id = 64, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", CO2CEF = 1, CEF_Correction = 3 },
+new Material { Id = 65, Name = "乙炔", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 3.3841653850M, CEF_Correction = 1 },
+new Material { Id = 66, Name = "焊條", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 3.6666666666M, CEF_Correction = 1 },
+new Material { Id = 67, Name = "冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.003000M, CEF_Correction = 3 }, //家用冷凍、冷藏裝備
+new Material { Id = 68, Name = "飲水機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.003000M, CEF_Correction = 3 }, //家用冷凍、冷藏裝備
+new Material { Id = 69, Name = "商用冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.055000M, CEF_Correction = 3 }, //獨立商用冷凍、冷藏裝備	
+new Material { Id = 70, Name = "中、大型冰箱", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.200000M, CEF_Correction = 3 }, //中、大型冷凍、冷藏裝備
+new Material { Id = 71, Name = "低溫冷凍車", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.330000M, CEF_Correction = 3 }, //交通用冷凍、冷藏裝備
+new Material { Id = 72, Name = "乾燥機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M, CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
+new Material { Id = 73, Name = "工業冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M, CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
+new Material { Id = 74, Name = "食品加工冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.160000M, CEF_Correction = 3 }, //工業冷凍、冷藏裝備，包括食品加工及冷藏
+new Material { Id = 75, Name = "冰水主機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.090000M, CEF_Correction = 3 }, //冰水機
+new Material { Id = 76, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.030000M, CEF_Correction = 3 }, //住宅及商業建築冷氣機
+new Material { Id = 77, Name = "車用空調", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.200000M, CEF_Correction = 3 }, //移動式空氣清靜機
+new Material { Id = 78, Name = "丁烷", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 3.0260000000M, CEF_Correction = 1 },
+new Material { Id = 79, Name = "WD40", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 0.025M, CEF_Correction = 3 }
 );
             builder.Entity<GWP>().HasData(
 new GWP { Name = "CO2", Num = 1, GWP_Year = 2022 },

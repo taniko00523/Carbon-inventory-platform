@@ -9,13 +9,12 @@
 <p>
     @if(Model.Company.ModifiedTime!=null && Model.ModifiedTime!=null && Model.All!=0)
     {
-        <a class="btn btn-warning" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">新版報告書下載</a>
+        <a class="btn btn-warning" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
     }
     else
     {
-        <a class="btn btn-warning disabled" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">新版報告書下載</a>
+        <a class="btn btn-warning disabled" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
     }
-    <a class="btn btn-dark" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
     <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
 </p>
 <h3>類別一七大溫室氣體排放量統計表</h3>

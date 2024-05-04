@@ -13,10 +13,9 @@
         <button class="btn btn-outline-success" type="submit">Search</button>
         </form> *@
     </div>
-
-    <p>
+   @*  <p>
         <a class="btn btn-dark" asp-controller="Companies" asp-action="Create">新增公司</a>
-    </p>
+    </p> *@
 </div>
 
 <table class="table">
@@ -175,13 +174,13 @@
                     {
                         <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">填寫</a>
                     }
-                    <a class="btn btn-info" asp-area="" asp-controller="Areas" asp-action="Index" asp-route-id="@item.Id">廠區資料</a>
+                    <a class="btn btn-info" asp-area="" asp-controller="Areas" asp-action="AdminIndex" asp-route-id="@item.Id">邊界資料</a>
                 </td>
-                <td>
+                @* <td>
                     <form method="post" asp-controller="Companies" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">
                         <button type="submit" class="btn btn-danger">刪除</button>
                     </form>
-                </td>
+                </td> *@
             </tr>
         }
     </tbody>

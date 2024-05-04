@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -18,11 +19,12 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
 {
-    //[Authorize(Roles ="Admin,Manager")]
+    [Authorize(Roles ="Admin")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -32,6 +34,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager; //新增RoleManager
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -39,8 +42,10 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager, //新增RoleManager
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext context)
         {
+            _context = context;
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
@@ -79,6 +84,10 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            //[Required]
+            //[Display(Name = "用戶名稱")]
+            //public string UserName { get; set; }
+
             [Required]
             [Display(Name = "帳號")]
             public string Email { get; set; }
@@ -141,6 +150,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
                     }
                     user.UserLimitData = DateTime.UtcNow.AddYears(Input.Year);
                     await _userManager.UpdateAsync(user);
+                    
                     //if(Input.Manager == true)
                     //{
                     //    var role = _roleManager.FindByNameAsync("Manager").Result;
@@ -162,6 +172,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    await CreateCompanyAsync(userId);
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
@@ -202,6 +213,31 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
                 throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
                     $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+            }
+        }
+
+        public async Task CreateCompanyAsync(string userId)
+        {
+            var Company_id = Guid.NewGuid();
+            var Area_id = Guid.NewGuid();
+            if (ModelState.IsValid)
+            {
+                await _context.Companies.AddAsync(new Company()
+                {
+                    Id = Company_id,
+                    UserId = userId,
+                    CreateTime = DateTime.Now
+                });
+                await _context.SaveChangesAsync();
+                await _context.Areas.AddAsync(new Area()
+                {
+                    Id = Area_id,
+                    CompanyId = Company_id,
+                    Year = DateTime.Now.Year - 1912, //減去1911取得民國年 再減去1盤去年
+                    BaseYear = true,
+                    CreateTime = DateTime.Now
+                });
+                await _context.SaveChangesAsync();
             }
         }
 

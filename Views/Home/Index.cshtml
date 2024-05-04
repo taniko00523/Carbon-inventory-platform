@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@{
     ViewData["Title"] = "首頁";
 }
 <div class="px-4 pt-5 my-5 text-center border-bottom">
@@ -7,8 +9,23 @@
         <p class="lead mb-4">
             現今溫室氣體盤查工具大多都缺乏統一及完整性的盤查方式，造成整體盤查困難且準確率欠佳，故開發此平台。協助中小企業向淨零邁出一步。
         </p>
+
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
-            <a type="button" class="btn btn-primary btn-lg px-4 me-sm-3" asp-controller="Companies" asp-action="Index">開始盤查</a>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                @if (User.IsInRole("Admin"))
+                {
+                    <a type="button" class="btn btn-primary btn-lg px-4 me-sm-3" asp-controller="Companies" asp-action="AdminIndex">開始盤查</a>
+                }
+                else // 用戶登入
+                {
+                    <a type="button" class="btn btn-primary btn-lg px-4 me-sm-3" asp-controller="Areas" asp-action="Index">開始盤查</a>
+                }
+            }
+            else // 無登入
+            {
+                <a type="button" class="btn btn-primary btn-lg px-4 me-sm-3" asp-area="Identity" asp-page="/Account/Login">開始盤查</a>
+            }
         </div>
     </div>
     <div class="overflow-hidden" style="max-height: 60vh;">

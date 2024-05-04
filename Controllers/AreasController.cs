@@ -33,14 +33,6 @@ namespace Carbon_inventory_platform.Controllers
                                .Where(a => a.UserId == userId)
                                .FirstOrDefaultAsync();
 
-            if (compnay == null)
-            {
-                CreateCompany();
-                compnay = await _context.Companies // 暫存目前所在的公司名稱 顯示在畫面上方
-                               .Where(a => a.UserId == userId)
-                               .FirstOrDefaultAsync();
-            }
-
             Guid Id = compnay.Id;
             TempData["companyId"] = Id; //暫存進入畫面所查詢的CompanyId
             TempData["companyName"] = compnay.Name;
@@ -52,33 +44,6 @@ namespace Carbon_inventory_platform.Controllers
                       .OrderBy(x => x.CreateTime)
                       .ToListAsync()) : //非同步方法
                       Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
-        }
-
-        public async Task<IActionResult> CreateCompany()
-        {
-            string userId = _userManager.GetUserId(User);
-            var Company_id = Guid.NewGuid();
-            var Area_id = Guid.NewGuid();
-            if (ModelState.IsValid)
-            {
-                await _context.Companies.AddAsync(new Company()
-                {
-                    Id = Company_id,
-                    UserId = userId,
-                    CreateTime = DateTime.Now
-                });
-                await _context.SaveChangesAsync();
-                await _context.Areas.AddAsync(new Area()
-                {
-                    Id = Area_id,
-                    CompanyId = Company_id,
-                    Year = DateTime.Now.Year - 1912, //減去1911取得民國年 再減去1盤去年
-                    BaseYear = true,
-                    CreateTime = DateTime.Now
-                });
-                await _context.SaveChangesAsync();
-            }
-            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> AdminIndex(Guid Id) //非同步方法

@@ -18,6 +18,9 @@ namespace  Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public static string Index => "Index";
+        public static string CompanyDataEdit => "CompanyDataEdit";
+        public static string ReportDataEdit => "ReportDataEdit";
+
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -66,6 +69,10 @@ namespace  Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
+        public static string CompanyDataEditNavClass(ViewContext viewContext) => PageNavClass(viewContext, CompanyDataEdit);
+        public static string ReportDataEditNavClass(ViewContext viewContext) => PageNavClass(viewContext, ReportDataEdit);
+
+        //public static string ReportData(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used

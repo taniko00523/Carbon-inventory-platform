@@ -20,14 +20,31 @@
         {
             <tr>
                 <td>@user.ApplicationUser.UserName</td>
-                <td>@user.Company.Name</td>
-                <td>@user.Company.ContactName</td>
-                <td>@user.Company.Phone</td>
-                <td>@user.Company.Email</td>
-
+                @if (user.Company != null)
+                {
+                    <td>@user.Company.Name</td>
+                    <td>@user.Company.ContactName</td>
+                    <td>@user.Company.Phone</td>
+                    <td>@user.Company.Email</td>
+                }
+                else
+                {
+                    <td colspan="4">尚未創建公司資料</td>
+                }
                 <td>@user.ApplicationUser.Email</td>
                 <td>@(user.ApplicationUser.UserLimitData.HasValue ? user.ApplicationUser.UserLimitData.Value.ToString("yyyy-MM-dd") : "未設定")</td>
-                <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal_@user.ApplicationUser.Id">編輯</button></td>
+                
+                <td>
+                    @if (user.ApplicationUser.UserName != "Admin")
+                    {
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal_@user.ApplicationUser.Id">編輯</button>
+                        <form method="post" asp-action="Delete" asp-route-id="@user.ApplicationUser.Id" onsubmit="return confirm('注意 此操作極度危險 確定要刪除嗎？');">
+                            <button type="submit" class="btn btn-danger">刪除</button>
+                        </form>
+                    }
+                    
+                </td>
+                
             </tr>
             <!-- 編輯用戶資料的模態框 -->
             <div class="modal fade" id="editModal_@user.ApplicationUser.Id" tabindex="-1" role="dialog" aria-labelledby="editModalLabel_@user.ApplicationUser.Id" aria-hidden="true">

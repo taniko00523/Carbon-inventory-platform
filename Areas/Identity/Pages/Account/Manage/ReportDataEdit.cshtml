@@ -1,0 +1,63 @@
+﻿@page
+@model ReportDataModel
+@{
+    ViewData["Title"] = "個人資料";
+    ViewData["ActivePage"] = ManageNavPages.ReportDataEdit;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="ReportData-form" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Input.Id" />
+            <input type="hidden" asp-for="Input.UserId" />
+            <div class="form-group">
+                <label asp-for="Input.ReportOpening" class="control-label"></label>
+                <textarea asp-for="Input.ReportOpening" placeholder="請填寫前言" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Input.ReportOpening" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.CompanyInformation" class="control-label"></label>
+                <textarea asp-for="Input.CompanyInformation" placeholder="請填寫公司簡介" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Input.CompanyInformation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.ReportingPurposes" class="control-label"></label>
+                <textarea asp-for="Input.ReportingPurposes" placeholder="請填寫預期用途" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Input.ReportingPurposes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.AddressInformation" class="control-label"></label>
+                <textarea asp-for="Input.AddressInformation" placeholder="本次組織邊界之設定，乃參考ISO/CNS 14064-1與環保署溫室氣體盤查指引..." class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Input.AddressInformation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.ReportingInformation" class="control-label"></label>
+                <textarea asp-for="Input.ReportingInformation" placeholder="本公司之營運邊界包含直接(類別1)、能源間接(類別2) …….。" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Input.ReportingInformation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.GHGInformation" class="control-label"></label>
+                <textarea asp-for="Input.GHGInformation" placeholder="請填寫溫室氣體排放類型與排放量說明" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Input.GHGInformation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Scope1Information" class="control-label"></label>
+                <textarea asp-for="Input.Scope1Information" placeholder="請填寫直接溫室氣體排放說明" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Input.Scope1Information" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Scope2Information" class="control-label"></label>
+                <textarea asp-for="Input.Scope2Information" placeholder="請填寫能源間接溫室氣體排放說明" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Input.Scope2Information" class="text-danger"></span>
+            </div>
+            <button id="update-ReportData-button" type="submit" class="w-100 btn btn-lg btn-primary">儲存</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

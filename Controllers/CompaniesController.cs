@@ -8,8 +8,9 @@ using Carbon_inventory_platform.Filters;
 
 namespace Carbon_inventory_platform.Controllers
 {
+
     [CheckSubscriptionData]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class CompaniesController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -19,23 +20,6 @@ namespace Carbon_inventory_platform.Controllers
         {
             _context = context;
             _userManager = userManager;
-        }
-
-        //[Authorize]
-        // GET: Companies
-        public async Task<IActionResult> Index()
-        {
-            string userId = _userManager.GetUserId(User);
-            if(userId != null)
-            {
-                var company = await _context.Companies.Where(x => x.isDeleted == 0 && x.UserId == userId).OrderByDescending(x => x.CreateTime).ToListAsync();
-                return View(company);
-            }
-            else
-            {
-                return View();
-            }
-            
         }
 
         public async Task<IActionResult> AdminIndex()
@@ -52,109 +36,35 @@ namespace Carbon_inventory_platform.Controllers
             }
 
         }
-        
-        public async Task<IActionResult> Create()
-        {
-            string userId = _userManager.GetUserId(User);
-            var Company_id = Guid.NewGuid();
-            var Area_id = Guid.NewGuid();
-            if (ModelState.IsValid)
-            {
-                await _context.Companies.AddAsync(new Company()
-                {
-                    Id = Company_id,
-                    UserId = userId,
-                    CreateTime = DateTime.Now
-                });
-                await _context.SaveChangesAsync();
-                    await _context.Areas.AddAsync(new Area()
-                {
-                    Id = Area_id,
-                    CompanyId = Company_id,
-                    Year = DateTime.Now.Year - 1912, //減去1911取得民國年 再減去1盤去年
-                    BaseYear = true,
-                    CreateTime = DateTime.Now
-                });
-                await _context.SaveChangesAsync();
-            }
-            return RedirectToAction(nameof(Index));
-        }
-
-
-        // POST: Companies/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            if (_context.Companies == null)
-            {
-                return Problem("沒有找到資料");
-            }
-            //抓出要刪除的資料
-            var delCompany = await _context.Companies.FindAsync(id);
-            var hasCompany = _context.Companies //如果此公司有修改過
-                .Where(c => c.Id == id)
-                .Any(c => c.ModifiedTime != null);
-
-            var hasArea = _context.Companies //如果此公司下有修改過的廠區
-    .Where(c => c.Id == id)
-    .SelectMany(c => c.Areas)
-    .Any(area => area.ModifiedTime != null);
-
-            var hasDevice = _context.Companies //如果此公司有修改過的排放源
-    .Where(c => c.Id == id)
-    .SelectMany(c => c.Areas)
-    .SelectMany(y => y.Devices)
-    .Any(device => device.ModifiedTime != null);
-
-
-            if (hasCompany || hasArea || hasDevice)
-            {
-                delCompany.isDeleted = 1;
-                delCompany.DeleteTime = DateTime.Now;
-            }
-            else
-            {
-                _context.Companies.Remove(delCompany);
-            }
 
 
 
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
         // GET: Companies/Edit/5
-        public async Task<IActionResult> Edit()
+        public async Task<IActionResult> Edit(Guid id)
         {
-            string userId = _userManager.GetUserId(User);
 
-
-            if (userId == null || _context.Companies == null)
+            if (id == null || _context.Companies == null)
             {
                 return NotFound();
             }
 
-            var company = await _context.Companies.Where(x=>x.UserId==userId).FirstOrDefaultAsync();
-            if(company == null)
-            {
-                Create();
-                company = await _context.Companies.Where(x => x.UserId == userId).FirstOrDefaultAsync();
-            }
+            Company company = await _context.Companies.FindAsync(id);
+
             if (company == null)
             {
                 return NotFound();
             }
             return View(company);
         }
-        
+
         // POST: Companies/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,EasyName,ContactName,Email,Phone,EnglishName,EasyEnglishName,UserId,CompanyInformation,AddressInformation,ReportingInformation,GHGInformation,Scope1Information,Scope2Information")] Company company)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,EasyName,ContactName,Email,Phone,EnglishName,EasyEnglishName,UserId,CompanyInformation,AddressInformation,ReportingInformation,GHGInformation,Scope1Information,Scope2Information,ReportOpening,ReportingPurposes")] Company company)
         {
             string userId = _userManager.GetUserId(User);
             if (id != company.Id)
@@ -176,6 +86,8 @@ namespace Carbon_inventory_platform.Controllers
                         toUpdate.ContactName = company.ContactName;
                         toUpdate.Email = company.Email;
                         toUpdate.Phone = company.Phone;
+                        toUpdate.ReportingPurposes = company.ReportingPurposes;
+                        toUpdate.ReportOpening = company.ReportOpening;
                         toUpdate.CompanyInformation = company.CompanyInformation;
                         toUpdate.AddressInformation = company.AddressInformation;
                         toUpdate.ReportingInformation = company.ReportingInformation;
@@ -198,21 +110,19 @@ namespace Carbon_inventory_platform.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(AdminIndex));
             }
             return View(company);
         }
 
-        
-
         private bool CompanyExists(Guid id)
         {
-          return (_context.Companies?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Companies?.Any(e => e.Id == id)).GetValueOrDefault();
         }
         static string RemoveSuffixes(string input)
         {
 
-            string[] suffixes = {  "股份有限公司","有限公司" };
+            string[] suffixes = { "股份有限公司", "有限公司" };
             foreach (string suffix in suffixes)
             {
                 if (input.EndsWith(suffix))
@@ -238,7 +148,7 @@ namespace Carbon_inventory_platform.Controllers
                 if (trimmedInput.IndexOf(suffix, StringComparison.OrdinalIgnoreCase) != -1)
                 {
                     // 如果包含后缀，截取到后缀的位置
-                        return trimmedInput.Substring(0, trimmedInput.IndexOf(suffix, StringComparison.OrdinalIgnoreCase));
+                    return trimmedInput.Substring(0, trimmedInput.IndexOf(suffix, StringComparison.OrdinalIgnoreCase));
                 }
             }
 

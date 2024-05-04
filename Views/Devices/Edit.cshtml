@@ -7,12 +7,13 @@
 <h1>@ViewData["Title"] </h1>
 <h4>@Model.Name</h4>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+<form asp-action="Edit">
+    <div class="row">
+        <div class="col-md-4">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" id="id" />
-            <input type="hidden" asp-for="AreaId" class="form-control" /> 
+            <input type="hidden" asp-for="AreaId" class="form-control" />
             @* <div class="form-group" style="display: none;">
             <label asp-for="YearId" class="control-label"></label>
             <select asp-for="YearId" class="form-control"></select>
@@ -66,26 +67,26 @@
                 <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
 
             </div>
-        </form>
-    </div>
+        </div>
 
-    <div class="col-md-4" id="CEF" style="display:none;">
-        <label asp-for="CO2CEF" class="control-label"></label>
-        <input asp-for="CO2CEF" class="form-control cef-input" id="CO2CEF" type="number" step="0.0000000001" />
-        <label asp-for="CH4CEF" class="control-label"></label>
-        <input asp-for="CH4CEF" class="form-control cef-input" id="CH4CEF" type="number" step="0.0000000001" />
-        <label asp-for="N2OCEF" class="control-label"></label>
-        <input asp-for="N2OCEF" class="form-control cef-input" id="N2OCEF" type="number" step="0.0000000001" />
-        <label asp-for="HFCSCEF" class="control-label"></label>
-        <input asp-for="HFCSCEF" class="form-control cef-input" id="HFCSCEF" type="number" step="0.0000000001" />
-        <label asp-for="PFCSCEF" class="control-label"></label>
-        <input asp-for="PFCSCEF" class="form-control cef-input" id="PFCSCEF" type="number" step="0.0000000001" />
-        <label asp-for="SF6CEF" class="control-label"></label>
-        <input asp-for="SF6CEF" class="form-control cef-input" id="SF6CEF" type="number" step="0.0000000001" />
-        <label asp-for="NF3CEF" class="control-label"></label>
-        <input asp-for="NF3CEF" class="form-control cef-input" id="NF3CEF" type="number" step="0.0000000001" />
+        <div class="col-md-4" id="CEF" style="display:none;">
+            <label asp-for="CO2CEF" class="control-label"></label>
+            <input asp-for="CO2CEF" class="form-control cef-input" id="CO2CEF" type="number" step="0.0000000001" />
+            <label asp-for="CH4CEF" class="control-label"></label>
+            <input asp-for="CH4CEF" class="form-control cef-input" id="CH4CEF" type="number" step="0.0000000001" />
+            <label asp-for="N2OCEF" class="control-label"></label>
+            <input asp-for="N2OCEF" class="form-control cef-input" id="N2OCEF" type="number" step="0.0000000001" />
+            <label asp-for="HFCSCEF" class="control-label"></label>
+            <input asp-for="HFCSCEF" class="form-control cef-input" id="HFCSCEF" type="number" step="0.0000000001" />
+            <label asp-for="PFCSCEF" class="control-label"></label>
+            <input asp-for="PFCSCEF" class="form-control cef-input" id="PFCSCEF" type="number" step="0.0000000001" />
+            <label asp-for="SF6CEF" class="control-label"></label>
+            <input asp-for="SF6CEF" class="form-control cef-input" id="SF6CEF" type="number" step="0.0000000001" />
+            <label asp-for="NF3CEF" class="control-label"></label>
+            <input asp-for="NF3CEF" class="form-control cef-input" id="NF3CEF" type="number" step="0.0000000001" />
+        </div>
     </div>
-</div>
+</form>
 
 @section scripts
 {

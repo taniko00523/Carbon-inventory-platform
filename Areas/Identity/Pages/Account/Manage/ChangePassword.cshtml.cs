@@ -120,7 +120,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "您的密碼已更變";
+            StatusMessage = "您的密碼已更新";
 
             return RedirectToPage();
         }

@@ -70,7 +70,7 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "是否刪除")]
         public byte isDeleted { get; set; } = 0;
 
-        [Display(Name = "建立時間")]
+        [Display(Name = "建立時間")] 
         public DateTime CreateTime { get; set; }
 
         [Display(Name = "修改時間")]
@@ -79,14 +79,10 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "刪除時間")]
         public DateTime? DeleteTime { get; set; }
 
-
-
-
         //Navigation導覽屬性
-
+        [ForeignKey("UserId")]
         public ApplicationUser User { get; set; } // 外來鍵導覽屬性
         public ICollection<Area> Areas { get; set; }
-
         public Company()
         {
             Id = Guid.NewGuid();

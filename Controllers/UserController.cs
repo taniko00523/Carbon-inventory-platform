@@ -1,12 +1,15 @@
 ﻿using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
 using Carbon_inventory_platform.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.Design;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -30,8 +33,24 @@ namespace Carbon_inventory_platform.Controllers
                 model.Company = _context.Companies.Where(x => x.UserId == user.Id).FirstOrDefault();
                 viewModel.Add(model);
             }
+            
 
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var user = await _userManager.FindByIdAsync(id);
+            if(user != null)
+            {
+                await _userManager.DeleteAsync(user);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

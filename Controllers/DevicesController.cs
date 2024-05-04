@@ -6,6 +6,8 @@ using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Carbon_inventory_platform.Filters;
 using Carbon_inventory_platform.ViewModel;
+using System;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -40,7 +42,8 @@ namespace Carbon_inventory_platform.Controllers
                          .Include(x => x.GHGs)
                          .Include(x => x.ActivityDatas)
                          .Include(x => x.Area.Company)
-                         .OrderBy(x => x.CreateTime)
+                         .OrderBy(x => x.Name)
+                         .ThenBy(x => x.CreateTime)
                          .ToListAsync()) : //非同步方法
                          Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
         }
@@ -129,7 +132,8 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 else
                 {
-                    await GHGCheckAsync(deviceId, device.Name, device.Material, device.Scope, device.EmissionPattern);
+                    
+                    await GHGCheckAsync(deviceId, device.Name, device.Material, device.Scope, device.EmissionPattern, _context.Areas.FirstOrDefault(x => x.Id == device.AreaId).Year);
                 }
 
                 return RedirectToAction("Index", "Devices", new { id = device.AreaId });
@@ -140,6 +144,76 @@ namespace Carbon_inventory_platform.Controllers
             ViewData["Scope"] = new SelectList(await _context.Materials.Select(m => m.Scope).Distinct().ToListAsync());
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
             return View(device);
+        }
+
+        public async Task<IActionResult> CopyDevice(Guid? id)
+        {
+            var device = await _context.Devices.FirstOrDefaultAsync(x => x.Id == id);
+            Guid newDeviceId = Guid.Empty;
+            var areaId = new Guid();
+            if (device != null)
+            {
+                areaId = device.AreaId;
+
+                newDeviceId = Guid.NewGuid();
+                var newDevice = new Device
+                {
+                    Id = newDeviceId,
+                    AreaId = areaId,
+                    Name = device.Name,
+                    OtherName = device.OtherName,
+                    Scope = device.Scope,
+                    EmissionPattern = device.EmissionPattern,
+                    Material = device.Material,
+                    Customize = device.Customize,
+                    AssetNo = device.AssetNo,
+                    Provess = device.Provess,
+                    Source = device.Source,
+                    Dept = device.Dept,
+                    Unit = device.Unit,
+                    Data_Correction = device.Data_Correction,
+                    Device_Correction = device.Device_Correction,
+                    CEF_Correction = device.CEF_Correction,
+                    Grade = device.Grade,
+                    Emissions = device.Emissions,
+                    data_ULL = device.data_ULL,
+                    all_ULL = device.all_ULL,
+                    all_UUL = device.all_UUL,
+                    count_ULL = device.count_ULL,
+                    count_UUL = device.count_UUL,
+                    isDeleted = 0,
+                    CreateTime = DateTime.Now
+                };
+
+                _context.Devices.Add(newDevice);
+                await _context.SaveChangesAsync();
+            }
+            var GHGs = await _context.GHGs.Where(x => x.DeviceId == id).ToListAsync();
+            if (GHGs != null)
+            {
+                foreach (var ghg in GHGs)
+                {
+                    var newGHG = new GHG
+                    {
+                        Id = new Guid(),
+                        DeviceId = newDeviceId,
+                        Name = ghg.Name,
+                        GWP = ghg.GWP,
+                        CEF = ghg.CEF,
+                        all_ULL = ghg.all_ULL,
+                        all_UUL = ghg.all_UUL,
+                        CEF_ULL = ghg.CEF_ULL,
+                        CEF_UUL = ghg.CEF_UUL,
+                        Emission = ghg.Emission,
+                        isDeleted = 0,
+                        CreateTime = DateTime.Now
+                    };
+                    _context.GHGs.Add(newGHG);
+
+                }
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Index", "Devices", new { id = areaId });
         }
 
         [HttpGet]
@@ -349,7 +423,8 @@ namespace Carbon_inventory_platform.Controllers
                                         device.OtherName != device.OtherName; //換排放源
                     bool changeMaterial = deviceUpdate.Material != device.Material ||  //換物料
                                             deviceUpdate.EmissionPattern != device.EmissionPattern;
-                    bool changeCEF = deviceUpdate.Customize != device.Customize; //換排放係數
+                    bool changeIsComstomCEF = deviceUpdate.Customize != device.Customize; //換排放係數
+
 
                     if (deviceUpdate != null)
                     {
@@ -364,11 +439,11 @@ namespace Carbon_inventory_platform.Controllers
                         deviceUpdate.ModifiedTime = DateTime.Now;
                         deviceUpdate.Customize = device.Customize;
 
-                        if (changeCEF || changeName || changeMaterial) // 換排放源 或 換物料 或 換排放係數是否自訂勾選選項
+                        if (changeIsComstomCEF || changeName || changeMaterial || deviceUpdate.Customize) // 換排放源 或 換物料 或 換排放係數是否自訂勾選選項 或 換排放係數
                         {
                             if (device.Customize == true) // 自訂排放係數
                             {
-                                if (device.CO2CEF != null || // 至少有一個欄位不為 null，執行原有的程式碼
+                                if (device.CO2CEF != null ||
                                     device.CH4CEF != null ||
                                     device.N2OCEF != null ||
                                     device.HFCSCEF != null ||
@@ -422,7 +497,7 @@ namespace Carbon_inventory_platform.Controllers
                                         _context.GHGs.Remove(item);
                                     }
                                 }
-                                await GHGCheckAsync(id, device.Name, device.Material, device.Scope, device.EmissionPattern);
+                                await GHGCheckAsync(id, device.Name, device.Material, device.Scope, device.EmissionPattern, _context.Areas.FirstOrDefault(x => x.Id == device.AreaId).Year);
                             }
                         }
                         else
@@ -475,6 +550,11 @@ namespace Carbon_inventory_platform.Controllers
                                 }
                             }
                         }
+
+                    }
+                    if (_context.ActivityDatas.Where(x => x.DeviceId == id) != null)
+                    {
+                        await CountEmissionData(id);
                     }
                     await _context.SaveChangesAsync();
                 }
@@ -628,15 +708,6 @@ namespace Carbon_inventory_platform.Controllers
                 return View();
             }
 
-            var GHG = await _context.GHGs.Where(x => x.DeviceId == id).ToListAsync(); //抓出需要算排放量的排放源中的溫室氣體
-            var emission = await _context.Areas.FindAsync(Device.AreaId);
-
-            decimal all_Emission = 0,
-                GHG1 = 0, GHG2 = 0, GHG3 = 0,
-                GHG1ULL = 0, GHG1UUL = 0,
-                GHG2ULL = 0, GHG2UUL = 0,
-                GHG3ULL = 0, GHG3UUL = 0;
-
             foreach (var data in activityData.ActivityDataList)
             {
                 var toCreate = new ActivityData
@@ -664,10 +735,53 @@ namespace Carbon_inventory_platform.Controllers
                     _context.ActivityDatas.Add(toCreate);
                 }
             }
+            Device.Unit = device.Unit;
+            Device.Data_Correction = device.Data_Correction;
+            Device.Device_Correction = device.Device_Correction;
+            Device.Grade = device.CEF_Correction * device.Data_Correction * device.Device_Correction;
+            Device.Source = device.Source;
+            await _context.SaveChangesAsync();
 
-            decimal Num = activityData.ActivityDataList.Sum(x => x.Num);
+            await CountEmissionData(id);
+
+            string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
+            ViewData["Unit"] = new SelectList(unit);
+            string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
+            ViewData["Source"] = new SelectList(source);
+            var dataCorrections = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "1", Text = "有外部校正或多組數據佐證者" },
+                new SelectListItem { Value = "2", Text = "有內部校正或經過會計簽證等證明者" },
+                new SelectListItem { Value = "3", Text = "未進行儀器校正或未進行紀錄彙整者" }
+            };
+
+            ViewData["DataCorrection"] = new SelectList(dataCorrections, "Value", "Text");
+
+            var dataLevel = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "1", Text = "連續監測" },
+                new SelectListItem { Value = "2", Text = "定期/間歇量測" },
+                new SelectListItem { Value = "3", Text = "自行/財務推估" }
+            };
+
+            ViewData["DataLevel"] = new SelectList(dataLevel, "Value", "Text");
+            var areaId = TempData.Peek("areaId");
+            return RedirectToAction("Index", "Devices", new { id = areaId });
+        }
+        public async Task CountEmissionData(Guid? id)
+        {
+            var activityDatas = await _context.ActivityDatas.Where(x => x.DeviceId == id).ToListAsync();
+            decimal Num = activityDatas.Sum(x => x.Num);
 
 
+            var Device = await _context.Devices.Where(x => x.Id == id).Include(x => x.Area).FirstOrDefaultAsync();
+            var GHG = await _context.GHGs.Where(x => x.DeviceId == id).ToListAsync(); //抓出需要算排放量的排放源中的溫室氣體
+            var emission = await _context.Areas.FindAsync(Device.AreaId);
+            decimal all_Emission = 0,
+                GHG1 = 0, GHG2 = 0, GHG3 = 0,
+                GHG1ULL = 0, GHG1UUL = 0,
+                GHG2ULL = 0, GHG2UUL = 0,
+                GHG3ULL = 0, GHG3UUL = 0;
             if (GHG != null && Device != null)
             {
                 if (ModelState.IsValid)
@@ -682,7 +796,6 @@ namespace Carbon_inventory_platform.Controllers
                         //else if (GHG.Count == 1 && device.Unit == "人" && Device.Name == "化糞池")
                         //{
                         //    item.CEF = 0.0031875000M;
-
                         //}
                         item.Emission = item.CEF * Num / 1000 * item.GWP;
                         item.ModifiedTime = DateTime.Now;
@@ -711,44 +824,17 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     decimal Device_allUUL = Calculate95U(GHG1, GHG2, GHG3, GHG1UUL, GHG2UUL, GHG3UUL);
                     decimal Device_allULL = Calculate95U(GHG1, GHG2, GHG3, GHG1ULL, GHG2ULL, GHG3ULL);
-                    Device.Unit = device.Unit;
                     Device.Emissions = all_Emission;
                     emission.All += all_Emission;
-                    Device.Data_Correction = device.Data_Correction;
-                    Device.Device_Correction = device.Device_Correction;
-                    Device.Grade = device.CEF_Correction * device.Data_Correction * device.Device_Correction;
-                    Device.Source = device.Source;
                     Device.all_UUL = Device_allUUL;
                     Device.all_ULL = Device_allULL;
                     Device.ModifiedTime = DateTime.Now;
                     Device.count_UUL = Device_allUUL * all_Emission * Device_allUUL * all_Emission;
                     Device.count_ULL = Device_allULL * all_Emission * Device_allULL * all_Emission;
-                    string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
-                    ViewData["Unit"] = new SelectList(unit);
-                    string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
-                    ViewData["Source"] = new SelectList(source);
+
                     await _context.SaveChangesAsync();
                 }
             }
-            var dataCorrections = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "1", Text = "有外部校正或多組數據佐證者" },
-                new SelectListItem { Value = "2", Text = "有內部校正或經過會計簽證等證明者" },
-                new SelectListItem { Value = "3", Text = "未進行儀器校正或未進行紀錄彙整者" }
-            };
-
-            ViewData["DataCorrection"] = new SelectList(dataCorrections, "Value", "Text");
-
-            var dataLevel = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "1", Text = "連續監測" },
-                new SelectListItem { Value = "2", Text = "定期/間歇量測" },
-                new SelectListItem { Value = "3", Text = "自行/財務推估" }
-            };
-
-            ViewData["DataLevel"] = new SelectList(dataLevel, "Value", "Text");
-            var areaId = TempData.Peek("areaId");
-            return RedirectToAction("Index", "Devices", new { id = areaId });
         }
 
         static decimal CalculateRoundDistance(decimal num1, decimal num2) // 計算兩數平方和的平方根，並四捨五入到小數點後5位
@@ -854,7 +940,7 @@ namespace Carbon_inventory_platform.Controllers
                     CreateTime = DateTime.Now,
                 });
                 await _context.SaveChangesAsync();
-                await GHGCheckAsync(deviceID, Name, Material, Scope, EmissionPattern);
+                await GHGCheckAsync(deviceID, Name, Material, Scope, EmissionPattern, _context.Areas.FirstOrDefault(x => x.Id == id).Year);
             }
 
             var areaId = TempData.Peek("SelectedAreaId") as Guid?;
@@ -863,12 +949,15 @@ namespace Carbon_inventory_platform.Controllers
             return RedirectToAction(nameof(Index), new { id = id });
         }
 
-        public async Task<GHG?> GHGCheckAsync(Guid id, string name, string material, string scope, string emisspatern) //排放源Id, 排放源名稱, 物料名稱, 類別, 排放型式
+        public async Task<GHG?> GHGCheckAsync(Guid id, string name, string material, string scope, string emisspatern, int year) //排放源Id, 排放源名稱, 物料名稱, 類別, 排放型式
         {
             var Device = await _context.Devices.FindAsync(id);
             //var GWP = await _context.GWPs.OrderBy(x => x.GWP_Year).Where(x => x.GWP_Year <= Device.Year.Num).ToListAsync();
             var GWP = await _context.GWPs.ToListAsync();
-            var Material = await _context.Materials.Where(x => x.Name == material && x.Scope == scope && x.EmissionPattern == emisspatern).FirstOrDefaultAsync();
+            var MaterialList = await _context.Materials
+            .Where(x => x.Name == material && x.Scope == scope && x.EmissionPattern == emisspatern && x.Year <= year).ToListAsync();
+            var Material = MaterialList.OrderByDescending(x => x.Year).FirstOrDefault();
+
             var otherMaterial = await _context.Materials.Where(x => x.Name == name && x.Scope == scope && x.EmissionPattern == emisspatern).FirstOrDefaultAsync(); //目前只有冷媒設備，但我包含了PFCS以防萬一
             if (ModelState.IsValid)
             {

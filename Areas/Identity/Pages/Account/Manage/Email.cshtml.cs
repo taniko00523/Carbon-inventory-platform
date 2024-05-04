@@ -70,7 +70,6 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [EmailAddress]
             [Display(Name = "新的帳號")]
             public string NewEmail { get; set; }
         }
@@ -117,21 +116,30 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
             var email = await _userManager.GetEmailAsync(user);
             if (Input.NewEmail != email)
             {
-                var userId = await _userManager.GetUserIdAsync(user);
-                var code = await _userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var callbackUrl = Url.Page(
-                    "/Account/ConfirmEmailChange",
-                    pageHandler: null,
-                    values: new { area = "Identity", userId = userId, email = Input.NewEmail, code = code },
-                    protocol: Request.Scheme);
-                await _emailSender.SendEmailAsync(
-                    Input.NewEmail,
-                    "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                // set the email on the user, but don't send any email
+                await _userManager.SetEmailAsync(user, Input.NewEmail) ;
 
-                StatusMessage = "Confirmation link to change email sent. Please check your email.";
-                return RedirectToPage();
+                //generate an email confirmation token
+                var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                //confirm the new email right away
+                var result = await _userManager.ConfirmEmailAsync(user, emailConfirmationToken);
+                ////改
+                //var userId = await _userManager.GetUserIdAsync(user);
+                //var code = await _userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
+                //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                //var callbackUrl = Url.Page(
+                //    "/Account/ConfirmEmailChange",
+                //    pageHandler: null,
+                //    values: new { area = "Identity", userId = userId, email = Input.NewEmail, code = code },
+                //    protocol: Request.Scheme);
+                //await _emailSender.SendEmailAsync(
+                //    Input.NewEmail,
+                //    "Confirm your email",
+                //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                //StatusMessage = "Confirmation link to change email sent. Please check your email.";
+                //return RedirectToPage();
             }
 
             StatusMessage = "Your email is unchanged.";

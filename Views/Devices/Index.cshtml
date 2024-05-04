@@ -32,7 +32,7 @@
                 }
                 @if (Model.Any(x => x.Area.Company.ModifiedTime != null) && Model.Any(x => x.Area.ModifiedTime != null) && Model.Any(x => x.Area.All != 0))
                 {
-                    <a class="btn btn-warning" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">新版報告書下載</a>
+                    <a class="btn btn-warning" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
                 }
                 else
                 {
@@ -249,7 +249,8 @@
                                     <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
                                 }
                                 <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
-
+                                <a class="btn btn-success" asp-action="CopyDevice" asp-route-id="@item.Id">複製
+                                </a>
                             </td>
                             <td>
                                 <form method="post" asp-controller="Devices" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">
