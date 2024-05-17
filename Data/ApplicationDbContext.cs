@@ -29,9 +29,9 @@ namespace Carbon_inventory_platform.Data
             base.OnModelCreating(builder);
 
             builder.Entity<Company>(entity =>
-                {
-                    entity.HasMany(e => e.Areas);
-                });
+            {
+                entity.HasMany(e => e.Areas);
+            });
 
             builder.Entity<Area>(entity =>
             {
@@ -150,7 +150,7 @@ new GWP { Name = "R-32", Num = 771, GWP_Year = 2022 },
 new GWP { Name = "R-134A", Num = 1530, GWP_Year = 2022 },
 new GWP { Name = "FM200", Num = 3600, GWP_Year = 2022 },
 new GWP { Name = "R-22", Num = 1960, GWP_Year = 2022 },
-new GWP { Name = "R-410A", Num = 2256, GWP_Year = 2022 },
+new GWP { Name = "R-410A", Num = 2255.5M, GWP_Year = 2022 },
 new GWP { Name = "R-600A", Num = 0.006M, GWP_Year = 2022 },
 new GWP { Name = "R-417A", Num = 2127, GWP_Year = 2022 },
 new GWP { Name = "R-404A", Num = 4728, GWP_Year = 2022 },
@@ -172,12 +172,12 @@ new GWP { Name = "海龍-1211", Num = 1930, GWP_Year = 2022 }
                 new DeviceData { Id = 9, Name = "廚房", Scope = "類別一", EmissionPattern = "固定", Material = "液化石油氣", Device_Correction = 2, Data_Correction = 2, unit = "公斤" },
                 new DeviceData { Id = 10, Name = "公務車", Scope = "類別一", EmissionPattern = "移動", Material = "車用汽油", Device_Correction = 2, Data_Correction = 2, unit = "公升" },
                 new DeviceData { Id = 11, Name = "堆高機", Scope = "類別一", EmissionPattern = "移動", Material = "柴油", Device_Correction = 2, Data_Correction = 2, unit = "公升" },
-                new DeviceData { Id = 12, Name = "CO2滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                new DeviceData { Id = 12, Name = "二氧化碳滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                 new DeviceData { Id = 13, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                 new DeviceData { Id = 14, Name = "WD40", Scope = "類別一", EmissionPattern = "製程", Material = "WD40", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                 new DeviceData { Id = 15, Name = "海龍1211", Scope = "類別一", EmissionPattern = "逸散", Material = "海龍-1211", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                 new DeviceData { Id = 16, Name = "FM200", Scope = "類別一", EmissionPattern = "逸散", Material = "FM200", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
-                new DeviceData { Id = 17, Name = "化糞池", Scope = "類別一", EmissionPattern = "逸散", Material = "廢水處理", Device_Correction = 3, Data_Correction = 3, unit = "人" },
+                new DeviceData { Id = 17, Name = "化糞池", Scope = "類別一", EmissionPattern = "逸散", Material = "廢水處理", Device_Correction = 3, Data_Correction = 3, unit = "人-年" },
                 new DeviceData { Id = 18, Name = "電力", Scope = "類別二", EmissionPattern = "外購電力", Material = "外購電力", Device_Correction = 1, Data_Correction = 1, unit = "度" },
                 new DeviceData { Id = 19, Name = "乙炔", Scope = "類別一", EmissionPattern = "製程", Material = "乙炔", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                 new DeviceData { Id = 20, Name = "焊條", Scope = "類別一", EmissionPattern = "製程", Material = "焊條", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },

@@ -133,7 +133,7 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 else
                 {
-                    
+
                     await GHGCheckAsync(deviceId, device.Name, device.Material, device.Scope, device.EmissionPattern, _context.Areas.FirstOrDefault(x => x.Id == device.AreaId).Year);
                 }
 
@@ -335,7 +335,7 @@ namespace Carbon_inventory_platform.Controllers
                 Id = device.Id,
                 Name = device.Name,
                 OtherName = device.OtherName,
-                NameRemark=  device.NameRemark,
+                NameRemark = device.NameRemark,
                 AreaId = device.AreaId,
                 AssetNo = device.AssetNo,
                 Provess = device.Provess,
@@ -684,7 +684,7 @@ namespace Carbon_inventory_platform.Controllers
             };
 
             ViewData["DataCorrections"] = new SelectList(dataCorrections, "Value", "Text");
-            string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
+            string[] unit = { "公斤", "公升", "立方公尺", "度", "人-年", "其他" };
             ViewData["Unit"] = new SelectList(unit);
             string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
             ViewData["Source"] = new SelectList(source);
@@ -748,7 +748,7 @@ namespace Carbon_inventory_platform.Controllers
 
             await CountEmissionData(id);
 
-            string[] unit = { "公斤", "公升", "立方公尺", "度", "人", "其他" };
+            string[] unit = { "公斤", "公升", "立方公尺", "度", "人-年", "其他" };
             ViewData["Unit"] = new SelectList(unit);
             string[] source = { "發票", "領用單", "紀錄表", "繳費單" };
             ViewData["Source"] = new SelectList(source);
@@ -793,15 +793,15 @@ namespace Carbon_inventory_platform.Controllers
                     int i = 1;
                     foreach (var item in GHG)
                     {
-                        //if (GHG.Count == 1 && device.Unit == "人小時" && Device.Name == "化糞池")
-                        //{
-                        //    item.CEF = 0.0000015938M;
-                        //}//化糞池人小時特別確認
-                        //else if (GHG.Count == 1 && device.Unit == "人" && Device.Name == "化糞池")
-                        //{
-                        //    item.CEF = 0.0031875000M;
-                        //}
-                        item.Emission = item.CEF * Num / 1000 * item.GWP;
+                        if (item.Device.Material == "廢水處理")
+                        {
+                            item.Emission = item.CEF * Num * item.GWP;
+                        }
+                        else
+                        {
+                            item.Emission = item.CEF * Num / 1000 * item.GWP;
+                        }
+
                         item.ModifiedTime = DateTime.Now;
                         if (i == 1)
                         {
@@ -1143,7 +1143,7 @@ namespace Carbon_inventory_platform.Controllers
             return null;
         }
 
-        public async Task<GHG?> CEFAddAsync(Device device, string GHG, decimal? CEF) //排放源Id, 排放源名稱, 物料名稱, 類別, 排放型式
+        public async Task<GHG?> CEFAddAsync(Device device, string GHG, decimal? CEF)
         {
 
             //var GWP = await _context.GWPs.OrderBy(x => x.GWP_Year).Where(x => x.GWP_Year <= device.Year.Num).ToListAsync();
@@ -1156,7 +1156,14 @@ namespace Carbon_inventory_platform.Controllers
                 toCreate.Name = GHG;
                 toCreate.DeviceId = device.Id;
                 toCreate.CEF = (decimal)CEF;
-                toCreate.GWP = GWP.Where(x => x.Name == GHG).Select(x => x.Num).FirstOrDefault();
+                if (GHG == "HFCS")
+                {
+                    toCreate.GWP = GWP.Where(x => x.Name == device.Material).Select(x => x.Num).FirstOrDefault();
+                }
+                else
+                {
+                    toCreate.GWP = GWP.Where(x => x.Name == GHG).Select(x => x.Num).FirstOrDefault();
+                }
                 toCreate.CreateTime = DateTime.Now;
                 device.CEF_Correction = 3;//輸入?
                 _context.Add(toCreate);

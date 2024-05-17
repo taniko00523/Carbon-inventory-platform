@@ -39,7 +39,14 @@
                     <a class="btn btn-warning disabled" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
                 }
             }
-            <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
+            @if (User.IsInRole("User"))
+            {
+                <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                <a class="btn btn-secondary" asp-controller="Areas" asp-action="AdminIndex" asp-route-id="@TempData.Peek("companyId")">返回</a>
+            }
         </p>
     </div>
 </div>
@@ -247,16 +254,16 @@
                                                 break;
                                         }
 
-                                        @if (displayUnit != "人")
+                                        @if (displayUnit != "人-年")
                                         {
                                             <p>
-                                                @($"{item.ActivityDatas.Sum(ad => ad.Num) / 1000:F4} {displayUnit}")
+                                                @($"{item.ActivityDatas.Sum(ad => ad.Num) / 1000 :F4} {displayUnit}")
                                             </p>
                                         }
                                         else
                                         {
                                             <p>
-                                                @($"{item.ActivityDatas.Sum(ad => ad.Num):F0} {displayUnit}")
+                                                @($"{item.ActivityDatas.Sum(ad => ad.Num) :F4} {displayUnit}")
                                             </p>
                                         }
                                     }

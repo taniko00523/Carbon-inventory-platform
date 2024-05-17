@@ -973,7 +973,7 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     doc.ReplaceText("[公司組織圖]", "");
                 }
-                if (showDrawingPath != "")
+                if (mapPath != "")
                 {
                     replaceImage(doc, "[地理位置圖]", mapPath);
                 }
@@ -1068,7 +1068,14 @@ namespace Carbon_inventory_platform.Controllers
 
             foreach (var GHG in manyGHGs.Where(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName))
             {
-                table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(GHG.Device.Name).Font(font).FontSize(9d);
+                if (GHG.Device.NameRemark != null && GHG.Device.NameRemark.Trim() != string.Empty)
+                {
+                    table.Rows[rowIndex].Cells[0].Paragraphs.First().Append((GHG.Device.Name + "(" + GHG.Device.NameRemark + ")")).Font(font).FontSize(9d);
+                }
+                else
+                {
+                    table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(GHG.Device.Name).Font(font).FontSize(9d);
+                }
                 table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(GHG.Device.Material).Font(font).FontSize(9d);
                 var ActivityData = _context.ActivityDatas.Where(x => x.DeviceId == GHG.DeviceId).ToList();
 
@@ -1080,7 +1087,7 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(0 + GHG.Device.Unit).Font(font).FontSize(9d);
                 }
-                table.Rows[rowIndex].Cells[3].Paragraphs.First().Append(GHG.CEF.ToString("N4") + "公斤/" + GHG.Device.Unit).Font(font).FontSize(9d);
+                table.Rows[rowIndex].Cells[3].Paragraphs.First().Append(GHG.CEF.ToString() + "公斤/" + GHG.Device.Unit).Font(font).FontSize(9d);
                 string CEF_Source = string.Empty;
                 if (GHG.Device.CEF_Correction == 1)
                 {
@@ -1135,7 +1142,14 @@ namespace Carbon_inventory_platform.Controllers
             {
                 table.Rows[x + 1].Cells[0].Paragraphs.First().Append(devices[x].Scope).Font(font).FontSize(11d);
                 table.Rows[x + 1].Cells[1].Paragraphs.First().Append(devices[x].EmissionPattern).Font(font).FontSize(11d);
-                table.Rows[x + 1].Cells[2].Paragraphs.First().Append(devices[x].Name + "(" + devices[x].Material + ")").Font(font).FontSize(11d);
+                if (devices[x].NameRemark != null && devices[x].NameRemark.Trim() != string.Empty)
+                {
+                    table.Rows[x + 1].Cells[2].Paragraphs.First().Append(devices[x].Name + "-" + devices[x].Material + "(" + devices[x].NameRemark + ")").Font(font).FontSize(11d);
+                }
+                else
+                {
+                    table.Rows[x + 1].Cells[2].Paragraphs.First().Append(devices[x].Name + "-" + devices[x].Material).Font(font).FontSize(11d);
+                }
                 var GHGs = _context.GHGs.Where(ghg => ghg.DeviceId == devices[x].Id);
                 // 定義 GHG 名稱與排序數值的映射
                 var ghgOrder = new Dictionary<string, int>
@@ -1223,7 +1237,7 @@ namespace Carbon_inventory_platform.Controllers
                 // 填充基本資料
                 table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(item.Scope).Font(font).FontSize(11d);
                 table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(item.EmissionPattern).Font(font).FontSize(11d);
-                table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(item.Name + "(" + item.Material + ")").Font(font).FontSize(11d);
+                table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(item.Name + "-" + item.Material).Font(font).FontSize(11d);
                 // 填充溫室氣體選項欄位
                 foreach (var GHG in GHGs)
                 {

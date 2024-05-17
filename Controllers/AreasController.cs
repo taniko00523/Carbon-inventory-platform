@@ -193,7 +193,14 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 _context.Add(toCreate);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { id = companyId });
+                if (User.IsInRole("User"))
+                {
+                    return RedirectToAction(nameof(Index), new { id = companyId });
+                }
+                else if (User.IsInRole("Admin"))
+                {
+                    return RedirectToAction(nameof(AdminIndex), new { id = companyId });
+                }
 
             }
             return View(area);
@@ -289,7 +296,14 @@ namespace Carbon_inventory_platform.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index), new { id = companyId });
+                if (User.IsInRole("User"))
+                {
+                    return RedirectToAction(nameof(Index), new { id = companyId });
+                }
+                else if (User.IsInRole("Admin"))
+                {
+                    return RedirectToAction(nameof(AdminIndex), new { id = companyId });
+                }
             }
             return View(area);
         }
