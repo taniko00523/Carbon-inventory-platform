@@ -1165,7 +1165,7 @@ namespace Carbon_inventory_platform.Controllers
                     toCreate.GWP = GWP.Where(x => x.Name == GHG).Select(x => x.Num).FirstOrDefault();
                 }
                 toCreate.CreateTime = DateTime.Now;
-                device.CEF_Correction = 3;//輸入?
+                device.CEF_Correction = 1;//輸入?
                 _context.Add(toCreate);
                 await _context.SaveChangesAsync();
 
