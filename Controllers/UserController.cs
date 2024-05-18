@@ -33,8 +33,7 @@ namespace Carbon_inventory_platform.Controllers
                 model.Company = _context.Companies.Where(x => x.UserId == user.Id).FirstOrDefault();
                 viewModel.Add(model);
             }
-            
-
+            viewModel.Remove(viewModel.FirstOrDefault(x => x.ApplicationUser.Email == "Admin"));
             return View(viewModel);
         }
 

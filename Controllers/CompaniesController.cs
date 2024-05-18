@@ -5,6 +5,7 @@ using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Carbon_inventory_platform.Filters;
+using Carbon_inventory_platform.ViewModel;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -24,22 +25,19 @@ namespace Carbon_inventory_platform.Controllers
 
         public async Task<IActionResult> AdminIndex()
         {
-            string userId = _userManager.GetUserId(User);
-            if (userId != null)
-            {
-                var company = await _context.Companies.Where(x => x.isDeleted == 0).OrderByDescending(x => x.CreateTime).ToListAsync();
-                return View(company);
-            }
-            else
-            {
-                return View();
-            }
+            List<ApplicationUser> users = _userManager.Users.ToList();
+            List<CompanyUserViewModel> viewModel = new List<CompanyUserViewModel>();
 
+            foreach (var user in users)
+            {
+                CompanyUserViewModel model = new CompanyUserViewModel();
+                model.ApplicationUser = user;
+                model.Company = _context.Companies.Where(x => x.UserId == user.Id).FirstOrDefault();
+                viewModel.Add(model);
+            }
+            viewModel.Remove(viewModel.FirstOrDefault(x=>x.ApplicationUser.Email=="Admin"));
+            return View(viewModel);
         }
-
-
-
-
 
         // GET: Companies/Edit/5
         public async Task<IActionResult> Edit(Guid id)

@@ -1,7 +1,7 @@
 ﻿@model Carbon_inventory_platform.Models.Area
 
 @{
-    ViewData["Title"] = "廠商資料維護";
+    ViewData["Title"] = "邊界資料維護";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -81,7 +81,7 @@
                 <input type="submit" value="確認" class="btn btn-primary" />|
                 @if (User.IsInRole("User"))
                 {
-                    <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
+                    <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index">返回</a>
                 }
                 @if (User.IsInRole("Admin"))
                 {

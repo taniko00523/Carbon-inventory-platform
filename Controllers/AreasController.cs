@@ -46,6 +46,7 @@ namespace Carbon_inventory_platform.Controllers
                       Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminIndex(Guid Id) //非同步方法
         {
             TempData["companyId"] = Id; //暫存進入畫面所查詢的CompanyId
