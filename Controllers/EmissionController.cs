@@ -265,7 +265,6 @@ namespace Carbon_inventory_platform.Controllers
         public async Task<IActionResult> Word3Async(Guid id)
         {
             await CountEmissionAsync(id);
-
             var data = await _context.Areas.Where(x => x.Id == id && x.isDeleted == 0).Include(x => x.Company).FirstOrDefaultAsync();
             var device = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0).OrderBy(x => x.Scope).ThenBy(x => x.EmissionPattern).ToListAsync();
             var ManyGHGs = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0).SelectMany(x => x.GHGs).ToListAsync();
@@ -301,25 +300,33 @@ namespace Carbon_inventory_platform.Controllers
                 doc.ReplaceText("[清冊級別補充]", data.all_Grade.ToString());
                 doc.ReplaceText("[95上]", "-" + data.UUL.ToString("N2") + "%");
                 doc.ReplaceText("[95下]", "+" + data.ULL.ToString("N2") + "%");
+
                 if (data.Company.ReportOpening != null)
                 {
-                    doc.ReplaceText("[前言]", data.Company.ReportOpening);
+                    string trimRO = data.Company.ReportOpening.Replace(" ", "");
+                    trimRO = trimRO.Replace("\r\n", "\r\n    ");
+                    doc.ReplaceText("[前言]", trimRO);
                 }
                 else
                 {
-                    doc.ReplaceText("[前言]", "自1997年12月第三次締約國大會(COP3)簽署京都議定書後，全球先進國家均研擬因應溫室氣體減量的方法與措施，2005年2月京都議定書正式生效後，全球各國更積極建立了溫室氣體排放管制的共識，2007年12月巴里路線圖進一步強調開發中國家應推動可量測(Measurable)、報告(Reportable)及可供查證(Verifiable)之適當減緩行動，2009年12月丹麥哥本哈根會議更針對後京都世界各國溫室氣體減量提出可行方案。\r\n聯合國環境規劃署在2014年「溫室氣體排放缺口報告」指出，全球碳中和應於2055年至2070年間達成，否則地球將面臨氣候變遷災難。2015年聯合國發布「2030年永續發展方針」，公布17項永續發展目標(SDGs)，為人類和地球的「和平與繁榮」提供了現在與未來的共享藍圖。基於全球減碳趨勢，我國響應聯合國氣候變遷的目標，亦提出「2050淨零路徑里程碑」，隨後於112年1月10通過「氣候變遷因應法」，以達成節能減碳之永續發展目。\r\n" + data.Company.Name + "(以下簡稱本公司)為因應全球永續發展趨勢於 2015年底《聯合國氣候變化綱要公約》第21屆締約國(COP21)後「巴黎協議」產生，加上環境部《溫室氣體減量及管理法》於 2015年7月正式公布實施，配合國家整體溫室氣體減量策略發展，以達成節能減碳之永續發展目標，特配合政府政策，持續進行公司內部溫室氣體盤查，以瞭解溫室氣體排放實況，進而訂定改善措施，以求達成二氧化碳排放減量之目標。 \r\n本公司基於關心全球氣候變遷、善用資源及善盡企業的責任，根據ISO/IEC 14064-1： 2018要求，對溫室氣體管制發展趨勢及因應未來溫室氣體減量之要求，進行系統化的溫室氣體排放盤查 與清冊建置及查證程序等推動計畫，提供日後實施有效的減量改善方案作參考。今後除將持續推動溫室氣體排放管制以降低成本外，並期盼能達成兼顧資源效率、能源節約、環境保護的永續能源發展，共同為產業朝向低碳型經濟社會來努力。\r\n");
+                    doc.ReplaceText("[前言]", "自1997年12月第三次締約國大會(COP3)簽署京都議定書後，全球先進國家均研擬因應溫室氣體減量的方法與措施，2005年2月京都議定書正式生效後，全球各國更積極建立了溫室氣體排放管制的共識，2007年12月巴里路線圖進一步強調開發中國家應推動可量測(Measurable)、報告(Reportable)及可供查證(Verifiable)之適當減緩行動，2009年12月丹麥哥本哈根會議更針對後京都世界各國溫室氣體減量提出可行方案。\r\n    聯合國環境規劃署在2014年「溫室氣體排放缺口報告」指出，全球碳中和應於2055年至2070年間達成，否則地球將面臨氣候變遷災難。2015年聯合國發布「2030年永續發展方針」，公布17項永續發展目標(SDGs)，為人類和地球的「和平與繁榮」提供了現在與未來的共享藍圖。基於全球減碳趨勢，我國響應聯合國氣候變遷的目標，亦提出「2050淨零路徑里程碑」，隨後於112年1月10通過「氣候變遷因應法」，以達成節能減碳之永續發展目。\r\n    " + data.Company.Name + "(以下簡稱本公司)為因應全球永續發展趨勢於 2015年底《聯合國氣候變化綱要公約》第21屆締約國(COP21)後「巴黎協議」產生，加上環境部《溫室氣體減量及管理法》於 2015年7月正式公布實施，配合國家整體溫室氣體減量策略發展，以達成節能減碳之永續發展目標，特配合政府政策，持續進行公司內部溫室氣體盤查，以瞭解溫室氣體排放實況，進而訂定改善措施，以求達成二氧化碳排放減量之目標。 \r\n    本公司基於關心全球氣候變遷、善用資源及善盡企業的責任，根據ISO/IEC 14064-1： 2018要求，對溫室氣體管制發展趨勢及因應未來溫室氣體減量之要求，進行系統化的溫室氣體排放盤查 與清冊建置及查證程序等推動計畫，提供日後實施有效的減量改善方案作參考。今後除將持續推動溫室氣體排放管制以降低成本外，並期盼能達成兼顧資源效率、能源節約、環境保護的永續能源發展，共同為產業朝向低碳型經濟社會來努力。");
                 }
                 if (data.Company.CompanyInformation != null)
                 {
-                    doc.ReplaceText("[公司基本資料]", data.Company.CompanyInformation);
+                    string trimCM = data.Company.CompanyInformation.Replace(" ", "");
+                    trimCM = trimCM.Replace("\r\n", "\r\n    ");
+                    doc.ReplaceText("[公司基本資料]", trimCM);
                 }
                 else
                 {
+
                     doc.ReplaceText("[公司基本資料]", " ");
                 }
                 if (data.Company.ReportingPurposes != null)
                 {
-                    doc.ReplaceText("[預期用途]", data.Company.ReportingPurposes);
+                    string trimRP = data.Company.ReportingPurposes.Replace(" ", "");
+                    trimRP = trimRP.Replace("\r\n", "\r\n    ");
+                    doc.ReplaceText("[預期用途]", trimRP);
                 }
                 else
                 {
@@ -328,7 +335,9 @@ namespace Carbon_inventory_platform.Controllers
 
                 if (data.Company.AddressInformation != null)
                 {
-                    doc.ReplaceText("[組織邊界設定]", data.Company.AddressInformation);
+                    string trimAI = data.Company.AddressInformation.Replace(" ", "");
+                    trimAI = trimAI.Replace("\r\n", "\r\n    ");
+                    doc.ReplaceText("[組織邊界設定]", trimAI);
                 }
                 else
                 {
@@ -336,7 +345,9 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 if (data.Company.ReportingInformation != null)
                 {
-                    doc.ReplaceText("[報告邊界]", data.Company.ReportingInformation);
+                    string trimRI = data.Company.ReportingInformation.Replace(" ", "");
+                    trimRI = trimRI.Replace("\r\n", "\r\n    ");
+                    doc.ReplaceText("[報告邊界]", trimRI);
                 }
                 else
                 {
@@ -345,7 +356,9 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 if (data.Company.GHGInformation != null)
                 {
-                    doc.ReplaceText("[溫室氣體排放類型與排放量說明]", data.Company.GHGInformation);
+                    string trimGI = data.Company.GHGInformation.Replace(" ", "");
+                    trimGI = trimGI.Replace("\r\n", "\r\n    ");
+                    doc.ReplaceText("[溫室氣體排放類型與排放量說明]", trimGI);
                 }
                 else
                 {
@@ -353,7 +366,9 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 if (data.Company.Scope1Information != null)
                 {
-                    doc.ReplaceText("[直接溫室氣體排放說明]", data.Company.Scope1Information);
+                    string trimS1I = data.Company.Scope1Information.Replace(" ", "");
+                    trimS1I = trimS1I.Replace("\r\n", "\r\n    ");
+                    doc.ReplaceText("[直接溫室氣體排放說明]", trimS1I);
                 }
                 else
                 {
@@ -493,7 +508,9 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 if (data.Company.Scope2Information != null)
                 {
-                    doc.ReplaceText("[能源間接溫室氣體排放說明]", data.Company.Scope2Information);
+                    string trimS2I = data.Company.Scope2Information.Replace(" ", "");
+                    trimS2I = trimS2I.Replace("\r\n", "\r\n    ");
+                    doc.ReplaceText("[能源間接溫室氣體排放說明]", trimS2I);
                 }
                 else
                 {
@@ -710,7 +727,7 @@ namespace Carbon_inventory_platform.Controllers
             int num = manyGHGs.Count(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName);
             string tableName = $"[{emissionPattern}{gasName}]";
             var font = new Xceed.Document.NET.Font("標楷體");
-            Xceed.Document.NET.Table table = doc.AddTable(num!=0?(num + 1):(num+2), 8);
+            Xceed.Document.NET.Table table = doc.AddTable(num != 0 ? (num + 1) : (num + 2), 8);
             table.AutoFit = AutoFit.Contents;
             table.Design = TableDesign.MediumShading1Accent3;
 
@@ -724,9 +741,9 @@ namespace Carbon_inventory_platform.Controllers
             table.Rows[0].Cells[7].Paragraphs.First().Append("CO₂排放當量\n(公噸CO₂e/年)").Font(font).FontSize(9d);
 
             int rowIndex = 1;
-            if (num>0)
+            if (num > 0)
             {
-               foreach (var GHG in manyGHGs.Where(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName))
+                foreach (var GHG in manyGHGs.Where(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName))
                 {
                     string deviceCellString = (GHG.Device.Name == "其他" ? GHG.Device.OtherName : GHG.Device.Name)
                                              + (GHG.Device.NameRemark != null && GHG.Device.NameRemark.Trim() != string.Empty ? "(" + GHG.Device.NameRemark + ")" : "");
@@ -761,7 +778,7 @@ namespace Carbon_inventory_platform.Controllers
                 }
 
 
-                
+
 
             }
             else
@@ -869,7 +886,7 @@ namespace Carbon_inventory_platform.Controllers
                 foreach (var item in sortedGHGs)
                 {
                     text += SwitchGasName(item.Name);
-                    
+
                     text += "、";
                 }
                 if (text.EndsWith("、"))

@@ -6,8 +6,6 @@ using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Carbon_inventory_platform.Filters;
 using Carbon_inventory_platform.ViewModel;
-using System;
-using Microsoft.CodeAnalysis.Elfie.Serialization;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -24,18 +22,19 @@ namespace Carbon_inventory_platform.Controllers
         //GET: Devices
         public async Task<IActionResult> Index(Guid Id)
         {
-            TempData["areaId"] = Id; // 暫存目前所在的廠區年度ID
-                                     // TempData["year"] = await _context.Emissions // 暫存目前所在的公司名稱 顯示在畫面上方
-                                     //.Where(a => a.Id == Id)
-                                     //.FirstOrDefaultAsync();
-            TempData["areaName"] = await _context.Areas // 暫存目前所在的公司名稱 顯示在畫面上方
-           .Where(a => a.Id == Id)
-           .Select(a => a.Name)
-           .FirstOrDefaultAsync();
-            TempData["year"] = await _context.Areas // 暫存目前所在的公司名稱 顯示在畫面上方
-           .Where(a => a.Id == Id)
-           .Select(a => a.Year)
-           .FirstOrDefaultAsync();
+            TempData["areaId"] = Id; // 暫存目前所在的廠區ID
+            var AreaData = await _context.Areas.Where(x => x.Id == Id && x.isDeleted == 0).Include(x => x.Company).FirstOrDefaultAsync();
+            if (AreaData == null)
+            {
+                return View();
+            }
+            TempData["areaName"] = AreaData.Name;
+            if (AreaData.Company != null)
+            {
+                TempData["companyName"] = AreaData.Company.Name.Trim()!=""? AreaData.Company.Name:"未填寫公司資料";
+            }
+
+            TempData["year"] = AreaData.Year;
             return _context.Devices != null ? //如果有抓到資料表Null
                          View(await _context.Devices
                          .Where(x => x.isDeleted == 0 && x.AreaId == Id) //抓出資料表裡面沒被刪除的

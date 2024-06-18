@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col">
         <h1>@ViewData["Title"]</h1>
-        @if (@TempData.Peek("areaName") != null)
+        @if (TempData.Peek("areaName")!="" && TempData.Peek("areaName") != null)
         {
             <h3>@TempData.Peek("companyName")-@TempData.Peek("areaName")-@TempData.Peek("year")盤查年度</h3>
         }
@@ -28,15 +28,30 @@
                 }
                 else
                 {
-                    <a class="btn btn-danger disabled" asp-controller="Emission" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
+                    <a class="btn btn-danger" onclick="showAlert('尚未設定活動數據！\r\n請先設定活動數據！');" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
+
                 }
-                @if (Model.Any(x => x.Area.Company.ModifiedTime != null) && Model.Any(x => x.Area.ModifiedTime != null) && Model.Any(x => x.Area.All != 0))
+                @if (Model.Any(x => x.Area.Company.ModifiedTime != null))
                 {
-                    <a class="btn btn-warning" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
+                    if (Model.Any(x => x.Area.ModifiedTime != null))
+                    {
+                        if (Model.Any(x => x.Area.All != 0))
+                        {
+                            <a class="btn btn-warning" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-warning" onclick="showAlert('尚未設定活動數據！\r\n請先設定活動數據！');" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
+                        }
+                    }
+                    else
+                    {
+                        <a class="btn btn-warning" onclick="showAlert('尚未設定邊界資料！\r\n請先至左上角點擊邊界總覽設定邊界資料！');" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
+                    }
                 }
                 else
                 {
-                    <a class="btn btn-warning disabled" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
+                    <a class="btn btn-warning" onclick="showAlert('尚未設定公司資料！\r\n請先至右上角點擊使用者名稱設定公司資料！');" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
                 }
             }
             @if (User.IsInRole("User"))
@@ -55,10 +70,7 @@
     <table class="table">
         <thead>
             <tr>
-
-                @* <th>
-                @Html.DisplayNameFor(model => model.Areas.Name)
-                <th>
+                @*<th>
                 @Html.DisplayNameFor(model => model.AssetNo)
                 </th> *@
                 <th>
@@ -125,9 +137,7 @@
                     if (item.EmissionPattern == EmissPattern)
                     {
                         <tr class="table-@style">
-                            @* <td>
-                @Html.DisplayFor(modelItem => item.Areas.Name)
-                </td>
+                            @*
                 <td>
                 @Html.DisplayFor(modelItem => item.AssetNo)
                 </td> *@
@@ -149,7 +159,7 @@
                                     {
                                         <p>@item.OtherName</p>
                                     }
-                                   
+
                                 }
                                 else
                                 {
@@ -168,7 +178,7 @@
                                     {
                                         <p>@item.Name</p>
                                     }
-                                   
+
                                 }
                             </td>
                             @* <td>
@@ -257,13 +267,13 @@
                                         @if (displayUnit != "人-年")
                                         {
                                             <p>
-                                                @($"{item.ActivityDatas.Sum(ad => ad.Num) / 1000 :F4} {displayUnit}")
+                                                @($"{item.ActivityDatas.Sum(ad => ad.Num) / 1000:F4} {displayUnit}")
                                             </p>
                                         }
                                         else
                                         {
                                             <p>
-                                                @($"{item.ActivityDatas.Sum(ad => ad.Num) :F4} {displayUnit}")
+                                                @($"{item.ActivityDatas.Sum(ad => ad.Num):F4} {displayUnit}")
                                             </p>
                                         }
                                     }
@@ -304,3 +314,9 @@
     </table>
 
 </div>
+
+<script>
+    function showAlert(text) {
+        alert(text);
+    }
+</script>
