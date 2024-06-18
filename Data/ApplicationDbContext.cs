@@ -141,24 +141,24 @@ new Material { Id = 78, Name = "丁烷", Scope = "類別一", EmissionPattern = 
 new Material { Id = 79, Name = "WD40", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 0.025M, CEF_Correction = 1 }
 );
             builder.Entity<GWP>().HasData(
-new GWP { Name = "CO2", Num = 1, GWP_Year = 2022 },
-new GWP { Name = "CH4", Num = 27.9M, GWP_Year = 2022 },
-new GWP { Name = "N2O", Num = 273, GWP_Year = 2022 },
-new GWP { Name = "R-12", Num = 12500, GWP_Year = 2022 },
-new GWP { Name = "R-23", Num = 14600, GWP_Year = 2022 },
-new GWP { Name = "R-32", Num = 771, GWP_Year = 2022 },
-new GWP { Name = "R-134A", Num = 1530, GWP_Year = 2022 },
-new GWP { Name = "FM200", Num = 3600, GWP_Year = 2022 },
-new GWP { Name = "R-22", Num = 1960, GWP_Year = 2022 },
-new GWP { Name = "R-410A", Num = 2255.5M, GWP_Year = 2022 },
-new GWP { Name = "R-600A", Num = 0.006M, GWP_Year = 2022 },
-new GWP { Name = "R-417A", Num = 2127, GWP_Year = 2022 },
-new GWP { Name = "R-404A", Num = 4728, GWP_Year = 2022 },
-new GWP { Name = "R-407C", Num = 1908, GWP_Year = 2022 },
-new GWP { Name = "R-507A", Num = 4475, GWP_Year = 2022 },
-new GWP { Name = "NF3", Num = 17400, GWP_Year = 2022 },
-new GWP { Name = "SF6", Num = 24300, GWP_Year = 2022 },
-new GWP { Name = "海龍-1211", Num = 1930, GWP_Year = 2022 }
+new GWP {Id=1, Name = "CO2", Num = 1, ARCount = 6 },
+new GWP { Id = 2, Name = "CH4", Num = 27.9M, ARCount = 6 },
+new GWP {Id = 3, Name = "N2O", Num = 273, ARCount = 6 },
+new GWP {Id=4, Name = "R-12", Num = 12500, ARCount = 6 },
+new GWP {Id=5, Name = "R-23", Num = 14600, ARCount = 6 },
+new GWP {Id=6, Name = "R-32", Num = 771, ARCount = 6 },
+new GWP {Id=7, Name = "R-134A", Num = 1530, ARCount = 6 },
+new GWP {Id=8, Name = "FM200", Num = 3600, ARCount = 6 },
+new GWP {Id=9, Name = "R-22", Num = 1960, ARCount = 6 },
+new GWP { Id = 10, Name = "R-410A", Num = 2255.5M, ARCount = 6 },
+new GWP { Id = 11, Name = "R-600A", Num = 0.006M, ARCount = 6 },
+new GWP { Id = 12, Name = "R-417A", Num = 2127, ARCount = 6 },
+new GWP { Id = 13, Name = "R-404A", Num = 4728, ARCount = 6 },
+new GWP { Id = 14, Name = "R-407C", Num = 1908, ARCount = 6 },
+new GWP { Id = 15, Name = "R-507A", Num = 4475, ARCount = 6 },
+new GWP { Id = 16, Name = "NF3", Num = 17400, ARCount = 6 },
+new GWP { Id = 17, Name = "SF6", Num = 24300, ARCount = 6 },
+new GWP { Id = 18, Name = "海龍-1211", Num = 1930, ARCount = 6 }
                 );
             builder.Entity<DeviceData>().HasData(
                 new DeviceData { Id = 1, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-410A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },

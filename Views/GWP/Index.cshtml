@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Carbon_inventory_platform.Models.GWP>
+@{
+    int searchARcount = ViewBag.SearchARcount != null ? (int)ViewBag.SearchARcount : 0;
+    ViewData["Title"] = "GWP總覽";
+}
+
+<h2>@ViewData["Title"]</h2>
+<form asp-action="Index" id="SelectGWPForm">
+    <div class="row">
+        <div class="form-inline col-sm-3">
+            <label>輸入AR版本:</label>
+            <input name="year" type="number" class="form-control" value="@searchARcount" />
+            <button type="submit" class="btn btn-primary mt-2">查詢</button>
+        </div>
+    </div>
+</form>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddModal" @(ViewBag.SearchARcount != null ? "" : "disabled")>新增</button>
+
+
+<!-- 新增用戶資料的模態框 -->
+<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="AddModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="Add" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AddModalLabel">新增GWP資料</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="GWP_Name">GWP名稱：</label>
+                        <input class="form-control" id="GWP_Name" name="Name" required />
+
+                        <label for="GWP_Num">GWP值：</label>
+                        <input class="form-control" id="GWP_Num" name="Num" required />
+
+                        <input type="hidden" name="searchARcount" value="@searchARcount" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <input type="submit" value="儲存" class="btn btn-primary" />
+                </div>
+            </div>
+            @Html.AntiForgeryToken()
+        </form>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>GWP名稱</th>
+            <th>GWP值</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var gwp in Model)
+            {
+                <tr>
+                    <td>@gwp.Name</td>
+                    <td>@gwp.Num.ToString("F2")</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal_@gwp.Id">編輯</button>
+                        <form asp-action="Delete" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@gwp.Id" />
+                            <input type="hidden" name="searchARcount" value="@searchARcount" />
+                            <button type="submit" class="btn btn-danger">刪除</button>
+                        </form>
+                    </td>
+                </tr>
+                <!-- 編輯用戶資料的模態框 -->
+                <div class="modal fade" id="editModal_@gwp.Id" tabindex="-1" role="dialog" aria-labelledby="editModalLabel_@gwp.Id" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <form asp-action="Edit" method="post" id="editUserForm_@gwp.Id">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editModalLabel_@gwp.Id">編輯GWP資料</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input type="hidden" name="Id" value="@gwp.Id" />
+
+                                        <label for="editGWP_Name_@gwp.Id">GWP名稱：</label>
+                                        <input class="form-control" id="editGWP_Name_@gwp.Id" name="Name" value="@gwp.Name" required />
+
+                                        <label for="editGWP_Num_@gwp.Id">GWP值：</label>
+                                        <input class="form-control" id="editGWP_Num_@gwp.Id" name="Num" value="@gwp.Num" required />
+
+                                        <input type="hidden" name="searchARcount" value="@searchARcount" />
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                    <input type="submit" value="儲存" class="btn btn-primary" />
+                                </div>
+                            </div>
+                            @Html.AntiForgeryToken()
+                        </form>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+        <td colspan="3">請輸入AR版本</td>
+        }
+    </tbody>
+</table>

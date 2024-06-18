@@ -12,8 +12,7 @@
     <link rel="stylesheet" href="~/Carbon_inventory_platform.styles.css" asp-append-version="true" />
     <style>
         .container {
-            max-width: 1600px; /* 设置容器的最大宽度 */
-           
+            max-width: 1600px;
         }
     </style>
 </head>
@@ -35,15 +34,18 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-controller="Areas" asp-action="Index">邊界總覽</a>
                                 </li>
-                            }                            
+                            }
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-controller="Companies" asp-action="AdminIndex">公司總覽</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="GWP" asp-action="Index">GWP總覽</a>
+                                </li>
                             }
                         }
-                        
+
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -62,7 +64,6 @@
             <a class="btn btn-warning" href="mailto:4A952007@office.stust.edu.tw">回報問題</a>
         </div>
         <div class="container">
-            
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
