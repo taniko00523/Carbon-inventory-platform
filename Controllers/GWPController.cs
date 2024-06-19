@@ -29,35 +29,35 @@ namespace Carbon_inventory_platform.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(GWP model, int searchYear)
+        public async Task<IActionResult> Add(GWP model, int searchARcount)
         {
             if (ModelState.IsValid)
             {
-                model.ARCount = searchYear;
+                model.ARCount = searchARcount;
                 _context.Add(model);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { year = searchYear });
+                return RedirectToAction(nameof(Index), new { year = searchARcount });
             }
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(GWP model, int searchYear)
+        public async Task<IActionResult> Edit(GWP model, int searchARcount)
         {
             if (ModelState.IsValid)
             {
-                model.ARCount = searchYear;
+                model.ARCount = searchARcount;
                 _context.Update(model);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { year = searchYear });
+                return RedirectToAction(nameof(Index), new { year = searchARcount });
             }
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string id, int searchYear)
+        public async Task<IActionResult> Delete(string id, int searchARcount)
         {
             if (id == null)
             {
@@ -71,7 +71,7 @@ namespace Carbon_inventory_platform.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction(nameof(Index), new { year = searchYear });
+            return RedirectToAction(nameof(Index), new { year = searchARcount });
         }
     }
 }
