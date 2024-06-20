@@ -1,7 +1,11 @@
-﻿namespace Carbon_inventory_platform.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Carbon_inventory_platform.Models
 {
     public class Analysis //Materiality Analysis 重大性評估
     {
+        public Guid Id { get; set; }
+        public Guid AreaId { get; set; }
         public int _21A { get; set; } = 3;
         public int _21B { get; set; } = 3;
         public int _21C { get; set; } = 3;
@@ -98,7 +102,18 @@
         public int _54 { get; set; }
         public int _55 { get; set; }
         public int _61 { get; set; }
+        [Display(Name = "是否刪除")]
+        public byte isDeleted { get; set; } = 0;
 
+        [Display(Name = "建立時間")]
+        public DateTime CreateTime { get; set; } = DateTime.Now;
+
+        [Display(Name = "修改時間")]
+        public DateTime? ModifiedTime { get; set; }
+
+        [Display(Name = "刪除時間")]
+        public DateTime? DeleteTime { get; set; }
+        public Area? Area { get; set; }
 
     }
 }

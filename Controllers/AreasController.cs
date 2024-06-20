@@ -40,6 +40,7 @@ namespace Carbon_inventory_platform.Controllers
             return _context.Areas != null ? //如果有抓到資料表Null
                       View(await _context.Areas
                       .Include(x => x.Company)
+                      .Include(x => x.Analysis)
                       .Where(x => x.isDeleted == 0 && x.CompanyId == Id) //抓出資料表裡面沒被刪除的
                       .OrderBy(x => x.CreateTime)
                       .ToListAsync()) : //非同步方法

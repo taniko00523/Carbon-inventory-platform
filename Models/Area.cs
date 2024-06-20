@@ -11,6 +11,9 @@ namespace Carbon_inventory_platform.Models
 
         [Display(Name = "公司別")]
         public Guid CompanyId { get; set; }
+        
+        [Display(Name = "AR版本")]
+        public int ARVersion { get; set; }
 
         [MaxLength(20)]
         [Display(Name = "廠區名稱")]
@@ -215,6 +218,7 @@ namespace Carbon_inventory_platform.Models
         //Navigation導覽屬性
         [ForeignKey("CompanyId")]
         public Company? Company { get; set; }
+        public Analysis? Analysis { get; set; }
         public ICollection<Device>? Devices { get; set; }
 
         //public Area()

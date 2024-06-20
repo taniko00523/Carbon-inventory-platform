@@ -220,6 +220,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
         {
             var Company_id = Guid.NewGuid();
             var Area_id = Guid.NewGuid();
+            var Analysis_id = Guid.NewGuid();
             if (ModelState.IsValid)
             {
                 await _context.Companies.AddAsync(new Company()
@@ -235,6 +236,12 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
                     CompanyId = Company_id,
                     Year = DateTime.Now.Year - 1912, //減去1911取得民國年 再減去1盤去年
                     BaseYear = true,
+                    CreateTime = DateTime.Now
+                });
+                await _context.Analyses.AddAsync(new Analysis()
+                {
+                    Id = Analysis_id,
+                    AreaId = Area_id,
                     CreateTime = DateTime.Now
                 });
                 await _context.SaveChangesAsync();
