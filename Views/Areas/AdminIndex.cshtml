@@ -1,13 +1,31 @@
 ﻿@model IEnumerable<Carbon_inventory_platform.Models.Area>
 @{
     ViewData["Title"] = "邊界總覽";
+    List<SelectListItem> aListItem = new List<SelectListItem>
+{
+    new SelectListItem { Value = "1", Text = "連續監測數據" },
+    new SelectListItem { Value = "2", Text = "間接量測" },
+    new SelectListItem { Value = "3", Text = "自行評估/沒有相關資訊無法推估" }
+};
+    List<SelectListItem> bListItem = new List<SelectListItem>
+{
+    new SelectListItem { Value = "1", Text = "國際排放係數/無依據" },
+    new SelectListItem { Value = "2", Text = "國家排放係數" },
+    new SelectListItem { Value = "3", Text = "自廠發展係數/質量平衡所得係數/同製程/設備經驗係數/製造廠提供係數/區域排放係數" }
+};
+    List<SelectListItem> cListItem = new List<SelectListItem>
+{
+    new SelectListItem { Value = "1", Text = "每季不到一次" },
+    new SelectListItem { Value = "2", Text = "每周 /月一次" },
+    new SelectListItem { Value = "3", Text = "每天一次" }
+};
 }
 <div class="row">
     <div class="col">
         <h1>@ViewData["Title"]</h1>
         <a class="btn btn-primary" asp-action="Create" asp-route-id=@TempData.Peek("selectedCompanyId")>新增</a>
         <a class="btn btn-secondary" asp-controller="Companies" asp-action="AdminIndex">返回</a>
-       
+
     </div>
 </div>
 
@@ -75,7 +93,7 @@
                     }
                     else
                     {
-               
+
                     }
                 </td>
                 <td>
@@ -127,6 +145,265 @@
                         <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">填寫</a>
                     }
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal_@item.Id">重大性評估</button>
+                    <!-- 編輯用戶資料的模態框 -->
+                    <form method="post" asp-action="Analysis">
+                        <div class="modal fade" id="editModal_@item.Id" tabindex="-1" role="dialog" aria-labelledby="editModalLabel_@item.Id" aria-hidden="true">
+                            <div class="modal-dialog modal-xl" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editModalLabel_@item.Id">編輯GWP資料</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @Html.HiddenFor(x=>item.Analysis.Id)
+                                        @Html.HiddenFor(x=>item.Analysis.AreaId)
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>類別</th>
+                                                    <th>間接排放活動項目</th>
+                                                    <th>活動資料品質(A)</th>
+                                                    <th>係數品質(B)</th>
+                                                    <th>發生/使用頻率(C)</th>
+                                                    <th>重大性(A*B)*C</th>
+                                                    <th>量化與否</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>2.1輸入電力</td>
+                                                    <td>輸入電力所產生之排放</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._21A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._21B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._21C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2.2輸入二次能源</td>
+                                                    <td>無</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._22A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._22B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._22C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>3.1上游運輸和配送貨物</td>
+                                                    <td>盤查年度原物料及服務運送所產生之排放</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._31A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._31B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._31C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3.2下游運輸和配送貨物</td>
+                                                    <td>盤查服務運送所產生之排放</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._32A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._32B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._32C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3.3員工通勤</td>
+                                                    <td>員工通勤產生之排放，包含汽車與機車或大眾交通運輸工具等交通方式</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._33A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._33B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._33C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3.4客戶和訪客運輸</td>
+                                                    <td>客戶和訪客差旅包含陸、海、空運等交通方式，如出差搭乘大眾交通等</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._34A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._34B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._34C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3.5商務旅行</td>
+                                                    <td>員工、客戶與訪客的商務旅行之排放</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._35A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._35B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._35C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>4.1商品_輸入電力</td>
+                                                    <td>電力間接碳排放(電力供應者之上游供應鏈排放)</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._41A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._41B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._41C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4.2商品_輸入能源</td>
+                                                    <td>二次能源間接碳排放</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._42A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._42B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._42C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4.3商品_燃料</td>
+                                                    <td>天然氣、柴油、汽油間接碳排放(燃料供應者之上游供應鏈排放)</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._43A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._43B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._43C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4.4商品_資源</td>
+                                                    <td>自來水等</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._44A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._44B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._44C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4.5商品_主要原料</td>
+                                                    <td>原物料(防鏽油、脫脂劑、黑化劑、酸液、磷化劑)等</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._45A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._45B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._45C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4.6商品_輔助原料</td>
+                                                    <td>片鹼、液鹼、助凝劑、雙氧水、脫氧劑、設備維護保養原料等</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._46A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._46B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._46C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4.7商品_包裝材料</td>
+                                                    <td>報紙(墊著)</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._47A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._47B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._47C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4.8服務_不可回收廢棄物</td>
+                                                    <td>營運產生之不可回收廢棄物處理：生活垃圾(焚化)、汙泥</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._48A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._48B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._48C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4.9商品_資本貨物</td>
+                                                    <td>資本貨物製造加工及相關活動時，所產生之排放</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._49A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._49B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._49C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4.10服務_租賃資產</td>
+                                                    <td>上游租賃資產-事務機</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._410A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._410B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._410C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4.11服務_其他</td>
+                                                    <td>無</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._411A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._411B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._411C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>5.1產品加工</td>
+                                                    <td>所有下游的再加工過程所產生之排放</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._51A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._51B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._51C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>5.2產品使用</td>
+                                                    <td>所有下游的產品使用過程所產生之排放</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._52A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._52B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._52C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>5.3下游租賃</td>
+                                                    <td>所有出租資產給其他業者所產生之排放</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._53A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._53B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._53C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>5.4產品壽命終止處置力</td>
+                                                    <td>產品送達下游之後，所產生相關廢棄物之排放，含最終產品等後續經由客戶進行報廢處置</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._54A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._54B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._54C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>5.5投資</td>
+                                                    <td>無</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._55A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._55B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._55C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>6.1維修與施工</td>
+                                                    <td>承攬維修與施工</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._61A, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._61B, aListItem, new { @class = "form-control" })</td>
+                                                    <td>@Html.DropDownListFor(model => item.Analysis._61C, aListItem, new { @class = "form-control" })</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                        <input type="submit" value="儲存" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                                @Html.AntiForgeryToken()
+                            </div>
+                        </div>
+                    </form>
+                    
                     <a class="btn btn-info" asp-controller="Devices" asp-action="Index" asp-route-id="@item.Id">排放源資料</a>
 
                 </td>
@@ -136,26 +413,7 @@
                     </form>
                 </td>
             </tr>
-            <!-- 編輯用戶資料的模態框 -->
-            <div class="modal fade" id="editModal_@item.Id" tabindex="-1" role="dialog" aria-labelledby="editModalLabel_@item.Id" aria-hidden="true">
-                <div class="modal-dialog modal-xl" role="document">
-                    <form asp-action="Edit" method="post" id="editUserForm_@item.Id">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editModalLabel_@item.Id">編輯GWP資料</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">                               
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                                <input type="submit" value="儲存" class="btn btn-primary" />
-                            </div>
-                        </div>
-                        @Html.AntiForgeryToken()
-                    </form>
-                </div>
-            </div>
+
         }
     </tbody>
 </table>

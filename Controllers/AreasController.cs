@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Carbon_inventory_platform.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -58,6 +59,7 @@ namespace Carbon_inventory_platform.Controllers
             return _context.Areas != null ? //如果有抓到資料表Null
                           View(await _context.Areas
                           .Include(x => x.Company)
+                          .Include (x => x.Analysis)
                           .Where(x => x.isDeleted == 0 && x.CompanyId == Id) //抓出資料表裡面沒被刪除的
                           .OrderBy(x => x.CreateTime)
                           .ToListAsync()) : //非同步方法
@@ -135,6 +137,7 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Areas/Create
         public IActionResult Create()
         {
+            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARCount).Distinct().ToList();
             return View();
         }
 
@@ -213,6 +216,7 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Areas/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
+            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARCount).Distinct().ToList();
             var area = await _context.Areas
                 .Include(x => x.Company)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -230,8 +234,9 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,FullAddress,Year,BaseYear,Type,UniqueCode,FactorCode,OrganizationImage,MapImage,ShopDrawings")] Area area)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,FullAddress,Year,BaseYear,Type,UniqueCode,FactorCode,OrganizationImage,MapImage,ShopDrawings,ARVersion")] Area area)
         {
+            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARCount).Distinct().ToList();
             if (id != area.Id)
             {
                 return NotFound();
@@ -250,6 +255,7 @@ namespace Carbon_inventory_platform.Controllers
                     var toUpdate = await _context.Areas.FindAsync(id);
                     if (toUpdate != null)
                     {
+                        toUpdate.ARVersion = area.ARVersion;
                         toUpdate.Name = area.Name;
                         toUpdate.FullAddress = area.FullAddress;
                         if (area.FullAddress.Length > 6)
@@ -409,6 +415,20 @@ namespace Carbon_inventory_platform.Controllers
             }
             return null;
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Analysis(Area model)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Update(model);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index), new { Id = model.Id });
+            }
+            return View(model);
+        }
+        
 
     }
 }

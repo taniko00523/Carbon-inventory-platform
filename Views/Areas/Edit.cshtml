@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "邊界資料維護";
+    
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -54,6 +55,16 @@
                 <label asp-for="Year" class="control-label"></label><span style="color:red">*</span>
                 <input asp-for="Year" placeholder="請填寫民國盤查年度" class="form-control" />
                 <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ARVersion" class="control-label"></label><span style="color:red">*</span>
+                <select asp-for="ARVersion" class="form-control">
+                    @foreach (var item in ViewBag.ARVersion)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+                <span asp-validation-for="ARVersion" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>

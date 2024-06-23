@@ -31,7 +31,7 @@ namespace Carbon_inventory_platform.Controllers
             TempData["areaName"] = AreaData.Name;
             if (AreaData.Company != null)
             {
-                TempData["companyName"] = AreaData.Company.Name.Trim()!=""? AreaData.Company.Name:"未填寫公司資料";
+                TempData["companyName"] = AreaData.Company.Name.Trim() != "" ? AreaData.Company.Name : "未填寫公司資料";
             }
 
             TempData["year"] = AreaData.Year;
@@ -89,7 +89,6 @@ namespace Carbon_inventory_platform.Controllers
                 };
                 _context.Add(toCreate);
                 await _context.SaveChangesAsync();
-
                 if (device.Customize == true) // 自訂排放係數被勾選
                 {
                     if (device.CO2CEF != null || // 至少有一個欄位不為 null，執行原有的程式碼
@@ -100,33 +99,35 @@ namespace Carbon_inventory_platform.Controllers
                         device.SF6CEF != null ||
                         device.NF3CEF != null)
                     {
+                        int ARVersion = await _context.Areas.Where(x => x.Id == device.AreaId).Select(x => x.ARVersion).FirstOrDefaultAsync();
+
                         if (device.CO2CEF != null && device.CO2CEF != 0)
                         {
-                            await CEFAddAsync(toCreate, "CO2", device.CO2CEF);
+                            await CEFAddAsync(toCreate, "CO2", device.CO2CEF, ARVersion);
                         }
                         if (device.CH4CEF != null && device.CH4CEF != 0)
                         {
-                            await CEFAddAsync(toCreate, "CH4", device.CH4CEF);
+                            await CEFAddAsync(toCreate, "CH4", device.CH4CEF, ARVersion);
                         }
                         if (device.N2OCEF != null && device.N2OCEF != 0)
                         {
-                            await CEFAddAsync(toCreate, "N2O", device.N2OCEF);
+                            await CEFAddAsync(toCreate, "N2O", device.N2OCEF, ARVersion);
                         }
                         if (device.HFCSCEF != null && device.HFCSCEF != 0)
                         {
-                            await CEFAddAsync(toCreate, "HFCS", device.HFCSCEF);
+                            await CEFAddAsync(toCreate, "HFCS", device.HFCSCEF, ARVersion);
                         }
                         if (device.PFCSCEF != null && device.PFCSCEF != 0)
                         {
-                            await CEFAddAsync(toCreate, "PFCS", device.PFCSCEF);
+                            await CEFAddAsync(toCreate, "PFCS", device.PFCSCEF, ARVersion);
                         }
                         if (device.NF3CEF != null && device.NF3CEF != 0)
                         {
-                            await CEFAddAsync(toCreate, "NF3", device.NF3CEF);
+                            await CEFAddAsync(toCreate, "NF3", device.NF3CEF, ARVersion);
                         }
                         if (device.SF6CEF != null && device.SF6CEF != 0)
                         {
-                            await CEFAddAsync(toCreate, "SF6", device.SF6CEF);
+                            await CEFAddAsync(toCreate, "SF6", device.SF6CEF, ARVersion);
                         }
                     }
                 }
@@ -277,6 +278,9 @@ namespace Carbon_inventory_platform.Controllers
             List<object> gwpNames = new List<object>();
             List<object> materials = new List<object>();
             List<string> excludedOptions = new List<string>();
+            Guid areaId = (Guid)TempData.Peek("areaId");
+            var arVersion = _context.Areas.Where(x => x.Id == areaId).Select(x => x.ARVersion).FirstOrDefault();
+
             if (emissionPattern == "逸散")
             {
                 excludedOptions = new List<string> {
@@ -294,6 +298,7 @@ namespace Carbon_inventory_platform.Controllers
                 };
 
                 gwpNames = _context.GWPs
+                    .Where(x => x.ARCount == arVersion)
                     .Select(x => new { name = x.Name })
                     .Distinct()
                     .ToList<object>();
@@ -461,33 +466,35 @@ namespace Carbon_inventory_platform.Controllers
                                             _context.GHGs.Remove(item);
                                         }
                                     }
+                                    int ARVersion = await _context.Areas.Where(x => x.Id == device.AreaId).Select(x => x.ARVersion).FirstOrDefaultAsync();
+
                                     if (device.CO2CEF != null && device.CO2CEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "CO2", device.CO2CEF);
+                                        await CEFAddAsync(deviceUpdate, "CO2", device.CO2CEF, ARVersion);
                                     }
                                     if (device.CH4CEF != null && device.CH4CEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "CH4", device.CH4CEF);
+                                        await CEFAddAsync(deviceUpdate, "CH4", device.CH4CEF, ARVersion);
                                     }
                                     if (device.N2OCEF != null && device.N2OCEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "N2O", device.N2OCEF);
+                                        await CEFAddAsync(deviceUpdate, "N2O", device.N2OCEF, ARVersion);
                                     }
                                     if (device.HFCSCEF != null && device.HFCSCEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "HFCS", device.HFCSCEF);
+                                        await CEFAddAsync(deviceUpdate, "HFCS", device.HFCSCEF, ARVersion);
                                     }
                                     if (device.PFCSCEF != null && device.PFCSCEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "PFCS", device.PFCSCEF);
+                                        await CEFAddAsync(deviceUpdate, "PFCS", device.PFCSCEF, ARVersion);
                                     }
                                     if (device.NF3CEF != null && device.NF3CEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "NF3", device.NF3CEF);
+                                        await CEFAddAsync(deviceUpdate, "NF3", device.NF3CEF, ARVersion);
                                     }
                                     if (device.SF6CEF != null && device.SF6CEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "SF6", device.SF6CEF);
+                                        await CEFAddAsync(deviceUpdate, "SF6", device.SF6CEF, ARVersion);
                                     }
                                 }
                             }
@@ -522,33 +529,35 @@ namespace Carbon_inventory_platform.Controllers
                                             _context.GHGs.Remove(item);
                                         }
                                     }
+                                    int ARVersion = await _context.Areas.Where(x => x.Id == device.AreaId).Select(x => x.ARVersion).FirstOrDefaultAsync();
+
                                     if (device.CO2CEF != null && device.CO2CEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "CO2", device.CO2CEF);
+                                        await CEFAddAsync(deviceUpdate, "CO2", device.CO2CEF, ARVersion);
                                     }
                                     if (device.CH4CEF != null && device.CH4CEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "CH4", device.CH4CEF);
+                                        await CEFAddAsync(deviceUpdate, "CH4", device.CH4CEF, ARVersion);
                                     }
                                     if (device.N2OCEF != null && device.N2OCEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "N2O", device.N2OCEF);
+                                        await CEFAddAsync(deviceUpdate, "N2O", device.N2OCEF, ARVersion);
                                     }
                                     if (device.HFCSCEF != null && device.HFCSCEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "HFCS", device.HFCSCEF);
+                                        await CEFAddAsync(deviceUpdate, "HFCS", device.HFCSCEF, ARVersion);
                                     }
                                     if (device.PFCSCEF != null && device.PFCSCEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "PFCS", device.PFCSCEF);
+                                        await CEFAddAsync(deviceUpdate, "PFCS", device.PFCSCEF, ARVersion);
                                     }
                                     if (device.NF3CEF != null && device.NF3CEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "NF3", device.NF3CEF);
+                                        await CEFAddAsync(deviceUpdate, "NF3", device.NF3CEF, ARVersion);
                                     }
                                     if (device.SF6CEF != null && device.SF6CEF != 0)
                                     {
-                                        await CEFAddAsync(deviceUpdate, "SF6", device.SF6CEF);
+                                        await CEFAddAsync(deviceUpdate, "SF6", device.SF6CEF, ARVersion);
                                     }
                                 }
                             }
@@ -954,9 +963,8 @@ namespace Carbon_inventory_platform.Controllers
 
         public async Task<GHG?> GHGCheckAsync(Guid id, string name, string material, string scope, string emisspatern, int year) //排放源Id, 排放源名稱, 物料名稱, 類別, 排放型式
         {
-            var Device = await _context.Devices.FindAsync(id);
-            //var GWP = await _context.GWPs.OrderBy(x => x.GWP_Year).Where(x => x.GWP_Year <= Device.Year.Num).ToListAsync();
-            var GWP = await _context.GWPs.ToListAsync();
+            var Device = await _context.Devices.Include(x => x.Area).Where(x => x.Id == id).FirstOrDefaultAsync();
+            var GWP = await _context.GWPs.Where(x => x.ARCount == Device.Area.ARVersion).ToListAsync();
             var MaterialList = await _context.Materials
             .Where(x => x.Name == material && x.Scope == scope && x.EmissionPattern == emisspatern && x.Year <= year).ToListAsync();
             var Material = MaterialList.OrderByDescending(x => x.Year).FirstOrDefault();
@@ -1142,11 +1150,11 @@ namespace Carbon_inventory_platform.Controllers
             return null;
         }
 
-        public async Task<GHG?> CEFAddAsync(Device device, string GHG, decimal? CEF)
+        public async Task<GHG?> CEFAddAsync(Device device, string GHG, decimal? CEF, int ARVersion) //自訂排放係數
         {
 
             //var GWP = await _context.GWPs.OrderBy(x => x.GWP_Year).Where(x => x.GWP_Year <= device.Year.Num).ToListAsync();
-            var GWP = await _context.GWPs.ToListAsync();
+            var GWP = await _context.GWPs.Where(x => x.ARCount == ARVersion).ToListAsync();
             if (ModelState.IsValid)
             {
 
