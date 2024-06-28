@@ -1,0 +1,316 @@
+﻿@model Carbon_inventory_platform.ViewModel.DeviceViewModel
+
+@{
+    ViewData["Title"] = "排放源資料維護";
+}
+
+<h1>@ViewData["Title"] </h1>
+<h4>@Model.Name</h4>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<form asp-action="Edit">
+    <div class="row">
+        <div class="col-md-4">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" id="id" />
+            <input type="hidden" asp-for="AreaId" class="form-control" />
+            
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label><span style="color:red">*</span>
+                <select asp-for="Name" class="form-control" id="nameDropdown" asp-items="ViewBag.Name"></select>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="OtherName" style="display:none;">
+                <label asp-for="OtherName" class="control-label"></label><span style="color:red">*</span>
+                <input asp-for="OtherName" class="form-control" id="OtherNameText" />
+                <span asp-validation-for="OtherName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NameRemark" class="control-label"></label>
+                <input asp-for="NameRemark" class="form-control" id="NameRemarkText"/>
+                <span asp-validation-for="NameRemark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Scope" class="control-label"></label><span style="color:red">*</span>
+                <select asp-for="Scope" class="form-control" id="scopeDropdown" asp-items="ViewBag.Scope"></select>
+                <span asp-validation-for="Scope" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmissionPattern" class="control-label"></label><span style="color:red">*</span>
+                <select asp-for="EmissionPattern" class="form-control" id="emissionDropdown" asp-items="ViewBag.EmissionPattern"></select>
+                <span asp-validation-for="EmissionPattern" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Material" class="control-label"></label><span style="color:red">*</span>
+                <select asp-for="Material" class="form-control" id="MaterialDropdown" asp-items=" ViewBag.Material"></select>
+                <span asp-validation-for="Material" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AssetNo" class="control-label"></label>
+                <input asp-for="AssetNo" class="form-control" />
+                <span asp-validation-for="AssetNo" class="text-danger"></span>
+            </div><div class="form-group">
+                <label asp-for="Provess" class="control-label"></label>
+                <input asp-for="Provess" class="form-control" />
+                <span asp-validation-for="Provess" class="text-danger"></span>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" value="True" id="CEFCustomize">
+                <input asp-for="Customize" type="hidden" id="CEFCustomizeHidden">
+                <label asp-for="Customize" class="form-check-label" for="flexCheckChecked"></label>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="確認" class="btn btn-primary" id="submitBtn" />|
+                <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
+
+            </div>
+        </div>
+
+        <div class="col-md-4" id="CEF" style="display:none;">
+            <label asp-for="CO2CEF" class="control-label"></label>
+            <input asp-for="CO2CEF" class="form-control cef-input" id="CO2CEF" type="number" step="0.0000000001" />
+            <label asp-for="CH4CEF" class="control-label"></label>
+            <input asp-for="CH4CEF" class="form-control cef-input" id="CH4CEF" type="number" step="0.0000000001" />
+            <label asp-for="N2OCEF" class="control-label"></label>
+            <input asp-for="N2OCEF" class="form-control cef-input" id="N2OCEF" type="number" step="0.0000000001" />
+            <label asp-for="HFCSCEF" class="control-label"></label>
+            <input asp-for="HFCSCEF" class="form-control cef-input" id="HFCSCEF" type="number" step="0.0000000001" />
+            <label asp-for="PFCSCEF" class="control-label"></label>
+            <input asp-for="PFCSCEF" class="form-control cef-input" id="PFCSCEF" type="number" step="0.0000000001" />
+            <label asp-for="SF6CEF" class="control-label"></label>
+            <input asp-for="SF6CEF" class="form-control cef-input" id="SF6CEF" type="number" step="0.0000000001" />
+            <label asp-for="NF3CEF" class="control-label"></label>
+            <input asp-for="NF3CEF" class="form-control cef-input" id="NF3CEF" type="number" step="0.0000000001" />
+        </div>
+    </div>
+</form>
+
+@section scripts
+{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // 加載頁面時立即執行的程式碼
+            loadDeviceData();
+            OtherName();
+            checkCEF();
+
+            // nameDropdown 的 change 事件處理
+            $('#nameDropdown').change(function () {
+                var selectedName = $(this).val();
+                // 當用戶選擇名字時，重新加載相關數據
+                loadDefaultDeviceData();
+            });
+
+            // scopeDropdown 的 change 事件處理
+            $('#scopeDropdown').change(function () {
+                var selectedScope = $(this).val();
+                // 當類別選項改變時，重新加載相關數據
+                loadEmissionsAndMaterial(selectedScope);
+            });
+
+            // emissionDropdown 的 change 事件處理
+            $('#emissionDropdown').change(function () {
+                var selectedEmission = $(this).val();
+                // 當排放選項改變時，重新加載相關數據
+                loadMaterialsAndGWPNames(selectedEmission);
+            });
+
+            // 抓取選擇的排放源名稱
+            function loadDeviceData() {
+                var id = $('#id').val();
+                $.ajax({
+                    url: '/Devices/GetDeviceData',
+                    type: 'GET',
+                    data: { id: id },
+                    async: false,
+                    success: function (data) {
+                        var selectedScope = data.scope; //類別
+                        var selectedEmission = data.emissionPattern; //排放型式
+                        var selectedMaterial = data.material; //原物料
+                        loadEmissions(selectedScope);
+                        setTimeout(() => {
+                            loadMaterialsAndGWPNames(selectedEmission, selectedMaterial);
+                        }, 10) //設定延遲
+
+                        $('#emissionDropdown').val(selectedEmission);
+                        //$('#MaterialDropdown').val(selectedMaterial);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            // 抓取選擇的排放源名稱
+            function loadDefaultDeviceData() {
+                var selectedName = $('#nameDropdown').val();
+                $.ajax({
+                    url: '/Devices/GetDefaultDeviceData',
+                    type: 'GET',
+                    data: { selectedName: selectedName },
+                    async: false,
+                    success: function (data) {
+                        var selectedScope = data.scope; //類別
+                        var selectedEmission = data.emissionPattern; //排放型式
+                        var selectedMaterial = data.material; //原物料
+                        loadEmissions(selectedScope);
+                        setTimeout(() => {
+                            loadMaterialsAndGWPNames(selectedEmission, selectedMaterial);
+                        }, 10) //設定延遲
+
+                        $('#emissionDropdown').val(selectedEmission);
+                        //$('#MaterialDropdown').val(selectedMaterial);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            // 當類別下拉選單改變時，依據類別抓取排放源的所有排放型式
+            function loadEmissions(selectedScope) {
+                $.ajax({
+                    url: '/Devices/GetEmissions',
+                    type: 'GET',
+                    data: { scope: selectedScope },
+                    success: function (data) {
+                        $('#emissionDropdown').empty(); //清空排放源下拉選單
+                        $.each(data, function (i, item) {
+                            $('#emissionDropdown').append($('<option>', {
+                                value: item,
+                                text: item
+                            }));
+                        });
+                        $('#scopeDropdown').val(selectedScope);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+            function loadEmissionsAndMaterial(selectedScope) {
+                $.ajax({
+                    url: '/Devices/GetEmissions',
+                    type: 'GET',
+                    data: { scope: selectedScope },
+                    success: function (data) {
+                        $('#emissionDropdown').empty(); //清空排放源下拉選單
+                        $.each(data, function (i, item) {
+                            $('#emissionDropdown').append($('<option>', {
+                                value: item,
+                                text: item
+                            }));
+                        });
+                        $('#scopeDropdown').val(selectedScope);
+                        $('#emissionDropdown').trigger('change'); //觸發排放型式下拉選項改變
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            // 當排放型式下拉選單改變時，依據排放型式抓取所有物料
+            function loadMaterialsAndGWPNames(selectedEmission, selectedMaterial) {
+                $.ajax({
+                    url: '/Devices/GetMaterialsAndGWPNames',
+                    type: 'GET',
+                    data: { emissionPattern: selectedEmission },
+                    success: function (data) {
+                        $('#MaterialDropdown').empty();
+                        $.each(data.materials, function (i, item) {
+                            $('#MaterialDropdown').append($('<option>', {
+                                value: item.name,
+                                text: item.name
+                            }));
+                        });
+                        $.each(data.gwpNames, function (i, item) {
+                            $('#MaterialDropdown').append($('<option>', {
+                                value: item.name,
+                                text: item.name
+                            }));
+                        });
+                        $('#emissionDropdown').val(selectedEmission);
+                        if (selectedMaterial != null) {
+                            $('#MaterialDropdown').val(selectedMaterial);
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            // nameDropdown 的值為 "其他" 時，顯示 OtherName
+            $('#nameDropdown').change(function () {
+                OtherName();
+            });
+
+            $('#CEFCustomize').change(function () {
+                CEFCustomize();
+            });
+
+            function CEFCustomize() {
+                if ($('#CEFCustomize').prop('checked')) {
+                    // 如果 CEFCustomize 被选中，则显示相关的元素或执行其他操作
+                    $('#CEF').show();
+                    $('#CEFCustomizeHidden').val('true');
+                } else {
+                    // 如果 CEFCustomize 没有被选中，则隐藏相关的元素或执行其他操作
+                    $('#CEF').hide();
+                    $('#CEFCustomizeHidden').val('false');
+                }
+            }
+
+            function OtherName() {
+                if ($('#nameDropdown').val() === '其他') {
+                    $('#OtherName').show();
+                    $('#OtherNameText').prop('required', true);
+                    $('#CEFCustomize').prop('checked', true).prop('disabled', true).trigger('change');
+                } else {
+                    $('#OtherName').hide();
+                    $('#OtherNameText').prop('required', false);
+                    $('#CEFCustomize').prop('checked', false).prop('disabled', false).trigger('change');
+                }
+            }
+
+            function checkCEF() {
+                if ($('#CEFCustomizeHidden').val() === 'True') {
+                    $('#CEFCustomize').prop('checked', true);
+                    $('#CEF').show();
+                } else {
+                    $('#CEFCustomize').prop('checked', false);
+                    $('#CEF').hide();
+                }
+            }
+
+
+            $('#submitBtn').click(function () {
+                // 如果 CEFCustomize 复选框被选中，或者 CEF 区域可见
+                if ($('#CEFCustomize').prop('checked') || $('#CEF').is(':visible')) {
+                    var totalCef = 0; // 初始化总和
+
+                    // 计算所有输入字段的值的总和
+                    $('.cef-input').each(function () {
+                        var value = parseFloat($(this).val().trim());
+                        if (!isNaN(value)) {
+                            totalCef += value;
+                        }
+                    });
+
+                    // 如果总和小于等于0，则显示警告
+                    if (totalCef <= 0) {
+                        alert('請輸入自訂排放係數');
+                        return false; // 阻止提交表单
+                    }
+                }
+            });
+
+
+        });
+
+    </script>
+}

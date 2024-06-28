@@ -1,0 +1,109 @@
+﻿@model Carbon_inventory_platform.Models.Area
+
+@{
+    ViewData["Title"] = "邊界資料維護";
+}
+
+<h1>@ViewData["Title"]</h1>
+<h4>@TempData.Peek("companyName")</h4>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group" style="display: none;">
+                <label asp-for="CompanyId" class="control-label"></label>
+                <span asp-validation-for="CompanyId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UniqueCode" class="control-label"></label><span style="color:red">*</span>
+                <input asp-for="UniqueCode" placeholder="請填寫統一編號" class="form-control" />
+                <span asp-validation-for="UniqueCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FactorCode" class="control-label"></label><span style="color:red">*</span>
+                <input asp-for="FactorCode" placeholder="請填寫工廠登記編號" class="form-control" />
+                <span asp-validation-for="FactorCode" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display: none;">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display: none;">
+                <label asp-for="District" class="control-label"></label>
+                <input asp-for="District" class="form-control" />
+                <span asp-validation-for="District" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display: none;">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FullAddress" class="control-label"></label><span style="color:red">*</span>
+                <input asp-for="FullAddress" placeholder="請填寫工廠地址" class="form-control" />
+                <span asp-validation-for="FullAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Year" class="control-label"></label><span style="color:red">*</span>
+                <input asp-for="Year" placeholder="請填寫民國盤查年度" class="form-control" />
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ARVersion" class="control-label"></label><span style="color:red">*</span>
+                <select asp-for="ARVersion" class="form-control">
+                    @foreach (var item in ViewBag.ARVersion)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+                <span asp-validation-for="ARVersion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Type" class="control-label"></label>
+                <input asp-for="Type" placeholder="請填寫產業別，如：電子業、製造業" class="form-control" />
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrganizationImage" class="control-label"></label>
+                <input asp-for="OrganizationImage" type="file" class="form-control" accept="image/*" />
+            </div>
+            <div class="form-group">
+                <label asp-for="MapImage" class="control-label"></label>
+                <input asp-for="MapImage" type="file" class="form-control" accept="image/*" />
+            </div>
+            <div class="form-group">
+                <label asp-for="ShopDrawings" class="control-label"></label>
+                <input asp-for="ShopDrawings" type="file" class="form-control" accept="image/*" />
+            </div>
+            <div class="form-group">
+                <label asp-for="BaseYear" class="control-label"></label>
+                <input asp-for="BaseYear" />
+                <span asp-validation-for="BaseYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="確認" class="btn btn-primary" />|
+                @if (User.IsInRole("User"))
+                {
+                    <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index">返回</a>
+                }
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="btn btn-secondary" asp-controller="Areas" asp-action="AdminIndex" asp-route-id="@TempData.Peek("companyId")">返回</a>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

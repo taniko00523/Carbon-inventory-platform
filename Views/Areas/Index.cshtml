@@ -1,0 +1,142 @@
+﻿@model IEnumerable<Carbon_inventory_platform.Models.Area>
+@{
+    ViewData["Title"] = "邊界總覽";
+}
+<div class="row">
+    <div class="col">
+        <h1>@ViewData["Title"]</h1>
+        <h3>@TempData.Peek("companyName")</h3>
+        <a class="btn btn-primary" asp-action="Create" asp-route-id=@TempData.Peek("selectedCompanyId")>新增</a>
+        @if (User.IsInRole("Admin"))
+        {
+            <a class="btn btn-secondary" asp-controller="Companies" asp-action="AdminIndex">返回</a>
+        }
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniqueCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FactorCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BaseYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrganizationImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MapImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShopDrawings)
+            </th>
+            <th>設定</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniqueCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FactorCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullAddress)
+                </td>
+                <td>
+                    @if (item.BaseYear == true)
+                    {
+                        <p>V</p>
+                    }
+                    else
+                    {
+               
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <th>
+                    @if (item.OrganizationImagePath != "" && item.OrganizationImagePath != null)
+                    {
+                        <form method="post" asp-action="Image" asp-route-id="@item.Id" asp-route-item="Organization">
+                            <button type="submit" class="btn btn-success">查看圖片</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p>未上傳</p>
+                    }
+                </th>
+                <th>
+                    @if (item.MapImagePath != "" && item.MapImagePath != null)
+                    {
+                        <form method="post" asp-action="Image" asp-route-id="@item.Id" asp-route-item="Map">
+                            <button type="submit" class="btn btn-success">查看圖片</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p>未上傳</p>
+                    }
+                </th>
+                <th>
+                    @if (item.ShopDrawingsPath != "" && item.ShopDrawingsPath != null)
+                    {
+                        <form method="post" asp-action="Image" asp-route-id="@item.Id" asp-route-item="ShopDrawings">
+                            <button type="submit" class="btn btn-success">查看圖片</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p>未上傳</p>
+                    }
+                </th>
+                <td>
+                    @if (item.Name != "")
+                    {
+                        <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.Id">修改</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">填寫</a>
+                    }
+                    <a class="btn btn-info" asp-controller="Devices" asp-action="Index" asp-route-id="@item.Id">排放源資料</a>
+                </td>
+                <td>
+                    <form method="post" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">
+                        <button type="submit" class="btn btn-danger">刪除</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-Carbon_inventory_platform-f19a92ee-d2ab-4dcf-b9e2-42c55370b2e7</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Models\NewFolder1\**" />
+    <Compile Remove="Models\NewFolder\**" />
+    <Compile Remove="Views\Area\**" />
+    <Compile Remove="wwwroot\images\NewFolder\**" />
+    <Content Remove="Models\NewFolder1\**" />
+    <Content Remove="Models\NewFolder\**" />
+    <Content Remove="Views\Area\**" />
+    <Content Remove="wwwroot\images\NewFolder\**" />
+    <EmbeddedResource Remove="Models\NewFolder1\**" />
+    <EmbeddedResource Remove="Models\NewFolder\**" />
+    <EmbeddedResource Remove="Views\Area\**" />
+    <EmbeddedResource Remove="wwwroot\images\NewFolder\**" />
+    <None Remove="Models\NewFolder1\**" />
+    <None Remove="Models\NewFolder\**" />
+    <None Remove="Views\Area\**" />
+    <None Remove="wwwroot\images\NewFolder\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DocX" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Views\Home\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="electron.manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\output\" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties wwwroot_4lib_4bootstrap_4dist_4js_4bootstrap_1js_1map__JsonSchema="" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

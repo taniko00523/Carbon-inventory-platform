@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+此檔案由您的 Web 專案發佈/封裝處理序使用。您可以藉由編輯此 MSBuild 檔案，
+自訂此處理序的行為。若要深入了解，請前往 https://go.microsoft.com/fwlink/?LinkID=208121。 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAWtwfKf/5rkKaeoJ2NKyqFwAAAAACAAAAAAAQZgAAAAEAACAAAAAaprSMyGqxnEzldeN2ES+AV97VBMp6wOY9kyCqcxbFzQAAAAAOgAAAAAIAACAAAACx5D3g59IMqSQSsHyajE1hlmQ6kvkscADZ1Xx9xtQpBIAAAAAW8lJV90avJg7bQNBwtNkAkJQN8YuYGEczePju0OziQXB3fVVtJD9u4sc0k655F2Xz/faTAjh+xqoGVLJNVJdwOrmhXJRizvXPqNIxHBV/mBOVOAzS+USMM3RpH2rcY36/vbYXBWegV8/crAujNYGBO36L0jKBt3T9plHmM/XCq0AAAAAUC1LnezpRYz4cpUVvqK7OxiUEs5MC1/MnBxnlZWWfkcjvinNvAEGLZrj3he4wTi7ECeJE/qWoCcvuRSgTk/Ez</EncryptedPassword>
+    <History>True|2024-06-28T18:45:41.8675910Z;True|2024-06-29T02:30:29.8359758+08:00;True|2024-06-29T02:26:00.6264527+08:00;True|2024-06-29T02:02:45.6118154+08:00;False|2024-06-29T02:02:06.0030213+08:00;False|2024-06-29T01:59:45.8444493+08:00;False|2024-06-29T01:57:51.7298179+08:00;True|2024-06-29T01:48:01.0979063+08:00;True|2024-06-29T01:27:22.3331139+08:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=tcp:cip.database.windows.net,1433%3bInitial Catalog=Carbon inventory platform%3bPersist Security Info=False%3bUser ID=RCLab1234%3bPassword=RCStust1234%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>
