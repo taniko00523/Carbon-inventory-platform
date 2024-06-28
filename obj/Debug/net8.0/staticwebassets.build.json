@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "hPE7k+C1jpItVFGl7kK+GShaUOh2Z7asAkoFflbv79I=",
+  "Hash": "KbUsKLDmZgT5sZdY7pLfCbzUeVdXhMWvt1fa10tbnmE=",
   "Source": "Carbon_inventory_platform",
   "BasePath": "_content/Carbon_inventory_platform",
   "Mode": "Default",
@@ -10,7 +10,7 @@
     {
       "Name": "Carbon_inventory_platform\\wwwroot",
       "Source": "Carbon_inventory_platform",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "Pattern": "**"
     }
@@ -1157,10 +1157,10 @@
       "OriginalItemSpec": "C:\\Users\\jsj00\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\8.0.6\\staticwebassets\\V5\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Carbon_inventory_platform.styles.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Carbon_inventory_platform.styles.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Computed",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "Carbon_inventory_platform.styles.css",
       "AssetKind": "All",
@@ -1173,13 +1173,13 @@
       "AssetTraitValue": "ApplicationBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Carbon_inventory_platform.styles.css"
+      "OriginalItemSpec": "D:\\C#\\Carbon-inventory-platform\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Carbon_inventory_platform.styles.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Carbon_inventory_platform.bundle.scp.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Carbon_inventory_platform.bundle.scp.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Computed",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "Carbon_inventory_platform.bundle.scp.css",
       "AssetKind": "All",
@@ -1192,13 +1192,13 @@
       "AssetTraitValue": "ProjectBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Carbon_inventory_platform.bundle.scp.css"
+      "OriginalItemSpec": "D:\\C#\\Carbon-inventory-platform\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Carbon_inventory_platform.bundle.scp.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\css\\site.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\css\\site.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "css/site.css",
       "AssetKind": "All",
@@ -1214,10 +1214,10 @@
       "OriginalItemSpec": "wwwroot\\css\\site.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\doc\\溫盤報告書範本3.docx",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\doc\\溫盤報告書範本3.docx",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "doc/溫盤報告書範本3.docx",
       "AssetKind": "All",
@@ -1233,10 +1233,10 @@
       "OriginalItemSpec": "wwwroot\\doc\\溫盤報告書範本3.docx"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\favicon.ico",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\favicon.ico",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "favicon.ico",
       "AssetKind": "All",
@@ -1252,10 +1252,10 @@
       "OriginalItemSpec": "wwwroot\\favicon.ico"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\00000000-0000-0000-0000-000000000000\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\00000000-0000-0000-0000-000000000000\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/113374f5-b5c0-4d69-8869-fd3dfc66b32c/00000000-0000-0000-0000-000000000000/Organization.jpg",
       "AssetKind": "All",
@@ -1271,10 +1271,10 @@
       "OriginalItemSpec": "wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\00000000-0000-0000-0000-000000000000\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\96c5be9e-fdb1-48e7-8ada-e6dcce5d1b41\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\96c5be9e-fdb1-48e7-8ada-e6dcce5d1b41\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/113374f5-b5c0-4d69-8869-fd3dfc66b32c/96c5be9e-fdb1-48e7-8ada-e6dcce5d1b41/Map.jpg",
       "AssetKind": "All",
@@ -1290,10 +1290,10 @@
       "OriginalItemSpec": "wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\96c5be9e-fdb1-48e7-8ada-e6dcce5d1b41\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\96c5be9e-fdb1-48e7-8ada-e6dcce5d1b41\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\96c5be9e-fdb1-48e7-8ada-e6dcce5d1b41\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/113374f5-b5c0-4d69-8869-fd3dfc66b32c/96c5be9e-fdb1-48e7-8ada-e6dcce5d1b41/Organization.jpg",
       "AssetKind": "All",
@@ -1309,10 +1309,10 @@
       "OriginalItemSpec": "wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\96c5be9e-fdb1-48e7-8ada-e6dcce5d1b41\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\96c5be9e-fdb1-48e7-8ada-e6dcce5d1b41\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\96c5be9e-fdb1-48e7-8ada-e6dcce5d1b41\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/113374f5-b5c0-4d69-8869-fd3dfc66b32c/96c5be9e-fdb1-48e7-8ada-e6dcce5d1b41/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -1328,10 +1328,10 @@
       "OriginalItemSpec": "wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\96c5be9e-fdb1-48e7-8ada-e6dcce5d1b41\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\e0c0174c-51d9-47a4-9093-cecce84e60e6\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\e0c0174c-51d9-47a4-9093-cecce84e60e6\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/113374f5-b5c0-4d69-8869-fd3dfc66b32c/e0c0174c-51d9-47a4-9093-cecce84e60e6/Map.jpg",
       "AssetKind": "All",
@@ -1347,10 +1347,10 @@
       "OriginalItemSpec": "wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\e0c0174c-51d9-47a4-9093-cecce84e60e6\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\e0c0174c-51d9-47a4-9093-cecce84e60e6\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\e0c0174c-51d9-47a4-9093-cecce84e60e6\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/113374f5-b5c0-4d69-8869-fd3dfc66b32c/e0c0174c-51d9-47a4-9093-cecce84e60e6/Organization.jpg",
       "AssetKind": "All",
@@ -1366,10 +1366,10 @@
       "OriginalItemSpec": "wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\e0c0174c-51d9-47a4-9093-cecce84e60e6\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\e0c0174c-51d9-47a4-9093-cecce84e60e6\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\e0c0174c-51d9-47a4-9093-cecce84e60e6\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/113374f5-b5c0-4d69-8869-fd3dfc66b32c/e0c0174c-51d9-47a4-9093-cecce84e60e6/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -1385,10 +1385,10 @@
       "OriginalItemSpec": "wwwroot\\images\\113374f5-b5c0-4d69-8869-fd3dfc66b32c\\e0c0174c-51d9-47a4-9093-cecce84e60e6\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\261bca68-f514-4e93-96d2-b45005b72e48\\543b62a4-5d1a-498b-91a5-c12192c5c291\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\261bca68-f514-4e93-96d2-b45005b72e48\\543b62a4-5d1a-498b-91a5-c12192c5c291\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/261bca68-f514-4e93-96d2-b45005b72e48/543b62a4-5d1a-498b-91a5-c12192c5c291/Map.jpg",
       "AssetKind": "All",
@@ -1404,10 +1404,10 @@
       "OriginalItemSpec": "wwwroot\\images\\261bca68-f514-4e93-96d2-b45005b72e48\\543b62a4-5d1a-498b-91a5-c12192c5c291\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\261bca68-f514-4e93-96d2-b45005b72e48\\543b62a4-5d1a-498b-91a5-c12192c5c291\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\261bca68-f514-4e93-96d2-b45005b72e48\\543b62a4-5d1a-498b-91a5-c12192c5c291\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/261bca68-f514-4e93-96d2-b45005b72e48/543b62a4-5d1a-498b-91a5-c12192c5c291/Organization.jpg",
       "AssetKind": "All",
@@ -1423,10 +1423,10 @@
       "OriginalItemSpec": "wwwroot\\images\\261bca68-f514-4e93-96d2-b45005b72e48\\543b62a4-5d1a-498b-91a5-c12192c5c291\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\261bca68-f514-4e93-96d2-b45005b72e48\\543b62a4-5d1a-498b-91a5-c12192c5c291\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\261bca68-f514-4e93-96d2-b45005b72e48\\543b62a4-5d1a-498b-91a5-c12192c5c291\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/261bca68-f514-4e93-96d2-b45005b72e48/543b62a4-5d1a-498b-91a5-c12192c5c291/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -1442,10 +1442,10 @@
       "OriginalItemSpec": "wwwroot\\images\\261bca68-f514-4e93-96d2-b45005b72e48\\543b62a4-5d1a-498b-91a5-c12192c5c291\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\2895f45a-6a35-41ef-9632-e16e9dce19ef\\78badcf4-31bc-4fbe-972f-5da42652e32d\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\2895f45a-6a35-41ef-9632-e16e9dce19ef\\78badcf4-31bc-4fbe-972f-5da42652e32d\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/2895f45a-6a35-41ef-9632-e16e9dce19ef/78badcf4-31bc-4fbe-972f-5da42652e32d/Map.jpg",
       "AssetKind": "All",
@@ -1461,10 +1461,10 @@
       "OriginalItemSpec": "wwwroot\\images\\2895f45a-6a35-41ef-9632-e16e9dce19ef\\78badcf4-31bc-4fbe-972f-5da42652e32d\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\2895f45a-6a35-41ef-9632-e16e9dce19ef\\78badcf4-31bc-4fbe-972f-5da42652e32d\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\2895f45a-6a35-41ef-9632-e16e9dce19ef\\78badcf4-31bc-4fbe-972f-5da42652e32d\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/2895f45a-6a35-41ef-9632-e16e9dce19ef/78badcf4-31bc-4fbe-972f-5da42652e32d/Organization.jpg",
       "AssetKind": "All",
@@ -1480,10 +1480,10 @@
       "OriginalItemSpec": "wwwroot\\images\\2895f45a-6a35-41ef-9632-e16e9dce19ef\\78badcf4-31bc-4fbe-972f-5da42652e32d\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\2895f45a-6a35-41ef-9632-e16e9dce19ef\\78badcf4-31bc-4fbe-972f-5da42652e32d\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\2895f45a-6a35-41ef-9632-e16e9dce19ef\\78badcf4-31bc-4fbe-972f-5da42652e32d\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/2895f45a-6a35-41ef-9632-e16e9dce19ef/78badcf4-31bc-4fbe-972f-5da42652e32d/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -1499,10 +1499,10 @@
       "OriginalItemSpec": "wwwroot\\images\\2895f45a-6a35-41ef-9632-e16e9dce19ef\\78badcf4-31bc-4fbe-972f-5da42652e32d\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\30dc16bf-247d-4d04-8d75-28d57f99a0bd\\f1c8035f-ca41-4900-b32d-637cc19d7ed2\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\30dc16bf-247d-4d04-8d75-28d57f99a0bd\\f1c8035f-ca41-4900-b32d-637cc19d7ed2\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/30dc16bf-247d-4d04-8d75-28d57f99a0bd/f1c8035f-ca41-4900-b32d-637cc19d7ed2/Map.jpg",
       "AssetKind": "All",
@@ -1518,10 +1518,10 @@
       "OriginalItemSpec": "wwwroot\\images\\30dc16bf-247d-4d04-8d75-28d57f99a0bd\\f1c8035f-ca41-4900-b32d-637cc19d7ed2\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\30dc16bf-247d-4d04-8d75-28d57f99a0bd\\f1c8035f-ca41-4900-b32d-637cc19d7ed2\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\30dc16bf-247d-4d04-8d75-28d57f99a0bd\\f1c8035f-ca41-4900-b32d-637cc19d7ed2\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/30dc16bf-247d-4d04-8d75-28d57f99a0bd/f1c8035f-ca41-4900-b32d-637cc19d7ed2/Organization.jpg",
       "AssetKind": "All",
@@ -1537,10 +1537,10 @@
       "OriginalItemSpec": "wwwroot\\images\\30dc16bf-247d-4d04-8d75-28d57f99a0bd\\f1c8035f-ca41-4900-b32d-637cc19d7ed2\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\30dc16bf-247d-4d04-8d75-28d57f99a0bd\\f1c8035f-ca41-4900-b32d-637cc19d7ed2\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\30dc16bf-247d-4d04-8d75-28d57f99a0bd\\f1c8035f-ca41-4900-b32d-637cc19d7ed2\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/30dc16bf-247d-4d04-8d75-28d57f99a0bd/f1c8035f-ca41-4900-b32d-637cc19d7ed2/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -1556,10 +1556,10 @@
       "OriginalItemSpec": "wwwroot\\images\\30dc16bf-247d-4d04-8d75-28d57f99a0bd\\f1c8035f-ca41-4900-b32d-637cc19d7ed2\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\33c67266-0557-424d-b474-8875b4a42cb3\\dfcfebb3-5ddf-4be8-8dee-f3986582681c\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\33c67266-0557-424d-b474-8875b4a42cb3\\dfcfebb3-5ddf-4be8-8dee-f3986582681c\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/33c67266-0557-424d-b474-8875b4a42cb3/dfcfebb3-5ddf-4be8-8dee-f3986582681c/Map.jpg",
       "AssetKind": "All",
@@ -1575,10 +1575,10 @@
       "OriginalItemSpec": "wwwroot\\images\\33c67266-0557-424d-b474-8875b4a42cb3\\dfcfebb3-5ddf-4be8-8dee-f3986582681c\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\33c67266-0557-424d-b474-8875b4a42cb3\\dfcfebb3-5ddf-4be8-8dee-f3986582681c\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\33c67266-0557-424d-b474-8875b4a42cb3\\dfcfebb3-5ddf-4be8-8dee-f3986582681c\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/33c67266-0557-424d-b474-8875b4a42cb3/dfcfebb3-5ddf-4be8-8dee-f3986582681c/Organization.jpg",
       "AssetKind": "All",
@@ -1594,10 +1594,10 @@
       "OriginalItemSpec": "wwwroot\\images\\33c67266-0557-424d-b474-8875b4a42cb3\\dfcfebb3-5ddf-4be8-8dee-f3986582681c\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\33c67266-0557-424d-b474-8875b4a42cb3\\dfcfebb3-5ddf-4be8-8dee-f3986582681c\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\33c67266-0557-424d-b474-8875b4a42cb3\\dfcfebb3-5ddf-4be8-8dee-f3986582681c\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/33c67266-0557-424d-b474-8875b4a42cb3/dfcfebb3-5ddf-4be8-8dee-f3986582681c/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -1613,10 +1613,10 @@
       "OriginalItemSpec": "wwwroot\\images\\33c67266-0557-424d-b474-8875b4a42cb3\\dfcfebb3-5ddf-4be8-8dee-f3986582681c\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\36e2a413-e369-4bdf-9350-64b6bea63fb7\\395a93a5-837b-46ee-a6a7-bbed06ff4632\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\36e2a413-e369-4bdf-9350-64b6bea63fb7\\395a93a5-837b-46ee-a6a7-bbed06ff4632\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/36e2a413-e369-4bdf-9350-64b6bea63fb7/395a93a5-837b-46ee-a6a7-bbed06ff4632/Map.jpg",
       "AssetKind": "All",
@@ -1632,10 +1632,10 @@
       "OriginalItemSpec": "wwwroot\\images\\36e2a413-e369-4bdf-9350-64b6bea63fb7\\395a93a5-837b-46ee-a6a7-bbed06ff4632\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\36e2a413-e369-4bdf-9350-64b6bea63fb7\\395a93a5-837b-46ee-a6a7-bbed06ff4632\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\36e2a413-e369-4bdf-9350-64b6bea63fb7\\395a93a5-837b-46ee-a6a7-bbed06ff4632\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/36e2a413-e369-4bdf-9350-64b6bea63fb7/395a93a5-837b-46ee-a6a7-bbed06ff4632/Organization.jpg",
       "AssetKind": "All",
@@ -1651,10 +1651,10 @@
       "OriginalItemSpec": "wwwroot\\images\\36e2a413-e369-4bdf-9350-64b6bea63fb7\\395a93a5-837b-46ee-a6a7-bbed06ff4632\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\36e2a413-e369-4bdf-9350-64b6bea63fb7\\395a93a5-837b-46ee-a6a7-bbed06ff4632\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\36e2a413-e369-4bdf-9350-64b6bea63fb7\\395a93a5-837b-46ee-a6a7-bbed06ff4632\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/36e2a413-e369-4bdf-9350-64b6bea63fb7/395a93a5-837b-46ee-a6a7-bbed06ff4632/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -1670,10 +1670,10 @@
       "OriginalItemSpec": "wwwroot\\images\\36e2a413-e369-4bdf-9350-64b6bea63fb7\\395a93a5-837b-46ee-a6a7-bbed06ff4632\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\3e381be9-a313-4d3f-b061-ecef86f1b385\\f810d550-0e6e-4170-a09a-099ecab8c4da\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\3e381be9-a313-4d3f-b061-ecef86f1b385\\f810d550-0e6e-4170-a09a-099ecab8c4da\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/3e381be9-a313-4d3f-b061-ecef86f1b385/f810d550-0e6e-4170-a09a-099ecab8c4da/Map.jpg",
       "AssetKind": "All",
@@ -1689,10 +1689,10 @@
       "OriginalItemSpec": "wwwroot\\images\\3e381be9-a313-4d3f-b061-ecef86f1b385\\f810d550-0e6e-4170-a09a-099ecab8c4da\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\3e381be9-a313-4d3f-b061-ecef86f1b385\\f810d550-0e6e-4170-a09a-099ecab8c4da\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\3e381be9-a313-4d3f-b061-ecef86f1b385\\f810d550-0e6e-4170-a09a-099ecab8c4da\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/3e381be9-a313-4d3f-b061-ecef86f1b385/f810d550-0e6e-4170-a09a-099ecab8c4da/Organization.jpg",
       "AssetKind": "All",
@@ -1708,10 +1708,10 @@
       "OriginalItemSpec": "wwwroot\\images\\3e381be9-a313-4d3f-b061-ecef86f1b385\\f810d550-0e6e-4170-a09a-099ecab8c4da\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\3e381be9-a313-4d3f-b061-ecef86f1b385\\f810d550-0e6e-4170-a09a-099ecab8c4da\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\3e381be9-a313-4d3f-b061-ecef86f1b385\\f810d550-0e6e-4170-a09a-099ecab8c4da\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/3e381be9-a313-4d3f-b061-ecef86f1b385/f810d550-0e6e-4170-a09a-099ecab8c4da/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -1727,10 +1727,10 @@
       "OriginalItemSpec": "wwwroot\\images\\3e381be9-a313-4d3f-b061-ecef86f1b385\\f810d550-0e6e-4170-a09a-099ecab8c4da\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\4e34b01b-f808-411b-9207-03cc4e82c922\\c10e784b-ef2f-4f40-94dc-4391b272fa69\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\4e34b01b-f808-411b-9207-03cc4e82c922\\c10e784b-ef2f-4f40-94dc-4391b272fa69\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/4e34b01b-f808-411b-9207-03cc4e82c922/c10e784b-ef2f-4f40-94dc-4391b272fa69/Map.jpg",
       "AssetKind": "All",
@@ -1746,10 +1746,10 @@
       "OriginalItemSpec": "wwwroot\\images\\4e34b01b-f808-411b-9207-03cc4e82c922\\c10e784b-ef2f-4f40-94dc-4391b272fa69\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\4e34b01b-f808-411b-9207-03cc4e82c922\\c10e784b-ef2f-4f40-94dc-4391b272fa69\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\4e34b01b-f808-411b-9207-03cc4e82c922\\c10e784b-ef2f-4f40-94dc-4391b272fa69\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/4e34b01b-f808-411b-9207-03cc4e82c922/c10e784b-ef2f-4f40-94dc-4391b272fa69/Organization.jpg",
       "AssetKind": "All",
@@ -1765,10 +1765,10 @@
       "OriginalItemSpec": "wwwroot\\images\\4e34b01b-f808-411b-9207-03cc4e82c922\\c10e784b-ef2f-4f40-94dc-4391b272fa69\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\4e34b01b-f808-411b-9207-03cc4e82c922\\c10e784b-ef2f-4f40-94dc-4391b272fa69\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\4e34b01b-f808-411b-9207-03cc4e82c922\\c10e784b-ef2f-4f40-94dc-4391b272fa69\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/4e34b01b-f808-411b-9207-03cc4e82c922/c10e784b-ef2f-4f40-94dc-4391b272fa69/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -1784,10 +1784,10 @@
       "OriginalItemSpec": "wwwroot\\images\\4e34b01b-f808-411b-9207-03cc4e82c922\\c10e784b-ef2f-4f40-94dc-4391b272fa69\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\872b5299-a919-4085-ad63-3c073077c89f\\5fbc6003-8061-465f-beb1-12be52a9e725\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\872b5299-a919-4085-ad63-3c073077c89f\\5fbc6003-8061-465f-beb1-12be52a9e725\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/872b5299-a919-4085-ad63-3c073077c89f/5fbc6003-8061-465f-beb1-12be52a9e725/Map.jpg",
       "AssetKind": "All",
@@ -1803,10 +1803,10 @@
       "OriginalItemSpec": "wwwroot\\images\\872b5299-a919-4085-ad63-3c073077c89f\\5fbc6003-8061-465f-beb1-12be52a9e725\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\872b5299-a919-4085-ad63-3c073077c89f\\5fbc6003-8061-465f-beb1-12be52a9e725\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\872b5299-a919-4085-ad63-3c073077c89f\\5fbc6003-8061-465f-beb1-12be52a9e725\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/872b5299-a919-4085-ad63-3c073077c89f/5fbc6003-8061-465f-beb1-12be52a9e725/Organization.jpg",
       "AssetKind": "All",
@@ -1822,10 +1822,10 @@
       "OriginalItemSpec": "wwwroot\\images\\872b5299-a919-4085-ad63-3c073077c89f\\5fbc6003-8061-465f-beb1-12be52a9e725\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\872b5299-a919-4085-ad63-3c073077c89f\\5fbc6003-8061-465f-beb1-12be52a9e725\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\872b5299-a919-4085-ad63-3c073077c89f\\5fbc6003-8061-465f-beb1-12be52a9e725\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/872b5299-a919-4085-ad63-3c073077c89f/5fbc6003-8061-465f-beb1-12be52a9e725/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -1841,10 +1841,10 @@
       "OriginalItemSpec": "wwwroot\\images\\872b5299-a919-4085-ad63-3c073077c89f\\5fbc6003-8061-465f-beb1-12be52a9e725\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\908018fa-d26f-415c-8e5e-204c4398ce53\\e4c53e10-c2aa-4a99-b320-dc02194693c9\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\908018fa-d26f-415c-8e5e-204c4398ce53\\e4c53e10-c2aa-4a99-b320-dc02194693c9\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/908018fa-d26f-415c-8e5e-204c4398ce53/e4c53e10-c2aa-4a99-b320-dc02194693c9/Map.jpg",
       "AssetKind": "All",
@@ -1860,10 +1860,10 @@
       "OriginalItemSpec": "wwwroot\\images\\908018fa-d26f-415c-8e5e-204c4398ce53\\e4c53e10-c2aa-4a99-b320-dc02194693c9\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\908018fa-d26f-415c-8e5e-204c4398ce53\\e4c53e10-c2aa-4a99-b320-dc02194693c9\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\908018fa-d26f-415c-8e5e-204c4398ce53\\e4c53e10-c2aa-4a99-b320-dc02194693c9\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/908018fa-d26f-415c-8e5e-204c4398ce53/e4c53e10-c2aa-4a99-b320-dc02194693c9/Organization.jpg",
       "AssetKind": "All",
@@ -1879,10 +1879,10 @@
       "OriginalItemSpec": "wwwroot\\images\\908018fa-d26f-415c-8e5e-204c4398ce53\\e4c53e10-c2aa-4a99-b320-dc02194693c9\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\908018fa-d26f-415c-8e5e-204c4398ce53\\e4c53e10-c2aa-4a99-b320-dc02194693c9\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\908018fa-d26f-415c-8e5e-204c4398ce53\\e4c53e10-c2aa-4a99-b320-dc02194693c9\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/908018fa-d26f-415c-8e5e-204c4398ce53/e4c53e10-c2aa-4a99-b320-dc02194693c9/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -1898,10 +1898,10 @@
       "OriginalItemSpec": "wwwroot\\images\\908018fa-d26f-415c-8e5e-204c4398ce53\\e4c53e10-c2aa-4a99-b320-dc02194693c9\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\00000000-0000-0000-0000-000000000000\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\00000000-0000-0000-0000-000000000000\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd/00000000-0000-0000-0000-000000000000/Map.jpg",
       "AssetKind": "All",
@@ -1917,10 +1917,10 @@
       "OriginalItemSpec": "wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\00000000-0000-0000-0000-000000000000\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\00000000-0000-0000-0000-000000000000\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\00000000-0000-0000-0000-000000000000\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd/00000000-0000-0000-0000-000000000000/Organization.jpg",
       "AssetKind": "All",
@@ -1936,10 +1936,10 @@
       "OriginalItemSpec": "wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\00000000-0000-0000-0000-000000000000\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\00000000-0000-0000-0000-000000000000\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\00000000-0000-0000-0000-000000000000\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd/00000000-0000-0000-0000-000000000000/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -1955,10 +1955,10 @@
       "OriginalItemSpec": "wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\00000000-0000-0000-0000-000000000000\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\6b5363b0-c9e4-4b3d-b221-66a62fd97e96\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\6b5363b0-c9e4-4b3d-b221-66a62fd97e96\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd/6b5363b0-c9e4-4b3d-b221-66a62fd97e96/Map.jpg",
       "AssetKind": "All",
@@ -1974,10 +1974,10 @@
       "OriginalItemSpec": "wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\6b5363b0-c9e4-4b3d-b221-66a62fd97e96\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\6b5363b0-c9e4-4b3d-b221-66a62fd97e96\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\6b5363b0-c9e4-4b3d-b221-66a62fd97e96\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd/6b5363b0-c9e4-4b3d-b221-66a62fd97e96/Organization.jpg",
       "AssetKind": "All",
@@ -1993,10 +1993,10 @@
       "OriginalItemSpec": "wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\6b5363b0-c9e4-4b3d-b221-66a62fd97e96\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\6b5363b0-c9e4-4b3d-b221-66a62fd97e96\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\6b5363b0-c9e4-4b3d-b221-66a62fd97e96\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd/6b5363b0-c9e4-4b3d-b221-66a62fd97e96/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -2012,10 +2012,10 @@
       "OriginalItemSpec": "wwwroot\\images\\97b62290-e3d9-4fb8-b0c0-a8fbc15b01cd\\6b5363b0-c9e4-4b3d-b221-66a62fd97e96\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\dd4f7557-076e-4708-bfdd-9c33d8fd7f99\\b4d318de-613f-4382-8cb9-c93683ea578f\\Map.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\dd4f7557-076e-4708-bfdd-9c33d8fd7f99\\b4d318de-613f-4382-8cb9-c93683ea578f\\Map.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/dd4f7557-076e-4708-bfdd-9c33d8fd7f99/b4d318de-613f-4382-8cb9-c93683ea578f/Map.jpg",
       "AssetKind": "All",
@@ -2031,10 +2031,10 @@
       "OriginalItemSpec": "wwwroot\\images\\dd4f7557-076e-4708-bfdd-9c33d8fd7f99\\b4d318de-613f-4382-8cb9-c93683ea578f\\Map.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\dd4f7557-076e-4708-bfdd-9c33d8fd7f99\\b4d318de-613f-4382-8cb9-c93683ea578f\\Organization.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\dd4f7557-076e-4708-bfdd-9c33d8fd7f99\\b4d318de-613f-4382-8cb9-c93683ea578f\\Organization.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/dd4f7557-076e-4708-bfdd-9c33d8fd7f99/b4d318de-613f-4382-8cb9-c93683ea578f/Organization.jpg",
       "AssetKind": "All",
@@ -2050,10 +2050,10 @@
       "OriginalItemSpec": "wwwroot\\images\\dd4f7557-076e-4708-bfdd-9c33d8fd7f99\\b4d318de-613f-4382-8cb9-c93683ea578f\\Organization.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\images\\dd4f7557-076e-4708-bfdd-9c33d8fd7f99\\b4d318de-613f-4382-8cb9-c93683ea578f\\ShopDrawings.jpg",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\images\\dd4f7557-076e-4708-bfdd-9c33d8fd7f99\\b4d318de-613f-4382-8cb9-c93683ea578f\\ShopDrawings.jpg",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "images/dd4f7557-076e-4708-bfdd-9c33d8fd7f99/b4d318de-613f-4382-8cb9-c93683ea578f/ShopDrawings.jpg",
       "AssetKind": "All",
@@ -2069,10 +2069,10 @@
       "OriginalItemSpec": "wwwroot\\images\\dd4f7557-076e-4708-bfdd-9c33d8fd7f99\\b4d318de-613f-4382-8cb9-c93683ea578f\\ShopDrawings.jpg"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\js\\site.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\js\\site.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "js/site.js",
       "AssetKind": "All",
@@ -2088,10 +2088,10 @@
       "OriginalItemSpec": "wwwroot\\js\\site.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap.css",
       "AssetKind": "All",
@@ -2107,10 +2107,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap.css.map",
       "AssetKind": "All",
@@ -2126,10 +2126,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap.min.css",
       "AssetKind": "All",
@@ -2145,10 +2145,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap.min.css.map",
       "AssetKind": "All",
@@ -2164,10 +2164,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap.rtl.css",
       "AssetKind": "All",
@@ -2183,10 +2183,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap.rtl.css.map",
       "AssetKind": "All",
@@ -2202,10 +2202,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap.rtl.min.css",
       "AssetKind": "All",
@@ -2221,10 +2221,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap.rtl.min.css.map",
       "AssetKind": "All",
@@ -2240,10 +2240,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-grid.css",
       "AssetKind": "All",
@@ -2259,10 +2259,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-grid.css.map",
       "AssetKind": "All",
@@ -2278,10 +2278,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-grid.min.css",
       "AssetKind": "All",
@@ -2297,10 +2297,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-grid.min.css.map",
       "AssetKind": "All",
@@ -2316,10 +2316,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-grid.rtl.css",
       "AssetKind": "All",
@@ -2335,10 +2335,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-grid.rtl.css.map",
       "AssetKind": "All",
@@ -2354,10 +2354,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css",
       "AssetKind": "All",
@@ -2373,10 +2373,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css.map",
       "AssetKind": "All",
@@ -2392,10 +2392,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-reboot.css",
       "AssetKind": "All",
@@ -2411,10 +2411,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-reboot.css.map",
       "AssetKind": "All",
@@ -2430,10 +2430,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-reboot.min.css",
       "AssetKind": "All",
@@ -2449,10 +2449,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-reboot.min.css.map",
       "AssetKind": "All",
@@ -2468,10 +2468,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-reboot.rtl.css",
       "AssetKind": "All",
@@ -2487,10 +2487,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-reboot.rtl.css.map",
       "AssetKind": "All",
@@ -2506,10 +2506,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css",
       "AssetKind": "All",
@@ -2525,10 +2525,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css.map",
       "AssetKind": "All",
@@ -2544,10 +2544,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-utilities.css",
       "AssetKind": "All",
@@ -2563,10 +2563,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-utilities.css.map",
       "AssetKind": "All",
@@ -2582,10 +2582,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-utilities.min.css",
       "AssetKind": "All",
@@ -2601,10 +2601,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-utilities.min.css.map",
       "AssetKind": "All",
@@ -2620,10 +2620,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-utilities.rtl.css",
       "AssetKind": "All",
@@ -2639,10 +2639,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-utilities.rtl.css.map",
       "AssetKind": "All",
@@ -2658,10 +2658,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css",
       "AssetKind": "All",
@@ -2677,10 +2677,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css.map",
       "AssetKind": "All",
@@ -2696,10 +2696,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/js/bootstrap.bundle.js",
       "AssetKind": "All",
@@ -2715,10 +2715,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/js/bootstrap.bundle.js.map",
       "AssetKind": "All",
@@ -2734,10 +2734,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/js/bootstrap.bundle.min.js",
       "AssetKind": "All",
@@ -2753,10 +2753,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/js/bootstrap.bundle.min.js.map",
       "AssetKind": "All",
@@ -2772,10 +2772,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/js/bootstrap.esm.js",
       "AssetKind": "All",
@@ -2791,10 +2791,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/js/bootstrap.esm.js.map",
       "AssetKind": "All",
@@ -2810,10 +2810,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/js/bootstrap.esm.min.js",
       "AssetKind": "All",
@@ -2829,10 +2829,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/js/bootstrap.esm.min.js.map",
       "AssetKind": "All",
@@ -2848,10 +2848,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/js/bootstrap.js",
       "AssetKind": "All",
@@ -2867,10 +2867,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/js/bootstrap.js.map",
       "AssetKind": "All",
@@ -2886,10 +2886,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/js/bootstrap.min.js",
       "AssetKind": "All",
@@ -2905,10 +2905,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/dist/js/bootstrap.min.js.map",
       "AssetKind": "All",
@@ -2924,10 +2924,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\bootstrap\\LICENSE",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/bootstrap/LICENSE",
       "AssetKind": "All",
@@ -2943,10 +2943,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\bootstrap\\LICENSE"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\dist\\jquery.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/jquery/dist/jquery.js",
       "AssetKind": "All",
@@ -2962,10 +2962,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\jquery\\dist\\jquery.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/jquery/dist/jquery.min.js",
       "AssetKind": "All",
@@ -2981,10 +2981,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\jquery\\dist\\jquery.min.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/jquery/dist/jquery.min.map",
       "AssetKind": "All",
@@ -3000,10 +3000,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery\\LICENSE.txt",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/jquery/LICENSE.txt",
       "AssetKind": "All",
@@ -3019,10 +3019,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\jquery\\LICENSE.txt"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/jquery-validation/dist/additional-methods.js",
       "AssetKind": "All",
@@ -3038,10 +3038,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/jquery-validation/dist/additional-methods.min.js",
       "AssetKind": "All",
@@ -3057,10 +3057,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/jquery-validation/dist/jquery.validate.js",
       "AssetKind": "All",
@@ -3076,10 +3076,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/jquery-validation/dist/jquery.validate.min.js",
       "AssetKind": "All",
@@ -3095,10 +3095,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/jquery-validation/LICENSE.md",
       "AssetKind": "All",
@@ -3114,10 +3114,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation\\LICENSE.md"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js",
       "AssetKind": "All",
@@ -3133,10 +3133,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js",
       "AssetKind": "All",
@@ -3152,10 +3152,10 @@
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
     },
     {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "Identity": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
       "SourceId": "Carbon_inventory_platform",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
+      "ContentRoot": "D:\\C#\\Carbon-inventory-platform\\wwwroot\\",
       "BasePath": "_content/Carbon_inventory_platform",
       "RelativePath": "lib/jquery-validation-unobtrusive/LICENSE.txt",
       "AssetKind": "All",
@@ -3169,44 +3169,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
-    },
-    {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\output\\112年度-宏科貿易股份有限公司-溫室氣體盤查報告書.docx",
-      "SourceId": "Carbon_inventory_platform",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
-      "BasePath": "_content/Carbon_inventory_platform",
-      "RelativePath": "output/112年度-宏科貿易股份有限公司-溫室氣體盤查報告書.docx",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\output\\112年度-宏科貿易股份有限公司-溫室氣體盤查報告書.docx"
-    },
-    {
-      "Identity": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\output\\112年度-沛科精密股份有限公司-溫室氣體盤查報告書.docx",
-      "SourceId": "Carbon_inventory_platform",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\wwwroot\\",
-      "BasePath": "_content/Carbon_inventory_platform",
-      "RelativePath": "output/112年度-沛科精密股份有限公司-溫室氣體盤查報告書.docx",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\output\\112年度-沛科精密股份有限公司-溫室氣體盤查報告書.docx"
     }
   ]
 }

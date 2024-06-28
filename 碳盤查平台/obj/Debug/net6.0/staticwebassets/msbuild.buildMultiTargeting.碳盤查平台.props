@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\碳盤查平台.props" />
-</Project>

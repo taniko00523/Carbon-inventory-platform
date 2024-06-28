@@ -8677,11 +8677,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\Carbon_inventory_platform.csproj",
+      "projectUniqueName": "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
       "projectName": "Carbon_inventory_platform",
-      "projectPath": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\Carbon_inventory_platform.csproj",
+      "projectPath": "D:\\C#\\Carbon-inventory-platform\\Carbon_inventory_platform.csproj",
       "packagesPath": "C:\\Users\\jsj00\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jsj00\\OneDrive\\Desktop\\Carbon-inventory-platform 624\\obj\\",
+      "outputPath": "D:\\C#\\Carbon-inventory-platform\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\jsj00\\AppData\\Roaming\\NuGet\\NuGet.Config",
