@@ -5,6 +5,7 @@ using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Carbon_inventory_platform.Filters;
 using Microsoft.AspNetCore.Identity;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -105,7 +106,7 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     if (area.MapImagePath != null)
                     {
-                        string relativePath = GetRelativePath(area.MapImagePath);
+                        string relativePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", area.CompanyId.ToString(), area.Id.ToString(), "Map.jpg");
                         ViewBag.Image = relativePath;
                     }
                 }
@@ -113,7 +114,7 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     if (area.OrganizationImagePath != null)
                     {
-                        string relativePath = GetRelativePath(area.OrganizationImagePath);
+                        string relativePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", area.CompanyId.ToString(), area.Id.ToString(), "Organization.jpg");
                         ViewBag.Image = relativePath;
                     }
                 }
@@ -121,7 +122,7 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     if (area.ShopDrawingsPath != null)
                     {
-                        string relativePath = GetRelativePath(area.ShopDrawingsPath);
+                        string relativePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", area.CompanyId.ToString(), area.Id.ToString(), "ShopDrawings.jpg");
                         ViewBag.Image = relativePath;
                     }
                 }
