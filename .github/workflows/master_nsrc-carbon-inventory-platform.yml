@@ -54,4 +54,4 @@ jobs:
           app-name: 'NSRC-Carbon-inventory-platform'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_15B2C877B15548B5A4A5D787239B81BA }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_154E316FE0AF43D68899ACC63BE77D1A }}
