@@ -65,9 +65,7 @@
                     <td>@gwp.Num.ToString("F2")</td>
                     <td>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal_@gwp.Id">編輯</button>
-                        <form asp-action="Delete" method="post" style="display:inline;">
-                            <input type="hidden" name="id" value="@gwp.Id" />
-                            <input type="hidden" name="searchARcount" value="@searchARcount" />
+                        <form method="post" asp-action="Delete" asp-route-id="@gwp.Id" asp-route-searchARcount="@searchARcount" onsubmit="return confirm('確定要刪除嗎？');">
                             <button type="submit" class="btn btn-danger">刪除</button>
                         </form>
                     </td>

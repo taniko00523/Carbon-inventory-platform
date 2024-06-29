@@ -4,12 +4,12 @@
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
-    {        
+    {
         @if (User.IsInRole("Admin"))
         {
 
             <li class="nav-item">
-                <label class="nav-link text-dark" title="Manage">你好 管理員</label>               
+                <label class="nav-link text-dark" title="Manage">你好 管理員</label>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-controller="User" asp-action="Index">用戶總覽</a>
@@ -31,6 +31,6 @@
     {
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">登入</a>
-        </li>   
+        </li>
     }
 </ul>

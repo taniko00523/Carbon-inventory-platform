@@ -11,12 +11,12 @@ namespace Carbon_inventory_platform.Models
 
         public string UserId { get; set; } // 外來鍵屬性
 
-        [MaxLength(50)]
+        [MaxLength(100)]
         [Display(Name = "公司名稱")]
         [Required(ErrorMessage = "請填寫公司名稱")]
         public string Name { get; set; } = "";
 
-        [MaxLength(10)]
+        [MaxLength(100)]
         [Display(Name = "公司簡稱")]
         public string? EasyName { get; set; } = "";
 

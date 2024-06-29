@@ -89,6 +89,7 @@ namespace Carbon_inventory_platform.Controllers
                 };
                 _context.Add(toCreate);
                 await _context.SaveChangesAsync();
+
                 if (device.Customize == true) // 自訂排放係數被勾選
                 {
                     if (device.CO2CEF != null || // 至少有一個欄位不為 null，執行原有的程式碼
@@ -280,7 +281,6 @@ namespace Carbon_inventory_platform.Controllers
             List<string> excludedOptions = new List<string>();
             Guid areaId = (Guid)TempData.Peek("areaId");
             var arVersion = _context.Areas.Where(x => x.Id == areaId).Select(x => x.ARVersion).FirstOrDefault();
-
             if (emissionPattern == "逸散")
             {
                 excludedOptions = new List<string> {
@@ -467,7 +467,6 @@ namespace Carbon_inventory_platform.Controllers
                                         }
                                     }
                                     int ARVersion = await _context.Areas.Where(x => x.Id == device.AreaId).Select(x => x.ARVersion).FirstOrDefaultAsync();
-
                                     if (device.CO2CEF != null && device.CO2CEF != 0)
                                     {
                                         await CEFAddAsync(deviceUpdate, "CO2", device.CO2CEF, ARVersion);
@@ -530,7 +529,6 @@ namespace Carbon_inventory_platform.Controllers
                                         }
                                     }
                                     int ARVersion = await _context.Areas.Where(x => x.Id == device.AreaId).Select(x => x.ARVersion).FirstOrDefaultAsync();
-
                                     if (device.CO2CEF != null && device.CO2CEF != 0)
                                     {
                                         await CEFAddAsync(deviceUpdate, "CO2", device.CO2CEF, ARVersion);
@@ -1150,11 +1148,11 @@ namespace Carbon_inventory_platform.Controllers
             return null;
         }
 
-        public async Task<GHG?> CEFAddAsync(Device device, string GHG, decimal? CEF, int ARVersion) //自訂排放係數
+        public async Task<GHG?> CEFAddAsync(Device device, string GHG, decimal? CEF, int ARVersion)
         {
 
-            //var GWP = await _context.GWPs.OrderBy(x => x.GWP_Year).Where(x => x.GWP_Year <= device.Year.Num).ToListAsync();
             var GWP = await _context.GWPs.Where(x => x.ARCount == ARVersion).ToListAsync();
+
             if (ModelState.IsValid)
             {
 

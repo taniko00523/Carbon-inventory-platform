@@ -300,7 +300,7 @@ namespace Carbon_inventory_platform.Controllers
                 doc.ReplaceText("[清冊級別補充]", data.all_Grade.ToString());
                 doc.ReplaceText("[95上]", "-" + data.UUL.ToString("N2") + "%");
                 doc.ReplaceText("[95下]", "+" + data.ULL.ToString("N2") + "%");
-
+                
                 if (data.Company.ReportOpening != null)
                 {
                     string trimRO = data.Company.ReportOpening.Replace(" ", "");
@@ -313,13 +313,13 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 if (data.Company.CompanyInformation != null)
                 {
-                    string trimCM = data.Company.CompanyInformation.Replace(" ", "");
+                    string trimCM = data.Company.CompanyInformation.Replace(" ","");
                     trimCM = trimCM.Replace("\r\n", "\r\n    ");
                     doc.ReplaceText("[公司基本資料]", trimCM);
                 }
                 else
-                {
-
+                {　
+        
                     doc.ReplaceText("[公司基本資料]", " ");
                 }
                 if (data.Company.ReportingPurposes != null)
@@ -620,10 +620,11 @@ namespace Carbon_inventory_platform.Controllers
                 //--------------------------------報告邊界
                 GenerateActivityDataTable(doc, device);
 
-                //--------------------------------圖片
-                string mapPath = data.MapImagePath;
-                string organiztionPath = data.OrganizationImagePath;
-                string showDrawingPath = data.ShopDrawingsPath;
+                //--------------------------------圖片               
+                string mapPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), "Map.jpg");
+                string organiztionPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), "Organization.jpg");
+                string showDrawingPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), "ShopDrawings.jpg");
+                
                 if (showDrawingPath != "")
                 {
                     replaceImage(doc, "[廠區圖]", showDrawingPath);

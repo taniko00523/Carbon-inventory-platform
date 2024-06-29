@@ -3,6 +3,7 @@ using System;
 using Carbon_inventory_platform.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -15,25 +16,31 @@ namespace Carbon_inventory_platform.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.17");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.ActivityData", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
                     b.Property<Guid>("DeviceId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Num")
                         .HasColumnType("decimal(18, 4)");
 
                     b.Property<DateTime?>("Time")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("remark")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
 
@@ -42,22 +49,342 @@ namespace Carbon_inventory_platform.Migrations
                     b.ToTable("ActivityDatas");
                 });
 
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Analysis", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AreaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("_21")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_21A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_21B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_21C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_22")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_22A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_22B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_22C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_31")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_31A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_31B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_31C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_32")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_32A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_32B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_32C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_33")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_33A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_33B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_33C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_34")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_34A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_34B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_34C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_35")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_35A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_35B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_35C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_41")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_410")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_410A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_410B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_410C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_411")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_411A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_411B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_411C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_41A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_41B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_41C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_42")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_42A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_42B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_42C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_43")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_43A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_43B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_43C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_44")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_44A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_44B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_44C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_45")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_45A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_45B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_45C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_46")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_46A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_46B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_46C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_47")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_47A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_47B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_47C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_48")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_48A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_48B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_48C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_49")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_49A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_49B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_49C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_51")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_51A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_51B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_51C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_52")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_52A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_52B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_52C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_53")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_53A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_53B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_53C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_54")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_54A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_54B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_54C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_55")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_55A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_55B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_55C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_61")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_61A")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_61B")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_61C")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("isDeleted")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AreaId")
+                        .IsUnique();
+
+                    b.ToTable("Analyses");
+                });
+
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ARVersion")
+                        .HasColumnType("int");
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("All")
                         .HasColumnType("decimal(18, 3)");
 
                     b.Property<bool>("BaseYear")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("CH4")
                         .HasColumnType("decimal(18, 4)");
@@ -68,38 +395,38 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<Guid>("CompanyId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeleteTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("District")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<int>("FactorCode")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("FullAddress")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("HFCS")
                         .HasColumnType("decimal(18, 4)");
 
                     b.Property<string>("MapImagePath")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("N2O")
                         .HasColumnType("decimal(18, 4)");
@@ -108,18 +435,17 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("decimal(18, 4)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("OrganizationImagePath")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PFCS")
                         .HasColumnType("decimal(18, 4)");
 
                     b.Property<int>("PostalCode")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<decimal>("SF6")
                         .HasColumnType("decimal(18, 4)");
@@ -173,12 +499,11 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("decimal(18, 4)");
 
                     b.Property<string>("ShopDrawingsPath")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
-                        .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<decimal>("ULL")
                         .HasColumnType("decimal(18, 2)");
@@ -187,17 +512,17 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<int>("UniqueCode")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("Year")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("all_Grade")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("avg_Grade")
-                        .HasColumnType("REAL");
+                        .HasColumnType("real");
 
                     b.Property<decimal>("cal_all")
                         .HasColumnType("decimal(18, 4)");
@@ -206,19 +531,19 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("decimal(18, 4)");
 
                     b.Property<byte>("isDeleted")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("tinyint");
 
                     b.Property<decimal>("move")
                         .HasColumnType("decimal(18, 4)");
 
                     b.Property<int>("no1_Grade")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("no2_Grade")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("no3_Grade")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<decimal>("non_move")
                         .HasColumnType("decimal(18, 4)");
@@ -300,80 +625,80 @@ namespace Carbon_inventory_platform.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AddressInformation")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CompanyInformation")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContactName")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeleteTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("EasyEnglishName")
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("EasyName")
-                        .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("EnglishName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("GHGInformation")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ReportOpening")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReportingInformation")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReportingPurposes")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Scope1Information")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Scope2Information")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<byte>("isDeleted")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 
@@ -386,27 +711,29 @@ namespace Carbon_inventory_platform.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("EmissionPattern")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Material")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Scope")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -509,80 +836,87 @@ namespace Carbon_inventory_platform.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AreaId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AssetNo")
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("CEF_Correction")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("Customize")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<int>("Data_Correction")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeleteTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Dept")
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("Device_Correction")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("EmissionPattern")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<decimal>("Emissions")
                         .HasColumnType("decimal(18, 4)");
 
                     b.Property<int>("Grade")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Material")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("NameRemark")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("OtherName")
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Provess")
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Remark")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Scope")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Source")
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Unit")
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<decimal>("all_ULL")
                         .HasColumnType("decimal(18, 10)");
@@ -591,10 +925,10 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("decimal(18, 10)");
 
                     b.Property<decimal>("count_ULL")
-                        .HasColumnType("decimal(18, 10)");
+                        .HasColumnType("decimal(25, 10)");
 
                     b.Property<decimal>("count_UUL")
-                        .HasColumnType("decimal(18, 10)");
+                        .HasColumnType("decimal(25, 10)");
 
                     b.Property<decimal>("data_ULL")
                         .HasColumnType("decimal(18, 10)");
@@ -603,7 +937,7 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("decimal(18, 10)");
 
                     b.Property<byte>("isDeleted")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 
@@ -616,36 +950,38 @@ namespace Carbon_inventory_platform.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Data_Correction")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("Device_Correction")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("EmissionPattern")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Material")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Scope")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("unit")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -780,7 +1116,7 @@ namespace Carbon_inventory_platform.Migrations
                             Device_Correction = 3,
                             EmissionPattern = "逸散",
                             Material = "二氧化碳",
-                            Name = "CO2滅火器",
+                            Name = "二氧化碳滅火器",
                             Scope = "類別一",
                             unit = "公斤"
                         },
@@ -800,8 +1136,8 @@ namespace Carbon_inventory_platform.Migrations
                             Id = 14,
                             Data_Correction = 3,
                             Device_Correction = 3,
-                            EmissionPattern = "逸散",
-                            Material = "二氧化碳",
+                            EmissionPattern = "製程",
+                            Material = "WD40",
                             Name = "WD40",
                             Scope = "類別一",
                             unit = "公斤"
@@ -812,7 +1148,7 @@ namespace Carbon_inventory_platform.Migrations
                             Data_Correction = 3,
                             Device_Correction = 3,
                             EmissionPattern = "逸散",
-                            Material = "海龍-1211",
+                            Material = "二氟一氯一溴甲烷",
                             Name = "海龍1211",
                             Scope = "類別一",
                             unit = "公斤"
@@ -837,7 +1173,7 @@ namespace Carbon_inventory_platform.Migrations
                             Material = "廢水處理",
                             Name = "化糞池",
                             Scope = "類別一",
-                            unit = "人"
+                            unit = "人-年"
                         },
                         new
                         {
@@ -937,6 +1273,17 @@ namespace Carbon_inventory_platform.Migrations
                             Name = "瓦斯罐",
                             Scope = "類別一",
                             unit = "公斤"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Data_Correction = 3,
+                            Device_Correction = 3,
+                            EmissionPattern = "逸散",
+                            Material = "HFC-236fa",
+                            Name = "六氟丙烷滅火器",
+                            Scope = "類別一",
+                            unit = "公斤"
                         });
                 });
 
@@ -944,7 +1291,7 @@ namespace Carbon_inventory_platform.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("CEF")
                         .HasColumnType("decimal(18, 10)");
@@ -956,26 +1303,26 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("decimal(18, 10)");
 
                     b.Property<DateTime>("CreateTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeleteTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("DeviceId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Emission")
                         .HasColumnType("decimal(18, 10)");
 
                     b.Property<decimal>("GWP")
-                        .HasColumnType("decimal(18, 10)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<DateTime?>("ModifiedTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("all_ULL")
                         .HasColumnType("decimal(18, 10)");
@@ -984,7 +1331,7 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("decimal(18, 10)");
 
                     b.Property<byte>("isDeleted")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 
@@ -995,127 +1342,187 @@ namespace Carbon_inventory_platform.Migrations
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.GWP", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<int>("GWP_Year")
-                        .HasColumnType("INTEGER");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ARCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Num")
                         .HasColumnType("decimal(18, 10)");
 
-                    b.HasKey("Name");
+                    b.HasKey("Id");
 
                     b.ToTable("GWPs");
 
                     b.HasData(
                         new
                         {
+                            Id = 1,
+                            ARCount = 6,
                             Name = "CO2",
-                            GWP_Year = 2022,
                             Num = 1m
                         },
                         new
                         {
+                            Id = 2,
+                            ARCount = 6,
                             Name = "CH4",
-                            GWP_Year = 2022,
                             Num = 27.9m
                         },
                         new
                         {
+                            Id = 3,
+                            ARCount = 6,
                             Name = "N2O",
-                            GWP_Year = 2022,
                             Num = 273m
                         },
                         new
                         {
+                            Id = 4,
+                            ARCount = 6,
                             Name = "R-12",
-                            GWP_Year = 2022,
                             Num = 12500m
                         },
                         new
                         {
+                            Id = 5,
+                            ARCount = 6,
+                            Name = "R-125",
+                            Num = 3740m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ARCount = 6,
+                            Name = "R-1234yf",
+                            Num = 0.501m
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ARCount = 6,
                             Name = "R-23",
-                            GWP_Year = 2022,
                             Num = 14600m
                         },
                         new
                         {
+                            Id = 8,
+                            ARCount = 6,
                             Name = "R-32",
-                            GWP_Year = 2022,
                             Num = 771m
                         },
                         new
                         {
+                            Id = 9,
+                            ARCount = 6,
                             Name = "R-134A",
-                            GWP_Year = 2022,
                             Num = 1530m
                         },
                         new
                         {
+                            Id = 10,
+                            ARCount = 6,
                             Name = "FM200",
-                            GWP_Year = 2022,
                             Num = 3600m
                         },
                         new
                         {
+                            Id = 11,
+                            ARCount = 6,
                             Name = "R-22",
-                            GWP_Year = 2022,
                             Num = 1960m
                         },
                         new
                         {
+                            Id = 12,
+                            ARCount = 6,
                             Name = "R-410A",
-                            GWP_Year = 2022,
-                            Num = 2256m
+                            Num = 2255.5m
                         },
                         new
                         {
+                            Id = 13,
+                            ARCount = 6,
                             Name = "R-600A",
-                            GWP_Year = 2022,
                             Num = 0.006m
                         },
                         new
                         {
+                            Id = 14,
+                            ARCount = 6,
                             Name = "R-417A",
-                            GWP_Year = 2022,
                             Num = 2127m
                         },
                         new
                         {
+                            Id = 15,
+                            ARCount = 6,
                             Name = "R-404A",
-                            GWP_Year = 2022,
                             Num = 4728m
                         },
                         new
                         {
+                            Id = 16,
+                            ARCount = 6,
                             Name = "R-407C",
-                            GWP_Year = 2022,
                             Num = 1908m
                         },
                         new
                         {
+                            Id = 17,
+                            ARCount = 6,
+                            Name = "R-407F",
+                            Num = 1965.3m
+                        },
+                        new
+                        {
+                            Id = 18,
+                            ARCount = 6,
+                            Name = "R-452A",
+                            Num = 2291.5603m
+                        },
+                        new
+                        {
+                            Id = 19,
+                            ARCount = 6,
                             Name = "R-507A",
-                            GWP_Year = 2022,
                             Num = 4475m
                         },
                         new
                         {
+                            Id = 20,
+                            ARCount = 6,
                             Name = "NF3",
-                            GWP_Year = 2022,
                             Num = 17400m
                         },
                         new
                         {
+                            Id = 21,
+                            ARCount = 6,
                             Name = "SF6",
-                            GWP_Year = 2022,
                             Num = 24300m
                         },
                         new
                         {
-                            Name = "海龍-1211",
-                            GWP_Year = 2022,
+                            Id = 22,
+                            ARCount = 6,
+                            Name = "二氟一氯一溴甲烷",
                             Num = 1930m
+                        },
+                        new
+                        {
+                            Id = 23,
+                            ARCount = 6,
+                            Name = "HFC-236fa",
+                            Num = 8690m
                         });
                 });
 
@@ -1123,10 +1530,12 @@ namespace Carbon_inventory_platform.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CEF_Correction")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<decimal>("CH4CEF")
                         .HasColumnType("decimal(18, 10)");
@@ -1155,7 +1564,7 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<string>("EmissionPattern")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<decimal>("HFCSCEF")
                         .HasColumnType("decimal(18, 10)");
@@ -1187,7 +1596,7 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<decimal>("PFCSCEF")
                         .HasColumnType("decimal(18, 10)");
@@ -1210,15 +1619,15 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<string>("Scope")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Unit")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<int>("Year")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -2651,6 +3060,567 @@ namespace Carbon_inventory_platform.Migrations
                             CH4CEF = 0m,
                             CH4ULL = 0m,
                             CH4UUL = 0m,
+                            CO2CEF = 0.555m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 94
+                        },
+                        new
+                        {
+                            Id = 45,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.5625m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 95
+                        },
+                        new
+                        {
+                            Id = 46,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.558m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 96
+                        },
+                        new
+                        {
+                            Id = 47,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.555m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 97
+                        },
+                        new
+                        {
+                            Id = 48,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.543m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 98
+                        },
+                        new
+                        {
+                            Id = 49,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.534m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 99
+                        },
+                        new
+                        {
+                            Id = 50,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.534m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 100
+                        },
+                        new
+                        {
+                            Id = 51,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.529m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 101
+                        },
+                        new
+                        {
+                            Id = 52,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.519m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 102
+                        },
+                        new
+                        {
+                            Id = 53,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.518m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 103
+                        },
+                        new
+                        {
+                            Id = 54,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.525m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 104
+                        },
+                        new
+                        {
+                            Id = 55,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.530m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 105
+                        },
+                        new
+                        {
+                            Id = 56,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.554m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 106
+                        },
+                        new
+                        {
+                            Id = 57,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.533m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 107
+                        },
+                        new
+                        {
+                            Id = 58,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.509m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 108
+                        },
+                        new
+                        {
+                            Id = 59,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.502m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 109
+                        },
+                        new
+                        {
+                            Id = 60,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.509m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 110
+                        },
+                        new
+                        {
+                            Id = 61,
+                            CEF_Correction = 3,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
                             CO2CEF = 0.495m,
                             CO2ULL = -0.07m,
                             CO2UUL = 0.07m,
@@ -2675,13 +3645,46 @@ namespace Carbon_inventory_platform.Migrations
                             SF6UUL = 0m,
                             Scope = "類別二",
                             Unit = "",
-                            Year = 0
+                            Year = 111
                         },
                         new
                         {
-                            Id = 57,
+                            Id = 62,
                             CEF_Correction = 3,
-                            CH4CEF = 0.0031875000m,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0.494m,
+                            CO2ULL = -0.07m,
+                            CO2UUL = 0.07m,
+                            DataULL = -0.01m,
+                            DataUUL = -0.01m,
+                            EmissionPattern = "外購電力",
+                            HFCSCEF = 0m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "外購電力",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別二",
+                            Unit = "",
+                            Year = 112
+                        },
+                        new
+                        {
+                            Id = 63,
+                            CEF_Correction = 3,
+                            CH4CEF = 0.0038250000m,
                             CH4ULL = 0m,
                             CH4UUL = 0m,
                             CO2CEF = 0m,
@@ -2712,8 +3715,8 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 58,
-                            CEF_Correction = 3,
+                            Id = 64,
+                            CEF_Correction = 1,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
                             CH4UUL = 0m,
@@ -2745,7 +3748,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 59,
+                            Id = 65,
                             CEF_Correction = 1,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -2778,7 +3781,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 60,
+                            Id = 66,
                             CEF_Correction = 1,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -2811,7 +3814,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 61,
+                            Id = 67,
                             CEF_Correction = 3,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -2844,7 +3847,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 62,
+                            Id = 68,
                             CEF_Correction = 3,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -2877,7 +3880,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 63,
+                            Id = 69,
                             CEF_Correction = 3,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -2910,7 +3913,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 64,
+                            Id = 70,
                             CEF_Correction = 3,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -2943,7 +3946,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 65,
+                            Id = 71,
                             CEF_Correction = 3,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -2976,7 +3979,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 66,
+                            Id = 72,
                             CEF_Correction = 3,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -3009,7 +4012,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 67,
+                            Id = 73,
                             CEF_Correction = 3,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -3042,7 +4045,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 68,
+                            Id = 74,
                             CEF_Correction = 3,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -3075,7 +4078,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 69,
+                            Id = 75,
                             CEF_Correction = 3,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -3108,7 +4111,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 70,
+                            Id = 76,
                             CEF_Correction = 3,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -3141,7 +4144,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 71,
+                            Id = 77,
                             CEF_Correction = 3,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -3174,7 +4177,7 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 72,
+                            Id = 78,
                             CEF_Correction = 1,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
@@ -3207,17 +4210,17 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 73,
-                            CEF_Correction = 3,
+                            Id = 79,
+                            CEF_Correction = 1,
                             CH4CEF = 0m,
                             CH4ULL = 0m,
                             CH4UUL = 0m,
-                            CO2CEF = 0.509m,
-                            CO2ULL = -0.07m,
-                            CO2UUL = 0.07m,
-                            DataULL = -0.01m,
-                            DataUUL = -0.01m,
-                            EmissionPattern = "外購電力",
+                            CO2CEF = 0.025m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "製程",
                             HFCSCEF = 0m,
                             HFCSULL = 0m,
                             HFCSUUL = 0m,
@@ -3227,41 +4230,108 @@ namespace Carbon_inventory_platform.Migrations
                             NF3CEF = 0m,
                             NF3ULL = 0m,
                             NF3UUL = 0m,
-                            Name = "外購電力",
+                            Name = "WD40",
                             PFCSCEF = 0m,
                             PFCSULL = 0m,
                             PFCSUUL = 0m,
                             SF6CEF = 0m,
                             SF6ULL = 0m,
                             SF6UUL = 0m,
-                            Scope = "類別二",
+                            Scope = "類別一",
                             Unit = "",
-                            Year = 110
+                            Year = 0
+                        },
+                        new
+                        {
+                            Id = 80,
+                            CEF_Correction = 1,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "逸散",
+                            HFCSCEF = 1m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "HFC-236fa",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
+                            Unit = "",
+                            Year = 0
+                        },
+                        new
+                        {
+                            Id = 81,
+                            CEF_Correction = 1,
+                            CH4CEF = 0m,
+                            CH4ULL = 0m,
+                            CH4UUL = 0m,
+                            CO2CEF = 0m,
+                            CO2ULL = 0m,
+                            CO2UUL = 0m,
+                            DataULL = 0m,
+                            DataUUL = 0m,
+                            EmissionPattern = "逸散",
+                            HFCSCEF = 1m,
+                            HFCSULL = 0m,
+                            HFCSUUL = 0m,
+                            N2OCEF = 0m,
+                            N2OULL = 0m,
+                            N2OUUL = 0m,
+                            NF3CEF = 0m,
+                            NF3ULL = 0m,
+                            NF3UUL = 0m,
+                            Name = "二氟一氯一溴甲烷",
+                            PFCSCEF = 0m,
+                            PFCSULL = 0m,
+                            PFCSUUL = 0m,
+                            SF6CEF = 0m,
+                            SF6ULL = 0m,
+                            SF6UUL = 0m,
+                            Scope = "類別一",
+                            Unit = "",
+                            Year = 0
                         });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
                 });
@@ -3270,17 +4340,19 @@ namespace Carbon_inventory_platform.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -3292,58 +4364,59 @@ namespace Carbon_inventory_platform.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -3352,7 +4425,8 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
 
@@ -3365,17 +4439,19 @@ namespace Carbon_inventory_platform.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -3388,18 +4464,18 @@ namespace Carbon_inventory_platform.Migrations
                 {
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
                         .HasMaxLength(128)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -3411,10 +4487,10 @@ namespace Carbon_inventory_platform.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -3426,18 +4502,18 @@ namespace Carbon_inventory_platform.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(128)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -3449,7 +4525,7 @@ namespace Carbon_inventory_platform.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<DateTime?>("UserLimitData")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -3463,6 +4539,17 @@ namespace Carbon_inventory_platform.Migrations
                         .IsRequired();
 
                     b.Navigation("Device");
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Analysis", b =>
+                {
+                    b.HasOne("Carbon_inventory_platform.Models.Area", "Area")
+                        .WithOne("Analysis")
+                        .HasForeignKey("Carbon_inventory_platform.Models.Analysis", "AreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Area");
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
@@ -3562,6 +4649,8 @@ namespace Carbon_inventory_platform.Migrations
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
                 {
+                    b.Navigation("Analysis");
+
                     b.Navigation("Devices");
                 });
 

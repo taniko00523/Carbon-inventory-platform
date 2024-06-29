@@ -145,27 +145,34 @@ new Material { Id = 75, Name = "冰水主機", Scope = "類別一", EmissionPatt
 new Material { Id = 76, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.030000M, CEF_Correction = 3 }, //住宅及商業建築冷氣機
 new Material { Id = 77, Name = "車用空調", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 0.200000M, CEF_Correction = 3 }, //移動式空氣清靜機
 new Material { Id = 78, Name = "丁烷", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 3.0260000000M, CEF_Correction = 1 },
-new Material { Id = 79, Name = "WD40", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 0.025M, CEF_Correction = 1 }
+new Material { Id = 79, Name = "WD40", Scope = "類別一", EmissionPattern = "製程", CO2CEF = 0.025M, CEF_Correction = 1 },
+new Material { Id = 80, Name = "HFC-236fa", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 1, CEF_Correction = 1 },
+new Material { Id = 81, Name = "二氟一氯一溴甲烷", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 1, CEF_Correction = 1 }
 );
             builder.Entity<GWP>().HasData(
-new GWP {Id=1, Name = "CO2", Num = 1, ARCount = 6 },
-new GWP { Id = 2, Name = "CH4", Num = 27.9M, ARCount = 6 },
-new GWP {Id = 3, Name = "N2O", Num = 273, ARCount = 6 },
-new GWP {Id=4, Name = "R-12", Num = 12500, ARCount = 6 },
-new GWP {Id=5, Name = "R-23", Num = 14600, ARCount = 6 },
-new GWP {Id=6, Name = "R-32", Num = 771, ARCount = 6 },
-new GWP {Id=7, Name = "R-134A", Num = 1530, ARCount = 6 },
-new GWP {Id=8, Name = "FM200", Num = 3600, ARCount = 6 },
-new GWP {Id=9, Name = "R-22", Num = 1960, ARCount = 6 },
-new GWP { Id = 10, Name = "R-410A", Num = 2255.5M, ARCount = 6 },
-new GWP { Id = 11, Name = "R-600A", Num = 0.006M, ARCount = 6 },
-new GWP { Id = 12, Name = "R-417A", Num = 2127, ARCount = 6 },
-new GWP { Id = 13, Name = "R-404A", Num = 4728, ARCount = 6 },
-new GWP { Id = 14, Name = "R-407C", Num = 1908, ARCount = 6 },
-new GWP { Id = 15, Name = "R-507A", Num = 4475, ARCount = 6 },
-new GWP { Id = 16, Name = "NF3", Num = 17400, ARCount = 6 },
-new GWP { Id = 17, Name = "SF6", Num = 24300, ARCount = 6 },
-new GWP { Id = 18, Name = "海龍-1211", Num = 1930, ARCount = 6 }
+new GWP { Id = 1, Name = "CO2", Num = 1, ARCount = 6 },
+new GWP { Id =2, Name = "CH4", Num = 27.9M, ARCount = 6 },
+new GWP { Id =3, Name = "N2O", Num = 273, ARCount = 6 },
+new GWP { Id =4, Name = "R-12", Num = 12500, ARCount = 6 },
+new GWP { Id =5, Name = "R-125", Num = 3740, ARCount = 6 },
+new GWP { Id =6, Name = "R-1234yf", Num = 0.501M, ARCount = 6 },
+new GWP { Id =7, Name = "R-23", Num = 14600, ARCount = 6 },
+new GWP { Id =8, Name = "R-32", Num = 771, ARCount = 6 },
+new GWP { Id=9, Name = "R-134A", Num = 1530, ARCount = 6 },
+new GWP { Id =10, Name = "FM200", Num = 3600, ARCount = 6 },
+new GWP { Id =11, Name = "R-22", Num = 1960, ARCount = 6 },
+new GWP { Id =12, Name = "R-410A", Num = 2255.5M, ARCount = 6 },
+new GWP { Id =13, Name = "R-600A", Num = 0.006M, ARCount = 6 },
+new GWP { Id =14, Name = "R-417A", Num = 2127, ARCount = 6 },
+new GWP { Id =15, Name = "R-404A", Num = 4728, ARCount = 6 },
+new GWP { Id =16, Name = "R-407C", Num = 1908, ARCount = 6 },
+new GWP { Id =17, Name = "R-407F", Num = 1965.3M, ARCount = 6 }, //40% R-134a / 30% R-125 / 30% R-32
+new GWP { Id =18, Name = "R-452A", Num = 2291.5603M, ARCount = 6 }, //30 % R-1234yf / 11% R-32 / 59% R-125 
+new GWP { Id =19, Name = "R-507A", Num = 4475, ARCount = 6 },
+new GWP { Id =20, Name = "NF3", Num = 17400, ARCount = 6 },
+new GWP { Id =21, Name = "SF6", Num = 24300, ARCount = 6 },
+new GWP { Id =22, Name = "二氟一氯一溴甲烷", Num = 1930, ARCount = 6 },
+new GWP { Id =23, Name = "HFC-236fa", Num = 8690, ARCount = 6 }
                 );
             builder.Entity<DeviceData>().HasData(
                 new DeviceData { Id = 1, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-410A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
@@ -182,7 +189,7 @@ new GWP { Id = 18, Name = "海龍-1211", Num = 1930, ARCount = 6 }
                 new DeviceData { Id = 12, Name = "二氧化碳滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                 new DeviceData { Id = 13, Name = "二氧化碳", Scope = "類別一", EmissionPattern = "逸散", Material = "二氧化碳", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                 new DeviceData { Id = 14, Name = "WD40", Scope = "類別一", EmissionPattern = "製程", Material = "WD40", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
-                new DeviceData { Id = 15, Name = "海龍1211", Scope = "類別一", EmissionPattern = "逸散", Material = "海龍-1211", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                new DeviceData { Id = 15, Name = "海龍1211", Scope = "類別一", EmissionPattern = "逸散", Material = "二氟一氯一溴甲烷", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                 new DeviceData { Id = 16, Name = "FM200", Scope = "類別一", EmissionPattern = "逸散", Material = "FM200", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                 new DeviceData { Id = 17, Name = "化糞池", Scope = "類別一", EmissionPattern = "逸散", Material = "廢水處理", Device_Correction = 3, Data_Correction = 3, unit = "人-年" },
                 new DeviceData { Id = 18, Name = "電力", Scope = "類別二", EmissionPattern = "外購電力", Material = "外購電力", Device_Correction = 1, Data_Correction = 1, unit = "度" },
@@ -193,7 +200,8 @@ new GWP { Id = 18, Name = "海龍-1211", Num = 1930, ARCount = 6 }
                    new DeviceData { Id = 23, Name = "中、大型冰箱", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                     new DeviceData { Id = 24, Name = "低溫冷凍車", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                      new DeviceData { Id = 25, Name = "食品加工冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
-                     new DeviceData { Id = 26, Name = "瓦斯罐", Scope = "類別一", EmissionPattern = "製程", Material = "丁烷", Device_Correction = 3, Data_Correction = 3, unit = "公斤" }
+                     new DeviceData { Id = 26, Name = "瓦斯罐", Scope = "類別一", EmissionPattern = "製程", Material = "丁烷", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                     new DeviceData { Id = 27, Name = "六氟丙烷滅火器", Scope = "類別一", EmissionPattern = "逸散", Material = "HFC-236fa", Device_Correction = 3, Data_Correction = 3, unit = "公斤" }
 
     );
             builder.Entity<DefaultDevices>().HasData(

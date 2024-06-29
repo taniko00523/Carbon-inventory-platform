@@ -55,15 +55,12 @@ namespace Carbon_inventory_platform.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string id, int searchARcount)
+        public async Task<IActionResult> Delete(int id, int searchARcount)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
             var gwp = await _context.GWPs.FindAsync(id);
             if (gwp != null)
             {

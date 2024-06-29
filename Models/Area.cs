@@ -11,11 +11,11 @@ namespace Carbon_inventory_platform.Models
 
         [Display(Name = "公司別")]
         public Guid CompanyId { get; set; }
-        
-        [Display(Name = "AR版本")]
-        public int ARVersion { get; set; }
 
-        [MaxLength(20)]
+        [Display(Name = "AR版本")]
+        public int ARVersion { get; set; } = 6;
+
+        [MaxLength(100)]
         [Display(Name = "廠區名稱")]
         public string? Name { get; set; } = "";
 

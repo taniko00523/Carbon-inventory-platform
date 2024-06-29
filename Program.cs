@@ -1,19 +1,14 @@
 using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
-using ElectronNET.API;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseElectron(args);
-
-// Is optional, but you can use the Electron.NET API-Classes directly with DI (relevant if you wont more encoupled code)
-builder.Services.AddElectron();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false) //Email驗證關閉
@@ -72,13 +67,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
-
-//await app.StartAsync();
-
-//// Open the Electron-Window here
-//await Electron.WindowManager.CreateWindowAsync();
-
-//app.WaitForShutdown();
 
 using (var scope = app.Services.CreateScope())
 {

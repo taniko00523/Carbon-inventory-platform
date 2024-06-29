@@ -5,8 +5,6 @@ using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Carbon_inventory_platform.Filters;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -37,15 +35,26 @@ namespace Carbon_inventory_platform.Controllers
             Guid Id = compnay.Id;
             TempData["companyId"] = Id; //暫存進入畫面所查詢的CompanyId
             TempData["companyName"] = compnay.Name;
+            var area = await _context.Areas
+                       .Include(x => x.Company)
+                       .Include(x => x.Analysis)
+                       .Where(x => x.isDeleted == 0 && x.CompanyId == Id) //抓出資料表裡面沒被刪除的
+                       .OrderBy(x => x.CreateTime)
+                       .ToListAsync();
 
-            return _context.Areas != null ? //如果有抓到資料表Null
-                      View(await _context.Areas
-                      .Include(x => x.Company)
-                      .Include(x => x.Analysis)
-                      .Where(x => x.isDeleted == 0 && x.CompanyId == Id) //抓出資料表裡面沒被刪除的
-                      .OrderBy(x => x.CreateTime)
-                      .ToListAsync()) : //非同步方法
-                      Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
+            if (area[0].Analysis == null)
+            {
+                var Analysis_id = Guid.NewGuid();
+                Guid Area_id = area[0].Id;
+                await _context.Analyses.AddAsync(new Analysis()
+                {
+                    Id = Analysis_id,
+                    AreaId = Area_id,
+                    CreateTime = DateTime.Now
+                });
+                await _context.SaveChangesAsync();
+            }
+            return View(area);
         }
 
         [Authorize(Roles = "Admin")]
@@ -56,14 +65,32 @@ namespace Carbon_inventory_platform.Controllers
            .Where(a => a.Id == Id)
            .Select(a => a.Name)
            .FirstOrDefaultAsync();
-            return _context.Areas != null ? //如果有抓到資料表Null
-                          View(await _context.Areas
+            var area = await _context.Areas
                           .Include(x => x.Company)
-                          .Include (x => x.Analysis)
                           .Where(x => x.isDeleted == 0 && x.CompanyId == Id) //抓出資料表裡面沒被刪除的
                           .OrderBy(x => x.CreateTime)
-                          .ToListAsync()) : //非同步方法
-                          Problem("沒有找到資料表"); //否則回報問題 Entity set 'ApplicationDbContext.Companies'  is null.
+                          .Include(x => x.Analysis)
+                          .ToListAsync();
+
+            if (area[0].Analysis == null)
+            {
+                var Analysis_id = Guid.NewGuid();
+                Guid Area_id = area[0].Id;
+                await _context.Analyses.AddAsync(new Analysis()
+                {
+                    Id = Analysis_id,
+                    AreaId = Area_id,
+                    CreateTime = DateTime.Now
+                });
+                await _context.SaveChangesAsync();
+                area = await _context.Areas
+                          .Include(x => x.Company)
+                          .Where(x => x.isDeleted == 0 && x.CompanyId == Id) //抓出資料表裡面沒被刪除的
+                          .OrderBy(x => x.CreateTime)
+                          .Include(x => x.Analysis)
+                          .ToListAsync();
+            }
+            return View(area);
         }
 
         [HttpPost]
@@ -208,6 +235,7 @@ namespace Carbon_inventory_platform.Controllers
                 }
 
             }
+            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARCount).Distinct().ToList();
             return View(area);
         }
 
@@ -236,7 +264,6 @@ namespace Carbon_inventory_platform.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,FullAddress,Year,BaseYear,Type,UniqueCode,FactorCode,OrganizationImage,MapImage,ShopDrawings,ARVersion")] Area area)
         {
-            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARCount).Distinct().ToList();
             if (id != area.Id)
             {
                 return NotFound();
@@ -313,6 +340,7 @@ namespace Carbon_inventory_platform.Controllers
                     return RedirectToAction(nameof(AdminIndex), new { id = companyId });
                 }
             }
+            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARCount).Distinct().ToList();
             return View(area);
         }
 
@@ -415,20 +443,6 @@ namespace Carbon_inventory_platform.Controllers
             }
             return null;
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Analysis(Area model)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Update(model);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { Id = model.Id });
-            }
-            return View(model);
-        }
-        
 
     }
 }

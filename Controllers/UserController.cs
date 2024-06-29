@@ -47,7 +47,7 @@ namespace Carbon_inventory_platform.Controllers
                 if (user != null)
                 {
                     var userName = await _userManager.GetUserNameAsync(user);
-                    
+
 
                     user.UserLimitData = model.ApplicationUser.UserLimitData;
                     if (userName != model.ApplicationUser.UserName)

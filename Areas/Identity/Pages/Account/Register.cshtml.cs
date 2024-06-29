@@ -24,7 +24,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -132,7 +132,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                               
+
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -140,7 +140,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                   
+
 
                     var role = _roleManager.FindByNameAsync("User").Result;
 
@@ -150,7 +150,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
                     }
                     user.UserLimitData = DateTime.UtcNow.AddYears(Input.Year);
                     await _userManager.UpdateAsync(user);
-                    
+
                     //if(Input.Manager == true)
                     //{
                     //    var role = _roleManager.FindByNameAsync("Manager").Result;
@@ -235,6 +235,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
                     Id = Area_id,
                     CompanyId = Company_id,
                     Year = DateTime.Now.Year - 1912, //減去1911取得民國年 再減去1盤去年
+                    ARVersion = 6,
                     BaseYear = true,
                     CreateTime = DateTime.Now
                 });

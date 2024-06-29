@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\IIS-Data\Carbon-inventory-platform\Public CIP</_PublishTargetUrl>
+    <History>True|2024-06-26T10:33:45.5455146Z;True|2024-06-26T18:31:20.3001158+08:00;True|2024-06-26T18:19:33.7730608+08:00;True|2024-06-24T23:21:30.7609044+08:00;True|2024-06-24T23:04:07.8512432+08:00;True|2024-06-13T14:06:44.9434235+08:00;True|2024-06-13T14:03:05.8181066+08:00;False|2024-06-13T14:00:52.7684221+08:00;True|2024-05-18T19:41:55.2388203+08:00;True|2024-05-18T19:39:40.2950268+08:00;True|2024-05-18T17:12:38.0511529+08:00;True|2024-05-18T17:12:22.9239652+08:00;True|2024-05-18T17:10:20.0171561+08:00;True|2024-05-18T17:08:08.2191981+08:00;True|2024-05-18T16:59:23.0860590+08:00;True|2024-05-18T16:59:00.0029324+08:00;True|2024-05-17T22:43:21.4256995+08:00;True|2024-05-17T22:39:09.0483497+08:00;True|2024-05-17T22:27:35.4627023+08:00;True|2024-05-17T22:18:09.6152861+08:00;True|2024-05-17T22:17:49.0960139+08:00;True|2024-05-17T22:06:29.4089755+08:00;True|2024-05-17T22:05:23.0511092+08:00;True|2024-05-17T22:03:45.4174272+08:00;True|2024-05-17T22:00:37.7005801+08:00;True|2024-05-17T20:47:31.3977160+08:00;True|2024-05-17T20:44:36.6785563+08:00;False|2024-05-17T20:44:18.3275003+08:00;True|2024-05-17T20:25:50.7523647+08:00;True|2024-05-17T20:16:30.1875882+08:00;True|2024-05-17T19:43:57.4051176+08:00;True|2024-05-17T19:34:35.9695046+08:00;True|2024-05-14T15:03:11.1863096+08:00;True|2024-05-13T21:31:32.5051220+08:00;True|2024-05-13T21:30:08.1051726+08:00;True|2024-05-13T20:53:23.1446898+08:00;True|2024-05-13T18:15:08.6376507+08:00;True|2024-05-06T19:51:12.8195812+08:00;True|2024-05-06T16:12:26.0141766+08:00;True|2024-05-06T15:31:39.7164009+08:00;True|2024-05-06T15:25:18.9806241+08:00;True|2024-05-03T20:20:26.8145286+08:00;True|2024-05-02T17:24:19.0306749+08:00;True|2024-04-15T15:30:36.4159452+08:00;True|2024-04-13T21:18:17.3353230+08:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Data Source=localhost%3bDatabase=%27Carbon inventory platform%27%3bIntegrated Security=false%3bUser ID=test004%3bPassword=test%3bTrust Server Certificate=True</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="Carbon_inventory_platform.Data.ApplicationDbContext">
+      <Value>Data Source=localhost%3bDatabase=%27Carbon inventory platform%27%3bIntegrated Security=false%3bUser ID=test004%3bPassword=test%3bTrust Server Certificate=True</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

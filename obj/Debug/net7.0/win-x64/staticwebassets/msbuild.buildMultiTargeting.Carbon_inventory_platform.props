@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\Carbon_inventory_platform.props" />
-</Project>

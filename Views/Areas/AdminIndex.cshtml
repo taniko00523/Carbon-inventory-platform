@@ -155,8 +155,8 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        @Html.HiddenFor(x=>item.Analysis.Id)
-                                        @Html.HiddenFor(x=>item.Analysis.AreaId)
+                                        @Html.HiddenFor(x => item.Analysis.Id)
+                                        @Html.HiddenFor(x => item.Analysis.AreaId)
                                         <table class="table">
                                             <thead>
                                                 <tr>
@@ -403,7 +403,7 @@
                             </div>
                         </div>
                     </form>
-                    
+
                     <a class="btn btn-info" asp-controller="Devices" asp-action="Index" asp-route-id="@item.Id">排放源資料</a>
 
                 </td>

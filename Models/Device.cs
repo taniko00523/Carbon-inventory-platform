@@ -79,7 +79,7 @@ namespace Carbon_inventory_platform.Models
         public int Grade { get; set; } = 27;
 
         [Column(TypeName = "decimal(18, 4)")]
-        [Display(Name = "排放量")]
+        [Display(Name = "CO₂排放當量")]
         public decimal Emissions { get; set; } = 0;
 
         [Column(TypeName = "decimal(18, 10)")]
@@ -96,10 +96,10 @@ namespace Carbon_inventory_platform.Models
         [Column(TypeName = "decimal(18, 10)")]
         public decimal all_ULL { get; set; } = 0;
 
-        [Column(TypeName = "decimal(18, 10)")]
+        [Column(TypeName = "decimal(25, 10)")]
         public decimal count_UUL { get; set; } = 0;
 
-        [Column(TypeName = "decimal(18, 10)")]
+        [Column(TypeName = "decimal(25, 10)")]
         public decimal count_ULL { get; set; } = 0;
 
         // 生命週期紀錄
