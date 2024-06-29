@@ -271,7 +271,10 @@ namespace Carbon_inventory_platform.Controllers
 
             //-----------------檔案設定
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\doc\\", "溫盤報告書範本3.docx");
-            string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\output\\", data.Year + "年度" + "-" + data.Company.Name + (data.Name != null ? ("-" + data.Name) : "") + "-溫室氣體盤查報告書.docx");
+            string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\output\\");
+            string newFile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\output\\", data.Year + "年度" + "-" + data.Company.Name + (data.Name != null ? ("-" + data.Name) : "") + "-溫室氣體盤查報告書.docx");
+            if (!Directory.Exists(newFilePath))
+            { Directory.CreateDirectory(newFilePath); }
             //-----------------檔案設定
             // 複製文件
             using (DocX doc = DocX.Load(filePath))
@@ -652,9 +655,9 @@ namespace Carbon_inventory_platform.Controllers
                 //--------------------------------圖片
 
                 // 保存新文檔
-                doc.SaveAs(newFilePath);
+                doc.SaveAs(newFile);
             }
-            var fileBytes = System.IO.File.ReadAllBytes(newFilePath);
+            var fileBytes = System.IO.File.ReadAllBytes(newFile);
             var fileName = data.Year + "年度" + "-" + data.Company.Name + (data.Name != null ? ("-" + data.Name) : "") + "-溫室氣體盤查報告書.docx"; // 可以自行定義檔名
             return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         }
