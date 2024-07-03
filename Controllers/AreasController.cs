@@ -42,7 +42,12 @@ namespace Carbon_inventory_platform.Controllers
                        .Where(x => x.isDeleted == 0 && x.CompanyId == Id) //抓出資料表裡面沒被刪除的
                        .OrderBy(x => x.CreateTime)
                        .ToListAsync();
-
+            foreach (var item in area)
+            {
+                item.MapImagePath = !string.IsNullOrEmpty(item.MapImagePath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", item.CompanyId.ToString(), item.Id.ToString(), item.MapImagePath)) : "";
+                item.OrganizationImagePath = !string.IsNullOrEmpty(item.OrganizationImagePath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", item.CompanyId.ToString(), item.Id.ToString(), item.OrganizationImagePath)) : "";
+                item.ShopDrawingsPath = !string.IsNullOrEmpty(item.ShopDrawingsPath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", item.CompanyId.ToString(), item.Id.ToString(), item.ShopDrawingsPath)) : "";
+            }
             if (area[0].Analysis == null)
             {
                 var Analysis_id = Guid.NewGuid();
@@ -72,7 +77,12 @@ namespace Carbon_inventory_platform.Controllers
                           .OrderBy(x => x.CreateTime)
                           .Include(x => x.Analysis)
                           .ToListAsync();
-
+            foreach (var item in area)
+            {
+                item.MapImagePath = !string.IsNullOrEmpty(item.MapImagePath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", item.CompanyId.ToString(), item.Id.ToString(), item.MapImagePath)) : "";
+                item.OrganizationImagePath = !string.IsNullOrEmpty(item.OrganizationImagePath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", item.CompanyId.ToString(), item.Id.ToString(), item.OrganizationImagePath)) : "";
+                item.ShopDrawingsPath = !string.IsNullOrEmpty(item.ShopDrawingsPath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", item.CompanyId.ToString(), item.Id.ToString(), item.ShopDrawingsPath)) : "";
+            }
             if (area[0].Analysis == null)
             {
                 var Analysis_id = Guid.NewGuid();
@@ -102,29 +112,18 @@ namespace Carbon_inventory_platform.Controllers
                          .FirstOrDefaultAsync();
             if (area != null)
             {
+                string BaseURL = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, Request.PathBase);//http://localhost:5000
                 if (item == "Map")
                 {
-                    if (area.MapImagePath != null)
-                    {
-                        string relativePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", area.CompanyId.ToString(), area.Id.ToString(), "Map.jpg");
-                        ViewBag.Image = relativePath;
-                    }
+                    ViewBag.Image = !string.IsNullOrEmpty(area.MapImagePath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", area.CompanyId.ToString(), area.Id.ToString(), area.MapImagePath )): "";
                 }
                 else if (item == "Organization")
                 {
-                    if (area.OrganizationImagePath != null)
-                    {
-                        string relativePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", area.CompanyId.ToString(), area.Id.ToString(), "Organization.jpg");
-                        ViewBag.Image = relativePath;
-                    }
+                    ViewBag.Image = !string.IsNullOrEmpty(area.OrganizationImagePath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", area.CompanyId.ToString(), area.Id.ToString(), area.OrganizationImagePath)) : "";
                 }
                 else if (item == "ShopDrawings")
                 {
-                    if (area.ShopDrawingsPath != null)
-                    {
-                        string relativePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", area.CompanyId.ToString(), area.Id.ToString(), "ShopDrawings.jpg");
-                        ViewBag.Image = relativePath;
-                    }
+                    ViewBag.Image = !string.IsNullOrEmpty(area.ShopDrawingsPath) ? (string.Format("/{0}/{1}/{2}/{3}" , "images", area.CompanyId.ToString(), area.Id.ToString(), area.ShopDrawingsPath)) : "";
                 }
             }
 
@@ -208,17 +207,17 @@ namespace Carbon_inventory_platform.Controllers
                     toCreate.Type = area.Type;
                     if (area.OrganizationImage != null)
                     {
-                        string OrganizationImagePath = await SaveImage(area.OrganizationImage, companyId.ToString(), area.Id.ToString(), "Organization.jpg");
+                        string OrganizationImagePath = await SaveImage(area.OrganizationImage, companyId.ToString(), area.Id.ToString());
                         toCreate.OrganizationImagePath = OrganizationImagePath;
                     }
                     if (area.MapImage != null)
                     {
-                        string MapImagePath = await SaveImage(area.MapImage, companyId.ToString(), area.Id.ToString(), "Map.jpg");
+                        string MapImagePath = await SaveImage(area.MapImage, companyId.ToString(), area.Id.ToString());
                         toCreate.MapImagePath = MapImagePath;
                     }
                     if (area.ShopDrawings != null)
                     {
-                        string ShopDrawingsPath = await SaveImage(area.ShopDrawings, companyId.ToString(), area.Id.ToString(), "ShopDrawings.jpg");
+                        string ShopDrawingsPath = await SaveImage(area.ShopDrawings, companyId.ToString(), area.Id.ToString());
                         toCreate.ShopDrawingsPath = ShopDrawingsPath;
                     }
                     toCreate.isDeleted = 0;
@@ -300,17 +299,17 @@ namespace Carbon_inventory_platform.Controllers
                         toUpdate.FactorCode = area.FactorCode;
                         if (area.OrganizationImage != null)
                         {
-                            string OrganizationImagePath = await SaveImage(area.OrganizationImage, companyId.ToString(), area.Id.ToString(), "Organization.jpg");
+                            string OrganizationImagePath = await SaveImage(area.OrganizationImage, companyId.ToString(), area.Id.ToString());
                             toUpdate.OrganizationImagePath = OrganizationImagePath;
                         }
                         if (area.MapImage != null)
                         {
-                            string MapImagePath = await SaveImage(area.MapImage, companyId.ToString(), area.Id.ToString(), "Map.jpg");
+                            string MapImagePath = await SaveImage(area.MapImage, companyId.ToString(), area.Id.ToString());
                             toUpdate.MapImagePath = MapImagePath;
                         }
                         if (area.ShopDrawings != null)
                         {
-                            string ShopDrawingsPath = await SaveImage(area.ShopDrawings, companyId.ToString(), area.Id.ToString(), "ShopDrawings.jpg");
+                            string ShopDrawingsPath = await SaveImage(area.ShopDrawings, companyId.ToString(), area.Id.ToString());
                             toUpdate.ShopDrawingsPath = ShopDrawingsPath;
                         }
                         toUpdate.Year = area.Year;
@@ -409,8 +408,9 @@ namespace Carbon_inventory_platform.Controllers
             return input.Substring(6);
         }
 
-        private static async Task<string> SaveImage(IFormFile file, string companyId, string areaId, string fileName)
+        private static async Task<string> SaveImage(IFormFile file, string companyId, string areaId)
         {
+            string fileName = Guid.NewGuid().ToString() + ".jpg";
             if (file != null && file.Length > 0)
             {
                 //var fileName = Path.GetFileName(file.FileName);
@@ -434,7 +434,7 @@ namespace Carbon_inventory_platform.Controllers
                         {
                             await file.CopyToAsync(stream);
                         }
-                        return FilePath;
+                        return fileName;
                     }
                 }
                 catch (Exception ex)

@@ -102,9 +102,7 @@
                 <th>
                     @if (item.OrganizationImagePath != "" && item.OrganizationImagePath != null)
                     {
-                        <form method="post" asp-action="Image" asp-route-id="@item.Id" asp-route-item="Organization">
-                            <button type="submit" class="btn btn-success">查看圖片</button>
-                        </form>
+                        <img src="@item.OrganizationImagePath" width="40" height="40" onclick="window.open('@item.OrganizationImagePath', '_blank')"></img>
                     }
                     else
                     {
@@ -114,9 +112,7 @@
                 <th>
                     @if (item.MapImagePath != "" && item.MapImagePath != null)
                     {
-                        <form method="post" asp-action="Image" asp-route-id="@item.Id" asp-route-item="Map">
-                            <button type="submit" class="btn btn-success">查看圖片</button>
-                        </form>
+                        <img src="@item.MapImagePath" width="40" height="40" onclick="window.open('@item.MapImagePath', '_blank')"></img>
                     }
                     else
                     {
@@ -126,9 +122,8 @@
                 <th>
                     @if (item.ShopDrawingsPath != "" && item.ShopDrawingsPath != null)
                     {
-                        <form method="post" asp-action="Image" asp-route-id="@item.Id" asp-route-item="ShopDrawings">
-                            <button type="submit" class="btn btn-success">查看圖片</button>
-                        </form>
+                        <img src="@item.ShopDrawingsPath" width="40" height="40" onclick="window.open('@item.ShopDrawingsPath', '_blank')"></img>
+
                     }
                     else
                     {

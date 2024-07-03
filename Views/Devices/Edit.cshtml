@@ -7,7 +7,7 @@
 <h1>@ViewData["Title"] </h1>
 <h4>@Model.Name</h4>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<form asp-action="Edit">
+<form asp-action="Edit" id="DeviceEdit">
     <div class="row">
         <div class="col-md-4">
 
@@ -42,8 +42,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="Material" class="control-label"></label><span style="color:red">*</span>
-                <select asp-for="Material" class="form-control" id="MaterialDropdown" asp-items=" ViewBag.Material"></select>
-                <span asp-validation-for="Material" class="text-danger"></span>
+                @Html.TextBoxFor(x => x.Material, new { @list = "MaterialList", @class = "form-control" })
+                <datalist id="MaterialList">
+                </datalist>
+                <span asp-validation-for="Material" id="lbMaterial" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AssetNo" class="control-label"></label>
@@ -62,7 +64,7 @@
 
 
             <div class="form-group">
-                <input type="submit" value="確認" class="btn btn-primary" id="submitBtn" />|
+                <a class="btn btn-primary" onclick="Save();">新增</a>|
                 <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
 
             </div>
@@ -91,6 +93,31 @@
 {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        function Save() {
+            var material = document.getElementById('Material').value;
+            var datalist = document.getElementById('MaterialList');
+            var options = datalist.querySelectorAll('option');
+            var matchFound = false;
+            var pos = 0;
+
+            for (var i = 0; i < options.length; i++) {
+                if (options[i].value === material) {
+                    matchFound = true;
+                    break;
+                }
+            }
+
+            if (!matchFound) {
+                pos++;
+                document.getElementById("lbMaterial").innerHTML = "請選擇有效的原燃物料";
+            }
+            if (pos > 0) {
+                return false;
+            } else {
+                $("#DeviceEdit").submit();
+            }
+        }
+
         $(document).ready(function () {
             // 加載頁面時立即執行的程式碼
             loadDeviceData();
@@ -136,7 +163,7 @@
                         }, 10) //設定延遲
 
                         $('#emissionDropdown').val(selectedEmission);
-                        //$('#MaterialDropdown').val(selectedMaterial);
+                        //$('#MaterialList').val(selectedMaterial);
                     },
                     error: function (error) {
                         console.log(error);
@@ -162,7 +189,7 @@
                         }, 10) //設定延遲
 
                         $('#emissionDropdown').val(selectedEmission);
-                        //$('#MaterialDropdown').val(selectedMaterial);
+                        //$('#MaterialList').val(selectedMaterial);
                     },
                     error: function (error) {
                         console.log(error);
@@ -220,22 +247,22 @@
                     type: 'GET',
                     data: { emissionPattern: selectedEmission },
                     success: function (data) {
-                        $('#MaterialDropdown').empty();
+                        $('#MaterialList').empty();
                         $.each(data.materials, function (i, item) {
-                            $('#MaterialDropdown').append($('<option>', {
+                            $('#MaterialList').append($('<option>', {
                                 value: item.name,
                                 text: item.name
                             }));
                         });
                         $.each(data.gwpNames, function (i, item) {
-                            $('#MaterialDropdown').append($('<option>', {
+                            $('#MaterialList').append($('<option>', {
                                 value: item.name,
                                 text: item.name
                             }));
                         });
                         $('#emissionDropdown').val(selectedEmission);
                         if (selectedMaterial != null) {
-                            $('#MaterialDropdown').val(selectedMaterial);
+                            $('#MaterialList').val(selectedMaterial);
                         }
                     },
                     error: function (error) {

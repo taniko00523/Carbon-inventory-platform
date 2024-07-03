@@ -623,30 +623,56 @@ namespace Carbon_inventory_platform.Controllers
                 //--------------------------------報告邊界
                 GenerateActivityDataTable(doc, device);
 
-                //--------------------------------圖片               
-                string mapPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), "Map.jpg");
-                string organiztionPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), "Organization.jpg");
-                string showDrawingPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), "ShopDrawings.jpg");
-                
-                if (showDrawingPath != "")
+                //--------------------------------圖片                               
+                if (data.ShopDrawingsPath != "")
                 {
-                    replaceImage(doc, "[廠區圖]", showDrawingPath);
+                    try
+                    {
+                        string showDrawingPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), data.ShopDrawingsPath);
+                        replaceImage(doc, "[廠區圖]", showDrawingPath);
+                    }
+                    catch (Exception e)
+                    {
+                        ViewData["showDrawingError"] = e.Message;
+                        throw;
+                    }                    
                 }
                 else
                 {
                     doc.ReplaceText("[廠區圖]", "");
                 }
-                if (organiztionPath != "")
+
+                if (data.OrganizationImagePath != "")
                 {
-                    replaceImage(doc, "[公司組織圖]", organiztionPath);
+                    try
+                    {
+                        string organiztionPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), data.OrganizationImagePath);
+                        replaceImage(doc, "[公司組織圖]", organiztionPath);
+                    }
+                    catch (Exception e)
+                    {
+                        ViewData["organiztionError"] = e.Message;
+                        throw;
+                    }
+                    
                 }
                 else
                 {
                     doc.ReplaceText("[公司組織圖]", "");
                 }
-                if (mapPath != "")
+                if (data.MapImagePath != "")
                 {
-                    replaceImage(doc, "[地理位置圖]", mapPath);
+                    try
+                    {
+                        string mapPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), data.MapImagePath);
+                        replaceImage(doc, "[地理位置圖]", mapPath);
+                    }
+                    catch (Exception e)
+                    {
+                        ViewData["mapError"] = e.Message;
+                        throw;
+                    }
+                    
                 }
                 else
                 {
