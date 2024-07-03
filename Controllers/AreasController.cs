@@ -445,5 +445,164 @@ namespace Carbon_inventory_platform.Controllers
             return null;
         }
 
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Analyses(Guid Id) //非同步方法
+        {
+
+            var analyses = await _context.Analyses
+                          .Where(x => x.isDeleted == 0 && x.AreaId == Id) //抓出資料表裡面沒被刪除的
+                          .FirstOrDefaultAsync();
+            if (analyses == null)
+            {
+                return NotFound();
+            }
+
+            return View(analyses);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Analyses(Guid id, Analysis analysis)
+        {
+            if (id != analysis.Id)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                var companyId = TempData.Peek("companyId") as Guid?;
+                try
+                {
+                    var toUpdate = await _context.Analyses.FindAsync(id);
+                    if (toUpdate != null)
+                    {
+                        toUpdate._21A = analysis._21A;
+                        toUpdate._22A = analysis._22A;
+                        toUpdate._31A = analysis._31A;
+                        toUpdate._32A = analysis._32A;
+                        toUpdate._33A = analysis._33A;
+                        toUpdate._34A = analysis._34A;
+                        toUpdate._35A = analysis._35A;
+                        toUpdate._41A = analysis._41A;
+                        toUpdate._42A = analysis._42A;
+                        toUpdate._43A = analysis._43A;
+                        toUpdate._44A = analysis._44A;
+                        toUpdate._45A = analysis._45A;
+                        toUpdate._46A = analysis._46A;
+                        toUpdate._47A = analysis._47A;
+                        toUpdate._48A = analysis._48A;
+                        toUpdate._49A = analysis._49A;
+                        toUpdate._410A = analysis._410A;
+                        toUpdate._411A = analysis._411A;
+                        toUpdate._51A = analysis._51A;
+                        toUpdate._52A = analysis._52A;
+                        toUpdate._53A = analysis._53A;
+                        toUpdate._54A = analysis._54A;
+                        toUpdate._55A = analysis._55A;
+                        toUpdate._61A = analysis._61A;
+
+                        toUpdate._21B = analysis._21B;
+                        toUpdate._22B = analysis._22B;
+                        toUpdate._31B = analysis._31B;
+                        toUpdate._32B = analysis._32B;
+                        toUpdate._33B = analysis._33B;
+                        toUpdate._34B = analysis._34B;
+                        toUpdate._35B = analysis._35B;
+                        toUpdate._41B = analysis._41B;
+                        toUpdate._42B = analysis._42B;
+                        toUpdate._43B = analysis._43B;
+                        toUpdate._44B = analysis._44B;
+                        toUpdate._45B = analysis._45B;
+                        toUpdate._46B = analysis._46B;
+                        toUpdate._47B = analysis._47B;
+                        toUpdate._48B = analysis._48B;
+                        toUpdate._49B = analysis._49B;
+                        toUpdate._410B = analysis._410B;
+                        toUpdate._411B = analysis._411B;
+                        toUpdate._51B = analysis._51B;
+                        toUpdate._52B = analysis._52B;
+                        toUpdate._53B = analysis._53B;
+                        toUpdate._54B = analysis._54B;
+                        toUpdate._55B = analysis._55B;
+                        toUpdate._61B = analysis._61B;
+
+                        toUpdate._21C = analysis._21C;
+                        toUpdate._22C = analysis._22C;
+                        toUpdate._31C = analysis._31C;
+                        toUpdate._32C = analysis._32C;
+                        toUpdate._33C = analysis._33C;
+                        toUpdate._34C = analysis._34C;
+                        toUpdate._35C = analysis._35C;
+                        toUpdate._41C = analysis._41C;
+                        toUpdate._42C = analysis._42C;
+                        toUpdate._43C = analysis._43C;
+                        toUpdate._44C = analysis._44C;
+                        toUpdate._45C = analysis._45C;
+                        toUpdate._46C = analysis._46C;
+                        toUpdate._47C = analysis._47C;
+                        toUpdate._48C = analysis._48C;
+                        toUpdate._49C = analysis._49C;
+                        toUpdate._410C = analysis._410C;
+                        toUpdate._411C = analysis._411C;
+                        toUpdate._51C = analysis._51C;
+                        toUpdate._52C = analysis._52C;
+                        toUpdate._53C = analysis._53C;
+                        toUpdate._54C = analysis._54C;
+                        toUpdate._55C = analysis._55C;
+                        toUpdate._61C = analysis._61C;
+
+                        toUpdate._21 = analysis._21;
+                        toUpdate._22 = analysis._22;
+                        toUpdate._31 = analysis._31;
+                        toUpdate._32 = analysis._32;
+                        toUpdate._33 = analysis._33;
+                        toUpdate._34 = analysis._34;
+                        toUpdate._35 = analysis._35;
+                        toUpdate._41 = analysis._41;
+                        toUpdate._42 = analysis._42;
+                        toUpdate._43 = analysis._43;
+                        toUpdate._44 = analysis._44;
+                        toUpdate._45 = analysis._45;
+                        toUpdate._46 = analysis._46;
+                        toUpdate._47 = analysis._47;
+                        toUpdate._48 = analysis._48;
+                        toUpdate._49 = analysis._49;
+                        toUpdate._410 = analysis._410;
+                        toUpdate._411 = analysis._411;
+                        toUpdate._51 = analysis._51;
+                        toUpdate._52 = analysis._52;
+                        toUpdate._53 = analysis._53;
+                        toUpdate._54 = analysis._54;
+                        toUpdate._55 = analysis._55;
+                        toUpdate._61 = analysis._61;
+
+                        toUpdate.ModifiedTime = DateTime.Now;
+                    }
+                    await _context.SaveChangesAsync();
+
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AreaExists(analysis.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                if (User.IsInRole("User"))
+                {
+                    return RedirectToAction(nameof(Index), new { id = companyId });
+                }
+                else if (User.IsInRole("Admin"))
+                {
+                    return RedirectToAction(nameof(AdminIndex), new { id = companyId });
+                }
+            }
+            return View(analysis);
+        }
+
+
     }
 }

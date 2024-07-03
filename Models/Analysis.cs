@@ -3,13 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Carbon_inventory_platform.Models
 {
-    [NotMapped]
-    public class CategoryData
-    {
-        public int A { get; set; }
-        public int B { get; set; }
-        public int C { get; set; }
-    }
     public class Analysis //Materiality Analysis 重大性評估
     {
         public Guid Id { get; set; }
