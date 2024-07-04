@@ -308,14 +308,19 @@
             }
 
             function OtherName() {
-                if ($('#nameDropdown').val() === '其他') {
-                    $('#OtherName').show();
-                    $('#OtherNameText').prop('required', true);
-                    $('#CEFCustomize').prop('checked', true).prop('disabled', true).trigger('change');
+                var nameDropdownValue = $('#nameDropdown').val();
+                var $otherName = $('#OtherName');
+                var $otherNameText = $('#OtherNameText');
+                var $cefCustomize = $('#CEFCustomize');
+
+                if (nameDropdownValue === '其他') {
+                    $otherName.show();
+                    $otherNameText.prop('required', true);
+                    $cefCustomize.prop('checked', true).prop('disabled', true).trigger('change');
                 } else {
-                    $('#OtherName').hide();
-                    $('#OtherNameText').prop('required', false);
-                    $('#CEFCustomize').prop('checked', false).prop('disabled', false).trigger('change');
+                    $otherName.hide();
+                    $otherNameText.prop('required', false);
+                    $cefCustomize.prop('checked', false).prop('disabled', false).trigger('change');
                 }
             }
 
