@@ -120,10 +120,12 @@
                 <th></th>
             </tr>
         </thead>
-        @for (int i = 0; i <= 4; i++)
+        @for (int i = 0; i <= 5; i++) 
         {
             string EmissPattern = "";
             string style = "";
+            bool isOtherPattern = false;
+
             switch (i)
             {
                 case 0: EmissPattern = "固定"; style = "warning"; break;
@@ -131,11 +133,12 @@
                 case 2: EmissPattern = "逸散"; style = "success"; break;
                 case 3: EmissPattern = "製程"; style = "danger"; break;
                 case 4: EmissPattern = "外購電力"; style = "primary"; break;
+                case 5: isOtherPattern = true; style = "info"; break; 
             }
             <tbody>
                 @foreach (var item in Model)
                 {
-                    if (item.EmissionPattern == EmissPattern)
+                    if ((!isOtherPattern && item.EmissionPattern == EmissPattern) || (isOtherPattern && item.EmissionPattern != "固定" && item.EmissionPattern != "移動" && item.EmissionPattern != "逸散" && item.EmissionPattern != "製程" && item.EmissionPattern != "外購電力")) 
                     {
                         <tr class="table-@style">
                             @*
@@ -160,7 +163,6 @@
                                     {
                                         <p>@item.OtherName</p>
                                     }
-
                                 }
                                 else
                                 {
@@ -179,7 +181,6 @@
                                     {
                                         <p>@item.Name</p>
                                     }
-
                                 }
                             </td>
                             @* <td>
@@ -239,7 +240,6 @@
                                     }
                                 </td>
                             }
-
                             <td>
                                 @if (item.ActivityDatas.Count != 0)
                                 {
@@ -308,10 +308,10 @@
                             </td>
                         </tr>
                     }
-
                 }
             </tbody>
         }
+
     </table>
 
 </div>

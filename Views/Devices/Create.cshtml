@@ -90,21 +90,33 @@
     <script>
         function Save() {
             var pos = 0;
+            var matchFound = false;
             var material = document.getElementById('Material').value;
-            if ($('#nameDropdown').val() === '其他') {
+            var nameDropdown = $('#nameDropdown').val();
+
+            if (nameDropdown === "其他") {
                 if (material.trim() == "") {
                     pos++;
                     document.getElementById("lbMaterial").innerHTML = "請輸入原燃物料";
+                } else {
+                    document.getElementById("lbMaterial").innerHTML = "";
                 }
-            } else {
+            }
+            else {
                 var datalist = document.getElementById('MaterialList');
                 var options = datalist.querySelectorAll('option');
                 for (var i = 0; i < options.length; i++) {
+                    console.log(options[i].value);
                     if (options[i].value === material) {
-                        pos++;
-                        document.getElementById("lbMaterial").innerHTML = "請選擇有效的原燃物料";
+                        matchFound = true;
                         break;
                     }
+                }
+                if (!matchFound) {
+                    pos++;
+                    document.getElementById("lbMaterial").innerHTML = "請選擇有效的原燃物料";
+                } else {
+                    document.getElementById("lbMaterial").innerHTML = "";
                 }
             }
 

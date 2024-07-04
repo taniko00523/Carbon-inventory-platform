@@ -4,23 +4,23 @@
     List<SelectListItem> aListItem = new List<SelectListItem>
 {
     new SelectListItem { Value = "0", Text = "無" },
-    new SelectListItem { Value = "1", Text = "自行評估/沒有相關資訊無法推估" },
-    new SelectListItem { Value = "2", Text = "間接量測" },
-    new SelectListItem { Value = "3", Text = "連續監測數據" }
+    new SelectListItem { Value = "1", Text = "1.自行評估/沒有相關資訊無法推估" },
+    new SelectListItem { Value = "2", Text = "2.間接量測" },
+    new SelectListItem { Value = "3", Text = "3.連續監測數據" }
 };
     List<SelectListItem> bListItem = new List<SelectListItem>
 {
         new SelectListItem { Value = "0", Text = "無" },
-    new SelectListItem { Value = "1", Text = "國際排放係數/無依據" },
-    new SelectListItem { Value = "2", Text = "國家排放係數" },
-    new SelectListItem { Value = "3", Text = "自廠發展係數/質量平衡所得係數/同製程/設備經驗係數/製造廠提供係數/區域排放係數" }
+    new SelectListItem { Value = "1", Text = "1.國際排放係數/無依據" },
+    new SelectListItem { Value = "2", Text = "2.國家排放係數" },
+    new SelectListItem { Value = "3", Text = "3.自廠發展係數/質量平衡所得係數/同製程/設備經驗係數/製造廠提供係數/區域排放係數" }
 };
     List<SelectListItem> cListItem = new List<SelectListItem>
 {
         new SelectListItem { Value = "0", Text = "無" },
-    new SelectListItem { Value = "1", Text = "每季不到一次" },
-    new SelectListItem { Value = "2", Text = "每周 /月一次" },
-    new SelectListItem { Value = "3", Text = "每天一次" }
+    new SelectListItem { Value = "1", Text = "1.每季不到一次" },
+    new SelectListItem { Value = "2", Text = "2.每周 /月一次" },
+    new SelectListItem { Value = "3", Text = "3.每天一次" }
 };
     List<SelectListItem> isCalListItem = new List<SelectListItem>
 {
@@ -52,7 +52,7 @@
                     <td>@Html.DropDownListFor(model => Model._21A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('21');" })</td>
                     <td>@Html.DropDownListFor(model => Model._21B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('21');" })</td>
                     <td>@Html.DropDownListFor(model => Model._21C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('21');" })</td>
-                    <td>@Html.EditorFor(model => Model._21, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._21, new { @class = "form-control" })<label id="lb21">@Model._21</label></td>
                     <td>@Html.DropDownListFor(model => model._21isCal, isCalListItem, new { @class = "form-control", @style = Model._21isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -61,7 +61,7 @@
                     <td>@Html.DropDownListFor(model => Model._22A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('22');" })</td>
                     <td>@Html.DropDownListFor(model => Model._22B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('22');" })</td>
                     <td>@Html.DropDownListFor(model => Model._22C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('22');" })</td>
-                    <td>@Html.EditorFor(model => Model._22, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._22, new { @class = "form-control" })<label id="lb22">@Model._22</label></td>
                     <td>@Html.DropDownListFor(model => Model._22isCal, isCalListItem, new { @class = "form-control", @style = Model._22isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
             </tbody>
@@ -72,7 +72,7 @@
                     <td>@Html.DropDownListFor(model => Model._31A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('31');" })</td>
                     <td>@Html.DropDownListFor(model => Model._31B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('31');" })</td>
                     <td>@Html.DropDownListFor(model => Model._31C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('31');" })</td>
-                    <td>@Html.EditorFor(model => Model._31, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._31, new { @class = "form-control" })<label id="lb31">@Model._31</label></td>
                     <td>@Html.DropDownListFor(model => Model._31isCal, isCalListItem, new { @class = "form-control", @style = Model._31isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -81,7 +81,7 @@
                     <td>@Html.DropDownListFor(model => Model._32A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('32');" })</td>
                     <td>@Html.DropDownListFor(model => Model._32B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('32');" })</td>
                     <td>@Html.DropDownListFor(model => Model._32C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('32');" })</td>
-                    <td>@Html.EditorFor(model => Model._32, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._32, new { @class = "form-control" })<label id="lb32">@Model._32</label></td>
                     <td>@Html.DropDownListFor(model => Model._32isCal, isCalListItem, new { @class = "form-control", @style = Model._32isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -90,7 +90,7 @@
                     <td>@Html.DropDownListFor(model => Model._33A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('33');" })</td>
                     <td>@Html.DropDownListFor(model => Model._33B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('33');" })</td>
                     <td>@Html.DropDownListFor(model => Model._33C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('33');" })</td>
-                    <td>@Html.EditorFor(model => Model._33, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._33, new { @class = "form-control" })<label id="lb33">@Model._33</label></td>
                     <td>@Html.DropDownListFor(model => Model._33isCal, isCalListItem, new { @class = "form-control", @style = Model._33isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -99,7 +99,7 @@
                     <td>@Html.DropDownListFor(model => Model._34A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('34');" })</td>
                     <td>@Html.DropDownListFor(model => Model._34B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('34');" })</td>
                     <td>@Html.DropDownListFor(model => Model._34C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('34');" })</td>
-                    <td>@Html.EditorFor(model => Model._34, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._34, new { @class = "form-control" })<label id="lb34">@Model._34</label></td>
                     <td>@Html.DropDownListFor(model => Model._34isCal, isCalListItem, new { @class = "form-control", @style = Model._34isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -108,7 +108,7 @@
                     <td>@Html.DropDownListFor(model => Model._35A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('35');" })</td>
                     <td>@Html.DropDownListFor(model => Model._35B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('35');" })</td>
                     <td>@Html.DropDownListFor(model => Model._35C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('35');" })</td>
-                    <td>@Html.EditorFor(model => Model._35, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._35, new { @class = "form-control" })<label id="lb35">@Model._35</label></td>
                     <td>@Html.DropDownListFor(model => Model._35isCal, isCalListItem, new { @class = "form-control", @style = Model._35isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
             </tbody>
@@ -119,7 +119,7 @@
                     <td>@Html.DropDownListFor(model => Model._41A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('41');" })</td>
                     <td>@Html.DropDownListFor(model => Model._41B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('41');" })</td>
                     <td>@Html.DropDownListFor(model => Model._41C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('41');" })</td>
-                    <td>@Html.EditorFor(model => Model._41, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._41, new { @class = "form-control" })<label id="lb41">@Model._41</label></td>
                     <td>@Html.DropDownListFor(model => Model._41isCal, isCalListItem, new { @class = "form-control", @style = Model._41isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -128,7 +128,7 @@
                     <td>@Html.DropDownListFor(model => Model._42A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('42');" })</td>
                     <td>@Html.DropDownListFor(model => Model._42B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('42');" })</td>
                     <td>@Html.DropDownListFor(model => Model._42C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('42');" })</td>
-                    <td>@Html.EditorFor(model => Model._42, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._42, new { @class = "form-control" })<label id="lb42">@Model._42</label></td>
                     <td>@Html.DropDownListFor(model => Model._42isCal, isCalListItem, new { @class = "form-control", @style = Model._42isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -137,7 +137,7 @@
                     <td>@Html.DropDownListFor(model => Model._43A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('43');" })</td>
                     <td>@Html.DropDownListFor(model => Model._43B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('43');" })</td>
                     <td>@Html.DropDownListFor(model => Model._43C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('43');" })</td>
-                    <td>@Html.EditorFor(model => Model._43, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._43, new { @class = "form-control" })<label id="lb43">@Model._43</label></td>
                     <td>@Html.DropDownListFor(model => Model._43isCal, isCalListItem, new { @class = "form-control", @style = Model._43isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -146,7 +146,7 @@
                     <td>@Html.DropDownListFor(model => Model._44A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('44');" })</td>
                     <td>@Html.DropDownListFor(model => Model._44B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('44');" })</td>
                     <td>@Html.DropDownListFor(model => Model._44C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('44');" })</td>
-                    <td>@Html.EditorFor(model => Model._44, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._44, new { @class = "form-control" })<label id="lb44">@Model._44</label></td>
                     <td>@Html.DropDownListFor(model => Model._44isCal, isCalListItem, new { @class = "form-control", @style = Model._44isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -155,7 +155,7 @@
                     <td>@Html.DropDownListFor(model => Model._45A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('45');" })</td>
                     <td>@Html.DropDownListFor(model => Model._45B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('45');" })</td>
                     <td>@Html.DropDownListFor(model => Model._45C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('45');" })</td>
-                    <td>@Html.EditorFor(model => Model._45, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._45, new { @class = "form-control" })<label id="lb45">@Model._45</label></td>
                     <td>@Html.DropDownListFor(model => Model._45isCal, isCalListItem, new { @class = "form-control", @style = Model._45isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -164,7 +164,7 @@
                     <td>@Html.DropDownListFor(model => Model._46A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('46');" })</td>
                     <td>@Html.DropDownListFor(model => Model._46B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('46');" })</td>
                     <td>@Html.DropDownListFor(model => Model._46C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('46');" })</td>
-                    <td>@Html.EditorFor(model => Model._46, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._46, new { @class = "form-control" })<label id="lb46">@Model._46</label></td>
                     <td>@Html.DropDownListFor(model => Model._46isCal, isCalListItem, new { @class = "form-control", @style = Model._46isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -173,7 +173,7 @@
                     <td>@Html.DropDownListFor(model => Model._47A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('47');" })</td>
                     <td>@Html.DropDownListFor(model => Model._47B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('47');" })</td>
                     <td>@Html.DropDownListFor(model => Model._47C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('47');" })</td>
-                    <td>@Html.EditorFor(model => Model._47, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._47, new { @class = "form-control" })<label id="lb47">@Model._47</label></td>
                     <td>@Html.DropDownListFor(model => Model._47isCal, isCalListItem, new { @class = "form-control", @style = Model._47isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -182,7 +182,7 @@
                     <td>@Html.DropDownListFor(model => Model._48A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('48');" })</td>
                     <td>@Html.DropDownListFor(model => Model._48B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('48');" })</td>
                     <td>@Html.DropDownListFor(model => Model._48C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('48');" })</td>
-                    <td>@Html.EditorFor(model => Model._48, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._48, new { @class = "form-control" })<label id="lb48">@Model._48</label></td>
                     <td>@Html.DropDownListFor(model => Model._48isCal, isCalListItem, new { @class = "form-control", @style = Model._48isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -191,7 +191,7 @@
                     <td>@Html.DropDownListFor(model => Model._49A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('49');" })</td>
                     <td>@Html.DropDownListFor(model => Model._49B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('49');" })</td>
                     <td>@Html.DropDownListFor(model => Model._49C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('49');" })</td>
-                    <td>@Html.EditorFor(model => Model._49, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._49, new { @class = "form-control" })<label id="lb49">@Model._49</label></td>
                     <td>@Html.DropDownListFor(model => Model._49isCal, isCalListItem, new { @class = "form-control", @style = Model._49isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -200,7 +200,7 @@
                     <td>@Html.DropDownListFor(model => Model._410A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('410');" })</td>
                     <td>@Html.DropDownListFor(model => Model._410B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('410');" })</td>
                     <td>@Html.DropDownListFor(model => Model._410C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('410');" })</td>
-                    <td>@Html.EditorFor(model => Model._410, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._410, new { @class = "form-control" })<label id="lb410">@Model._410</label></td>
                     <td>@Html.DropDownListFor(model => Model._410isCal, isCalListItem, new { @class = "form-control", @style = Model._410isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -209,7 +209,7 @@
                     <td>@Html.DropDownListFor(model => Model._411A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('411');" })</td>
                     <td>@Html.DropDownListFor(model => Model._411B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('411');" })</td>
                     <td>@Html.DropDownListFor(model => Model._411C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('411');" })</td>
-                    <td>@Html.EditorFor(model => Model._411, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._411, new { @class = "form-control" })<label id="lb411">@Model._411</label></td>
                     <td>@Html.DropDownListFor(model => Model._411isCal, isCalListItem, new { @class = "form-control", @style = Model._411isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
             </tbody>
@@ -220,7 +220,7 @@
                     <td>@Html.DropDownListFor(model => Model._51A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('51');" })</td>
                     <td>@Html.DropDownListFor(model => Model._51B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('51');" })</td>
                     <td>@Html.DropDownListFor(model => Model._51C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('51');" })</td>
-                    <td>@Html.EditorFor(model => Model._51, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._51, new { @class = "form-control" })<label id="lb51">@Model._51</label></td>
                     <td>@Html.DropDownListFor(model => Model._51isCal, isCalListItem, new { @class = "form-control", @style = Model._51isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -229,7 +229,7 @@
                     <td>@Html.DropDownListFor(model => Model._52A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('52');" })</td>
                     <td>@Html.DropDownListFor(model => Model._52B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('52');" })</td>
                     <td>@Html.DropDownListFor(model => Model._52C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('52');" })</td>
-                    <td>@Html.EditorFor(model => Model._52, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._52, new { @class = "form-control" })<label id="lb52">@Model._52</label></td>
                     <td>@Html.DropDownListFor(model => Model._52isCal, isCalListItem, new { @class = "form-control", @style = Model._52isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -238,7 +238,7 @@
                     <td>@Html.DropDownListFor(model => Model._53A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('53');" })</td>
                     <td>@Html.DropDownListFor(model => Model._53B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('53');" })</td>
                     <td>@Html.DropDownListFor(model => Model._53C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('53');" })</td>
-                    <td>@Html.EditorFor(model => Model._53, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._53, new { @class = "form-control" })<label id="lb53">@Model._53</label></td>
                     <td>@Html.DropDownListFor(model => Model._53isCal, isCalListItem, new { @class = "form-control", @style = Model._53isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -247,7 +247,7 @@
                     <td>@Html.DropDownListFor(model => Model._54A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('54');" })</td>
                     <td>@Html.DropDownListFor(model => Model._54B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('54');" })</td>
                     <td>@Html.DropDownListFor(model => Model._54C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('54');" })</td>
-                    <td>@Html.EditorFor(model => Model._54, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._54, new { @class = "form-control" })<label id="lb54">@Model._54</label></td>
                     <td>@Html.DropDownListFor(model => Model._54isCal, isCalListItem, new { @class = "form-control", @style = Model._54isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
                 <tr>
@@ -256,7 +256,7 @@
                     <td>@Html.DropDownListFor(model => Model._55A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('55');" })</td>
                     <td>@Html.DropDownListFor(model => Model._55B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('55');" })</td>
                     <td>@Html.DropDownListFor(model => Model._55C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('55');" })</td>
-                    <td>@Html.EditorFor(model => Model._55, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._55, new { @class = "form-control" })<label id="lb55">@Model._55</label></td>
                     <td>@Html.DropDownListFor(model => Model._55isCal, isCalListItem, new { @class = "form-control", @style = Model._55isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
             </tbody>
@@ -267,7 +267,7 @@
                     <td>@Html.DropDownListFor(model => Model._61A, aListItem, new { @class = "form-control", @onchange = "CountAnalyses('61');" })</td>
                     <td>@Html.DropDownListFor(model => Model._61B, bListItem, new { @class = "form-control", @onchange = "CountAnalyses('61');" })</td>
                     <td>@Html.DropDownListFor(model => Model._61C, cListItem, new { @class = "form-control", @onchange = "CountAnalyses('61');" })</td>
-                    <td>@Html.EditorFor(model => Model._61, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(model => Model._61, new { @class = "form-control" })<label id="lb61">@Model._61</label></td>
                     <td>@Html.DropDownListFor(model => Model._61isCal, isCalListItem, new { @class = "form-control", @style = Model._61isCal == 1 ? "color: red; font-weight: bold;" : "" })</td>
                 </tr>
             </tbody>
@@ -289,6 +289,7 @@
 
             var total = A * B * C;
             document.getElementById('z' + scope).value = total;
+            document.getElementById('lb' + scope).innerText = total;
             if (total > 8) {
                 document.getElementById('z' + scope + 'isCal').value = 1;
                 document.getElementById('z' + scope + 'isCal').style.color = 'red';
@@ -299,6 +300,7 @@
                 document.getElementById('z' + scope + 'isCal').style.fontWeight = 'normal';
             }
         }
+       
 
     </script>
 }
