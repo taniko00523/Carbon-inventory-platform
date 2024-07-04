@@ -54,7 +54,8 @@ namespace Carbon_inventory_platform.Controllers
             deviceDatas.Add(new DeviceData { Name = "其他" });
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
             ViewData["AreasId"] = new SelectList(await _context.Areas.Where(x => x.isDeleted == 0).ToListAsync(), "Id", "Name");
-            ViewData["Scope"] = new SelectList(await _context.Materials.Select(m => m.Scope).Distinct().ToListAsync());
+            ViewData["Scope"] = new SelectList(new List<string> { "類別一", "類別二", "類別三", "類別四", "類別五", "類別六" });
+
             //ViewData["EmissionPattern"] = new SelectList(emissionPattern);
 
             return View();
@@ -143,7 +144,8 @@ namespace Carbon_inventory_platform.Controllers
             var deviceDatas = await _context.deviceDatas.ToListAsync();
             deviceDatas.Add(new DeviceData { Name = "其他" });
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
-            ViewData["Scope"] = new SelectList(await _context.Materials.Select(m => m.Scope).Distinct().ToListAsync());
+            ViewData["Scope"] = new SelectList(new List<string> { "類別一", "類別二", "類別三", "類別四", "類別五", "類別六" });
+
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
             return View(device);
         }
@@ -320,7 +322,29 @@ namespace Carbon_inventory_platform.Controllers
         {
             var emission = new List<string> { };
             // 根據scope的值抓取相對應的emission選項
-            emission = _context.Materials.Where(x => x.Scope == scope).Select(m => m.EmissionPattern).Distinct().ToList();
+
+
+            if (scope == "類別三")
+            {
+                emission.AddRange(new List<string> { "上游運輸和配送貨物", "下游運輸和配送貨物", "員工通勤", "客戶和訪客運輸", "商務旅行" });
+
+            }
+            else if (scope == "類別四")
+            {
+                emission.AddRange(new List<string> { "商品_輸入電力", "商品_輸入能源", "商品_燃料", "商品_資源", "商品_主要原料", "商品_輔助原料", "商品_包裝材料", "服務_不可回收廢棄物", "商品_資本貨物", "服務_租賃資產", "服務_其他" });
+            }
+            else if (scope == "類別五")
+            {
+                emission.AddRange(new List<string> { "產品加工", "產品使用", "下游租賃", "產品壽命終止處置", "投資" });
+            }
+            else if (scope == "類別六")
+            {
+                emission.AddRange(new List<string> { "維修與施工" });
+            }
+            else
+            {
+                emission = _context.Materials.Where(x => x.Scope == scope).Select(m => m.EmissionPattern).Distinct().ToList();
+            }
             return Json(emission);
         }
 
@@ -402,7 +426,7 @@ namespace Carbon_inventory_platform.Controllers
             var deviceDatas = await _context.deviceDatas.ToListAsync();
             deviceDatas.Add(new DeviceData { Name = "其他" });
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
-            ViewData["Scope"] = new SelectList(await _context.Materials.Select(m => m.Scope).Distinct().ToListAsync());
+            ViewData["Scope"] = new SelectList(new List<string> { "類別一", "類別二", "類別三", "類別四", "類別五", "類別六" });
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
             return View(deviceViewModel);
         }
@@ -585,7 +609,7 @@ namespace Carbon_inventory_platform.Controllers
             var deviceDatas = await _context.deviceDatas.ToListAsync();
             deviceDatas.Add(new DeviceData { Name = "其他" });
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
-            ViewData["Scope"] = new SelectList(await _context.Materials.Select(m => m.Scope).Distinct().ToListAsync());
+            ViewData["Scope"] = new SelectList(new List<string> { "類別一", "類別二", "類別三", "類別四", "類別五", "類別六" });
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
 
             return View(device);

@@ -600,11 +600,10 @@ namespace Carbon_inventory_platform.Controllers
                         toUpdate._55isCal = analysis._55isCal;
                         toUpdate._61isCal = analysis._61isCal;
 
-
                         toUpdate.ModifiedTime = DateTime.Now;
                     }
                     await _context.SaveChangesAsync();
-
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
