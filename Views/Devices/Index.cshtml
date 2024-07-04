@@ -6,6 +6,7 @@
 <div class="row">
     <div class="col">
         <h1>@ViewData["Title"]</h1>
+        <h1>@ViewData["showDrawingError"]</h1>
         @if (TempData.Peek("areaName") != "" && TempData.Peek("areaName") != null)
         {
             <h3>@TempData.Peek("companyName")-@TempData.Peek("areaName")-@TempData.Peek("year")盤查年度</h3>
@@ -67,7 +68,7 @@
 </div>
 
 <div class="table-responsive">
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
                 @*<th>

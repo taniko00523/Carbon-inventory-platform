@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Carbon_inventory_platform.Models
 {
@@ -7,6 +6,7 @@ namespace Carbon_inventory_platform.Models
     {
         public Guid Id { get; set; }
         public Guid AreaId { get; set; }
+        public int Target { get; set; } = 8;
         public int _21A { get; set; } = 3;
         public int _21B { get; set; } = 3;
         public int _21C { get; set; } = 3;
@@ -79,30 +79,55 @@ namespace Carbon_inventory_platform.Models
         public int _61A { get; set; } = 3;
         public int _61B { get; set; } = 3;
         public int _61C { get; set; } = 3;
-        public int _21 { get; set; }
-        public int _22 { get; set; }
-        public int _31 { get; set; }
-        public int _32 { get; set; }
-        public int _33 { get; set; }
-        public int _34 { get; set; }
-        public int _35 { get; set; }
-        public int _41 { get; set; }
-        public int _42 { get; set; }
-        public int _43 { get; set; }
-        public int _44 { get; set; }
-        public int _45 { get; set; }
-        public int _46 { get; set; }
-        public int _47 { get; set; }
-        public int _48 { get; set; }
-        public int _49 { get; set; }
-        public int _410 { get; set; }
-        public int _411 { get; set; }
-        public int _51 { get; set; }
-        public int _52 { get; set; }
-        public int _53 { get; set; }
-        public int _54 { get; set; }
-        public int _55 { get; set; }
-        public int _61 { get; set; }
+        public int _21 { get; set; } = 9;
+        public int _22 { get; set; }= 9;
+        public int _31 { get; set; }= 9;
+        public int _32 { get; set; }= 9;
+        public int _33 { get; set; }= 9;
+        public int _34 { get; set; }= 9;
+        public int _35 { get; set; }= 9;
+        public int _41 { get; set; }= 9;
+        public int _42 { get; set; }= 9;
+        public int _43 { get; set; }= 9;
+        public int _44 { get; set; }= 9;
+        public int _45 { get; set; }= 9;
+        public int _46 { get; set; }= 9;
+        public int _47 { get; set; }= 9;
+        public int _48 { get; set; }= 9;
+        public int _49 { get; set; }= 9;
+        public int _410 { get; set; }= 9;
+        public int _411 { get; set; }= 9;
+        public int _51 { get; set; }= 9;
+        public int _52 { get; set; }= 9;
+        public int _53 { get; set; }= 9;
+        public int _54 { get; set; }= 9;
+        public int _55 { get; set; }= 9;
+        public int _61 { get; set; }= 9;
+
+        public int _21isCal { get; set; }
+        public int _22isCal { get; set; }
+        public int _31isCal { get; set; }
+        public int _32isCal { get; set; }
+        public int _33isCal { get; set; }
+        public int _34isCal { get; set; }
+        public int _35isCal { get; set; }
+        public int _41isCal { get; set; }
+        public int _42isCal { get; set; }
+        public int _43isCal { get; set; }
+        public int _44isCal { get; set; }
+        public int _45isCal { get; set; }
+        public int _46isCal { get; set; }
+        public int _47isCal { get; set; }
+        public int _48isCal { get; set; }
+        public int _49isCal { get; set; }
+        public int _410isCal { get; set; }
+        public int _411isCal { get; set; }
+        public int _51isCal { get; set; }
+        public int _52isCal { get; set; }
+        public int _53isCal { get; set; }
+        public int _54isCal { get; set; }
+        public int _55isCal { get; set; }
+        public int _61isCal { get; set; }
         [Display(Name = "是否刪除")]
         public byte isDeleted { get; set; } = 0;
 

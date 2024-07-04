@@ -575,6 +575,32 @@ namespace Carbon_inventory_platform.Controllers
                         toUpdate._55 = analysis._55;
                         toUpdate._61 = analysis._61;
 
+                        toUpdate._21isCal = analysis._21isCal;
+                        toUpdate._22isCal = analysis._22isCal;
+                        toUpdate._31isCal = analysis._31isCal;
+                        toUpdate._32isCal = analysis._32isCal;
+                        toUpdate._33isCal = analysis._33isCal;
+                        toUpdate._34isCal = analysis._34isCal;
+                        toUpdate._35isCal = analysis._35isCal;
+                        toUpdate._41isCal = analysis._41isCal;
+                        toUpdate._42isCal = analysis._42isCal;
+                        toUpdate._43isCal = analysis._43isCal;
+                        toUpdate._44isCal = analysis._44isCal;
+                        toUpdate._45isCal = analysis._45isCal;
+                        toUpdate._46isCal = analysis._46isCal;
+                        toUpdate._47isCal = analysis._47isCal;
+                        toUpdate._48isCal = analysis._48isCal;
+                        toUpdate._49isCal = analysis._49isCal;
+                        toUpdate._410isCal = analysis._410isCal;
+                        toUpdate._411isCal = analysis._411isCal;
+                        toUpdate._51isCal = analysis._51isCal;
+                        toUpdate._52isCal = analysis._52isCal;
+                        toUpdate._53isCal = analysis._53isCal;
+                        toUpdate._54isCal = analysis._54isCal;
+                        toUpdate._55isCal = analysis._55isCal;
+                        toUpdate._61isCal = analysis._61isCal;
+
+
                         toUpdate.ModifiedTime = DateTime.Now;
                     }
                     await _context.SaveChangesAsync();
