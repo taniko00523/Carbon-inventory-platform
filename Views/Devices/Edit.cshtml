@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" id="id" />
             <input type="hidden" asp-for="AreaId" class="form-control" />
-            
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label><span style="color:red">*</span>
                 <select asp-for="Name" class="form-control" id="nameDropdown" asp-items="ViewBag.Name"></select>
@@ -27,7 +27,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="NameRemark" class="control-label"></label>
-                <input asp-for="NameRemark" class="form-control" id="NameRemarkText"/>
+                <input asp-for="NameRemark" class="form-control" id="NameRemarkText" />
                 <span asp-validation-for="NameRemark" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -94,27 +94,29 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function Save() {
-            var material = document.getElementById('Material').value;
-            var datalist = document.getElementById('MaterialList');
-            var options = datalist.querySelectorAll('option');
-            var matchFound = false;
             var pos = 0;
-
-            for (var i = 0; i < options.length; i++) {
-                if (options[i].value === material) {
-                    matchFound = true;
-                    break;
+            var material = document.getElementById('Material').value;
+            if ($('#nameDropdown').val() === '其他') {
+                if (material.trim() == "") {
+                    pos++;
+                    document.getElementById("lbMaterial").innerHTML = "請輸入原燃物料";
+                }
+            } else {
+                var datalist = document.getElementById('MaterialList');
+                var options = datalist.querySelectorAll('option');
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].value === material) {
+                        pos++;
+                        document.getElementById("lbMaterial").innerHTML = "請選擇有效的原燃物料";
+                        break;
+                    }
                 }
             }
 
-            if (!matchFound) {
-                pos++;
-                document.getElementById("lbMaterial").innerHTML = "請選擇有效的原燃物料";
-            }
             if (pos > 0) {
                 return false;
             } else {
-                $("#DeviceEdit").submit();
+                $("#DeviceCreate").submit();
             }
         }
 
