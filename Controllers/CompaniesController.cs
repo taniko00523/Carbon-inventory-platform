@@ -121,7 +121,7 @@ namespace Carbon_inventory_platform.Controllers
         {
             return (_context.Companies?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-        static string RemoveSuffixes(string input)
+        public string RemoveSuffixes(string input)
         {
 
             string[] suffixes = { "股份有限公司", "有限公司" };
@@ -136,7 +136,7 @@ namespace Carbon_inventory_platform.Controllers
             // 如果没有匹配的后缀，则返回原始输入
             return input;
         }
-        static string RemoveENSuffixes(string input)
+        public string RemoveENSuffixes(string input)
         {
             string[] suffixes = { "INDUSTRIAL CO., LTD", "PAPERWARE CO., LTD", "SCIENTIFIC CO., LTD", "B.T. CO.,LTD", "AUTOMOBILE DIE CO., LTD", "INTERNATIONAL CO., LTD", "MACHINE CO., LTD", "TECHNOLOGY CO., LTD", "Co., Ltd", "CORPORATION" };
 
