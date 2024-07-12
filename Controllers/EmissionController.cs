@@ -32,10 +32,11 @@ namespace Carbon_inventory_platform.Controllers
         {
             // 合并数据库查询
             var areaData = await _context.Areas
-                .Include(a => a.Devices)
-                .ThenInclude(d => d.GHGs)
-                .Where(a => a.Id == id && a.Devices.All(d => d.isDeleted == 0))
-                .FirstOrDefaultAsync();
+    .Include(a => a.Devices.Where(d => d.isDeleted == 0))  // 只包含 isDeleted == 0 的 Devices
+    .ThenInclude(d=>d.GHGs)
+    .Where(a => a.Id == id && a.isDeleted == 0)  // Area 的 Id 等于 id，且 IsDeleted == 0
+    .FirstOrDefaultAsync();
+
 
             if (areaData == null) return null;
             if (areaData.Devices == null) return null;
