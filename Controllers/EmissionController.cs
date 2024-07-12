@@ -306,7 +306,8 @@ namespace Carbon_inventory_platform.Controllers
             string currentDirectory = Directory.GetCurrentDirectory();
             string filePath = Path.Combine(currentDirectory, "wwwroot\\doc\\", "溫盤報告書範本3.docx");
             string newFilePath = Path.Combine(currentDirectory, "wwwroot\\output\\");
-            string newFile = Path.Combine($"{data.Year}年度-{data.Company.Name}{(data.Name != null ? ("-" + data.Name) : "")}-溫室氣體盤查報告書.docx");
+            string fileName = data.Year + "年度" + "-" + data.Company.Name + (data.Name != null ? ("-" + data.Name) : "") + "-溫室氣體盤查報告書.docx";
+            string newFile = Path.Combine(newFilePath, fileName);
 
             if (!Directory.Exists(newFilePath))
             {
@@ -723,7 +724,7 @@ namespace Carbon_inventory_platform.Controllers
             }
 
             byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(newFile);
-            return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", newFile);
+            return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         }
         public async Task<IActionResult> IISReportAsync(Guid id)
         {
@@ -755,8 +756,8 @@ namespace Carbon_inventory_platform.Controllers
             string currentDirectory = Directory.GetCurrentDirectory();
             string filePath = Path.Combine(currentDirectory, "wwwroot\\doc\\", "資策會版.docx");
             string newFilePath = Path.Combine(currentDirectory, "wwwroot\\output\\");
-            string newFile = Path.Combine($"{data.Year}年度-{data.Company.Name}{(data.Name != null ? ("-" + data.Name) : "")}-溫室氣體盤查報告書.docx");
-
+            string fileName = data.Year + "年度" + "-" + data.Company.Name + (data.Name != null ? ("-" + data.Name) : "") + "-溫室氣體盤查報告書.docx";
+            string newFile = Path.Combine(newFilePath, fileName);
             if (!Directory.Exists(newFilePath))
             {
                 Directory.CreateDirectory(newFilePath);
@@ -1172,7 +1173,7 @@ namespace Carbon_inventory_platform.Controllers
             }
 
             byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(newFile);
-            return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", newFile);
+            return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         }
         private void ReplaceText(DocX doc, string oldText, string newText)
         {
@@ -1295,10 +1296,6 @@ namespace Carbon_inventory_platform.Controllers
                     table.Rows[rowIndex].Cells[7].Paragraphs.First().Append(GHG.Emission.ToString("N4")).Font(font).FontSize(9d);
                     rowIndex++;
                 }
-
-
-
-
             }
             else
             {
@@ -1341,34 +1338,48 @@ namespace Carbon_inventory_platform.Controllers
         }
         public void replaceImage(DocX doc, string text, string imagePath)
         {
+            //foreach (var paragraph in doc.Paragraphs)
+            //{
+            //    if (paragraph.Text.Contains(text))
+            //    {
+            //        var image = doc.AddImage(imagePath);
+            //        var picture = image.CreatePicture();
+
+            //        // 設置圖片大小並保持長寬比
+            //        double aspectRatio = (double)picture.Width / picture.Height;
+            //        if (picture.Width > 200 || picture.Height > 200)
+            //        {
+            //            if (aspectRatio > 1) // 寬度大於高度
+            //            {
+            //                picture.Width = (int)200;
+            //                picture.Height = (int)(200 / aspectRatio);
+            //            }
+            //            else // 高度大於寬度
+            //            {
+            //                picture.Height = (int)200;
+            //                picture.Width = (int)(200 * aspectRatio);
+            //            }
+            //        }
+
+            //        // 替換文本為圖片
+            //        paragraph.ReplaceText(text, string.Empty);
+            //        paragraph.InsertPicture(picture, 0);
+
+            //        //ReplaceText(doc,text, string.Empty);
+            //    }
+            //}
             foreach (var paragraph in doc.Paragraphs)
             {
                 if (paragraph.Text.Contains(text))
                 {
-                    var image = doc.AddImage(imagePath);
-                    var picture = image.CreatePicture();
-
-                    // 設置圖片大小並保持長寬比
-                    double aspectRatio = (double)picture.Width / picture.Height;
-                    if (picture.Width > 200 || picture.Height > 200)
+                    if (imagePath != null)
                     {
-                        if (aspectRatio > 1) // 寬度大於高度
-                        {
-                            picture.Width = (int)200;
-                            picture.Height = (int)(200 / aspectRatio);
-                        }
-                        else // 高度大於寬度
-                        {
-                            picture.Height = (int)200;
-                            picture.Width = (int)(200 * aspectRatio);
-                        }
+                        var image = doc.AddImage(imagePath);
+                        var picture = image.CreatePicture(200, 200);
+                        paragraph.InsertPicture(picture);
                     }
 
-                    // 替換文本為圖片
-                    paragraph.ReplaceText(text, string.Empty);
-                    paragraph.InsertPicture(picture, 0);
-
-                    //ReplaceText(doc,text, string.Empty);
+                    doc.ReplaceText(text, string.Empty);
                 }
             }
         }

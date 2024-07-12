@@ -153,30 +153,30 @@ namespace Carbon_inventory_platform.Models
         public int _55isCal { get; set; }
         public int _61isCal { get; set; }
 
-        public string _21Remark { get; set; }
-        public string _22Remark { get; set; }
-        public string _31Remark { get; set; }
-        public string _32Remark { get; set; }
-        public string _33Remark { get; set; }
-        public string _34Remark { get; set; }
-        public string _35Remark { get; set; }
-        public string _41Remark { get; set; }
-        public string _42Remark { get; set; }
-        public string _43Remark { get; set; }
-        public string _44Remark { get; set; }
-        public string _45Remark { get; set; }
-        public string _46Remark { get; set; }
-        public string _47Remark { get; set; }
-        public string _48Remark { get; set; }
-        public string _49Remark { get; set; }
-        public string _410Remark { get; set; }
-        public string _411Remark { get; set; }
-        public string _51Remark { get; set; }
-        public string _52Remark { get; set; }
-        public string _53Remark { get; set; }
-        public string _54Remark { get; set; }
-        public string _55Remark { get; set; }
-        public string _61Remark { get; set; }
+        public string _21Remark { get; set; } =string.Empty;
+        public string _22Remark { get; set; } = string.Empty;
+        public string _31Remark { get; set; } = string.Empty;
+        public string _32Remark { get; set; } = string.Empty;
+        public string _33Remark { get; set; } = string.Empty;
+        public string _34Remark { get; set; } = string.Empty;
+        public string _35Remark { get; set; } = string.Empty;
+        public string _41Remark { get; set; } = string.Empty;
+        public string _42Remark { get; set; } = string.Empty;
+        public string _43Remark { get; set; } = string.Empty;
+        public string _44Remark { get; set; } = string.Empty;
+        public string _45Remark { get; set; } = string.Empty;
+        public string _46Remark { get; set; } = string.Empty;
+        public string _47Remark { get; set; } = string.Empty;
+        public string _48Remark { get; set; } = string.Empty;
+        public string _49Remark { get; set; } = string.Empty;
+        public string _410Remark { get; set; } = string.Empty;
+        public string _411Remark { get; set; } = string.Empty;
+        public string _51Remark { get; set; } = string.Empty;
+        public string _52Remark { get; set; } = string.Empty;
+        public string _53Remark { get; set; } = string.Empty;
+        public string _54Remark { get; set; } = string.Empty;
+        public string _55Remark { get; set; } = string.Empty;
+        public string _61Remark { get; set; } = string.Empty;
         [Display(Name = "是否刪除")]
         public byte isDeleted { get; set; } = 0;
 

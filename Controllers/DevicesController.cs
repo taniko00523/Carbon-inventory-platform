@@ -1202,5 +1202,15 @@ namespace Carbon_inventory_platform.Controllers
 
             return null;
         }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> View(Guid Id)
+        {
+            var deviceInformation = new DeviceInformationViewModel();
+            deviceInformation.Device = await _context.Devices.FindAsync(Id);
+            deviceInformation.ActivityDataList = await _context.ActivityDatas.Where(x => x.DeviceId == Id).ToListAsync();
+            deviceInformation.GHG = await _context.GHGs.Where(x => x.DeviceId == Id).ToListAsync();
+            return View(deviceInformation);
+
+        }
     }
 }
