@@ -17,18 +17,17 @@
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label><span style="color:red">*</span>
-                <select asp-for="Name" class="form-control" id="nameDropdown" asp-items="ViewBag.Name"></select>
+                <div class="d-flex align-items-center">
+                    <input asp-for="Name" class="form-control mr-2" list="NameList" placeholder="排放源名稱" />
+                    (<input asp-for="NameRemark" class="form-control" placeholder="備註 可不填" />)
+                </div>
+                <datalist id="NameList">
+                    @foreach (var item in (SelectList)ViewData["name"])
+                    {
+                        <option value="@item.Text"></option>
+                    }
+                </datalist>
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group" id="OtherName" style="display:none;">
-                <label asp-for="OtherName" class="control-label"></label><span style="color:red">*</span>
-                <input asp-for="OtherName" class="form-control" id="OtherNameText" />
-                <span asp-validation-for="OtherName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NameRemark" class="control-label"></label>
-                <input asp-for="NameRemark" class="form-control" id="NameRemarkText" />
-                <span asp-validation-for="NameRemark" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Scope" class="control-label"></label><span style="color:red">*</span>
@@ -43,15 +42,15 @@
             <div class="form-group">
                 <label asp-for="Material" class="control-label"></label><span style="color:red">*</span>
                 @Html.TextBoxFor(x => x.Material, new { @list = "MaterialList", @class = "form-control" })
-                <datalist id="MaterialList">
-                </datalist>
+                <datalist id="MaterialList"></datalist>
                 <span asp-validation-for="Material" id="lbMaterial" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AssetNo" class="control-label"></label>
                 <input asp-for="AssetNo" class="form-control" />
                 <span asp-validation-for="AssetNo" class="text-danger"></span>
-            </div><div class="form-group">
+            </div>
+            <div class="form-group">
                 <label asp-for="Provess" class="control-label"></label>
                 <input asp-for="Provess" class="form-control" />
                 <span asp-validation-for="Provess" class="text-danger"></span>
@@ -61,12 +60,9 @@
                 <input asp-for="Customize" type="hidden" id="CEFCustomizeHidden">
                 <label asp-for="Customize" class="form-check-label" for="flexCheckChecked"></label>
             </div>
-
-
             <div class="form-group">
                 <a class="btn btn-primary" onclick="Save();">儲存</a>|
                 <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
-
             </div>
         </div>
 
@@ -89,6 +85,7 @@
     </div>
 </form>
 
+
 @section scripts
 {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -99,20 +96,26 @@
             var material = document.getElementById('Material').value;
             var nameDropdown = $('#nameDropdown').val();
 
-            if (nameDropdown === "其他") {
+            var NameDatalist = document.getElementById('NameList');
+            var NameOptions = NameDatalist.querySelectorAll('option');
+            for (var i = 0; i < NameOptions.length; i++) {
+                if (NameOptions[i].value === material) {
+                    matchFound = true;
+                    break;
+                }
+            }
+            if (!matchFound) {
                 if (material.trim() == "") {
                     pos++;
                     document.getElementById("lbMaterial").innerHTML = "請輸入原燃物料";
                 } else {
-                    document.getElementById("lbMaterial").innerHTML = ""; 
+                    document.getElementById("lbMaterial").innerHTML = "";
                 }
-            }
-            else {
-                var datalist = document.getElementById('MaterialList');
-                var options = datalist.querySelectorAll('option');
-                for (var i = 0; i < options.length; i++) {
-                    console.log(options[i].value);
-                    if (options[i].value === material) {
+            } else {
+                var MaterialDatalist = document.getElementById('MaterialList');
+                var MaterialOptions = MaterialDatalist.querySelectorAll('option');
+                for (var i = 0; i < MaterialOptions.length; i++) {
+                    if (MaterialOptions[i].value === material) {
                         matchFound = true;
                         break;
                     }
@@ -124,6 +127,32 @@
                     document.getElementById("lbMaterial").innerHTML = "";
                 }
             }
+
+            // if (nameDropdown === "其他") {
+            //     if (material.trim() == "") {
+            //         pos++;
+            //         document.getElementById("lbMaterial").innerHTML = "請輸入原燃物料";
+            //     } else {
+            //         document.getElementById("lbMaterial").innerHTML = "";
+            //     }
+            // }
+            // else {
+            //     var datalist = document.getElementById('MaterialList');
+            //     var options = datalist.querySelectorAll('option');
+            //     for (var i = 0; i < options.length; i++) {
+            //         console.log(options[i].value);
+            //         if (options[i].value === material) {
+            //             matchFound = true;
+            //             break;
+            //         }
+            //     }
+            //     if (!matchFound) {
+            //         pos++;
+            //         document.getElementById("lbMaterial").innerHTML = "請選擇有效的原燃物料";
+            //     } else {
+            //         document.getElementById("lbMaterial").innerHTML = "";
+            //     }
+            // }
 
             if (pos > 0) {
                 return false;
@@ -277,7 +306,7 @@
                         });
                         $('#emissionDropdown').val(selectedEmission);
                         if (selectedMaterial != null) {
-                            $('#MaterialList').val(selectedMaterial);
+                            // $('#Material').val(selectedMaterial);
                         }
                     },
                     error: function (error) {

@@ -14,18 +14,17 @@
             <input type="hidden" asp-for="AreaId" value="@TempData.Peek("areaId")" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label><span style="color:red">*</span>
-                <select asp-for="Name" class="form-control" id="nameDropdown" asp-items="ViewBag.Name"></select>
+                <div class="d-flex align-items-center">
+                    <input asp-for="Name" class="form-control mr-2" list="NameList" placeholder="排放源名稱" />
+                    (<input asp-for="NameRemark" class="form-control" placeholder="備註 可不填" />)
+                </div>
+                <datalist id="NameList">
+                    @foreach (var item in (SelectList)ViewData["name"])
+                    {
+                        <option value="@item.Text"></option>
+                    }
+                </datalist>
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group" id="OtherName" style="display:none;">
-                <label asp-for="OtherName" class="control-label"></label><span style="color:red">*</span>
-                <input asp-for="OtherName" class="form-control" id="OtherNameText" />
-                <span asp-validation-for="OtherName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NameRemark" class="control-label"></label>
-                <input asp-for="NameRemark" class="form-control" id="NameRemarkText" />
-                <span asp-validation-for="NameRemark" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Scope" class="control-label"></label><span style="color:red">*</span>
@@ -91,9 +90,9 @@
             var pos = 0;
             var matchFound = false;
             var material = document.getElementById('Material').value;
-            var nameDropdown = $('#nameDropdown').val();
+            var Name = $('#Name').val();
 
-            if (nameDropdown === "其他") {
+            if (Name === "其他") {
                 if (material.trim() == "") {
                     pos++;
                     document.getElementById("lbMaterial").innerHTML = "請輸入原燃物料";
@@ -131,7 +130,7 @@
             loadDefaultDeviceData();
 
             // nameDropdown 的 change 事件處理
-            $('#nameDropdown').change(function () {
+            $('#Name').change(function () {
                 var selectedName = $(this).val();
                 // 當用戶選擇名字時，重新加載相關數據
                 loadDefaultDeviceData();
@@ -153,7 +152,7 @@
 
             // 抓取選擇的排放源名稱
             function loadDefaultDeviceData() {
-                var selectedName = $('#nameDropdown').val();
+                var selectedName = $('#Name').val();
                 $.ajax({
                     url: '/Devices/GetDefaultDeviceData',
                     type: 'GET',
@@ -166,7 +165,7 @@
                         loadEmissions(selectedScope);
                         setTimeout(() => {
                             loadMaterialsAndGWPNames(selectedEmission, selectedMaterial);
-                        }, 10) //設定延遲
+                        }, 30) //設定延遲
 
                         $('#emissionDropdown').val(selectedEmission);
                         //$('#MaterialList').val(selectedMaterial);
@@ -242,7 +241,7 @@
                         });
                         $('#emissionDropdown').val(selectedEmission);
                         if (selectedMaterial != null) {
-                            $('#MaterialList').val(selectedMaterial);
+                            // $('#Material').val(selectedMaterial);
                         }
                     },
                     error: function (error) {
@@ -252,8 +251,8 @@
             }
 
 
-            // nameDropdown 的值為 "其他" 時，顯示 OtherName
-            $('#nameDropdown').change(function () {
+            // Name 的值為 "其他" 時，顯示 OtherName
+            $('#Name').change(function () {
                 OtherName();
             });
 
@@ -263,7 +262,7 @@
             });
 
             function OtherName() {
-                var nameDropdownValue = $('#nameDropdown').val();
+                var nameDropdownValue = $('#Name').val();
                 var $otherName = $('#OtherName');
                 var $otherNameText = $('#OtherNameText');
                 var $cefCustomize = $('#CEFCustomize');
