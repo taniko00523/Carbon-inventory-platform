@@ -761,9 +761,11 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 else
                 {
+                    var maxId = await _context.ActivityDatas.MaxAsync(x => (int?)x.id) ?? 0;
                     // 如果不存在，則添加新的ActivityData
                     var toCreate = new ActivityData
                     {
+                        id = maxId + 1, 
                         DeviceId = device.Id,
                         Num = data.Num,
                         Time = data.Time,
