@@ -50,6 +50,7 @@ namespace Carbon_inventory_platform.Data
             {
                 entity.HasOne(e => e.Area);
                 entity.HasMany(e => e.GHGs);
+                entity.HasMany(e => e.ActivityDatas);
             });
 
             builder.Entity<ActivityData>(entity =>

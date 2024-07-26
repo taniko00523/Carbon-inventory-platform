@@ -2,6 +2,15 @@
 @{
     ViewData["Title"] = "公司總覽";
 }
+<style>
+   /*  th {
+        max-width: 100px; 
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    } */
+</style>
+
 <div class="row">
     <div class="col">
         <h1>@ViewData["Title"] </h1>
@@ -9,9 +18,9 @@
 
 </div>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
-        <tr>
+        <tr >
             <th>
                 使用者名稱
             </th>

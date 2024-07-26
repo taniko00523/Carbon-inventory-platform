@@ -39,7 +39,7 @@
                         if (Model.Any(x => x.Area.All != 0))
                         {
                             <a class="btn btn-warning" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
-                            <a class="btn btn-warning" asp-controller="Emission" asp-action="IISReport" asp-route-id="@TempData.Peek("areaId")">資策會版報告書下載 BETA</a>
+                            <a class="btn btn-warning" asp-controller="Emission" asp-action="IISReport" asp-route-id="@TempData.Peek("areaId")">資策會版報告書下載</a>
                         }
                         else
                         {
@@ -62,6 +62,7 @@
             }
             @if (User.IsInRole("Admin"))
             {
+                <a class="btn btn-warning" asp-controller="Devices" asp-action="DeviceExcel" asp-route-id="@TempData.Peek("areaId")">清冊匯出</a>   
                 <a class="btn btn-secondary" asp-controller="Areas" asp-action="AdminIndex" asp-route-id="@TempData.Peek("companyId")">返回</a>
             }
         </p>
@@ -147,41 +148,11 @@
                 @Html.DisplayFor(modelItem => item.AssetNo)
                 </td> *@
                             <td>
-                                @if (item.Name == "其他")
+                                @if (User.IsInRole("Admin"))
                                 {
-                                    if (item.NameRemark != null)
-                                    {
-                                        if (item.NameRemark.Trim() != "")
-                                        {
-                                            <p>@item.OtherName ( @item.NameRemark )</p>
-                                        }
-                                        else
-                                        {
-                                            <p>@item.OtherName</p>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <p>@item.OtherName</p>
-                                    }
-                                }
-                                else
-                                {
-                                    if (item.NameRemark != null)
-                                    {
-                                        if (item.NameRemark.Trim() != "")
-                                        {
-                                            <p>@item.Name ( @item.NameRemark )</p>
-                                        }
-                                        else
-                                        {
-                                            <p>@item.Name</p>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <p>@item.Name</p>
-                                    }
+                                    <a asp-action="Detail" asp-route-id="@item.Id"> @item.Name @(!string.IsNullOrEmpty(item.NameRemark) ?  "(" + item.OtherName + ")" : "")</a>
+                                }else{
+                                    <p>@item.Name @(!string.IsNullOrEmpty(item.NameRemark) ? "(" + item.OtherName + ")" : "")</p>
                                 }
                             </td>
                             @* <td>

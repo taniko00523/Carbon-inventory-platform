@@ -6,6 +6,12 @@ using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Carbon_inventory_platform.Filters;
 using Carbon_inventory_platform.ViewModel;
+using System.Collections.Generic;
+using Xceed.Document.NET;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NPOI.Util;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -51,7 +57,6 @@ namespace Carbon_inventory_platform.Controllers
         public async Task<IActionResult> Create()
         {
             var deviceDatas = await _context.deviceDatas.ToListAsync();
-            deviceDatas.Add(new DeviceData { Name = "其他" });
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
             ViewData["AreasId"] = new SelectList(await _context.Areas.Where(x => x.isDeleted == 0).ToListAsync(), "Id", "Name");
             ViewData["Scope"] = new SelectList(new List<string> { "類別一", "類別二", "類別三", "類別四", "類別五", "類別六" });
@@ -142,7 +147,6 @@ namespace Carbon_inventory_platform.Controllers
                 return RedirectToAction("Index", "Devices", new { id = device.AreaId });
             }
             var deviceDatas = await _context.deviceDatas.ToListAsync();
-            deviceDatas.Add(new DeviceData { Name = "其他" });
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
             ViewData["Scope"] = new SelectList(new List<string> { "類別一", "類別二", "類別三", "類別四", "類別五", "類別六" });
 
@@ -424,7 +428,6 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
             var deviceDatas = await _context.deviceDatas.ToListAsync();
-            deviceDatas.Add(new DeviceData { Name = "其他" });
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
             ViewData["Scope"] = new SelectList(new List<string> { "類別一", "類別二", "類別三", "類別四", "類別五", "類別六" });
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
@@ -607,7 +610,6 @@ namespace Carbon_inventory_platform.Controllers
                 return RedirectToAction("Index", "Devices", new { id = areaId });
             }
             var deviceDatas = await _context.deviceDatas.ToListAsync();
-            deviceDatas.Add(new DeviceData { Name = "其他" });
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
             ViewData["Scope"] = new SelectList(new List<string> { "類別一", "類別二", "類別三", "類別四", "類別五", "類別六" });
             ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
@@ -1203,7 +1205,7 @@ namespace Carbon_inventory_platform.Controllers
             return null;
         }
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> View(Guid Id)
+        public async Task<IActionResult> DetailAsync(Guid Id)
         {
             var deviceInformation = new DeviceInformationViewModel();
             deviceInformation.Device = await _context.Devices.FindAsync(Id);
@@ -1211,6 +1213,323 @@ namespace Carbon_inventory_platform.Controllers
             deviceInformation.GHG = await _context.GHGs.Where(x => x.DeviceId == Id).ToListAsync();
             return View(deviceInformation);
 
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeviceExcelAsync(Guid id)
+        {
+            // 讀取現有的Excel文件
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "test.xlsx");
+            IWorkbook workbook;
+            using (var file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            {
+                workbook = new XSSFWorkbook(file);
+            }
+
+            // 獲取第一個工作表
+            ISheet sheet1 = workbook.GetSheetAt(0);
+            ISheet sheet2 = workbook.GetSheetAt(1);
+
+            // 查找所在欄
+            int scopeColumn = -1;
+            int emissionColumn = -1;
+            int deviceColumn = -1;
+            int materialColumn = -1;
+            int activityDataColumn = -1;
+            int sourceColumn = -1;
+            int cef_correctionColumn = -1;
+            int device_correctionColumn = -1;
+            int data_correctionColumn = -1;
+            int gradeColumn = -1;
+            int data_uulColumn = -1;
+            int data_ullColumn = -1;
+            int all_emissionColumn = -1;
+            int unitColumn = -1;
+
+            int co2Column = -1;
+            int ch4Column = -1;
+            int n2oColumn = -1;
+            int hfcsColumn = -1;
+            int pfcsColumn = -1;
+            int sf6Column = -1;
+            int nf3Column = -1;
+
+            IRow headerRow1 = sheet1.GetRow(0); // 假設標題在第一行
+            for (int i = 0; i < headerRow1.LastCellNum; i++)
+            {
+                string cellValue = headerRow1.GetCell(i) != null ? headerRow1.GetCell(i).ToString() : null;
+                switch (cellValue)
+                {
+                    case "類別":
+                        scopeColumn = i;
+                        break;
+                    case "排放型式":
+                        emissionColumn = i;
+                        break;
+                    case "排放源名稱":
+                        deviceColumn = i;
+                        break;
+                    case "原燃物料":
+                        materialColumn = i;
+                        break;
+                    case "活動數據":
+                        activityDataColumn = i;
+                        break;
+                    case "單位":
+                        unitColumn = i;
+                        break;
+                    case "數據來源名稱":
+                        sourceColumn = i;
+                        break;
+                    case "數據等級評分":
+                        gradeColumn = i;
+                        break;
+                    case "活動數據誤差等級":
+                        data_correctionColumn = i;
+                        break;
+                    case "儀器校正等級":
+                        device_correctionColumn = i;
+                        break;
+                    case "排放係數誤差等級":
+                        cef_correctionColumn = i;
+                        break;
+                    case "活動數據信賴區間上限":
+                        data_uulColumn = i;
+                        break;
+                    case "活動數據信賴區間下限":
+                        data_ullColumn = i;
+                        break;
+                    case "CO2排放當量":
+                        all_emissionColumn = i;
+                        break;
+                    case "CO2":
+                        co2Column = i;
+                        break;
+                    case "CH4":
+                        ch4Column = i;
+                        break;
+                    case "N2O":
+                        n2oColumn = i;
+                        break;
+                    case "HFCS":
+                        hfcsColumn = i;
+                        break;
+                    case "PFCS":
+                        pfcsColumn = i;
+                        break;
+                    case "SF6":
+                        sf6Column = i;
+                        break;
+                    case "NF3":
+                        nf3Column = i;
+                        break;
+                }
+            }
+
+            // 檢查是否找到了所需的欄
+            //if (emissionSourceColumn == -1 || activityDataColumn == -1)
+            //{
+            //    return BadRequest("未找到所需的欄位");
+            //}
+
+            // 填寫數據
+            var device = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0)
+                .OrderBy(x => x.Scope)
+                .ThenBy(x => x.EmissionPattern)
+                .ToListAsync();
+
+
+
+            for (int i = 0; i < device.Count; i++)
+            {
+                IRow row = sheet1.GetRow(i + 1) ?? sheet1.CreateRow(i + 1);
+                row.CreateCell(deviceColumn).SetCellValue(device[i].Name);
+                row.CreateCell(emissionColumn).SetCellValue(device[i].EmissionPattern);
+                row.CreateCell(scopeColumn).SetCellValue(device[i].Scope);
+                row.CreateCell(materialColumn).SetCellValue(device[i].Material);
+                row.CreateCell(sourceColumn).SetCellValue(device[i].Source);
+                switch (device[i].CEF_Correction)
+                {
+                    case 1:
+                        row.CreateCell(cef_correctionColumn).SetCellValue("自廠發展係數/質量平衡所得係數/同製程/設備經驗係數");
+                        break;
+                    case 2:
+                        row.CreateCell(cef_correctionColumn).SetCellValue("製造商提供係數/區域排放係數");
+                        break;
+                    case 3:
+                        row.CreateCell(cef_correctionColumn).SetCellValue("國家/國際排放係數");
+                        break;
+                }
+                switch (device[i].Data_Correction)
+                {
+                    case 1:
+                        row.CreateCell(data_correctionColumn).SetCellValue("連續監測");
+                        break;
+                    case 2:
+                        row.CreateCell(data_correctionColumn).SetCellValue("定期/間歇量測");
+                        break;
+                    case 3:
+                        row.CreateCell(data_correctionColumn).SetCellValue("自行/財務推估");
+                        break;
+                }
+                switch (device[i].Device_Correction)
+                {
+                    case 1:
+                        row.CreateCell(device_correctionColumn).SetCellValue("有外部校正或多組數據佐證者");
+                        break;
+                    case 2:
+                        row.CreateCell(device_correctionColumn).SetCellValue("有內部校正或經過會計簽證等證明者");
+                        break;
+                    case 3:
+                        row.CreateCell(device_correctionColumn).SetCellValue("為進行儀器校正或未進行紀錄彙整者");
+                        break;
+                }
+
+                row.CreateCell(gradeColumn).SetCellValue(device[i].Grade);
+                row.CreateCell(data_uulColumn).SetCellValue(device[i].data_UUL.ToString());
+                row.CreateCell(data_ullColumn).SetCellValue(device[i].data_ULL.ToString());
+                row.CreateCell(all_emissionColumn).SetCellValue(device[i].Emissions.ToString());
+
+                var activityData = await _context.ActivityDatas.Where(x => x.DeviceId == device[i].Id).ToListAsync();
+                var GHGs = await _context.GHGs.Where(ghg => ghg.DeviceId == device[i].Id).ToListAsync();
+                foreach (var GHG in GHGs)
+                {
+                    switch (GHG.Name)
+                    {
+                        case "CO2":
+                            row.CreateCell(co2Column).SetCellValue("V");
+                            break;
+                        case "CH4":
+                            row.CreateCell(ch4Column).SetCellValue("V");
+                            break;
+                        case "N2O":
+                            row.CreateCell(n2oColumn).SetCellValue("V");
+                            break;
+                        case "HFCS":
+                            row.CreateCell(hfcsColumn).SetCellValue("V");
+                            break;
+                        case "PFCS":
+                            row.CreateCell(pfcsColumn).SetCellValue("V");
+                            break;
+                        case "SF6":
+                            row.CreateCell(sf6Column).SetCellValue("V");
+                            break;
+                        case "NF3":
+                            row.CreateCell(nf3Column).SetCellValue("V");
+                            break;
+                    }
+                }
+                #region 活動數據
+                string displayUnit = string.Empty;
+                if (device[i].Unit != null)
+                {
+                    switch (device[i].Unit)
+                    {
+                        case "公斤":
+                            displayUnit = "公噸";
+                            break;
+                        case "公升":
+                            displayUnit = "公秉";
+                            break;
+                        case "立方公尺":
+                            displayUnit = "千立方公尺";
+                            break;
+                        case "度":
+                            displayUnit = "千度";
+                            break;
+                        default:
+                            displayUnit = device[i].Unit;
+                            break;
+                    }
+                }
+                if (displayUnit != "人-年")
+                {
+                    row.CreateCell(activityDataColumn).SetCellValue($"{activityData.Sum(ad => ad.Num) / 1000:F4}");
+                }
+                else
+                {
+                    row.CreateCell(activityDataColumn).SetCellValue($"{activityData.Sum(ad => ad.Num):F4}");
+                }
+                row.CreateCell(unitColumn).SetCellValue(displayUnit);
+                #endregion
+            }
+
+            IRow headerRow2 = sheet2.GetRow(0); // 假設標題在第一行
+            int scopeSheet2Column = -1;
+            int emissionSheet2Column = -1;
+            int deviceSheet2Column = -1;
+            int materialSheet2Column = -1;
+            int ghgSheet2Column = -1;
+            int gwpSheet2Column = -1;
+            int cefSheet2Column = -1;
+            int cefuul2Column = -1;
+            int cefull2Column = -1;
+
+            for (int i = 0; i < headerRow2.LastCellNum; i++)
+            {
+                string cellValue = headerRow2.GetCell(i) != null ? headerRow2.GetCell(i).ToString() : null;
+                switch (cellValue)
+                {
+                    case "類別":
+                        scopeSheet2Column = i;
+                        break;
+                    case "排放型式":
+                        emissionSheet2Column = i;
+                        break;
+                    case "排放源名稱":
+                        deviceSheet2Column = i;
+                        break;
+                    case "原燃物料":
+                        materialSheet2Column = i;
+                        break;
+                    case "溫室氣體":
+                        ghgSheet2Column = i;
+                        break;
+                    case "GWP值":
+                        gwpSheet2Column = i;
+                        break;
+                    case "排放係數":
+                        cefSheet2Column = i;
+                        break;
+                    case "排放係數不確性上限":
+                        cefuul2Column = i;
+                        break;
+                    case "排放係數不確性下限":
+                        cefull2Column = i;
+                        break;
+                }
+            }
+
+            int rowIndex = 1;
+            var allGHGs = await _context.GHGs.Include(ghg => ghg.Device)
+                .Where(ghg => ghg.Device.AreaId == id && ghg.Device.isDeleted == 0)
+                .OrderBy(x => x.Device.Scope)
+                .ThenBy(x => x.Device.EmissionPattern)
+                .ToListAsync();
+
+            for (int i = 0; i < allGHGs.Count; i++)
+            {
+                IRow row = sheet2.GetRow(i + 1) ?? sheet2.CreateRow(i + 1);
+                row.CreateCell(scopeSheet2Column).SetCellValue(allGHGs[i].Device.Scope);
+                row.CreateCell(emissionSheet2Column).SetCellValue(allGHGs[i].Device.EmissionPattern);
+                row.CreateCell(deviceSheet2Column).SetCellValue(allGHGs[i].Device.Name);
+                row.CreateCell(materialSheet2Column).SetCellValue(allGHGs[i].Device.Material);
+                row.CreateCell(ghgSheet2Column).SetCellValue(allGHGs[i].Name);
+                row.CreateCell(gwpSheet2Column).SetCellValue(allGHGs[i].GWP.ToString());
+                row.CreateCell(cefSheet2Column).SetCellValue(allGHGs[i].CEF.ToString());
+                row.CreateCell(cefuul2Column).SetCellValue(allGHGs[i].CEF_UUL.ToString());
+                row.CreateCell(cefull2Column).SetCellValue(allGHGs[i].CEF_ULL.ToString());
+            }
+
+
+            // 將工作簿寫入MemoryStream
+            using (var exportData = new MemoryStream())
+            {
+                workbook.Write(exportData);
+                var bytes = exportData.ToArray();
+
+                // 返回Excel文件
+                return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "export.xlsx");
+            }
         }
     }
 }

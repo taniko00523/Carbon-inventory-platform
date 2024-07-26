@@ -48,19 +48,19 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "公司簡介")]
         public string? CompanyInformation { get; set; }
 
-        [Display(Name = "組織邊界說明")]
+        [Display(Name = "組織邊界")]
         public string? AddressInformation { get; set; }
 
-        [Display(Name = "報告邊界說明")]
+        [Display(Name = "報告邊界")]
         public string? ReportingInformation { get; set; }
 
-        [Display(Name = "溫室氣體排放類型與排放量說明")]
+        [Display(Name = "溫室氣體")]
         public string? GHGInformation { get; set; }
 
-        [Display(Name = "直接溫室氣體排放說明")]
+        [Display(Name = "直接溫室氣體")]
         public string? Scope1Information { get; set; }
 
-        [Display(Name = "間接溫室氣體排放​說明")]
+        [Display(Name = "間接溫室氣體")]
         public string? Scope2Information { get; set; }
         [Display(Name = "前言")]
         public string? ReportOpening { get; set; }

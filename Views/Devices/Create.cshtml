@@ -28,17 +28,21 @@
             </div>
             <div class="form-group">
                 <label asp-for="Scope" class="control-label"></label><span style="color:red">*</span>
-                <select asp-for="Scope" class="form-control" id="scopeDropdown" asp-items="ViewBag.Scope"></select>
+                <select asp-for="Scope" class="form-control" id="scopeDropdown" asp-items="ViewBag.Scope">
+                    <option value="" disabled selected>請選擇類別</option>
+                </select>
                 <span asp-validation-for="Scope" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EmissionPattern" class="control-label"></label><span style="color:red">*</span>
-                <select asp-for="EmissionPattern" class="form-control" id="emissionDropdown" asp-items="ViewBag.EmissionPattern"></select>
+                <select asp-for="EmissionPattern" class="form-control" id="emissionDropdown">
+                    <option value="" disabled selected>請先選擇類別</option>
+                </select>
                 <span asp-validation-for="EmissionPattern" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Material" class="control-label"></label><span style="color:red">*</span>
-                @Html.TextBoxFor(x => x.Material, new { @list = "MaterialList", @class = "form-control" })
+                @Html.TextBoxFor(x => x.Material, new { @list = "MaterialList", @class = "form-control", @placeholder = "輸入或者選擇原燃物料選項" })
                 <datalist id="MaterialList"></datalist>
                 <span asp-validation-for="Material" id="lbMaterial" class="text-danger"></span>
             </div>
@@ -88,29 +92,36 @@
     <script>
         function Save() {
             var pos = 0;
-            var matchFound = false;
+            var nameMatchFound = false;
+            var name = document.getElementById('Name').value;
+            var NameDatalist = document.getElementById('NameList');
+            var NameOptions = NameDatalist.querySelectorAll('option');
             var material = document.getElementById('Material').value;
-            var Name = $('#Name').val();
 
-            if (Name === "其他") {
+            for (var i = 0; i < NameOptions.length; i++) {
+                if (NameOptions[i].value === name) {
+                    nameMatchFound = true;
+                    break;
+                }
+            }
+            if (!nameMatchFound) {
                 if (material.trim() == "") {
                     pos++;
                     document.getElementById("lbMaterial").innerHTML = "請輸入原燃物料";
                 } else {
                     document.getElementById("lbMaterial").innerHTML = "";
                 }
-            }
-            else {
-                var datalist = document.getElementById('MaterialList');
-                var options = datalist.querySelectorAll('option');
-                for (var i = 0; i < options.length; i++) {
-                    console.log(options[i].value);
-                    if (options[i].value === material) {
-                        matchFound = true;
+            } else {
+                var MaterialDatalist = document.getElementById('MaterialList');
+                var MaterialOptions = MaterialDatalist.querySelectorAll('option');
+                var materialMatchFound = false;
+                for (var i = 0; i < MaterialOptions.length; i++) {
+                    if (MaterialOptions[i].value === material) {
+                        materialMatchFound = true;
                         break;
                     }
                 }
-                if (!matchFound) {
+                if (!materialMatchFound) {
                     pos++;
                     document.getElementById("lbMaterial").innerHTML = "請選擇有效的原燃物料";
                 } else {
@@ -124,12 +135,33 @@
                 $("#DeviceCreate").submit();
             }
         }
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     var materialInput = document.getElementById('Material');
+        //     var materialDatalist = document.getElementById('MaterialList');
+
+        //     function setMaterialPlaceholder() {
+        //         var materialOptions = materialDatalist.querySelectorAll('option');
+        //         console.log(materialOptions.length);
+        //         if (materialOptions.length === 0) {
+        //             materialInput.setAttribute('placeholder', 'Enter material');
+        //         } else {
+        //             materialInput.setAttribute('placeholder', 'Enter or select a material');
+        //         }
+        //     }
+
+        //     // Call the function to set the initial placeholder
+        //     setMaterialPlaceholder();
+
+        //     // Optionally, you can call this function whenever the datalist is updated
+        //     // For example, if options are added dynamically via AJAX
+        //     // You can attach the function to the relevant event or callback
+        // });
+
 
         $(document).ready(function () {
             // 加載頁面時立即執行的程式碼
-            loadDefaultDeviceData();
 
-            // nameDropdown 的 change 事件處理
+            // Name 的 change 事件處理
             $('#Name').change(function () {
                 var selectedName = $(this).val();
                 // 當用戶選擇名字時，重新加載相關數據
@@ -165,7 +197,7 @@
                         loadEmissions(selectedScope);
                         setTimeout(() => {
                             loadMaterialsAndGWPNames(selectedEmission, selectedMaterial);
-                        }, 30) //設定延遲
+                        }, 100) //設定延遲
 
                         $('#emissionDropdown').val(selectedEmission);
                         //$('#MaterialList').val(selectedMaterial);
@@ -197,6 +229,7 @@
                     }
                 });
             }
+
             function loadEmissionsAndMaterial(selectedScope) {
                 $.ajax({
                     url: '/Devices/GetEmissions',
@@ -241,7 +274,11 @@
                         });
                         $('#emissionDropdown').val(selectedEmission);
                         if (selectedMaterial != null) {
-                            // $('#Material').val(selectedMaterial);
+                            if (selectedEmission != "逸散") {
+                                $('#Material').val(selectedMaterial);
+                            } else {
+                                $('#Material').val("");
+                            }
                         }
                     },
                     error: function (error) {
@@ -262,18 +299,27 @@
             });
 
             function OtherName() {
-                var nameDropdownValue = $('#Name').val();
-                var $otherName = $('#OtherName');
-                var $otherNameText = $('#OtherNameText');
+                var nameMatchFound = false;
+                var name = document.getElementById('Name').value;
+                
                 var $cefCustomize = $('#CEFCustomize');
+                if (name != "") { //改
+                    var NameDatalist = document.getElementById('NameList');
+                    var NameOptions = NameDatalist.querySelectorAll('option');
+                    for (var i = 0; i < NameOptions.length; i++) {
+                        if (NameOptions[i].value === name) {
+                            nameMatchFound = true; // 非其他排放源
+                            break;
+                        }
+                    }
+                }
+                
 
-                if (nameDropdownValue === '其他') {
-                    $otherName.show();
-                    $otherNameText.prop('required', true);
+                if (!nameMatchFound) {
+                    //其他排放源
                     $cefCustomize.prop('checked', true).prop('disabled', true).trigger('change');
                 } else {
-                    $otherName.hide();
-                    $otherNameText.prop('required', false);
+                    // 非其他排放源
                     $cefCustomize.prop('checked', false).prop('disabled', false).trigger('change');
                 }
             }
