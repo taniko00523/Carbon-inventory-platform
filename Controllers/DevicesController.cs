@@ -746,13 +746,7 @@ namespace Carbon_inventory_platform.Controllers
 
             foreach (var data in activityData.ActivityDataList)
             {
-                var toCreate = new ActivityData
-                {
-                    DeviceId = device.Id,
-                    Num = data.Num,
-                    Time = data.Time,
-                    remark = data.remark,
-                };
+                
 
                 // 查找資料庫中是否已經存在該ActivityData
                 var existingData = await _context.ActivityDatas.FirstOrDefaultAsync(x => x.id == data.id);
@@ -768,6 +762,13 @@ namespace Carbon_inventory_platform.Controllers
                 else
                 {
                     // 如果不存在，則添加新的ActivityData
+                    var toCreate = new ActivityData
+                    {
+                        DeviceId = device.Id,
+                        Num = data.Num,
+                        Time = data.Time,
+                        remark = data.remark,
+                    };
                     _context.ActivityDatas.Add(toCreate);
                 }
             }
@@ -820,56 +821,55 @@ namespace Carbon_inventory_platform.Controllers
                 GHG3ULL = 0, GHG3UUL = 0;
             if (GHG != null && Device != null)
             {
-                if (ModelState.IsValid)
+
+                int i = 1;
+                foreach (var item in GHG)
                 {
-                    int i = 1;
-                    foreach (var item in GHG)
+                    if (item.Device.Material == "廢水處理")
                     {
-                        if (item.Device.Material == "廢水處理")
-                        {
-                            item.Emission = item.CEF * Num * item.GWP;
-                        }
-                        else
-                        {
-                            item.Emission = item.CEF * Num / 1000 * item.GWP;
-                        }
-
-                        item.ModifiedTime = DateTime.Now;
-                        if (i == 1)
-                        {
-                            GHG1 += item.Emission;
-                            all_Emission += item.Emission;
-                            GHG1ULL += item.all_ULL * 100;
-                            GHG1UUL += item.all_UUL * 100;
-                        }
-                        if (i == 2)
-                        {
-                            GHG2 += item.Emission;
-                            all_Emission += item.Emission;
-                            GHG2ULL += item.all_ULL * 100;
-                            GHG2UUL += item.all_UUL * 100;
-                        }
-                        if (i == 3)
-                        {
-                            GHG3 += item.Emission;
-                            all_Emission += item.Emission;
-                            GHG3ULL += item.all_ULL * 100;
-                            GHG3UUL += item.all_UUL * 100;
-                        }
-                        i++;
+                        item.Emission = item.CEF * Num * item.GWP;
                     }
-                    decimal Device_allUUL = Calculate95U(GHG1, GHG2, GHG3, GHG1UUL, GHG2UUL, GHG3UUL);
-                    decimal Device_allULL = Calculate95U(GHG1, GHG2, GHG3, GHG1ULL, GHG2ULL, GHG3ULL);
-                    Device.Emissions = all_Emission;
-                    emission.All += all_Emission;
-                    Device.all_UUL = Device_allUUL;
-                    Device.all_ULL = Device_allULL;
-                    Device.ModifiedTime = DateTime.Now;
-                    Device.count_UUL = Device_allUUL * all_Emission * Device_allUUL * all_Emission;
-                    Device.count_ULL = Device_allULL * all_Emission * Device_allULL * all_Emission;
+                    else
+                    {
+                        item.Emission = item.CEF * Num / 1000 * item.GWP;
+                    }
 
-                    await _context.SaveChangesAsync();
+                    item.ModifiedTime = DateTime.Now;
+                    if (i == 1)
+                    {
+                        GHG1 += item.Emission;
+                        all_Emission += item.Emission;
+                        GHG1ULL += item.all_ULL * 100;
+                        GHG1UUL += item.all_UUL * 100;
+                    }
+                    if (i == 2)
+                    {
+                        GHG2 += item.Emission;
+                        all_Emission += item.Emission;
+                        GHG2ULL += item.all_ULL * 100;
+                        GHG2UUL += item.all_UUL * 100;
+                    }
+                    if (i == 3)
+                    {
+                        GHG3 += item.Emission;
+                        all_Emission += item.Emission;
+                        GHG3ULL += item.all_ULL * 100;
+                        GHG3UUL += item.all_UUL * 100;
+                    }
+                    i++;
                 }
+                decimal Device_allUUL = Calculate95U(GHG1, GHG2, GHG3, GHG1UUL, GHG2UUL, GHG3UUL);
+                decimal Device_allULL = Calculate95U(GHG1, GHG2, GHG3, GHG1ULL, GHG2ULL, GHG3ULL);
+                Device.Emissions = all_Emission;
+                emission.All += all_Emission;
+                Device.all_UUL = Device_allUUL;
+                Device.all_ULL = Device_allULL;
+                Device.ModifiedTime = DateTime.Now;
+                Device.count_UUL = Device_allUUL * all_Emission * Device_allUUL * all_Emission;
+                Device.count_ULL = Device_allULL * all_Emission * Device_allULL * all_Emission;
+
+                await _context.SaveChangesAsync();
+
             }
         }
 
