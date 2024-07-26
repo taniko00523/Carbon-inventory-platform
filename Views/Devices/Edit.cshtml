@@ -90,83 +90,42 @@
 {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function Save() {
-            var pos = 0;
-            var nameMatchFound = false;
-            var name = document.getElementById('Name').value;
-            var NameDatalist = document.getElementById('NameList');
-            var NameOptions = NameDatalist.querySelectorAll('option');
-            var material = document.getElementById('Material').value;
-
-            for (var i = 0; i < NameOptions.length; i++) {
-                if (NameOptions[i].value === name) {
-                    nameMatchFound = true;
-                    break;
-                }
-            }
-            if (!nameMatchFound) {
-                if (material.trim() == "") {
-                    pos++;
-                    document.getElementById("lbMaterial").innerHTML = "請輸入原燃物料";
-                } else {
-                    document.getElementById("lbMaterial").innerHTML = "";
-                }
-            } else {
-                var MaterialDatalist = document.getElementById('MaterialList');
-                var MaterialOptions = MaterialDatalist.querySelectorAll('option');
-                var materialMatchFound = false;
-                for (var i = 0; i < MaterialOptions.length; i++) {
-                    if (MaterialOptions[i].value === material) {
-                        materialMatchFound = true;
-                        break;
-                    }
-                }
-                if (!materialMatchFound) {
-                    pos++;
-                    document.getElementById("lbMaterial").innerHTML = "請選擇有效的原燃物料";
-                } else {
-                    document.getElementById("lbMaterial").innerHTML = "";
-                }
-            }
-
-
-            if (pos > 0) {
-                return false;
-            } else {
-                $("#DeviceEdit").submit();
-            }
-        }
-
-
         $(document).ready(function () {
             // 加載頁面時立即執行的程式碼
-            loadDeviceData();
+            docReadyLoadDeviceData();
             OtherName();
             checkCEF();
 
             // Name 的 change 事件處理
             $('#Name').change(function () {
-                var selectedName = $(this).val();
-                // 當用戶選擇名字時，重新加載相關數據
+                OtherName();
                 loadDefaultDeviceData();
             });
+
+            $('#CEFCustomize').change(CEFCustomize);
 
             // scopeDropdown 的 change 事件處理
             $('#scopeDropdown').change(function () {
                 var selectedScope = $(this).val();
-                // 當類別選項改變時，重新加載相關數據
                 loadEmissionsAndMaterial(selectedScope);
             });
 
             // emissionDropdown 的 change 事件處理
             $('#emissionDropdown').change(function () {
                 var selectedEmission = $(this).val();
-                // 當排放選項改變時，重新加載相關數據
                 loadMaterialsAndGWPNames(selectedEmission);
             });
 
-            // 抓取選擇的排放源名稱
-            function loadDeviceData() {
+            function updateMaterialPlaceholder() {
+                if ($('#MaterialList option').length === 0) {
+                    $('#Material').attr('placeholder', '請填寫原燃物料');
+                } else {
+                    $('#Material').attr('placeholder', '請選擇原燃物料');
+
+                }
+            }
+
+            function docReadyLoadDeviceData() {
                 var id = $('#id').val();
                 $.ajax({
                     url: '/Devices/GetDeviceData',
@@ -174,16 +133,11 @@
                     data: { id: id },
                     async: false,
                     success: function (data) {
-                        var selectedScope = data.scope; //類別
-                        var selectedEmission = data.emissionPattern; //排放型式
-                        var selectedMaterial = data.material; //原物料
-                        loadEmissions(selectedScope);
-                        setTimeout(() => {
-                            loadMaterialsAndGWPNames(selectedEmission, selectedMaterial);
-                        }, 100) //設定延遲
-
-                        $('#emissionDropdown').val(selectedEmission);
-                        //$('#MaterialList').val(selectedMaterial);
+                        var { scope, emissionPattern, material } = data;
+                        loadEmissions(scope, function () {
+                            $('#emissionDropdown').val(emissionPattern);
+                            // 改
+                        });
                     },
                     error: function (error) {
                         console.log(error);
@@ -191,7 +145,6 @@
                 });
             }
 
-            // 抓取選擇的排放源名稱
             function loadDefaultDeviceData() {
                 var selectedName = $('#Name').val();
                 $.ajax({
@@ -200,16 +153,11 @@
                     data: { selectedName: selectedName },
                     async: false,
                     success: function (data) {
-                        var selectedScope = data.scope; //類別
-                        var selectedEmission = data.emissionPattern; //排放型式
-                        var selectedMaterial = data.material; //原物料
-                        loadEmissions(selectedScope);
-                        setTimeout(() => {
-                            loadMaterialsAndGWPNames(selectedEmission, selectedMaterial);
-                        }, 100) //設定延遲
-
-                        $('#emissionDropdown').val(selectedEmission);
-                        //$('#MaterialList').val(selectedMaterial);
+                        var { scope, emissionPattern, material } = data;
+                        loadEmissions(scope, function () {
+                            loadMaterialsAndGWPNames(emissionPattern, material);
+                            $('#emissionDropdown').val(emissionPattern);
+                        });
                     },
                     error: function (error) {
                         console.log(error);
@@ -217,76 +165,22 @@
                 });
             }
 
-            // 當類別下拉選單改變時，依據類別抓取排放源的所有排放型式
-            function loadEmissions(selectedScope) {
+            function loadEmissions(scope, callback) {
                 $.ajax({
                     url: '/Devices/GetEmissions',
                     type: 'GET',
-                    data: { scope: selectedScope },
+                    data: { scope: scope },
                     success: function (data) {
-                        $('#emissionDropdown').empty(); //清空排放源下拉選單
-                        $.each(data, function (i, item) {
+                        $('#emissionDropdown').empty();
+                        data.forEach(item => {
                             $('#emissionDropdown').append($('<option>', {
                                 value: item,
                                 text: item
                             }));
                         });
-                        $('#scopeDropdown').val(selectedScope);
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    }
-                });
-            }
-            function loadEmissionsAndMaterial(selectedScope) {
-                $.ajax({
-                    url: '/Devices/GetEmissions',
-                    type: 'GET',
-                    data: { scope: selectedScope },
-                    success: function (data) {
-                        $('#emissionDropdown').empty(); //清空排放源下拉選單
-                        $.each(data, function (i, item) {
-                            $('#emissionDropdown').append($('<option>', {
-                                value: item,
-                                text: item
-                            }));
-                        });
-                        $('#scopeDropdown').val(selectedScope);
-                        $('#emissionDropdown').trigger('change'); //觸發排放型式下拉選項改變
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    }
-                });
-            }
-
-            // 當排放型式下拉選單改變時，依據排放型式抓取所有物料
-            function loadMaterialsAndGWPNames(selectedEmission, selectedMaterial) {
-                $.ajax({
-                    url: '/Devices/GetMaterialsAndGWPNames',
-                    type: 'GET',
-                    data: { emissionPattern: selectedEmission },
-                    success: function (data) {
-                        $('#MaterialList').empty();
-                        $.each(data.materials, function (i, item) {
-                            $('#MaterialList').append($('<option>', {
-                                value: item.name,
-                                text: item.name
-                            }));
-                        });
-                        $.each(data.gwpNames, function (i, item) {
-                            $('#MaterialList').append($('<option>', {
-                                value: item.name,
-                                text: item.name
-                            }));
-                        });
-                        $('#emissionDropdown').val(selectedEmission);
-                        if (selectedMaterial != null) {
-                            if (selectedEmission!="逸散"){
-                                $('#Material').val(selectedMaterial);
-                            }else{
-                                $('#Material').val("");
-                            }
+                        $('#scopeDropdown').val(scope);
+                        if (callback && typeof callback === 'function') {
+                            callback();
                         }
                     },
                     error: function (error) {
@@ -295,14 +189,60 @@
                 });
             }
 
-            // Name 的值為其他排放源 時，顯示 OtherName
-            $('#Name').change(function () {
-                OtherName();
-            });
+            function loadEmissionsAndMaterial(scope) {
+                loadEmissions(scope, function () {
+                    $('#emissionDropdown').trigger('change');
+                });
+            }
 
-            $('#CEFCustomize').change(function () {
-                CEFCustomize();
-            });
+            function loadMaterialsAndGWPNames(emissionPattern, material = null) {
+                $.ajax({
+                    url: '/Devices/GetMaterialsAndGWPNames',
+                    type: 'GET',
+                    data: { emissionPattern: emissionPattern },
+                    success: function (data) {
+                        $('#MaterialList').empty();
+                        data.materials.forEach(item => {
+                            $('#MaterialList').append($('<option>', {
+                                value: item.name,
+                                text: item.name
+                            }));
+                        });
+                        data.gwpNames.forEach(item => {
+                            $('#MaterialList').append($('<option>', {
+                                value: item.name,
+                                text: item.name
+                            }));
+                        });
+                        if (material && emissionPattern != "逸散") {
+                            $('#Material').val(material);
+                        } else {
+                            $('#Material').val("");
+                        }
+                        updateMaterialPlaceholder();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            function OtherName() {
+                var name = $('#Name').val();
+                var nameMatchFound = $('#NameList option').filter(function () {
+                    return this.value === name;
+                }).length > 0;
+
+                if (name === "") {
+                    return;
+                }
+
+                if (!nameMatchFound) {
+                    $('#CEFCustomize').prop('checked', true).prop('disabled', true).trigger('change');
+                } else {
+                    $('#CEFCustomize').prop('checked', false).prop('disabled', false).trigger('change');
+                }
+            }
 
             function CEFCustomize() {
                 if ($('#CEFCustomize').prop('checked')) {
@@ -316,27 +256,6 @@
                 }
             }
 
-            function OtherName() {
-                var nameMatchFound = false;
-                var name = document.getElementById('Name').value;
-                var NameDatalist = document.getElementById('NameList');
-                var NameOptions = NameDatalist.querySelectorAll('option');
-                var $cefCustomize = $('#CEFCustomize');
-                for (var i = 0; i < NameOptions.length; i++) {
-                    if (NameOptions[i].value === name) {
-                        nameMatchFound = true;
-                        break;
-                    }
-                }
-
-                if (!nameMatchFound) {
-                    //其他排放源
-                    $cefCustomize.prop('checked', true).prop('disabled', true).trigger('change');
-                } else {
-                    $cefCustomize.prop('checked', false).prop('disabled', false).trigger('change');
-                }
-            }
-
             function checkCEF() {
                 if ($('#CEFCustomizeHidden').val() === 'True') {
                     $('#CEFCustomize').prop('checked', true);
@@ -347,30 +266,44 @@
                 }
             }
 
-
             $('#submitBtn').click(function () {
-                // 如果 CEFCustomize 复选框被选中，或者 CEF 区域可见
                 if ($('#CEFCustomize').prop('checked') || $('#CEF').is(':visible')) {
-                    var totalCef = 0; // 初始化总和
+                    var totalCef = $('.cef-input').toArray().reduce((sum, input) => {
+                        var value = parseFloat($(input).val().trim());
+                        return !isNaN(value) ? sum + value : sum;
+                    }, 0);
 
-                    // 计算所有输入字段的值的总和
-                    $('.cef-input').each(function () {
-                        var value = parseFloat($(this).val().trim());
-                        if (!isNaN(value)) {
-                            totalCef += value;
-                        }
-                    });
-
-                    // 如果总和小于等于0，则显示警告
                     if (totalCef <= 0) {
                         alert('請輸入自訂排放係數');
-                        return false; // 阻止提交表单
+                        return false;
                     }
                 }
             });
-
-
         });
 
+        function Save() {
+            var name = $('#Name').val();
+            var material = $('#Material').val();
+            var nameMatchFound = $('#NameList option').filter(function () {
+                return this.value === name;
+            }).length > 0;
+
+            if (!nameMatchFound && !material.trim()) {
+                $('#lbMaterial').text("請輸入原燃物料");
+                return false;
+            } else if (nameMatchFound) {
+                var materialMatchFound = $('#MaterialList option').filter(function () {
+                    return this.value === material;
+                }).length > 0;
+
+                if (!materialMatchFound) {
+                    $('#lbMaterial').text("請選擇有效的原燃物料");
+                    return false;
+                }
+            }
+
+            $('#lbMaterial').text("");
+            $("#DeviceEdit").submit();
+        }
     </script>
 }

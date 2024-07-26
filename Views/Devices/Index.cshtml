@@ -150,9 +150,9 @@
                             <td>
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <a asp-action="Detail" asp-route-id="@item.Id"> @item.Name @(!string.IsNullOrEmpty(item.NameRemark) ?  "(" + item.OtherName + ")" : "")</a>
+                                    <a asp-action="Detail" asp-route-id="@item.Id"> @item.Name @(!string.IsNullOrEmpty(item.NameRemark) ? "(" + item.NameRemark + ")" : "")</a>
                                 }else{
-                                    <p>@item.Name @(!string.IsNullOrEmpty(item.NameRemark) ? "(" + item.OtherName + ")" : "")</p>
+                                    <p>@item.Name @(!string.IsNullOrEmpty(item.NameRemark) ? "(" + item.NameRemark + ")" : "")</p>
                                 }
                             </td>
                             @* <td>
