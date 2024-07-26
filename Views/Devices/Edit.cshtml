@@ -135,8 +135,14 @@
                     success: function (data) {
                         var { scope, emissionPattern, material } = data;
                         loadEmissions(scope, function () {
+                            var selectedMaterial = $('#Material').val()
+                            loadMaterialsAndGWPNames(emissionPattern, material);
                             $('#emissionDropdown').val(emissionPattern);
-                            // 改
+                            setTimeout(() => {
+                                //改
+                                $('#Material').val(selectedMaterial);
+                            }, 50) //設定延遲
+                            
                         });
                     },
                     error: function (error) {
