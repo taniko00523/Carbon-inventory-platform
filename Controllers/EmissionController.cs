@@ -1339,36 +1339,6 @@ namespace Carbon_inventory_platform.Controllers
         }
         public void replaceImage(DocX doc, string text, string imagePath)
         {
-            //foreach (var paragraph in doc.Paragraphs)
-            //{
-            //    if (paragraph.Text.Contains(text))
-            //    {
-            //        var image = doc.AddImage(imagePath);
-            //        var picture = image.CreatePicture();
-
-            //        // 設置圖片大小並保持長寬比
-            //        double aspectRatio = (double)picture.Width / picture.Height;
-            //        if (picture.Width > 200 || picture.Height > 200)
-            //        {
-            //            if (aspectRatio > 1) // 寬度大於高度
-            //            {
-            //                picture.Width = (int)200;
-            //                picture.Height = (int)(200 / aspectRatio);
-            //            }
-            //            else // 高度大於寬度
-            //            {
-            //                picture.Height = (int)200;
-            //                picture.Width = (int)(200 * aspectRatio);
-            //            }
-            //        }
-
-            //        // 替換文本為圖片
-            //        paragraph.ReplaceText(text, string.Empty);
-            //        paragraph.InsertPicture(picture, 0);
-
-            //        //ReplaceText(doc,text, string.Empty);
-            //    }
-            //}
             foreach (var paragraph in doc.Paragraphs)
             {
                 if (paragraph.Text.Contains(text))
@@ -1376,13 +1346,52 @@ namespace Carbon_inventory_platform.Controllers
                     if (imagePath != null)
                     {
                         var image = doc.AddImage(imagePath);
-                        var picture = image.CreatePicture(200, 200);
+                        var picture = image.CreatePicture();
+
+                        // A4纸的尺寸 (单位：像素)
+                        //const float a4Width = (float)(100 * 3.78);  // 210mm * 3.78 = 794像素 (DPI = 96)
+                        //const float a4Height = (float)(100 * 3.78); // 297mm * 3.78 = 1123像素 (DPI = 96)
+                        const float a4Width = (float)(200);  // 210mm * 3.78 = 794像素 (DPI = 96)
+                        const float a4Height = (float)(200); // 297mm * 3.78 = 1123像素 (DPI = 96)
+
+                        double aspectRatio = (double)picture.Width / picture.Height;
+
+                        // 根据长宽比调整图片大小
+                        
+                            if (aspectRatio > 1) // 宽度大于高度
+                            {
+                                picture.Width = a4Width;
+                                picture.Height = (int)(a4Width / aspectRatio);
+                            }
+                            else // 高度大于宽度
+                            {
+                                picture.Height = a4Height;
+                                picture.Width = (int)(a4Height * aspectRatio);
+                            }
+                        
+
                         paragraph.InsertPicture(picture);
                     }
+
+
 
                     doc.ReplaceText(text, string.Empty);
                 }
             }
+            //foreach (var paragraph in doc.Paragraphs)
+            //{
+            //    if (paragraph.Text.Contains(text))
+            //    {
+            //        if (imagePath != null)
+            //        {
+            //            var image = doc.AddImage(imagePath);
+            //            var picture = image.CreatePicture(200, 200);
+            //            paragraph.InsertPicture(picture);
+            //        }
+
+            //        doc.ReplaceText(text, string.Empty);
+            //    }
+            //}
         }
         public void GenerateReport(DocX doc, List<Device> devices)
         {
