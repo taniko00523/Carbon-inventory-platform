@@ -5,6 +5,7 @@ using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Carbon_inventory_platform.Filters;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.Design;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -110,7 +111,7 @@ namespace Carbon_inventory_platform.Controllers
                 string BaseURL = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, Request.PathBase);//http://localhost:5000
                 if (item == "Map")
                 {
-                    ViewBag.Image = !string.IsNullOrEmpty(area.MapImagePath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", area.CompanyId.ToString(), area.Id.ToString(), area.MapImagePath )): "";
+                    ViewBag.Image = !string.IsNullOrEmpty(area.MapImagePath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", area.CompanyId.ToString(), area.Id.ToString(), area.MapImagePath)) : "";
                 }
                 else if (item == "Organization")
                 {
@@ -118,7 +119,7 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 else if (item == "ShopDrawings")
                 {
-                    ViewBag.Image = !string.IsNullOrEmpty(area.ShopDrawingsPath) ? (string.Format("/{0}/{1}/{2}/{3}" , "images", area.CompanyId.ToString(), area.Id.ToString(), area.ShopDrawingsPath)) : "";
+                    ViewBag.Image = !string.IsNullOrEmpty(area.ShopDrawingsPath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", area.CompanyId.ToString(), area.Id.ToString(), area.ShopDrawingsPath)) : "";
                 }
             }
 
@@ -639,7 +640,7 @@ namespace Carbon_inventory_platform.Controllers
                         toUpdate.ModifiedTime = DateTime.Now;
                     }
                     await _context.SaveChangesAsync();
-                    
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -1110,5 +1111,203 @@ namespace Carbon_inventory_platform.Controllers
             return 0;
         }
         #endregion
+        public async Task<IActionResult> CopyArea(Guid id)
+        {
+            var area = await _context.Areas.FirstOrDefaultAsync(x => x.Id == id);
+            if (area == null)
+            {
+                return NotFound();
+            }
+            Guid newAreaId = Guid.NewGuid();
+            var newArea = new Area
+            {
+                Id = newAreaId,
+                Year = area.Year,
+                CompanyId = area.CompanyId,
+                ARVersion = area.ARVersion,
+                Name = area.Name,
+                //PostalCode = area.PostalCode, 
+                //UniqueCode = area.UniqueCode, 
+                //FactorCode = area.FactorCode, 
+                //City = area.City,
+                //District = area.District,
+                //Address = area.Address,
+                //FullAddress = area.FullAddress,
+                BaseYear = area.BaseYear,
+                Type = area.Type,
+                ShopDrawings = area.ShopDrawings,
+                Scope1_CO2 = area.Scope1_CO2,
+                Scope1_CH4 = area.Scope1_CH4,
+                Scope1_N2O = area.Scope1_N2O,
+                Scope1_HFCS = area.Scope1_HFCS,
+                Scope1_PFCS = area.Scope1_PFCS,
+                Scope1_NF3 = area.Scope1_NF3,
+                Scope1_SF6 = area.Scope1_SF6,
+
+                Scope2_CO2 = area.Scope2_CO2,
+                Scope2_CH4 = area.Scope2_CH4,
+                Scope2_N2O = area.Scope2_N2O,
+                Scope2_HFCS = area.Scope2_HFCS,
+                Scope2_PFCS = area.Scope2_PFCS,
+                Scope2_NF3 = area.Scope2_NF3,
+                Scope2_SF6 = area.Scope2_SF6,
+
+                CO2 = area.CO2,
+                CH4 = area.CH4,
+                N2O = area.N2O,
+                HFCS = area.HFCS,
+                PFCS = area.PFCS,
+                NF3 = area.NF3,
+                SF6 = area.SF6,
+
+                percentage1_CO2 = area.percentage1_CO2,
+                percentage1_CH4 = area.percentage1_CH4,
+                percentage1_N2O = area.percentage1_N2O,
+                percentage1_HFCS = area.percentage1_HFCS,
+                percentage1_PFCS = area.percentage1_PFCS,
+                percentage1_NF3 = area.percentage1_NF3,
+                percentage1_SF6 = area.percentage1_SF6,
+
+                percentage2_CO2 = area.percentage2_CO2,
+                percentage2_CH4 = area.percentage2_CH4,
+                percentage2_N2O = area.percentage2_N2O,
+                percentage2_HFCS = area.percentage2_HFCS,
+                percentage2_PFCS = area.percentage2_PFCS,
+                percentage2_NF3 = area.percentage2_NF3,
+                percentage2_SF6 = area.percentage2_SF6,
+
+                non_move = area.non_move,
+                move = area.move,
+                process = area.process,
+                escape = area.escape,
+                percentage_nonMove = area.percentage_nonMove,
+                percentage_Move = area.percentage_Move,
+                percentage_Process = area.percentage_Process,
+                percentage_Escape = area.percentage_Escape,
+
+                percentage_Scope1 = area.percentage_Scope1,
+                percentage_Scope2 = area.percentage_Scope2,
+                Scope1 = area.Scope1,
+                Scope2 = area.Scope2,
+                All = area.All,
+
+                cal_all = area.cal_all,
+                percentage_CalAll = area.percentage_CalAll,
+
+                no1_Grade = area.no1_Grade,
+                no2_Grade = area.no2_Grade,
+                no3_Grade = area.no3_Grade,
+                avg_Grade = area.avg_Grade,
+                all_Grade = area.all_Grade,
+                ULL = area.ULL,
+                UUL = area.UUL,
+
+                isDeleted = 0,
+                CreateTime = DateTime.Now
+            };
+            _context.Areas.Add(newArea);
+
+            var devices = await _context.Devices.Where(x => x.AreaId == area.Id && x.isDeleted == 0).ToListAsync();
+            if (devices != null)
+            {
+                foreach (var device in devices)
+                {
+                    Guid newDeviceId = Guid.NewGuid();
+                    Device newDevice = CopyDevice(device, newAreaId, newDeviceId);
+                    _context.Devices.Add(newDevice);
+                    var GHGs = await _context.GHGs.Where(x => x.DeviceId == device.Id && x.isDeleted == 0).ToListAsync();
+                    if (GHGs != null)
+                    {
+                        foreach (var ghg in GHGs)
+                        {
+                            var newGHG = CopyGHG(ghg, newDeviceId);
+                            _context.GHGs.Add(newGHG);
+                        }
+                    }
+                    var activityDatas = await _context.ActivityDatas.Where(x => x.DeviceId == device.Id).ToListAsync();
+                    if (activityDatas != null)
+                    {
+                        foreach (var activityData in activityDatas)
+                        {
+                            var newActivityData = CopyActivityData(activityData, newDeviceId);
+                            _context.ActivityDatas.Add(newActivityData);
+                        }
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            var companyId = area.CompanyId;
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction(nameof(AdminIndex), new { id = companyId });
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        public Device CopyDevice(Device device, Guid NewAreaId, Guid NewDeivceId)
+        {
+            Guid newDeviceId = Guid.NewGuid();
+            var newDevice = new Device
+            {
+                Id = NewDeivceId,
+                AreaId = NewAreaId,
+                Name = device.Name,
+                OtherName = device.OtherName,
+                NameRemark = device.NameRemark,
+                Scope = device.Scope,
+                EmissionPattern = device.EmissionPattern,
+                Material = device.Material,
+                Customize = device.Customize,
+                AssetNo = device.AssetNo,
+                Provess = device.Provess,
+                Source = device.Source,
+                Dept = device.Dept,
+                Unit = device.Unit,
+                Data_Correction = device.Data_Correction,
+                Device_Correction = device.Device_Correction,
+                CEF_Correction = device.CEF_Correction,
+                Grade = device.Grade,
+                Emissions = device.Emissions,
+                data_ULL = device.data_ULL,
+                all_ULL = device.all_ULL,
+                all_UUL = device.all_UUL,
+                count_ULL = device.count_ULL,
+                count_UUL = device.count_UUL,
+                isDeleted = 0,
+                CreateTime = DateTime.Now
+            };
+            return newDevice;
+        }
+        public GHG CopyGHG(GHG ghg, Guid newDeviceId)
+        {
+            var newGHG = new GHG
+            {
+                Id = new Guid(),
+                DeviceId = newDeviceId,
+                Name = ghg.Name,
+                GWP = ghg.GWP,
+                CEF = ghg.CEF,
+                all_ULL = ghg.all_ULL,
+                all_UUL = ghg.all_UUL,
+                CEF_ULL = ghg.CEF_ULL,
+                CEF_UUL = ghg.CEF_UUL,
+                Emission = ghg.Emission,
+                isDeleted = 0,
+                CreateTime = DateTime.Now
+            };
+            return newGHG;
+        }
+        public ActivityData CopyActivityData(ActivityData activityData, Guid newDeviceId)
+        {
+            var newActivityData = new ActivityData
+            {
+                DeviceId = newDeviceId,
+                Num = activityData.Num,
+                Time = activityData.Time,
+                remark = activityData.remark,
+            };
+            return newActivityData;
+        }
     }
+
 }
