@@ -36,9 +36,6 @@
                 @Html.DisplayNameFor(model => model.BaseYear)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.OrganizationImage)
             </th>
             <th>
@@ -68,7 +65,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.FactorCode)
                 </td>
-                <td>
+                <td style="width:10%">
                     @Html.DisplayFor(modelItem => item.FullAddress)
                 </td>
                 <td>
@@ -80,9 +77,6 @@
                     {
 
                     }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Type)
                 </td>
                 <th>
                     @if (item.OrganizationImagePath != "" && item.OrganizationImagePath != null)

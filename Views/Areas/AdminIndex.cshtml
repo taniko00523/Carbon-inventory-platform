@@ -66,7 +66,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.FactorCode)
                 </td>
-                <td>
+                <td style="width:10%">
                     @Html.DisplayFor(modelItem => item.FullAddress)
                 </td>
                 <td>
@@ -114,6 +114,7 @@
                     }
                 </th>
                 <td>
+                    <a class="btn btn-primary" asp-action="CopyArea" asp-route-id="@item.Id">複製</a>
                     @if (item.Name != "")
                     {
                         <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.Id">修改</a>
@@ -124,9 +125,6 @@
                     }
                     <a class="btn btn-info" asp-controller="Areas" asp-action="Analyses" asp-route-id="@item.Id">重大性評估</a>
                     <a class="btn btn-info" asp-controller="Devices" asp-action="Index" asp-route-id="@item.Id">排放源資料</a>
-                    <a class="btn btn-primary" asp-action="CopyArea" asp-route-id="@item.Id">複製</a>
-
-
                 </td>
                 <td>
                     <form method="post" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">

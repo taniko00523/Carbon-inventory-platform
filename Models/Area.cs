@@ -59,25 +59,25 @@ namespace Carbon_inventory_platform.Models
         [MaxLength(10)]
         [Display(Name = "產業別")]
         public string? Type { get; set; } = "";
-        [Display(Name = "公司組織圖")]
+        [Display(Name = "組織架構圖")]
 
         public string? OrganizationImagePath { get; set; } = "";
-        [Display(Name = "公司地理位置圖")]
+        [Display(Name = "地理位置圖")]
 
         public string? MapImagePath { get; set; } = "";
-        [Display(Name = "公司廠區配置圖")]
+        [Display(Name = "廠區配置圖")]
 
         public string? ShopDrawingsPath { get; set; } = "";
 
-        [Display(Name = "公司組織圖")]
+        [Display(Name = "組織架構圖")]
         [NotMapped]
 
         public IFormFile? OrganizationImage { get; set; }
-        [Display(Name = "公司地理位置圖")]
+        [Display(Name = "地理位置圖")]
         [NotMapped]
 
         public IFormFile? MapImage { get; set; }
-        [Display(Name = "公司廠區配置圖")]
+        [Display(Name = "組織架構圖")]
         [NotMapped]
 
         public IFormFile? ShopDrawings { get; set; }
