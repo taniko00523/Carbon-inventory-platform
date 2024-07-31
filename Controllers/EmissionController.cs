@@ -300,18 +300,18 @@ namespace Carbon_inventory_platform.Controllers
                     Devices = _context.Devices.Where(d => d.AreaId == area.Id && d.isDeleted == 0)
                                                .OrderBy(d => d.Scope)
                                                .ThenBy(d => d.EmissionPattern).ToList(),
-                    ManyGHGs = _context.Devices.Where(d => d.AreaId == area.Id && d.isDeleted == 0)
+                    AllGHGs = _context.Devices.Where(d => d.AreaId == area.Id && d.isDeleted == 0)
                                                .SelectMany(d => d.GHGs).ToList(),
-                    activityData = _context.ActivityDatas.ToList()
+                    AllActivityData = _context.ActivityDatas.ToList()
 
                 });
 
             var dataResult = await dataQuery.FirstOrDefaultAsync();
             if (dataResult == null) return NotFound();
-            var ActivityData = dataResult.activityData;
+            var AllActivityData = dataResult.AllActivityData;
             var data = dataResult.Area;
             var device = dataResult.Devices;
-            var ManyGHGs = dataResult.ManyGHGs;
+            var AllGHGs = dataResult.AllGHGs;
 
             //-----------------檔案設定
             string currentDirectory = Directory.GetCurrentDirectory();
@@ -586,7 +586,7 @@ namespace Carbon_inventory_platform.Controllers
                 if (device.Find(x => x.Name == "電力") != null)
                 {
                     Guid deviceId = device.Find(x => x.Name == "電力").Id;
-                    var deviceActivityData = ActivityData.Where(x => x.DeviceId == deviceId).ToList();
+                    var deviceActivityData = AllActivityData.Where(x => x.DeviceId == deviceId).ToList();
 
 
                     if (deviceActivityData != null)
@@ -646,33 +646,33 @@ namespace Carbon_inventory_platform.Controllers
                 ReplaceText(doc, "[類別二總排放]", data.Scope2.ToString("N4"));
                 //-----------------替換的文本
                 //--------------------------------排放源溫室氣體表表
-                GenerateGHGsTable(doc, ManyGHGs, "固定", "CO2");
-                GenerateGHGsTable(doc, ManyGHGs, "固定", "CH4");
-                GenerateGHGsTable(doc, ManyGHGs, "固定", "N2O");
-                GenerateGHGsTable(doc, ManyGHGs, "移動", "CO2");
-                GenerateGHGsTable(doc, ManyGHGs, "移動", "CH4");
-                GenerateGHGsTable(doc, ManyGHGs, "移動", "N2O");
-                GenerateGHGsTable(doc, ManyGHGs, "逸散", "CO2");
-                GenerateGHGsTable(doc, ManyGHGs, "逸散", "CH4");
-                GenerateGHGsTable(doc, ManyGHGs, "逸散", "HFCS");
-                GenerateGHGsTable(doc, ManyGHGs, "製程", "CO2");
-                GenerateGHGsTable(doc, ManyGHGs, "外購電力", "CO2");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "固定", "CO2");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "固定", "CH4");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "固定", "N2O");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "移動", "CO2");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "移動", "CH4");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "移動", "N2O");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "逸散", "CO2");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "逸散", "CH4");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "逸散", "HFCS");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "製程", "CO2");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "外購電力", "CO2");
                 //--------------------------------排放源溫室氣體表表
                 //--------------------------------類別表
                 if (device.Any(x => x.Scope == "類別一"))
                 {
-                    GenerateScopeTable(doc, device, "類別一");
+                    GenerateScopeTable(doc, device, AllGHGs, "類別一");
                 }
                 // 檢查是否有類別二設備
                 if (device.Any(x => x.Scope == "類別二"))
                 {
-                    GenerateScopeTable(doc, device, "類別二");
+                    GenerateScopeTable(doc, device, AllGHGs, "類別二");
                 }
                 //--------------------------------類別表
                 //--------------------------------報告邊界
-                GenerateReport(doc, device);
+                GenerateReport(doc, device, AllGHGs);
                 //--------------------------------報告邊界
-                GenerateActivityDataTable(doc, device);
+                GenerateActivityDataTable(doc, device, AllActivityData);
 
                 //--------------------------------圖片                               
                 if (data.ShopDrawingsPath != "")
@@ -750,18 +750,18 @@ namespace Carbon_inventory_platform.Controllers
                     Devices = _context.Devices.Where(d => d.AreaId == area.Id && d.isDeleted == 0)
                                                .OrderBy(d => d.Scope)
                                                .ThenBy(d => d.EmissionPattern).ToList(),
-                    ManyGHGs = _context.Devices.Where(d => d.AreaId == area.Id && d.isDeleted == 0)
+                    AllGHGs = _context.Devices.Where(d => d.AreaId == area.Id && d.isDeleted == 0)
                                                .SelectMany(d => d.GHGs).ToList(),
-                    activityData = _context.ActivityDatas.ToList()
+                    AllActivityData = _context.ActivityDatas.ToList()
 
                 });
 
             var dataResult = await dataQuery.FirstOrDefaultAsync();
             if (dataResult == null) return NotFound();
-            var ActivityData = dataResult.activityData;
+            var AllActivityData = dataResult.AllActivityData;
             var data = dataResult.Area;
             var device = dataResult.Devices;
-            var ManyGHGs = dataResult.ManyGHGs;
+            var AllGHGs = dataResult.AllGHGs;
 
             //-----------------檔案設定
             string currentDirectory = Directory.GetCurrentDirectory();
@@ -1035,7 +1035,7 @@ namespace Carbon_inventory_platform.Controllers
                 if (device.Find(x => x.Name == "電力") != null)
                 {
                     Guid deviceId = device.Find(x => x.Name == "電力").Id;
-                    var deviceActivityData = ActivityData.Where(x => x.DeviceId == deviceId).ToList();
+                    var deviceActivityData = AllActivityData.Where(x => x.DeviceId == deviceId).ToList();
 
 
                     if (deviceActivityData != null)
@@ -1095,33 +1095,33 @@ namespace Carbon_inventory_platform.Controllers
                 ReplaceText(doc, "[類別二總排放]", data.Scope2.ToString("N4"));
                 //-----------------替換的文本
                 //--------------------------------排放源溫室氣體表表
-                GenerateGHGsTable(doc, ManyGHGs, "固定", "CO2");
-                GenerateGHGsTable(doc, ManyGHGs, "固定", "CH4");
-                GenerateGHGsTable(doc, ManyGHGs, "固定", "N2O");
-                GenerateGHGsTable(doc, ManyGHGs, "移動", "CO2");
-                GenerateGHGsTable(doc, ManyGHGs, "移動", "CH4");
-                GenerateGHGsTable(doc, ManyGHGs, "移動", "N2O");
-                GenerateGHGsTable(doc, ManyGHGs, "逸散", "CO2");
-                GenerateGHGsTable(doc, ManyGHGs, "逸散", "CH4");
-                GenerateGHGsTable(doc, ManyGHGs, "逸散", "HFCS");
-                GenerateGHGsTable(doc, ManyGHGs, "製程", "CO2");
-                GenerateGHGsTable(doc, ManyGHGs, "外購電力", "CO2");
+                GenerateGHGsTable(doc, AllGHGs,AllActivityData, "固定", "CO2");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "固定", "CH4");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "固定", "N2O");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "移動", "CO2");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "移動", "CH4");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "移動", "N2O");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "逸散", "CO2");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "逸散", "CH4");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "逸散", "HFCS");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "製程", "CO2");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "外購電力", "CO2");
                 //--------------------------------排放源溫室氣體表表
                 //--------------------------------類別表
                 if (device.Any(x => x.Scope == "類別一"))
                 {
-                    GenerateScopeTable(doc, device, "類別一");
+                    GenerateScopeTable(doc, device,AllGHGs, "類別一");
                 }
                 // 檢查是否有類別二設備
                 if (device.Any(x => x.Scope == "類別二"))
                 {
-                    GenerateScopeTable(doc, device, "類別二");
+                    GenerateScopeTable(doc, device, AllGHGs, "類別二");
                 }
                 //--------------------------------類別表
                 //--------------------------------報告邊界
-                GenerateReport(doc, device);
+                GenerateReport(doc, device, AllGHGs);
                 //--------------------------------報告邊界
-                GenerateActivityDataTable(doc, device);
+                GenerateActivityDataTable(doc, device, AllActivityData);
 
                 //--------------------------------圖片                               
                 if (data.ShopDrawingsPath != "")
@@ -1190,7 +1190,7 @@ namespace Carbon_inventory_platform.Controllers
         {
             doc.ReplaceText(oldText, newText);
         }
-        public void GenerateActivityDataTable(DocX doc, List<Device> devices)
+        public void GenerateActivityDataTable(DocX doc, List<Device> devices,List<ActivityData> activityDatas)
         {
             var font = new Xceed.Document.NET.Font("標楷體");
             Xceed.Document.NET.Table table = doc.AddTable(devices.Count() + 1, 6);
@@ -1214,7 +1214,7 @@ namespace Carbon_inventory_platform.Controllers
                 table.Rows[x + 1].Cells[2].Paragraphs.First().Append(deviceCellString).Font(font).FontSize(11d);
 
                 var DeviceId = devices[x].Id;
-                var activityData = _context.ActivityDatas.Where(x => x.DeviceId == DeviceId).ToList();
+                var activityData = activityDatas.Where(x => x.DeviceId == DeviceId).ToList();
                 table.Rows[x + 1].Cells[3].Paragraphs.First().Append((activityData.Sum(x => x.Num) / 1000).ToString("F4")).Font(font).FontSize(11d);
                 if (devices[x].Unit == "人")
                 {
@@ -1253,9 +1253,9 @@ namespace Carbon_inventory_platform.Controllers
             double widthInPoints = cmWidth * 0.393701 * 72; // 1英寸 ≈ 2.54厘米，1磅 ≈ 0.0353厘米
             return widthInPoints;
         }
-        public void GenerateGHGsTable(DocX doc, List<GHG> manyGHGs, string emissionPattern, string gasName)
+        public void GenerateGHGsTable(DocX doc, List<GHG> GHGs,List<ActivityData> activityDatas, string emissionPattern, string gasName)
         {
-            int num = manyGHGs.Count(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName);
+            int num = GHGs.Count(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName);
             string tableName = $"[{emissionPattern}{gasName}]";
             var font = new Xceed.Document.NET.Font("標楷體");
             Xceed.Document.NET.Table table = doc.AddTable(num != 0 ? (num + 1) : (num + 2), 8);
@@ -1274,14 +1274,14 @@ namespace Carbon_inventory_platform.Controllers
             int rowIndex = 1;
             if (num > 0)
             {
-                foreach (var GHG in manyGHGs.Where(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName))
+                foreach (var GHG in GHGs.Where(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName))
                 {
                     string deviceCellString = (GHG.Device.Name == "其他" ? GHG.Device.OtherName : GHG.Device.Name)
                                              + (GHG.Device.NameRemark != null && GHG.Device.NameRemark.Trim() != string.Empty ? "(" + GHG.Device.NameRemark + ")" : "");
 
                     table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(deviceCellString).Font(font).FontSize(9d);
                     table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(GHG.Device.Name != "WD40" ? GHG.Device.Material : "二氧化碳").Font(font).FontSize(9d);
-                    var ActivityData = _context.ActivityDatas.Where(x => x.DeviceId == GHG.DeviceId).ToList();
+                    var ActivityData = activityDatas.Where(x => x.DeviceId == GHG.DeviceId).ToList();
 
                     if (ActivityData != null)
                     {
@@ -1403,7 +1403,7 @@ namespace Carbon_inventory_platform.Controllers
             //    }
             //}
         }
-        public void GenerateReport(DocX doc, List<Device> devices)
+        public void GenerateReport(DocX doc, List<Device> devices,List<GHG> AllGHGs)
         {
             var font = new Xceed.Document.NET.Font("標楷體");
             Xceed.Document.NET.Table table = doc.AddTable(devices.Count() + 1, 4);
@@ -1423,7 +1423,7 @@ namespace Carbon_inventory_platform.Controllers
                     + (devices[x].Name != "WD40" ? ("-" + devices[x].Material) : "-二氧化碳")
                     + (devices[x].NameRemark != null && devices[x].NameRemark.Trim() != string.Empty ? "(" + devices[x].NameRemark + ")" : "");
                 table.Rows[x + 1].Cells[2].Paragraphs.First().Append(deviceCellString).Font(font).FontSize(11d);
-                var GHGs = _context.GHGs.Where(ghg => ghg.DeviceId == devices[x].Id);
+                var GHGs = AllGHGs.Where(ghg => ghg.DeviceId == devices[x].Id);
                 var ghgOrder = new Dictionary<string, int>
                 {
                     { "CO2", 0 },
@@ -1461,7 +1461,7 @@ namespace Carbon_inventory_platform.Controllers
             }
             doc.ReplaceTextWithObject("[報告邊界表]", table);
         }
-        public void GenerateScopeTable(DocX doc, List<Device> devices, string scope)
+        public void GenerateScopeTable(DocX doc, List<Device> devices, List<GHG> AllGHGs, string scope)
         {
             // 獲取特定類別的設備數量
             int numDevices = devices.Where(x => x.Scope == scope).Count();
@@ -1487,7 +1487,7 @@ namespace Carbon_inventory_platform.Controllers
             foreach (var item in devices.Where(x => x.Scope == scope))
             {
                 // 獲取特定設備的溫室氣體
-                var GHGs = _context.GHGs.Where(ghg => ghg.DeviceId == item.Id);
+                var GHGs = AllGHGs.Where(ghg => ghg.DeviceId == item.Id);
 
                 // 填充基本資料
                 table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(item.Scope).Font(font).FontSize(11d);
