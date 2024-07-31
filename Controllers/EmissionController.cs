@@ -4,6 +4,7 @@ using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
 using static System.Net.Mime.MediaTypeNames;
@@ -43,7 +44,7 @@ namespace Carbon_inventory_platform.Controllers
             // 合并数据库查询
             var areaData = await _context.Areas
     .Include(a => a.Devices.Where(d => d.isDeleted == 0))  // 只包含 isDeleted == 0 的 Devices
-    .ThenInclude(d=>d.GHGs)
+    .ThenInclude(d => d.GHGs)
     .Where(a => a.Id == id && a.isDeleted == 0)  // Area 的 Id 等于 id，且 IsDeleted == 0
     .FirstOrDefaultAsync();
 
@@ -287,6 +288,7 @@ namespace Carbon_inventory_platform.Controllers
             }
 
         }
+
         public async Task<IActionResult> Word3Async(Guid id)
         {
             await CountEmissionAsync(id);
@@ -329,98 +331,98 @@ namespace Carbon_inventory_platform.Controllers
             using (DocX doc = DocX.Load(filePath))
             {
                 //-----------------替換的文本
-                ReplaceText(doc, "[聯絡人姓名]", data.Company.ContactName);
-                ReplaceText(doc, "[聯絡人電話]", data.Company.Phone);
-                ReplaceText(doc, "[聯絡人電子信箱]", data.Company.Email);
+                UpdateReplacePattern("聯絡人姓名", data.Company.ContactName);
+                UpdateReplacePattern("聯絡人電話", data.Company.Phone);
+                UpdateReplacePattern("聯絡人電子信箱", data.Company.Email);
 
-                ReplaceText(doc, "[公司中文名稱]", data.Company.Name);
-                ReplaceText(doc, "[西元盤查年份]", (data.Year + 1911).ToString());
-                ReplaceText(doc, "[民國盤查年份]", (data.Year).ToString());
+                UpdateReplacePattern("公司中文名稱", data.Company.Name);
+                UpdateReplacePattern("西元盤查年份", (data.Year + 1911).ToString());
+                UpdateReplacePattern("民國盤查年份", (data.Year).ToString());
                 if (data.Name != null)
                 {
                     if (data.Name.Trim() != "")
                     {
-                        ReplaceText(doc, "[廠區名稱]", data.Name);
+                        UpdateReplacePattern("廠區名稱", data.Name);
                     }
                 }
-                ReplaceText(doc, "[進行評估排放當量]", data.cal_all.ToString("N4"));
-                ReplaceText(doc, "[不確定性評估占比]", data.percentage_CalAll.ToString("N2") + "%");
-                ReplaceText(doc, "[第1級評分]", data.no1_Grade.ToString());
-                ReplaceText(doc, "[第2級評分]", data.no2_Grade.ToString());
-                ReplaceText(doc, "[第3級評分]", data.no3_Grade.ToString());
-                ReplaceText(doc, "[清冊等級分數補充]", data.avg_Grade.ToString());
-                ReplaceText(doc, "[清冊級別補充]", data.all_Grade.ToString());
-                ReplaceText(doc, "[95上]", "-" + data.UUL.ToString("N2") + "%");
-                ReplaceText(doc, "[95下]", "+" + data.ULL.ToString("N2") + "%");
+                UpdateReplacePattern("進行評估排放當量", data.cal_all.ToString("N4"));
+                UpdateReplacePattern("不確定性評估占比", data.percentage_CalAll.ToString("N2") + "%");
+                UpdateReplacePattern("第1級評分", data.no1_Grade.ToString());
+                UpdateReplacePattern("第2級評分", data.no2_Grade.ToString());
+                UpdateReplacePattern("第3級評分", data.no3_Grade.ToString());
+                UpdateReplacePattern("清冊等級分數補充", data.avg_Grade.ToString());
+                UpdateReplacePattern("清冊級別補充", data.all_Grade.ToString());
+                UpdateReplacePattern("95上", "-" + data.UUL.ToString("N2") + "%");
+                UpdateReplacePattern("95下", "+" + data.ULL.ToString("N2") + "%");
 
                 if (data.Company.ReportOpening != null)
                 {
                     string trimRO = data.Company.ReportOpening.Replace(" ", "");
                     trimRO = trimRO.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[前言]", trimRO);
+                    UpdateReplacePattern("前言", trimRO);
                 }
                 else
                 {
-                    ReplaceText(doc, "[前言]", "自1997年12月第三次締約國大會(COP3)簽署京都議定書後，全球先進國家均研擬因應溫室氣體減量的方法與措施，2005年2月京都議定書正式生效後，全球各國更積極建立了溫室氣體排放管制的共識，2007年12月巴里路線圖進一步強調開發中國家應推動可量測(Measurable)、報告(Reportable)及可供查證(Verifiable)之適當減緩行動，2009年12月丹麥哥本哈根會議更針對後京都世界各國溫室氣體減量提出可行方案。\r\n    聯合國環境規劃署在2014年「溫室氣體排放缺口報告」指出，全球碳中和應於2055年至2070年間達成，否則地球將面臨氣候變遷災難。2015年聯合國發布「2030年永續發展方針」，公布17項永續發展目標(SDGs)，為人類和地球的「和平與繁榮」提供了現在與未來的共享藍圖。基於全球減碳趨勢，我國響應聯合國氣候變遷的目標，亦提出「2050淨零路徑里程碑」，隨後於112年1月10通過「氣候變遷因應法」，以達成節能減碳之永續發展目。\r\n    " + data.Company.Name + "(以下簡稱本公司)為因應全球永續發展趨勢於 2015年底《聯合國氣候變化綱要公約》第21屆締約國(COP21)後「巴黎協議」產生，加上環境部《溫室氣體減量及管理法》於 2015年7月正式公布實施，配合國家整體溫室氣體減量策略發展，以達成節能減碳之永續發展目標，特配合政府政策，持續進行公司內部溫室氣體盤查，以瞭解溫室氣體排放實況，進而訂定改善措施，以求達成二氧化碳排放減量之目標。 \r\n    本公司基於關心全球氣候變遷、善用資源及善盡企業的責任，根據ISO/IEC 14064-1： 2018要求，對溫室氣體管制發展趨勢及因應未來溫室氣體減量之要求，進行系統化的溫室氣體排放盤查 與清冊建置及查證程序等推動計畫，提供日後實施有效的減量改善方案作參考。今後除將持續推動溫室氣體排放管制以降低成本外，並期盼能達成兼顧資源效率、能源節約、環境保護的永續能源發展，共同為產業朝向低碳型經濟社會來努力。");
+                    UpdateReplacePattern("前言", "自1997年12月第三次締約國大會(COP3)簽署京都議定書後，全球先進國家均研擬因應溫室氣體減量的方法與措施，2005年2月京都議定書正式生效後，全球各國更積極建立了溫室氣體排放管制的共識，2007年12月巴里路線圖進一步強調開發中國家應推動可量測(Measurable)、報告(Reportable)及可供查證(Verifiable)之適當減緩行動，2009年12月丹麥哥本哈根會議更針對後京都世界各國溫室氣體減量提出可行方案。\r\n    聯合國環境規劃署在2014年「溫室氣體排放缺口報告」指出，全球碳中和應於2055年至2070年間達成，否則地球將面臨氣候變遷災難。2015年聯合國發布「2030年永續發展方針」，公布17項永續發展目標(SDGs)，為人類和地球的「和平與繁榮」提供了現在與未來的共享藍圖。基於全球減碳趨勢，我國響應聯合國氣候變遷的目標，亦提出「2050淨零路徑里程碑」，隨後於112年1月10通過「氣候變遷因應法」，以達成節能減碳之永續發展目。\r\n    " + data.Company.Name + "(以下簡稱本公司)為因應全球永續發展趨勢於 2015年底《聯合國氣候變化綱要公約》第21屆締約國(COP21)後「巴黎協議」產生，加上環境部《溫室氣體減量及管理法》於 2015年7月正式公布實施，配合國家整體溫室氣體減量策略發展，以達成節能減碳之永續發展目標，特配合政府政策，持續進行公司內部溫室氣體盤查，以瞭解溫室氣體排放實況，進而訂定改善措施，以求達成二氧化碳排放減量之目標。 \r\n    本公司基於關心全球氣候變遷、善用資源及善盡企業的責任，根據ISO/IEC 14064-1： 2018要求，對溫室氣體管制發展趨勢及因應未來溫室氣體減量之要求，進行系統化的溫室氣體排放盤查 與清冊建置及查證程序等推動計畫，提供日後實施有效的減量改善方案作參考。今後除將持續推動溫室氣體排放管制以降低成本外，並期盼能達成兼顧資源效率、能源節約、環境保護的永續能源發展，共同為產業朝向低碳型經濟社會來努力。");
                 }
                 if (data.Company.CompanyInformation != null)
                 {
                     string trimCM = data.Company.CompanyInformation.Replace(" ", "");
                     trimCM = trimCM.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[公司基本資料]", trimCM);
+                    UpdateReplacePattern("公司基本資料", trimCM);
                 }
                 else
                 {
 
-                    ReplaceText(doc, "[公司基本資料]", " ");
+                    UpdateReplacePattern("公司基本資料", " ");
                 }
                 if (data.Company.ReportingPurposes != null)
                 {
                     string trimRP = data.Company.ReportingPurposes.Replace(" ", "");
                     trimRP = trimRP.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[預期用途]", trimRP);
+                    UpdateReplacePattern("預期用途", trimRP);
                 }
                 else
                 {
-                    ReplaceText(doc, "[預期用途]", "為接軌國際議題，提升競爭力，以及實施社會責任，進行本報告書撰寫，以展現本公司溫室氣體盤查結果及推動減碳的決心。");
+                    UpdateReplacePattern("預期用途", "為接軌國際議題，提升競爭力，以及實施社會責任，進行本報告書撰寫，以展現本公司溫室氣體盤查結果及推動減碳的決心。");
                 }
 
                 if (data.Company.AddressInformation != null)
                 {
                     string trimAI = data.Company.AddressInformation.Replace(" ", "");
                     trimAI = trimAI.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[組織邊界設定]", trimAI);
+                    UpdateReplacePattern("組織邊界設定", trimAI);
                 }
                 else
                 {
-                    ReplaceText(doc, "[組織邊界設定]", "本次組織邊界之設定，遵循ISO 14064-1:2018標準，採用營運控制權法。");
+                    UpdateReplacePattern("組織邊界設定", "本次組織邊界之設定，遵循ISO 14064-1:2018標準，採用營運控制權法。");
                 }
                 if (data.Company.ReportingInformation != null)
                 {
                     string trimRI = data.Company.ReportingInformation.Replace(" ", "");
                     trimRI = trimRI.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[報告邊界]", trimRI);
+                    UpdateReplacePattern("報告邊界", trimRI);
                 }
                 else
                 {
-                    ReplaceText(doc, "[報告邊界]", "");
+                    UpdateReplacePattern("報告邊界", "");
 
                 }
                 if (data.Company.GHGInformation != null)
                 {
                     string trimGI = data.Company.GHGInformation.Replace(" ", "");
                     trimGI = trimGI.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[溫室氣體排放類型與排放量說明]", trimGI);
+                    UpdateReplacePattern("溫室氣體排放類型與排放量說明", trimGI);
                 }
                 else
                 {
-                    ReplaceText(doc, "[溫室氣體排放類型與排放量說明]", "溫室氣體之種類係指上述標準定義之溫室氣體，包括二氧化碳(CO₂)、甲烷(CH₄)、氧化亞氮(N₂O)、氫氟碳化物(HFCs)、全氟碳化物(PFCs)、六氟化硫(SF₆)、三氟化氮(NF₃)以及其他經環境部公告者，但不包含蒙特婁議定書規範之氟氯碳化物(CFCs)。");
+                    UpdateReplacePattern("溫室氣體排放類型與排放量說明", "溫室氣體之種類係指上述標準定義之溫室氣體，包括二氧化碳(CO₂)、甲烷(CH₄)、氧化亞氮(N₂O)、氫氟碳化物(HFCs)、全氟碳化物(PFCs)、六氟化硫(SF₆)、三氟化氮(NF₃)以及其他經環境部公告者，但不包含蒙特婁議定書規範之氟氯碳化物(CFCs)。");
                 }
                 if (data.Company.Scope1Information != null)
                 {
                     string trimS1I = data.Company.Scope1Information.Replace(" ", "");
                     trimS1I = trimS1I.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[直接溫室氣體排放說明]", trimS1I);
+                    UpdateReplacePattern("直接溫室氣體排放說明", trimS1I);
                 }
                 else
                 {
@@ -436,14 +438,7 @@ namespace Carbon_inventory_platform.Controllers
                         foreach (var item in DeviceList)
                         {
                             count++;
-                            if (item.Name != "其他")
-                            {
-                                text += item.Name;
-                            }
-                            else
-                            {
-                                text += item.OtherName;
-                            }
+                            text += item.Name;
                             if (count < DeviceList.Count())
                             {
                                 text += "、";
@@ -469,14 +464,7 @@ namespace Carbon_inventory_platform.Controllers
                         foreach (var item in DeviceList)
                         {
                             count++;
-                            if (item.Name != "其他")
-                            {
-                                text += item.Name;
-                            }
-                            else
-                            {
-                                text += item.OtherName;
-                            }
+                            text += item.Name;
                             if (count < DeviceList.Count())
                             {
                                 text += "、";
@@ -502,14 +490,7 @@ namespace Carbon_inventory_platform.Controllers
                         foreach (var item in DeviceList)
                         {
                             count++;
-                            if (item.Name != "其他")
-                            {
-                                text += item.Name;
-                            }
-                            else
-                            {
-                                text += item.OtherName;
-                            }
+                            text += item.Name;
                             if (count < DeviceList.Count())
                             {
                                 text += "、";
@@ -535,14 +516,7 @@ namespace Carbon_inventory_platform.Controllers
                         foreach (var item in DeviceList)
                         {
                             count++;
-                            if (item.Name != "其他")
-                            {
-                                text += item.Name;
-                            }
-                            else
-                            {
-                                text += item.OtherName;
-                            }
+                            text += item.Name;
                             if (count < DeviceList.Count())
                             {
                                 text += "、";
@@ -555,31 +529,31 @@ namespace Carbon_inventory_platform.Controllers
                         text += "本公司無製程排放源";
                     }
                     text += "。此外，本次盤查範圍無土地利用變化，也無生質燃料直接排放。";
-                    ReplaceText(doc, "[直接溫室氣體排放說明]", text);
+                    UpdateReplacePattern("直接溫室氣體排放說明", text);
 
                 }
                 if (data.Company.Scope2Information != null)
                 {
                     string trimS2I = data.Company.Scope2Information.Replace(" ", "");
                     trimS2I = trimS2I.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[能源間接溫室氣體排放說明]", trimS2I);
+                    UpdateReplacePattern("能源間接溫室氣體排放說明", trimS2I);
                 }
                 else
                 {
-                    ReplaceText(doc, "[能源間接溫室氣體排放說明]", "本廠類別二能源間接溫室氣體排放皆來自於外購電力部份。");
+                    UpdateReplacePattern("能源間接溫室氣體排放說明", "本廠類別二能源間接溫室氣體排放皆來自於外購電力部份。");
                 }
                 if (device.Find(x => x.Name == "WD40") != null)
                 {
-                    ReplaceText(doc, "[WD40排放係數描述]", "依WD-40之安全資料表(SDS)，可知其組成包含2~3 Wt%之CO₂，取其平均值2.5%；因CO₂係作為WD-40之推進劑，當使用WD-40時，亦將造成CO₂逸散，故假設每使用1單位重量之WD-40時，會有2.5%之單位重量CO₂隨之逸散。");
+                    UpdateReplacePattern("WD40排放係數描述", "依WD-40之安全資料表(SDS)，可知其組成包含2~3 Wt%之CO₂，取其平均值2.5%；因CO₂係作為WD-40之推進劑，當使用WD-40時，亦將造成CO₂逸散，故假設每使用1單位重量之WD-40時，會有2.5%之單位重量CO₂隨之逸散。");
                 }
                 else
                 {
-                    ReplaceText(doc, "[WD40排放係數描述]", "");
+                    UpdateReplacePattern("WD40排放係數描述", "");
                 }
-                ReplaceText(doc, "[盤查月]", DateTime.Now.Month.ToString());
-                ReplaceText(doc, "[盤查日]", DateTime.Now.Day.ToString());
-                ReplaceText(doc, "[地址]", data.FullAddress);
-                ReplaceText(doc, "[民國基準年]", data.Year.ToString());
+                UpdateReplacePattern("盤查月", DateTime.Now.Month.ToString());
+                UpdateReplacePattern("盤查日", DateTime.Now.Day.ToString());
+                UpdateReplacePattern("地址", data.FullAddress);
+                UpdateReplacePattern("民國基準年", data.Year.ToString());
 
                 ScopeDevice(doc, device, "類別一");
                 ScopeDevice(doc, device, "類別二");
@@ -591,59 +565,59 @@ namespace Carbon_inventory_platform.Controllers
 
                     if (deviceActivityData != null)
                     {
-                        ReplaceText(doc, "[電力使用量]", (deviceActivityData.Sum(ad => ad.Num) / 1000).ToString());
+                        UpdateReplacePattern("電力使用量", (deviceActivityData.Sum(ad => ad.Num) / 1000).ToString());
                     }
                     else
                     {
-                        ReplaceText(doc, "[電力使用量]", "0");
+                        UpdateReplacePattern("電力使用量", "0");
                     }
                 }
 
 
-                ReplaceText(doc, "[類別一CO2排放]", data.Scope1_CO2.ToString("N4"));
-                ReplaceText(doc, "[類別一CH4排放]", data.Scope1_CH4.ToString("N4"));
-                ReplaceText(doc, "[類別一N2O排放]", data.Scope1_N2O.ToString("N4"));
-                ReplaceText(doc, "[類別一HFCS排放]", data.Scope1_HFCS.ToString("N4"));
-                ReplaceText(doc, "[類別一PFCS排放]", data.Scope1_PFCS.ToString("N4"));
-                ReplaceText(doc, "[類別一SF6排放]", data.Scope1_SF6.ToString("N4"));
-                ReplaceText(doc, "[類別一NF3排放]", data.Scope1_NF3.ToString("N4"));
+                UpdateReplacePattern("類別一CO2排放", data.Scope1_CO2.ToString("N4"));
+                UpdateReplacePattern("類別一CH4排放", data.Scope1_CH4.ToString("N4"));
+                UpdateReplacePattern("類別一N2O排放", data.Scope1_N2O.ToString("N4"));
+                UpdateReplacePattern("類別一HFCS排放", data.Scope1_HFCS.ToString("N4"));
+                UpdateReplacePattern("類別一PFCS排放", data.Scope1_PFCS.ToString("N4"));
+                UpdateReplacePattern("類別一SF6排放", data.Scope1_SF6.ToString("N4"));
+                UpdateReplacePattern("類別一NF3排放", data.Scope1_NF3.ToString("N4"));
 
-                ReplaceText(doc, "[類別一CO2占比]", data.percentage1_CO2.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一CH4占比]", data.percentage1_CH4.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一N2O占比]", data.percentage1_N2O.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一HFCS占比]", data.percentage1_HFCS.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一PFCS占比]", data.percentage1_PFCS.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一SF6占比]", data.percentage1_SF6.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一NF3占比]", data.percentage2_NF3.ToString("N2") + "%");
+                UpdateReplacePattern("類別一CO2占比", data.percentage1_CO2.ToString("N2") + "%");
+                UpdateReplacePattern("類別一CH4占比", data.percentage1_CH4.ToString("N2") + "%");
+                UpdateReplacePattern("類別一N2O占比", data.percentage1_N2O.ToString("N2") + "%");
+                UpdateReplacePattern("類別一HFCS占比", data.percentage1_HFCS.ToString("N2") + "%");
+                UpdateReplacePattern("類別一PFCS占比", data.percentage1_PFCS.ToString("N2") + "%");
+                UpdateReplacePattern("類別一SF6占比", data.percentage1_SF6.ToString("N2") + "%");
+                UpdateReplacePattern("類別一NF3占比", data.percentage2_NF3.ToString("N2") + "%");
 
-                ReplaceText(doc, "[CO2排放]", data.CO2.ToString("N4"));
-                ReplaceText(doc, "[CH4排放]", data.CH4.ToString("N4"));
-                ReplaceText(doc, "[N2O排放]", data.N2O.ToString("N4"));
-                ReplaceText(doc, "[HFCS排放]", data.HFCS.ToString("N4"));
-                ReplaceText(doc, "[PFCS排放]", data.PFCS.ToString("N4"));
-                ReplaceText(doc, "[SF6排放]", data.SF6.ToString("N4"));
-                ReplaceText(doc, "[NF3排放]", data.NF3.ToString("N4"));
+                UpdateReplacePattern("CO2排放", data.CO2.ToString("N4"));
+                UpdateReplacePattern("CH4排放", data.CH4.ToString("N4"));
+                UpdateReplacePattern("N2O排放", data.N2O.ToString("N4"));
+                UpdateReplacePattern("HFCS排放", data.HFCS.ToString("N4"));
+                UpdateReplacePattern("PFCS排放", data.PFCS.ToString("N4"));
+                UpdateReplacePattern("SF6排放", data.SF6.ToString("N4"));
+                UpdateReplacePattern("NF3排放", data.NF3.ToString("N4"));
 
-                ReplaceText(doc, "[CO2占比]", data.percentage2_CO2.ToString("N2") + "%");
-                ReplaceText(doc, "[CH4占比]", data.percentage2_CH4.ToString("N2") + "%");
-                ReplaceText(doc, "[N2O占比]", data.percentage2_N2O.ToString("N2") + "%");
-                ReplaceText(doc, "[HFCS占比]", data.percentage2_HFCS.ToString("N2") + "%");
-                ReplaceText(doc, "[PFCS占比]", data.percentage2_PFCS.ToString("N2") + "%");
-                ReplaceText(doc, "[SF6占比]", data.percentage2_SF6.ToString("N2") + "%");
-                ReplaceText(doc, "[NF3占比]", data.percentage2_NF3.ToString("N2") + "%");
-                ReplaceText(doc, "[總排放當量]", data.All.ToString("N3"));
-                ReplaceText(doc, "[固定排放量]", data.non_move.ToString("N4"));
-                ReplaceText(doc, "[移動排放量]", data.move.ToString("N4"));
-                ReplaceText(doc, "[製程排放量]", data.process.ToString("N4"));
-                ReplaceText(doc, "[逸散排放量]", data.escape.ToString("N4"));
-                ReplaceText(doc, "[固定排放比例]", data.percentage_nonMove.ToString("N2") + "%");
-                ReplaceText(doc, "[製程排放比例]", data.percentage_Process.ToString("N2") + "%");
-                ReplaceText(doc, "[移動排放比例]", data.percentage_Move.ToString("N2") + "%");
-                ReplaceText(doc, "[逸散排放比例]", data.percentage_Escape.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一占比]", data.percentage_Scope1.ToString("N2") + "%");
-                ReplaceText(doc, "[類別二占比]", data.percentage_Scope2.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一總排放]", data.Scope1.ToString("N4"));
-                ReplaceText(doc, "[類別二總排放]", data.Scope2.ToString("N4"));
+                UpdateReplacePattern("CO2占比", data.percentage2_CO2.ToString("N2") + "%");
+                UpdateReplacePattern("CH4占比", data.percentage2_CH4.ToString("N2") + "%");
+                UpdateReplacePattern("N2O占比", data.percentage2_N2O.ToString("N2") + "%");
+                UpdateReplacePattern("HFCS占比", data.percentage2_HFCS.ToString("N2") + "%");
+                UpdateReplacePattern("PFCS占比", data.percentage2_PFCS.ToString("N2") + "%");
+                UpdateReplacePattern("SF6占比", data.percentage2_SF6.ToString("N2") + "%");
+                UpdateReplacePattern("NF3占比", data.percentage2_NF3.ToString("N2") + "%");
+                UpdateReplacePattern("總排放當量", data.All.ToString("N3"));
+                UpdateReplacePattern("固定排放量", data.non_move.ToString("N4"));
+                UpdateReplacePattern("移動排放量", data.move.ToString("N4"));
+                UpdateReplacePattern("製程排放量", data.process.ToString("N4"));
+                UpdateReplacePattern("逸散排放量", data.escape.ToString("N4"));
+                UpdateReplacePattern("固定排放比例", data.percentage_nonMove.ToString("N2") + "%");
+                UpdateReplacePattern("製程排放比例", data.percentage_Process.ToString("N2") + "%");
+                UpdateReplacePattern("移動排放比例", data.percentage_Move.ToString("N2") + "%");
+                UpdateReplacePattern("逸散排放比例", data.percentage_Escape.ToString("N2") + "%");
+                UpdateReplacePattern("類別一占比", data.percentage_Scope1.ToString("N2") + "%");
+                UpdateReplacePattern("類別二占比", data.percentage_Scope2.ToString("N2") + "%");
+                UpdateReplacePattern("類別一總排放", data.Scope1.ToString("N4"));
+                UpdateReplacePattern("類別二總排放", data.Scope2.ToString("N4"));
                 //-----------------替換的文本
                 //--------------------------------排放源溫室氣體表表
                 GenerateGHGsTable(doc, AllGHGs, AllActivityData, "固定", "CO2");
@@ -680,7 +654,7 @@ namespace Carbon_inventory_platform.Controllers
                     try
                     {
                         string showDrawingPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), data.ShopDrawingsPath);
-                        replaceImage(doc, "[廠區圖]", showDrawingPath);
+                        replaceImage(doc, "廠區圖", showDrawingPath);
                     }
                     catch (Exception e)
                     {
@@ -690,7 +664,7 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 else
                 {
-                    ReplaceText(doc, "[廠區圖]", "");
+                    UpdateReplacePattern("廠區圖", "");
                 }
 
                 if (data.OrganizationImagePath != "")
@@ -698,7 +672,7 @@ namespace Carbon_inventory_platform.Controllers
                     try
                     {
                         string organiztionPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), data.OrganizationImagePath);
-                        replaceImage(doc, "[公司組織圖]", organiztionPath);
+                        replaceImage(doc, "公司組織圖", organiztionPath);
                     }
                     catch (Exception e)
                     {
@@ -709,14 +683,14 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 else
                 {
-                    ReplaceText(doc, "[公司組織圖]", "");
+                    UpdateReplacePattern("公司組織圖", "");
                 }
                 if (data.MapImagePath != "")
                 {
                     try
                     {
                         string mapPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), data.MapImagePath);
-                        replaceImage(doc, "[地理位置圖]", mapPath);
+                        replaceImage(doc, "地理位置圖", mapPath);
                     }
                     catch (Exception e)
                     {
@@ -727,9 +701,21 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 else
                 {
-                    ReplaceText(doc, "[地理位置圖]", "");
+                    UpdateReplacePattern("地理位置圖", "");
                 }
                 //--------------------------------圖片
+                // Check if all the replace patterns are used in the loaded document.
+                if (doc.FindUniqueByPattern(@"<[\w \=]{4,}>", RegexOptions.IgnoreCase).Count > 0)
+                {
+                    // Do the replacement of all the found tags and with green bold strings.
+                    var replaceTextOptions = new FunctionReplaceTextOptions()
+                    {
+                        FindPattern = "<(.*?)>",
+                        RegexMatchHandler = ReplaceFunc,
+                        RegExOptions = RegexOptions.IgnoreCase,
+                    };
+                    doc.ReplaceText(replaceTextOptions);
+                }
 
                 doc.SaveAs(newFile);
             }
@@ -778,98 +764,98 @@ namespace Carbon_inventory_platform.Controllers
             using (DocX doc = DocX.Load(filePath))
             {
                 //-----------------替換的文本
-                ReplaceText(doc, "[聯絡人姓名]", data.Company.ContactName);
-                ReplaceText(doc, "[聯絡人電話]", data.Company.Phone);
-                ReplaceText(doc, "[聯絡人電子信箱]", data.Company.Email);
+                UpdateReplacePattern("聯絡人姓名", data.Company.ContactName);
+                UpdateReplacePattern("聯絡人電話", data.Company.Phone);
+                UpdateReplacePattern("聯絡人電子信箱", data.Company.Email);
 
-                ReplaceText(doc, "[公司中文名稱]", data.Company.Name);
-                ReplaceText(doc, "[西元盤查年份]", (data.Year + 1911).ToString());
-                ReplaceText(doc, "[民國盤查年份]", (data.Year).ToString());
+                UpdateReplacePattern("公司中文名稱", data.Company.Name);
+                UpdateReplacePattern("西元盤查年份", (data.Year + 1911).ToString());
+                UpdateReplacePattern("民國盤查年份", (data.Year).ToString());
                 if (data.Name != null)
                 {
                     if (data.Name.Trim() != "")
                     {
-                        ReplaceText(doc, "[廠區名稱]", data.Name);
+                        UpdateReplacePattern("廠區名稱", data.Name);
                     }
                 }
-                ReplaceText(doc, "[進行評估排放當量]", data.cal_all.ToString("N4"));
-                ReplaceText(doc, "[不確定性評估占比]", data.percentage_CalAll.ToString("N2") + "%");
-                ReplaceText(doc, "[第1級評分]", data.no1_Grade.ToString());
-                ReplaceText(doc, "[第2級評分]", data.no2_Grade.ToString());
-                ReplaceText(doc, "[第3級評分]", data.no3_Grade.ToString());
-                ReplaceText(doc, "[清冊等級分數補充]", data.avg_Grade.ToString());
-                ReplaceText(doc, "[清冊級別補充]", data.all_Grade.ToString());
-                ReplaceText(doc, "[95上]", "-" + data.UUL.ToString("N2") + "%");
-                ReplaceText(doc, "[95下]", "+" + data.ULL.ToString("N2") + "%");
+                UpdateReplacePattern("進行評估排放當量", data.cal_all.ToString("N4"));
+                UpdateReplacePattern("不確定性評估占比", data.percentage_CalAll.ToString("N2") + "%");
+                UpdateReplacePattern("第1級評分", data.no1_Grade.ToString());
+                UpdateReplacePattern("第2級評分", data.no2_Grade.ToString());
+                UpdateReplacePattern("第3級評分", data.no3_Grade.ToString());
+                UpdateReplacePattern("清冊等級分數補充", data.avg_Grade.ToString());
+                UpdateReplacePattern("清冊級別補充", data.all_Grade.ToString());
+                UpdateReplacePattern("95上", "-" + data.UUL.ToString("N2") + "%");
+                UpdateReplacePattern("95下", "+" + data.ULL.ToString("N2") + "%");
 
                 if (data.Company.ReportOpening != null)
                 {
                     string trimRO = data.Company.ReportOpening.Replace(" ", "");
                     trimRO = trimRO.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[前言]", trimRO);
+                    UpdateReplacePattern("前言", trimRO);
                 }
                 else
                 {
-                    ReplaceText(doc, "[前言]", "自1997年12月第三次締約國大會(COP3)簽署京都議定書後，全球先進國家均研擬因應溫室氣體減量的方法與措施，2005年2月京都議定書正式生效後，全球各國更積極建立了溫室氣體排放管制的共識，2007年12月巴里路線圖進一步強調開發中國家應推動可量測(Measurable)、報告(Reportable)及可供查證(Verifiable)之適當減緩行動，2009年12月丹麥哥本哈根會議更針對後京都世界各國溫室氣體減量提出可行方案。\r\n    聯合國環境規劃署在2014年「溫室氣體排放缺口報告」指出，全球碳中和應於2055年至2070年間達成，否則地球將面臨氣候變遷災難。2015年聯合國發布「2030年永續發展方針」，公布17項永續發展目標(SDGs)，為人類和地球的「和平與繁榮」提供了現在與未來的共享藍圖。基於全球減碳趨勢，我國響應聯合國氣候變遷的目標，亦提出「2050淨零路徑里程碑」，隨後於112年1月10通過「氣候變遷因應法」，以達成節能減碳之永續發展目。\r\n    " + data.Company.Name + "(以下簡稱本公司)為因應全球永續發展趨勢於 2015年底《聯合國氣候變化綱要公約》第21屆締約國(COP21)後「巴黎協議」產生，加上環境部《溫室氣體減量及管理法》於 2015年7月正式公布實施，配合國家整體溫室氣體減量策略發展，以達成節能減碳之永續發展目標，特配合政府政策，持續進行公司內部溫室氣體盤查，以瞭解溫室氣體排放實況，進而訂定改善措施，以求達成二氧化碳排放減量之目標。 \r\n    本公司基於關心全球氣候變遷、善用資源及善盡企業的責任，根據ISO/IEC 14064-1： 2018要求，對溫室氣體管制發展趨勢及因應未來溫室氣體減量之要求，進行系統化的溫室氣體排放盤查 與清冊建置及查證程序等推動計畫，提供日後實施有效的減量改善方案作參考。今後除將持續推動溫室氣體排放管制以降低成本外，並期盼能達成兼顧資源效率、能源節約、環境保護的永續能源發展，共同為產業朝向低碳型經濟社會來努力。");
+                    UpdateReplacePattern("前言", "自1997年12月第三次締約國大會(COP3)簽署京都議定書後，全球先進國家均研擬因應溫室氣體減量的方法與措施，2005年2月京都議定書正式生效後，全球各國更積極建立了溫室氣體排放管制的共識，2007年12月巴里路線圖進一步強調開發中國家應推動可量測(Measurable)、報告(Reportable)及可供查證(Verifiable)之適當減緩行動，2009年12月丹麥哥本哈根會議更針對後京都世界各國溫室氣體減量提出可行方案。\r\n    聯合國環境規劃署在2014年「溫室氣體排放缺口報告」指出，全球碳中和應於2055年至2070年間達成，否則地球將面臨氣候變遷災難。2015年聯合國發布「2030年永續發展方針」，公布17項永續發展目標(SDGs)，為人類和地球的「和平與繁榮」提供了現在與未來的共享藍圖。基於全球減碳趨勢，我國響應聯合國氣候變遷的目標，亦提出「2050淨零路徑里程碑」，隨後於112年1月10通過「氣候變遷因應法」，以達成節能減碳之永續發展目。\r\n    " + data.Company.Name + "(以下簡稱本公司)為因應全球永續發展趨勢於 2015年底《聯合國氣候變化綱要公約》第21屆締約國(COP21)後「巴黎協議」產生，加上環境部《溫室氣體減量及管理法》於 2015年7月正式公布實施，配合國家整體溫室氣體減量策略發展，以達成節能減碳之永續發展目標，特配合政府政策，持續進行公司內部溫室氣體盤查，以瞭解溫室氣體排放實況，進而訂定改善措施，以求達成二氧化碳排放減量之目標。 \r\n    本公司基於關心全球氣候變遷、善用資源及善盡企業的責任，根據ISO/IEC 14064-1： 2018要求，對溫室氣體管制發展趨勢及因應未來溫室氣體減量之要求，進行系統化的溫室氣體排放盤查 與清冊建置及查證程序等推動計畫，提供日後實施有效的減量改善方案作參考。今後除將持續推動溫室氣體排放管制以降低成本外，並期盼能達成兼顧資源效率、能源節約、環境保護的永續能源發展，共同為產業朝向低碳型經濟社會來努力。");
                 }
                 if (data.Company.CompanyInformation != null)
                 {
                     string trimCM = data.Company.CompanyInformation.Replace(" ", "");
                     trimCM = trimCM.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[公司基本資料]", trimCM);
+                    UpdateReplacePattern("公司基本資料", trimCM);
                 }
                 else
                 {
 
-                    ReplaceText(doc, "[公司基本資料]", " ");
+                    UpdateReplacePattern("公司基本資料", " ");
                 }
                 if (data.Company.ReportingPurposes != null)
                 {
                     string trimRP = data.Company.ReportingPurposes.Replace(" ", "");
                     trimRP = trimRP.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[預期用途]", trimRP);
+                    UpdateReplacePattern("預期用途", trimRP);
                 }
                 else
                 {
-                    ReplaceText(doc, "[預期用途]", "為接軌國際議題，提升競爭力，以及實施社會責任，進行本報告書撰寫，以展現本公司溫室氣體盤查結果及推動減碳的決心。");
+                    UpdateReplacePattern("預期用途", "為接軌國際議題，提升競爭力，以及實施社會責任，進行本報告書撰寫，以展現本公司溫室氣體盤查結果及推動減碳的決心。");
                 }
 
                 if (data.Company.AddressInformation != null)
                 {
                     string trimAI = data.Company.AddressInformation.Replace(" ", "");
                     trimAI = trimAI.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[組織邊界設定]", trimAI);
+                    UpdateReplacePattern("組織邊界設定", trimAI);
                 }
                 else
                 {
-                    ReplaceText(doc, "[組織邊界設定]", "本次組織邊界之設定，遵循ISO 14064-1:2018標準，採用營運控制權法。");
+                    UpdateReplacePattern("組織邊界設定", "本次組織邊界之設定，遵循ISO 14064-1:2018標準，採用營運控制權法。");
                 }
                 if (data.Company.ReportingInformation != null)
                 {
                     string trimRI = data.Company.ReportingInformation.Replace(" ", "");
                     trimRI = trimRI.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[報告邊界]", trimRI);
+                    UpdateReplacePattern("報告邊界", trimRI);
                 }
                 else
                 {
-                    ReplaceText(doc, "[報告邊界]", "");
+                    UpdateReplacePattern("報告邊界", "");
 
                 }
                 if (data.Company.GHGInformation != null)
                 {
                     string trimGI = data.Company.GHGInformation.Replace(" ", "");
                     trimGI = trimGI.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[溫室氣體排放類型與排放量說明]", trimGI);
+                    UpdateReplacePattern("溫室氣體排放類型與排放量說明", trimGI);
                 }
                 else
                 {
-                    ReplaceText(doc, "[溫室氣體排放類型與排放量說明]", "溫室氣體之種類係指上述標準定義之溫室氣體，包括二氧化碳(CO₂)、甲烷(CH₄)、氧化亞氮(N₂O)、氫氟碳化物(HFCs)、全氟碳化物(PFCs)、六氟化硫(SF₆)、三氟化氮(NF₃)以及其他經環境部公告者，但不包含蒙特婁議定書規範之氟氯碳化物(CFCs)。");
+                    UpdateReplacePattern("溫室氣體排放類型與排放量說明", "溫室氣體之種類係指上述標準定義之溫室氣體，包括二氧化碳(CO₂)、甲烷(CH₄)、氧化亞氮(N₂O)、氫氟碳化物(HFCs)、全氟碳化物(PFCs)、六氟化硫(SF₆)、三氟化氮(NF₃)以及其他經環境部公告者，但不包含蒙特婁議定書規範之氟氯碳化物(CFCs)。");
                 }
                 if (data.Company.Scope1Information != null)
                 {
                     string trimS1I = data.Company.Scope1Information.Replace(" ", "");
                     trimS1I = trimS1I.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[直接溫室氣體排放說明]", trimS1I);
+                    UpdateReplacePattern("直接溫室氣體排放說明", trimS1I);
                 }
                 else
                 {
@@ -885,14 +871,7 @@ namespace Carbon_inventory_platform.Controllers
                         foreach (var item in DeviceList)
                         {
                             count++;
-                            if (item.Name != "其他")
-                            {
-                                text += item.Name;
-                            }
-                            else
-                            {
-                                text += item.OtherName;
-                            }
+                            text += item.Name;
                             if (count < DeviceList.Count())
                             {
                                 text += "、";
@@ -918,14 +897,7 @@ namespace Carbon_inventory_platform.Controllers
                         foreach (var item in DeviceList)
                         {
                             count++;
-                            if (item.Name != "其他")
-                            {
-                                text += item.Name;
-                            }
-                            else
-                            {
-                                text += item.OtherName;
-                            }
+                            text += item.Name;
                             if (count < DeviceList.Count())
                             {
                                 text += "、";
@@ -951,14 +923,7 @@ namespace Carbon_inventory_platform.Controllers
                         foreach (var item in DeviceList)
                         {
                             count++;
-                            if (item.Name != "其他")
-                            {
-                                text += item.Name;
-                            }
-                            else
-                            {
-                                text += item.OtherName;
-                            }
+                            text += item.Name;
                             if (count < DeviceList.Count())
                             {
                                 text += "、";
@@ -984,14 +949,7 @@ namespace Carbon_inventory_platform.Controllers
                         foreach (var item in DeviceList)
                         {
                             count++;
-                            if (item.Name != "其他")
-                            {
-                                text += item.Name;
-                            }
-                            else
-                            {
-                                text += item.OtherName;
-                            }
+                            text += item.Name;
                             if (count < DeviceList.Count())
                             {
                                 text += "、";
@@ -1004,31 +962,31 @@ namespace Carbon_inventory_platform.Controllers
                         text += "本公司無製程排放源";
                     }
                     text += "。此外，本次盤查範圍無土地利用變化，也無生質燃料直接排放。";
-                    ReplaceText(doc, "[直接溫室氣體排放說明]", text);
+                    UpdateReplacePattern("直接溫室氣體排放說明", text);
 
                 }
                 if (data.Company.Scope2Information != null)
                 {
                     string trimS2I = data.Company.Scope2Information.Replace(" ", "");
                     trimS2I = trimS2I.Replace("\r\n", "\r\n    ");
-                    ReplaceText(doc, "[能源間接溫室氣體排放說明]", trimS2I);
+                    UpdateReplacePattern("能源間接溫室氣體排放說明", trimS2I);
                 }
                 else
                 {
-                    ReplaceText(doc, "[能源間接溫室氣體排放說明]", "本廠類別二能源間接溫室氣體排放皆來自於外購電力部份。");
+                    UpdateReplacePattern("能源間接溫室氣體排放說明", "本廠類別二能源間接溫室氣體排放皆來自於外購電力部份。");
                 }
                 if (device.Find(x => x.Name == "WD40") != null)
                 {
-                    ReplaceText(doc, "[WD40排放係數描述]", "依WD-40之安全資料表(SDS)，可知其組成包含2~3 Wt%之CO₂，取其平均值2.5%；因CO₂係作為WD-40之推進劑，當使用WD-40時，亦將造成CO₂逸散，故假設每使用1單位重量之WD-40時，會有2.5%之單位重量CO₂隨之逸散。");
+                    UpdateReplacePattern("WD40排放係數描述", "依WD-40之安全資料表(SDS)，可知其組成包含2~3 Wt%之CO₂，取其平均值2.5%；因CO₂係作為WD-40之推進劑，當使用WD-40時，亦將造成CO₂逸散，故假設每使用1單位重量之WD-40時，會有2.5%之單位重量CO₂隨之逸散。");
                 }
                 else
                 {
-                    ReplaceText(doc, "[WD40排放係數描述]", "");
+                    UpdateReplacePattern("WD40排放係數描述", "");
                 }
-                ReplaceText(doc, "[盤查月]", DateTime.Now.Month.ToString());
-                ReplaceText(doc, "[盤查日]", DateTime.Now.Day.ToString());
-                ReplaceText(doc, "[地址]", data.FullAddress);
-                ReplaceText(doc, "[民國基準年]", data.Year.ToString());
+                UpdateReplacePattern("盤查月", DateTime.Now.Month.ToString());
+                UpdateReplacePattern("盤查日", DateTime.Now.Day.ToString());
+                UpdateReplacePattern("地址", data.FullAddress);
+                UpdateReplacePattern("民國基準年", data.Year.ToString());
 
                 ScopeDevice(doc, device, "類別一");
                 ScopeDevice(doc, device, "類別二");
@@ -1040,62 +998,62 @@ namespace Carbon_inventory_platform.Controllers
 
                     if (deviceActivityData != null)
                     {
-                        ReplaceText(doc, "[電力使用量]", (deviceActivityData.Sum(ad => ad.Num) / 1000).ToString());
+                        UpdateReplacePattern("電力使用量", (deviceActivityData.Sum(ad => ad.Num) / 1000).ToString());
                     }
                     else
                     {
-                        ReplaceText(doc, "[電力使用量]", "0");
+                        UpdateReplacePattern("電力使用量", "0");
                     }
                 }
 
 
-                ReplaceText(doc, "[類別一CO2排放]", data.Scope1_CO2.ToString("N4"));
-                ReplaceText(doc, "[類別一CH4排放]", data.Scope1_CH4.ToString("N4"));
-                ReplaceText(doc, "[類別一N2O排放]", data.Scope1_N2O.ToString("N4"));
-                ReplaceText(doc, "[類別一HFCS排放]", data.Scope1_HFCS.ToString("N4"));
-                ReplaceText(doc, "[類別一PFCS排放]", data.Scope1_PFCS.ToString("N4"));
-                ReplaceText(doc, "[類別一SF6排放]", data.Scope1_SF6.ToString("N4"));
-                ReplaceText(doc, "[類別一NF3排放]", data.Scope1_NF3.ToString("N4"));
+                UpdateReplacePattern("類別一CO2排放", data.Scope1_CO2.ToString("N4"));
+                UpdateReplacePattern("類別一CH4排放", data.Scope1_CH4.ToString("N4"));
+                UpdateReplacePattern("類別一N2O排放", data.Scope1_N2O.ToString("N4"));
+                UpdateReplacePattern("類別一HFCS排放", data.Scope1_HFCS.ToString("N4"));
+                UpdateReplacePattern("類別一PFCS排放", data.Scope1_PFCS.ToString("N4"));
+                UpdateReplacePattern("類別一SF6排放", data.Scope1_SF6.ToString("N4"));
+                UpdateReplacePattern("類別一NF3排放", data.Scope1_NF3.ToString("N4"));
 
-                ReplaceText(doc, "[類別一CO2占比]", data.percentage1_CO2.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一CH4占比]", data.percentage1_CH4.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一N2O占比]", data.percentage1_N2O.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一HFCS占比]", data.percentage1_HFCS.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一PFCS占比]", data.percentage1_PFCS.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一SF6占比]", data.percentage1_SF6.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一NF3占比]", data.percentage2_NF3.ToString("N2") + "%");
+                UpdateReplacePattern("類別一CO2占比", data.percentage1_CO2.ToString("N2") + "%");
+                UpdateReplacePattern("類別一CH4占比", data.percentage1_CH4.ToString("N2") + "%");
+                UpdateReplacePattern("類別一N2O占比", data.percentage1_N2O.ToString("N2") + "%");
+                UpdateReplacePattern("類別一HFCS占比", data.percentage1_HFCS.ToString("N2") + "%");
+                UpdateReplacePattern("類別一PFCS占比", data.percentage1_PFCS.ToString("N2") + "%");
+                UpdateReplacePattern("類別一SF6占比", data.percentage1_SF6.ToString("N2") + "%");
+                UpdateReplacePattern("類別一NF3占比", data.percentage2_NF3.ToString("N2") + "%");
 
-                ReplaceText(doc, "[CO2排放]", data.CO2.ToString("N4"));
-                ReplaceText(doc, "[CH4排放]", data.CH4.ToString("N4"));
-                ReplaceText(doc, "[N2O排放]", data.N2O.ToString("N4"));
-                ReplaceText(doc, "[HFCS排放]", data.HFCS.ToString("N4"));
-                ReplaceText(doc, "[PFCS排放]", data.PFCS.ToString("N4"));
-                ReplaceText(doc, "[SF6排放]", data.SF6.ToString("N4"));
-                ReplaceText(doc, "[NF3排放]", data.NF3.ToString("N4"));
+                UpdateReplacePattern("CO2排放", data.CO2.ToString("N4"));
+                UpdateReplacePattern("CH4排放", data.CH4.ToString("N4"));
+                UpdateReplacePattern("N2O排放", data.N2O.ToString("N4"));
+                UpdateReplacePattern("HFCS排放", data.HFCS.ToString("N4"));
+                UpdateReplacePattern("PFCS排放", data.PFCS.ToString("N4"));
+                UpdateReplacePattern("SF6排放", data.SF6.ToString("N4"));
+                UpdateReplacePattern("NF3排放", data.NF3.ToString("N4"));
 
-                ReplaceText(doc, "[CO2占比]", data.percentage2_CO2.ToString("N2") + "%");
-                ReplaceText(doc, "[CH4占比]", data.percentage2_CH4.ToString("N2") + "%");
-                ReplaceText(doc, "[N2O占比]", data.percentage2_N2O.ToString("N2") + "%");
-                ReplaceText(doc, "[HFCS占比]", data.percentage2_HFCS.ToString("N2") + "%");
-                ReplaceText(doc, "[PFCS占比]", data.percentage2_PFCS.ToString("N2") + "%");
-                ReplaceText(doc, "[SF6占比]", data.percentage2_SF6.ToString("N2") + "%");
-                ReplaceText(doc, "[NF3占比]", data.percentage2_NF3.ToString("N2") + "%");
-                ReplaceText(doc, "[總排放當量]", data.All.ToString("N3"));
-                ReplaceText(doc, "[固定排放量]", data.non_move.ToString("N4"));
-                ReplaceText(doc, "[移動排放量]", data.move.ToString("N4"));
-                ReplaceText(doc, "[製程排放量]", data.process.ToString("N4"));
-                ReplaceText(doc, "[逸散排放量]", data.escape.ToString("N4"));
-                ReplaceText(doc, "[固定排放比例]", data.percentage_nonMove.ToString("N2") + "%");
-                ReplaceText(doc, "[製程排放比例]", data.percentage_Process.ToString("N2") + "%");
-                ReplaceText(doc, "[移動排放比例]", data.percentage_Move.ToString("N2") + "%");
-                ReplaceText(doc, "[逸散排放比例]", data.percentage_Escape.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一占比]", data.percentage_Scope1.ToString("N2") + "%");
-                ReplaceText(doc, "[類別二占比]", data.percentage_Scope2.ToString("N2") + "%");
-                ReplaceText(doc, "[類別一總排放]", data.Scope1.ToString("N4"));
-                ReplaceText(doc, "[類別二總排放]", data.Scope2.ToString("N4"));
+                UpdateReplacePattern("CO2占比", data.percentage2_CO2.ToString("N2") + "%");
+                UpdateReplacePattern("CH4占比", data.percentage2_CH4.ToString("N2") + "%");
+                UpdateReplacePattern("N2O占比", data.percentage2_N2O.ToString("N2") + "%");
+                UpdateReplacePattern("HFCS占比", data.percentage2_HFCS.ToString("N2") + "%");
+                UpdateReplacePattern("PFCS占比", data.percentage2_PFCS.ToString("N2") + "%");
+                UpdateReplacePattern("SF6占比", data.percentage2_SF6.ToString("N2") + "%");
+                UpdateReplacePattern("NF3占比", data.percentage2_NF3.ToString("N2") + "%");
+                UpdateReplacePattern("總排放當量", data.All.ToString("N3"));
+                UpdateReplacePattern("固定排放量", data.non_move.ToString("N4"));
+                UpdateReplacePattern("移動排放量", data.move.ToString("N4"));
+                UpdateReplacePattern("製程排放量", data.process.ToString("N4"));
+                UpdateReplacePattern("逸散排放量", data.escape.ToString("N4"));
+                UpdateReplacePattern("固定排放比例", data.percentage_nonMove.ToString("N2") + "%");
+                UpdateReplacePattern("製程排放比例", data.percentage_Process.ToString("N2") + "%");
+                UpdateReplacePattern("移動排放比例", data.percentage_Move.ToString("N2") + "%");
+                UpdateReplacePattern("逸散排放比例", data.percentage_Escape.ToString("N2") + "%");
+                UpdateReplacePattern("類別一占比", data.percentage_Scope1.ToString("N2") + "%");
+                UpdateReplacePattern("類別二占比", data.percentage_Scope2.ToString("N2") + "%");
+                UpdateReplacePattern("類別一總排放", data.Scope1.ToString("N4"));
+                UpdateReplacePattern("類別二總排放", data.Scope2.ToString("N4"));
                 //-----------------替換的文本
                 //--------------------------------排放源溫室氣體表表
-                GenerateGHGsTable(doc, AllGHGs,AllActivityData, "固定", "CO2");
+                GenerateGHGsTable(doc, AllGHGs, AllActivityData, "固定", "CO2");
                 GenerateGHGsTable(doc, AllGHGs, AllActivityData, "固定", "CH4");
                 GenerateGHGsTable(doc, AllGHGs, AllActivityData, "固定", "N2O");
                 GenerateGHGsTable(doc, AllGHGs, AllActivityData, "移動", "CO2");
@@ -1110,7 +1068,7 @@ namespace Carbon_inventory_platform.Controllers
                 //--------------------------------類別表
                 if (device.Any(x => x.Scope == "類別一"))
                 {
-                    GenerateScopeTable(doc, device,AllGHGs, "類別一");
+                    GenerateScopeTable(doc, device, AllGHGs, "類別一");
                 }
                 // 檢查是否有類別二設備
                 if (device.Any(x => x.Scope == "類別二"))
@@ -1129,7 +1087,7 @@ namespace Carbon_inventory_platform.Controllers
                     try
                     {
                         string showDrawingPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), data.ShopDrawingsPath);
-                        replaceImage(doc, "[廠區圖]", showDrawingPath);
+                        replaceImage(doc, "<廠區圖>", showDrawingPath);
                     }
                     catch (Exception e)
                     {
@@ -1139,7 +1097,7 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 else
                 {
-                    ReplaceText(doc, "[廠區圖]", "");
+                    UpdateReplacePattern("廠區圖", "");
                 }
 
                 if (data.OrganizationImagePath != "")
@@ -1147,7 +1105,7 @@ namespace Carbon_inventory_platform.Controllers
                     try
                     {
                         string organiztionPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), data.OrganizationImagePath);
-                        replaceImage(doc, "[公司組織圖]", organiztionPath);
+                        replaceImage(doc, "<公司組織圖>", organiztionPath);
                     }
                     catch (Exception e)
                     {
@@ -1158,14 +1116,14 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 else
                 {
-                    ReplaceText(doc, "[公司組織圖]", "");
+                    UpdateReplacePattern("公司組織圖", "");
                 }
                 if (data.MapImagePath != "")
                 {
                     try
                     {
                         string mapPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), data.MapImagePath);
-                        replaceImage(doc, "[地理位置圖]", mapPath);
+                        replaceImage(doc, "<地理位置圖>", mapPath);
                     }
                     catch (Exception e)
                     {
@@ -1176,21 +1134,50 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 else
                 {
-                    ReplaceText(doc, "[地理位置圖]", "");
+                    UpdateReplacePattern("地理位置圖", "");
                 }
                 //--------------------------------圖片
+                // Check if all the replace patterns are used in the loaded document.
+                if (doc.FindUniqueByPattern(@"<[\w \=]{4,}>", RegexOptions.IgnoreCase).Count > 0)
+                {
+                    // Do the replacement of all the found tags and with green bold strings.
+                    var replaceTextOptions = new FunctionReplaceTextOptions()
+                    {
+                        FindPattern = "<(.*?)>",
+                        RegexMatchHandler = ReplaceFunc,
+                        RegExOptions = RegexOptions.IgnoreCase,
 
+                    };
+                    doc.ReplaceText(replaceTextOptions);
+                }
                 doc.SaveAs(newFile);
             }
 
             byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(newFile);
             return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         }
-        private void ReplaceText(DocX doc, string oldText, string newText)
+
+        private static Dictionary<string, string> _replacePatterns = new Dictionary<string, string>() { };
+        private static string ReplaceFunc(string findStr)
         {
-            doc.ReplaceText(oldText, newText);
+            if (_replacePatterns.ContainsKey(findStr))
+            {
+                return _replacePatterns[findStr];
+            }
+            return string.Empty;
         }
-        public void GenerateActivityDataTable(DocX doc, List<Device> devices,List<ActivityData> activityDatas)
+        public static void UpdateReplacePattern(string key, string value)
+        {
+            if (_replacePatterns.ContainsKey(key))
+            {
+                _replacePatterns[key] = value;
+            }
+            else
+            {
+                _replacePatterns.Add(key, value);
+            }
+        }
+        public void GenerateActivityDataTable(DocX doc, List<Device> devices, List<ActivityData> activityDatas)
         {
             var font = new Xceed.Document.NET.Font("標楷體");
             Xceed.Document.NET.Table table = doc.AddTable(devices.Count() + 1, 6);
@@ -1209,8 +1196,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 table.Rows[x + 1].Cells[0].Paragraphs.First().Append(devices[x].Scope).Font(font).FontSize(11d);
                 table.Rows[x + 1].Cells[1].Paragraphs.First().Append(devices[x].EmissionPattern).Font(font).FontSize(11d);
-                string deviceCellString = (devices[x].Name != "WD40" ? devices[x].Material : "二氧化碳")
-                    + (devices[x].Name == "其他" ? ("(" + devices[x].OtherName + ")") : ("(" + devices[x].Name + ")"));
+                string deviceCellString = (devices[x].Name != "WD40" ? devices[x].Material : "二氧化碳") + ("(" + devices[x].Name + ")");
                 table.Rows[x + 1].Cells[2].Paragraphs.First().Append(deviceCellString).Font(font).FontSize(11d);
 
                 var DeviceId = devices[x].Id;
@@ -1245,7 +1231,7 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 table.Rows[x + 1].Cells[5].Paragraphs.First().Append(devices[x].Source).Font(font).FontSize(11d);
             }
-            doc.ReplaceTextWithObject("[排放源活動數據表]", table);
+            doc.ReplaceTextWithObject("<排放源活動數據表>", table);
 
         }
         public double CountWidth(double cmWidth)
@@ -1253,58 +1239,45 @@ namespace Carbon_inventory_platform.Controllers
             double widthInPoints = cmWidth * 0.393701 * 72; // 1英寸 ≈ 2.54厘米，1磅 ≈ 0.0353厘米
             return widthInPoints;
         }
-        public void GenerateGHGsTable(DocX doc, List<GHG> GHGs,List<ActivityData> activityDatas, string emissionPattern, string gasName)
+        public void GenerateGHGsTable(DocX doc, List<GHG> GHGs, List<ActivityData> activityDatas, string emissionPattern, string gasName)
         {
-            int num = GHGs.Count(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName);
-            string tableName = $"[{emissionPattern}{gasName}]";
+            var relevantGHGs = GHGs.Where(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName).ToList();
+            int num = relevantGHGs.Count;
+            string tableName = $"{emissionPattern}{gasName}";
             var font = new Xceed.Document.NET.Font("標楷體");
-            Xceed.Document.NET.Table table = doc.AddTable(num != 0 ? (num + 1) : (num + 2), 8);
+            Xceed.Document.NET.Table table = doc.AddTable(num > 0 ? (num + 1) : 2, 8);
             table.AutoFit = AutoFit.Contents;
             table.Design = TableDesign.MediumShading1Accent3;
 
-            table.Rows[0].Cells[0].Paragraphs.First().Append("排放源名稱").Font(font).FontSize(9d);
-            table.Rows[0].Cells[1].Paragraphs.First().Append("原燃物料或產品").Font(font).FontSize(9d);
-            table.Rows[0].Cells[2].Paragraphs.First().Append("活動數據").Font(font).FontSize(9d);
-            table.Rows[0].Cells[3].Paragraphs.First().Append("排放係數").Font(font).FontSize(9d);
-            table.Rows[0].Cells[4].Paragraphs.First().Append("係數來源").Font(font).FontSize(9d);
-            table.Rows[0].Cells[5].Paragraphs.First().Append("排放量\n(公噸/年)").Font(font).FontSize(9d);
-            table.Rows[0].Cells[6].Paragraphs.First().Append("GWP").Font(font).FontSize(9d);
-            table.Rows[0].Cells[7].Paragraphs.First().Append("CO₂排放當量\n(公噸CO₂e/年)").Font(font).FontSize(9d);
+            // 設定表頭
+            string[] headers = { "排放源名稱", "原燃物料或產品", "活動數據", "排放係數", "係數來源", "排放量\n(公噸/年)", "GWP", "CO₂排放當量\n(公噸CO₂e/年)" };
+            for (int i = 0; i < headers.Length; i++)
+            {
+                table.Rows[0].Cells[i].Paragraphs.First().Append(headers[i]).Font(font).FontSize(9d);
+            }
 
-            int rowIndex = 1;
             if (num > 0)
             {
-                foreach (var GHG in GHGs.Where(x => x.Device.EmissionPattern == emissionPattern && x.Name == gasName))
+                int rowIndex = 1;
+                foreach (var GHG in relevantGHGs)
                 {
-                    string deviceCellString = (GHG.Device.Name == "其他" ? GHG.Device.OtherName : GHG.Device.Name)
-                                             + (GHG.Device.NameRemark != null && GHG.Device.NameRemark.Trim() != string.Empty ? "(" + GHG.Device.NameRemark + ")" : "");
+                    string deviceCellString = GHG.Device.Name + (!string.IsNullOrWhiteSpace(GHG.Device.NameRemark) ? $"({GHG.Device.NameRemark})" : "");
 
                     table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(deviceCellString).Font(font).FontSize(9d);
                     table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(GHG.Device.Name != "WD40" ? GHG.Device.Material : "二氧化碳").Font(font).FontSize(9d);
-                    var ActivityData = activityDatas.Where(x => x.DeviceId == GHG.DeviceId).ToList();
 
-                    if (ActivityData != null)
-                    {
-                        table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(ActivityData.Sum(ad => ad.Num) + GHG.Device.Unit).Font(font).FontSize(9d);
-                    }
-                    else
-                    {
-                        table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(0 + GHG.Device.Unit).Font(font).FontSize(9d);
-                    }
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append(GHG.CEF.ToString() + "公斤/" + GHG.Device.Unit).Font(font).FontSize(9d);
-                    string CEF_Source = string.Empty;
-                    if (GHG.Device.CEF_Correction == 1)
-                    {
-                        CEF_Source = "自廠發展係數";
-                    }
-                    else
-                    {
-                        CEF_Source = "溫室氣體排放係數管理表 6.0.4 版";
-                    }
+                    var totalActivityData = activityDatas.Where(x => x.DeviceId == GHG.DeviceId).Sum(ad => ad.Num);
+                    table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(totalActivityData + GHG.Device.Unit).Font(font).FontSize(9d);
+
+                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append($"{GHG.CEF}公斤/{GHG.Device.Unit}").Font(font).FontSize(9d);
+
+                    string CEF_Source = GHG.Device.CEF_Correction == 1 ? "自廠發展係數" : "溫室氣體排放係數管理表 6.0.4 版";
                     table.Rows[rowIndex].Cells[4].Paragraphs.First().Append(CEF_Source).Font(font).FontSize(9d);
+
                     table.Rows[rowIndex].Cells[5].Paragraphs.First().Append((GHG.Emission / GHG.GWP).ToString("N4")).Font(font).FontSize(9d);
                     table.Rows[rowIndex].Cells[6].Paragraphs.First().Append(GHG.GWP.ToString()).Font(font).FontSize(9d);
                     table.Rows[rowIndex].Cells[7].Paragraphs.First().Append(GHG.Emission.ToString("N4")).Font(font).FontSize(9d);
+
                     rowIndex++;
                 }
             }
@@ -1312,12 +1285,14 @@ namespace Carbon_inventory_platform.Controllers
             {
                 table.Rows[1].MergeCells(0, 7);
                 string switchingGasName = SwitchGasName(gasName);
-                var paragraph = table.Rows[1].Cells[0].Paragraphs.First().Append($"{"無"}{switchingGasName}{emissionPattern}{"排放源"}").Font(font).FontSize(9d);
+                var paragraph = table.Rows[1].Cells[0].Paragraphs.First().Append($"無{switchingGasName}{emissionPattern}排放源").Font(font).FontSize(9d);
                 paragraph.Alignment = Alignment.center;
-
             }
+
             doc.ReplaceTextWithObject(tableName, table);
         }
+
+
         public string SwitchGasName(string gasName)
         {
             string returnGasName = string.Empty;
@@ -1367,18 +1342,18 @@ namespace Carbon_inventory_platform.Controllers
                         double aspectRatio = (double)picture.Width / picture.Height;
 
                         // 根据长宽比调整图片大小
-                        
-                            if (aspectRatio > 1) // 宽度大于高度
-                            {
-                                picture.Width = a4Width;
-                                picture.Height = (int)(a4Width / aspectRatio);
-                            }
-                            else // 高度大于宽度
-                            {
-                                picture.Height = a4Height;
-                                picture.Width = (int)(a4Height * aspectRatio);
-                            }
-                        
+
+                        if (aspectRatio > 1) // 宽度大于高度
+                        {
+                            picture.Width = a4Width;
+                            picture.Height = (int)(a4Width / aspectRatio);
+                        }
+                        else // 高度大于宽度
+                        {
+                            picture.Height = a4Height;
+                            picture.Width = (int)(a4Height * aspectRatio);
+                        }
+
 
                         paragraph.InsertPicture(picture);
                     }
@@ -1388,22 +1363,8 @@ namespace Carbon_inventory_platform.Controllers
                     doc.ReplaceText(text, string.Empty);
                 }
             }
-            //foreach (var paragraph in doc.Paragraphs)
-            //{
-            //    if (paragraph.Text.Contains(text))
-            //    {
-            //        if (imagePath != null)
-            //        {
-            //            var image = doc.AddImage(imagePath);
-            //            var picture = image.CreatePicture(200, 200);
-            //            paragraph.InsertPicture(picture);
-            //        }
-
-            //        doc.ReplaceText(text, string.Empty);
-            //    }
-            //}
         }
-        public void GenerateReport(DocX doc, List<Device> devices,List<GHG> AllGHGs)
+        public void GenerateReport(DocX doc, List<Device> devices, List<GHG> AllGHGs)
         {
             var font = new Xceed.Document.NET.Font("標楷體");
             Xceed.Document.NET.Table table = doc.AddTable(devices.Count() + 1, 4);
@@ -1419,7 +1380,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 table.Rows[x + 1].Cells[0].Paragraphs.First().Append(devices[x].Scope).Font(font).FontSize(11d);
                 table.Rows[x + 1].Cells[1].Paragraphs.First().Append(devices[x].EmissionPattern).Font(font).FontSize(11d);
-                string deviceCellString = (devices[x].Name == "其他" ? devices[x].OtherName : devices[x].Name)
+                string deviceCellString = devices[x].Name
                     + (devices[x].Name != "WD40" ? ("-" + devices[x].Material) : "-二氧化碳")
                     + (devices[x].NameRemark != null && devices[x].NameRemark.Trim() != string.Empty ? "(" + devices[x].NameRemark + ")" : "");
                 table.Rows[x + 1].Cells[2].Paragraphs.First().Append(deviceCellString).Font(font).FontSize(11d);
@@ -1459,7 +1420,7 @@ namespace Carbon_inventory_platform.Controllers
                 table.Rows[x + 1].Cells[3].Paragraphs.First().Append(text).Font(font).FontSize(11d);
 
             }
-            doc.ReplaceTextWithObject("[報告邊界表]", table);
+            doc.ReplaceTextWithObject("報告邊界表", table);
         }
         public void GenerateScopeTable(DocX doc, List<Device> devices, List<GHG> AllGHGs, string scope)
         {
@@ -1492,8 +1453,7 @@ namespace Carbon_inventory_platform.Controllers
                 // 填充基本資料
                 table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(item.Scope).Font(font).FontSize(11d);
                 table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(item.EmissionPattern).Font(font).FontSize(11d);
-                string deviceCellString = (item.Name == "其他" ? item.OtherName : item.Name)
-                    + (item.Name != "WD40" ? ("-" + item.Material) : ("-二氧化碳"));
+                string deviceCellString = item.Name + (item.Name != "WD40" ? ("-" + item.Material) : ("-二氧化碳"));
                 table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(deviceCellString).Font(font).FontSize(11d);
 
                 // 填充溫室氣體選項欄位
@@ -1527,7 +1487,7 @@ namespace Carbon_inventory_platform.Controllers
                 rowIndex++;
             }
 
-            doc.ReplaceTextWithObject("[" + scope + "Table]", table);
+            doc.ReplaceTextWithObject("" + scope + "Table", table);
 
         }
         public void ScopeDevice(DocX doc, List<Device> devices, string scope)
@@ -1540,10 +1500,10 @@ namespace Carbon_inventory_platform.Controllers
                 if (item.Scope == scope)
                 {
                     i++;
-                    Scope += i + "." + (item.Name != "其他" ? item.Name : item.OtherName) + "(" + item.Material + ")" + "\n";
+                    Scope += i + "." + item.Name + "(" + item.Material + ")" + "\n";
                 }
             }
-            ReplaceText(doc, "[" + scope + "Device]", Scope.Trim());
+            UpdateReplacePattern("" + scope + "Device", Scope.Trim());
         }
     }
 }
