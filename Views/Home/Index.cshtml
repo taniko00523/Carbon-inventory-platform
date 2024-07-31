@@ -4,8 +4,8 @@
     ViewData["Title"] = "首頁";
 }
 <div class="px-4 pt-5 my-5 text-center border-bottom">
-    <h1 class="display-4 fw-bold">碳盤查平台</h1>
-    <div class="col-lg-6 mx-auto">
+    <h1 class="display-4 fw-bold mb-4">碳盤查平台</h1>
+    <div class="col-lg-8 mx-auto">
         <p class="lead mb-4">
             現今溫室氣體盤查工具大多都缺乏統一及完整性的盤查方式，造成整體盤查困難且準確率欠佳，故開發此平台。協助中小企業向淨零邁出一步。
         </p>
@@ -28,11 +28,31 @@
             }
         </div>
     </div>
-    <div class="overflow-hidden" style="max-height: 60vh;">
+    <div class="overflow-hidden mb-4" style="max-height: 100vh;">
         <div class="container px-5">
-            <img src="https://photo.stust.edu.tw/photo/webapi/thumb.php?api=SYNO.PhotoStation.Thumb&method=get&version=1&size=large&id=photo_e58d97e887bae6a0a1e699af2fe5bbbae7af892f57e6a39f2de7a385e7a4a1e9a4a8_312d312e6a7067&rotate_version=0&thumb_sig=2f766f6c756d65312f70686f746f2fe58d97e887bae6a0a1e699af2fe5bbbae7af892f57e6a39f2de7a385e7a4a1e9a4a82f312d312e6a7067&mtime=1657848847&SynoToken=dde4e51f0f8b7d806bedcf859d2554f3" class="img-fluid border rounded-3 shadow-lg mb-4" alt="Example image" width="700" height="500" loading="lazy">
+            <img src="https://photo.stust.edu.tw/photo/webapi/thumb.php?api=SYNO.PhotoStation.Thumb&method=get&version=1&size=large&id=photo_e58d97e887bae6a0a1e699af2fe5bbbae7af892f57e6a39f2de7a385e7a4a1e9a4a8_312d312e6a7067&rotate_version=0&thumb_sig=2f766f6c756d65312f70686f746f2fe58d97e887bae6a0a1e699af2fe5bbbae7af892f57e6a39f2de7a385e7a4a1e9a4a82f312d312e6a7067&mtime=1657848847&SynoToken=dde4e51f0f8b7d806bedcf859d2554f3"
+                 class="img-fluid border rounded-3 shadow-lg mb-4"
+                 loading="lazy"
+                 style="transition: transform 0.3s ease-in-out;" />
         </div>
     </div>
 </div>
 
-<img style="width: 75rem" src="">
+<style>
+    .btn-primary {
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+    .img-fluid {
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .img-fluid:hover {
+            transform: scale(1.1);
+        }
+</style>
