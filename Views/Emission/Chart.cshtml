@@ -1,0 +1,120 @@
+﻿@model Carbon_inventory_platform.Models.Area
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    .chart-container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    canvas {
+        margin: 20px 0;
+    }
+
+    #toggleChart {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+    }
+
+        #toggleChart:hover {
+            background-color: #0056b3;
+        }
+
+    h3 {
+        color: #333;
+    }
+</style>
+<div class="row">
+    <div class="chart-container">
+        <h3>類別一溫室氣體排放</h3>
+        <canvas class="myChart" id="Scope1"></canvas>
+    </div>
+    <div class="chart-container">
+        <h3>類別二溫室氣體排放</h3>
+        <canvas id="Scope2"></canvas>
+    </div>
+    <div class="chart-container">
+        <h3>全部溫室氣體排放</h3>
+        <canvas id="All"></canvas>
+    </div>
+</div>
+<button id="toggleChart">切換圖表類型</button>
+
+<script>
+    var ctx1 = document.getElementById('Scope1').getContext('2d');
+    var ctx2 = document.getElementById('Scope2').getContext('2d');
+    var ctx3 = document.getElementById('All').getContext('2d');
+    var chartType = 'pie';
+
+    var chartData1 = {
+        labels: ['CO₂', 'CH₄', 'N₂O', 'HFCₛ', 'PFCₛ', 'SF₆', 'NF₃'],
+        datasets: [{
+            data: [@Model.Scope1_CO2, @Model.Scope1_CH4, @Model.Scope1_N2O, @Model.Scope1_HFCS, @Model.Scope1_PFCS, @Model.Scope1_SF6, @Model.Scope1_NF3],
+            backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff', '#ff9f40', '#c9cbcf'],
+            hoverBackgroundColor: ['#ff6384aa', '#36a2ebaa', '#ffce56aa', '#4bc0c0aa', '#9966ffaa', '#ff9f40aa', '#c9cbcfaa']
+        }]
+    };
+
+    var chartData2 = {
+        labels: ['CO₂', 'CH₄', 'N₂O', 'HFCₛ', 'PFCₛ', 'SF₆', 'NF₃'],
+        datasets: [{
+            data: [@Model.Scope2_CO2, @Model.Scope2_CH4, @Model.Scope2_N2O, @Model.Scope2_HFCS, @Model.Scope2_PFCS, @Model.Scope2_SF6, @Model.Scope2_NF3],
+            backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff', '#ff9f40', '#c9cbcf'],
+            hoverBackgroundColor: ['#ff6384aa', '#36a2ebaa', '#ffce56aa', '#4bc0c0aa', '#9966ffaa', '#ff9f40aa', '#c9cbcfaa']
+        }]
+    };
+
+    var chartData3 = {
+        labels: ['CO₂', 'CH₄', 'N₂O', 'HFCₛ', 'PFCₛ', 'SF₆', 'NF₃'],
+        datasets: [{
+            data: [@Model.CO2, @Model.CH4, @Model.N2O, @Model.HFCS, @Model.PFCS, @Model.SF6, @Model.NF3],
+            backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff', '#ff9f40', '#c9cbcf'],
+            hoverBackgroundColor: ['#ff6384aa', '#36a2ebaa', '#ffce56aa', '#4bc0c0aa', '#9966ffaa', '#ff9f40aa', '#c9cbcfaa']
+        }]
+    };
+
+    var chartOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    font: { size: 14 },
+                    color: '#333'
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function (tooltipItem) {
+                        return tooltipItem.label + ': ' + tooltipItem.raw.toFixed(2);
+                    }
+                }
+            }
+        },
+        layout: { padding: { top: 20, bottom: 20 } }
+    };
+
+    var chart1 = new Chart(ctx1, { type: chartType, data: chartData1, options: chartOptions });
+    var chart2 = new Chart(ctx2, { type: chartType, data: chartData2, options: chartOptions });
+    var chart3 = new Chart(ctx3, { type: chartType, data: chartData3, options: chartOptions });
+
+    document.getElementById('toggleChart').addEventListener('click', function () {
+        chart1.destroy();
+        chart2.destroy();
+        chart3.destroy();
+        chartType = chartType === 'pie' ? 'bar' : 'pie';
+        chart1 = new Chart(ctx1, { type: chartType, data: chartData1, options: chartOptions });
+        chart2 = new Chart(ctx2, { type: chartType, data: chartData2, options: chartOptions });
+        chart3 = new Chart(ctx3, { type: chartType, data: chartData3, options: chartOptions });
+    });
+</script>

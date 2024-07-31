@@ -28,6 +28,16 @@ namespace Carbon_inventory_platform.Controllers
             return View(emissions);
 
         }
+
+        public async Task<IActionResult> ChartAsync(Guid? id)
+        {
+            TempData["yearId"] = id;
+            await CountEmissionAsync(id);
+
+            var emissions = await _context.Areas.Include(y => y.Company).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return View(emissions);
+
+        }
         public async Task<Area> CountEmissionAsync(Guid? id)
         {
             // 合并数据库查询

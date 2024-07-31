@@ -25,11 +25,12 @@
             {
                 @if (Model.Any(x => x.Area.All != 0))
                 {
-                    <a class="btn btn-danger" asp-controller="Emission" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
+                    <a class="btn btn-warning" asp-controller="Emission" asp-action="Chart" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
+                    @* <a class="btn btn-danger" asp-controller="Emission" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">總排放量</a> *@
                 }
                 else
                 {
-                    <a class="btn btn-danger" onclick="showAlert('尚未設定活動數據！\r\n請先設定活動數據！');" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
+                    <a class="btn btn-warning" onclick="showAlert('尚未設定活動數據！\r\n請先設定活動數據！');">總排放量</a>
 
                 }
                 @if (Model.Any(x => x.Area.Company.ModifiedTime != null))
