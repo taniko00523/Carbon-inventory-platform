@@ -153,72 +153,77 @@ namespace Carbon_inventory_platform.Controllers
         public async Task<IActionResult> CopyDevice(Guid? id)
         {
             var device = await _context.Devices.FirstOrDefaultAsync(x => x.Id == id);
-            Guid newDeviceId = Guid.Empty;
-            var areaId = new Guid();
-            if (device != null)
+            if (device == null)
             {
-                areaId = device.AreaId;
-
-                newDeviceId = Guid.NewGuid();
-                var newDevice = new Device
-                {
-                    Id = newDeviceId,
-                    AreaId = areaId,
-                    Name = device.Name,
-                    OtherName = device.OtherName,
-                    NameRemark = device.NameRemark,
-                    Scope = device.Scope,
-                    EmissionPattern = device.EmissionPattern,
-                    Material = device.Material,
-                    Customize = device.Customize,
-                    AssetNo = device.AssetNo,
-                    Provess = device.Provess,
-                    Source = device.Source,
-                    Dept = device.Dept,
-                    Unit = device.Unit,
-                    Data_Correction = device.Data_Correction,
-                    Device_Correction = device.Device_Correction,
-                    CEF_Correction = device.CEF_Correction,
-                    Grade = device.Grade,
-                    Emissions = device.Emissions,
-                    data_ULL = device.data_ULL,
-                    all_ULL = device.all_ULL,
-                    all_UUL = device.all_UUL,
-                    count_ULL = device.count_ULL,
-                    count_UUL = device.count_UUL,
-                    isDeleted = 0,
-                    CreateTime = DateTime.Now
-                };
-
-                _context.Devices.Add(newDevice);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
+            Guid newDeviceId = Guid.NewGuid();
+            Guid areaId = device.AreaId;
+            
+            var newDevice = new Device
+            {
+                Id = newDeviceId,
+                AreaId = areaId,
+                Name = device.Name,
+                OtherName = device.OtherName,
+                NameRemark = device.NameRemark,
+                Scope = device.Scope,
+                EmissionPattern = device.EmissionPattern,
+                Material = device.Material,
+                Customize = device.Customize,
+                AssetNo = device.AssetNo,
+                Provess = device.Provess,
+                Source = device.Source,
+                Dept = device.Dept,
+                Unit = device.Unit,
+                Data_Correction = device.Data_Correction,
+                Device_Correction = device.Device_Correction,
+                CEF_Correction = device.CEF_Correction,
+                Grade = device.Grade,
+                Emissions = device.Emissions,
+                data_ULL = device.data_ULL,
+                all_ULL = device.all_ULL,
+                all_UUL = device.all_UUL,
+                count_ULL = device.count_ULL,
+                count_UUL = device.count_UUL,
+                isDeleted = 0,
+                CreateTime = DateTime.Now
+            };
+
+            _context.Devices.Add(newDevice);
+            await _context.SaveChangesAsync();
+
             var GHGs = await _context.GHGs.Where(x => x.DeviceId == id).ToListAsync();
             if (GHGs != null)
             {
                 foreach (var ghg in GHGs)
                 {
-                    var newGHG = new GHG
-                    {
-                        Id = new Guid(),
-                        DeviceId = newDeviceId,
-                        Name = ghg.Name,
-                        GWP = ghg.GWP,
-                        CEF = ghg.CEF,
-                        all_ULL = ghg.all_ULL,
-                        all_UUL = ghg.all_UUL,
-                        CEF_ULL = ghg.CEF_ULL,
-                        CEF_UUL = ghg.CEF_UUL,
-                        Emission = ghg.Emission,
-                        isDeleted = 0,
-                        CreateTime = DateTime.Now
-                    };
+                    var newGHG = CopyGHG(ghg, newDeviceId);
                     _context.GHGs.Add(newGHG);
-
                 }
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction("Index", "Devices", new { id = areaId });
+        }
+
+        public GHG CopyGHG(GHG ghg, Guid newDeviceId)
+        {
+            var newGHG = new GHG
+            {
+                Id = new Guid(),
+                DeviceId = newDeviceId,
+                Name = ghg.Name,
+                GWP = ghg.GWP,
+                CEF = ghg.CEF,
+                all_ULL = ghg.all_ULL,
+                all_UUL = ghg.all_UUL,
+                CEF_ULL = ghg.CEF_ULL,
+                CEF_UUL = ghg.CEF_UUL,
+                Emission = ghg.Emission,
+                isDeleted = 0,
+                CreateTime = DateTime.Now
+            };
+            return newGHG;
         }
 
         [HttpGet]
@@ -757,11 +762,11 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 else
                 {
-                    var maxId = await _context.ActivityDatas.MaxAsync(x => (int?)x.id) ?? 0;
+                    //var maxId = await _context.ActivityDatas.MaxAsync(x => (int?)x.id) ?? 0;
                     // 如果不存在，則添加新的ActivityData
                     var toCreate = new ActivityData
                     {
-                        id = maxId + 1,
+                        //id = maxId + 1,
                         DeviceId = device.Id,
                         Num = data.Num,
                         Time = data.Time,
@@ -1400,7 +1405,7 @@ namespace Carbon_inventory_platform.Controllers
             ReplaceTextInSheet(sheet, "[類別一占比]", data.percentage_Scope1.ToString("N2") + "%");
             ReplaceTextInSheet(sheet, "[類別二占比]", data.percentage_Scope2.ToString("N2") + "%");
             ReplaceTextInSheet(sheet, "[類別一總排放]", data.Scope1.ToString("N4"));
-            ReplaceTextInSheet(sheet, "[類別二總排放]", data.Devices.Where(x=>x.Scope=="類別二").Sum(x=>x.Emissions).ToString("N4"));
+            ReplaceTextInSheet(sheet, "[類別二總排放]", data.Devices.Where(x => x.Scope == "類別二").Sum(x => x.Emissions).ToString("N4"));
             ReplaceTextInSheet(sheet, "[進行評估排放當量]", data.cal_all.ToString("N4"));
             ReplaceTextInSheet(sheet, "[不確定性評估占比]", data.percentage_CalAll.ToString("N2") + "%");
             ReplaceTextInSheet(sheet, "[第1級個數]", data.no1_Grade.ToString());
