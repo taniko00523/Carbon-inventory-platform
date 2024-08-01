@@ -272,7 +272,7 @@ namespace Carbon_inventory_platform.Controllers
                     return NotFound();
                 }
 
-                toUpdate.ARVersion = area.ARVersion;
+
                 toUpdate.Name = area.Name;
                 toUpdate.FullAddress = area.FullAddress;
                 if (area.FullAddress.Length > 6)
@@ -305,14 +305,24 @@ namespace Carbon_inventory_platform.Controllers
                 toUpdate.BaseYear = area.BaseYear;
                 toUpdate.Type = area.Type;
                 toUpdate.ModifiedTime = DateTime.Now;
-
-                var AreaDevices = await _context.Devices.Where(x => x.AreaId == id).ToListAsync();
-                foreach (var item in AreaDevices)
+                #region 是否改變GWP
+                var changeGWP = false;
+                if (toUpdate.ARVersion != area.ARVersion)
                 {
-                    await ResetGHG(item.Id);
+                    changeGWP = true;
                 }
+                #endregion
 
+                toUpdate.ARVersion = area.ARVersion;
                 await _context.SaveChangesAsync();
+                if (changeGWP)
+                {
+                    var AreaDevices = await _context.Devices.Where(x => x.AreaId == id).ToListAsync();
+                    foreach (var item in AreaDevices)
+                    {
+                        await ResetGHG(item.Id);
+                    }
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
