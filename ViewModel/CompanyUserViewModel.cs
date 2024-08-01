@@ -8,5 +8,9 @@ namespace Carbon_inventory_platform.ViewModel
         public ApplicationUser? ApplicationUser { get; set; }
         public string? Password { get; set; }
         public DateTime? UserLimitData { get; set; }
+
+        public string SearchTerm { get; set; }
+        public int PageNumber { get; set; }
+        public int TotalPages { get; set; }
     }
 }

@@ -23,8 +23,9 @@ namespace Carbon_inventory_platform.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> AdminIndex()
+        public async Task<IActionResult> AdminIndex(string searchTerm, int pageNumber = 1)
         {
+            const int pageSize = 10;
             List<ApplicationUser> users = _userManager.Users.ToList();
             List<CompanyUserViewModel> viewModel = new List<CompanyUserViewModel>();
 
@@ -36,8 +37,28 @@ namespace Carbon_inventory_platform.Controllers
                 viewModel.Add(model);
             }
             viewModel.Remove(viewModel.FirstOrDefault(x => x.ApplicationUser.Email == "Admin"));
+
+            // 搜尋邏輯
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                viewModel = viewModel.Where(x => x.Company != null && x.Company.Name.Contains(searchTerm)).ToList();
+            }
+
+            // 計算總頁數
+            int totalItems = viewModel.Count();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            // 分頁邏輯
+            viewModel = viewModel.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+            // 將搜尋和分頁資訊加入ViewData
+            ViewData["SearchTerm"] = searchTerm;
+            ViewData["PageNumber"] = pageNumber;
+            ViewData["TotalPages"] = totalPages;
+
             return View(viewModel);
         }
+
 
 
 
