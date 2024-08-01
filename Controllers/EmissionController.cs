@@ -1263,21 +1263,26 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     string deviceCellString = GHG.Device.Name + (!string.IsNullOrWhiteSpace(GHG.Device.NameRemark) ? $"({GHG.Device.NameRemark})" : "");
 
-                    table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(deviceCellString).Font(font).FontSize(9d);
-                    table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(GHG.Device.Name != "WD40" ? GHG.Device.Material : "二氧化碳").Font(font).FontSize(9d);
-
-                    var totalActivityData = activityDatas.Where(x => x.DeviceId == GHG.DeviceId).Sum(ad => ad.Num);
-                    table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(totalActivityData + GHG.Device.Unit).Font(font).FontSize(9d);
-
-                    table.Rows[rowIndex].Cells[3].Paragraphs.First().Append($"{GHG.CEF}公斤/{GHG.Device.Unit}").Font(font).FontSize(9d);
-
-                    string CEF_Source = GHG.Device.CEF_Correction == 1 ? "自廠發展係數" : "溫室氣體排放係數管理表 6.0.4 版";
-                    table.Rows[rowIndex].Cells[4].Paragraphs.First().Append(CEF_Source).Font(font).FontSize(9d);
-
-                    table.Rows[rowIndex].Cells[5].Paragraphs.First().Append((GHG.Emission / GHG.GWP).ToString("N4")).Font(font).FontSize(9d);
-                    table.Rows[rowIndex].Cells[6].Paragraphs.First().Append(GHG.GWP.ToString()).Font(font).FontSize(9d);
-                    table.Rows[rowIndex].Cells[7].Paragraphs.First().Append(GHG.Emission.ToString("N4")).Font(font).FontSize(9d);
-
+                    if (GHG.GWP ==0)
+                    {
+                        table.Rows[rowIndex].MergeCells(0, 7);
+                        var paragraph = table.Rows[rowIndex].Cells[0].Paragraphs.First().Append($"找不到{deviceCellString}{GHG.Device.Material}{GHG.Name}的GWP，請確認是否有誤").Font(font).FontSize(19d);
+                        paragraph.Alignment = Alignment.center;
+                    }
+                    else
+                    {
+                        table.Rows[rowIndex].Cells[0].Paragraphs.First().Append(deviceCellString).Font(font).FontSize(9d);
+                        table.Rows[rowIndex].Cells[1].Paragraphs.First().Append(GHG.Device.Name != "WD40" ? GHG.Device.Material : "二氧化碳").Font(font).FontSize(9d);
+                        var totalActivityData = activityDatas.Where(x => x.DeviceId == GHG.DeviceId).Sum(ad => ad.Num);
+                        table.Rows[rowIndex].Cells[2].Paragraphs.First().Append(totalActivityData + GHG.Device.Unit).Font(font).FontSize(9d);
+                        table.Rows[rowIndex].Cells[3].Paragraphs.First().Append($"{GHG.CEF}公斤/{GHG.Device.Unit}").Font(font).FontSize(9d);
+                        string CEF_Source = GHG.Device.CEF_Correction == 1 ? "自廠發展係數" : "溫室氣體排放係數管理表 6.0.4 版";
+                        table.Rows[rowIndex].Cells[4].Paragraphs.First().Append(CEF_Source).Font(font).FontSize(9d);
+                        table.Rows[rowIndex].Cells[5].Paragraphs.First().Append((GHG.Emission / GHG.GWP).ToString("N4")).Font(font).FontSize(9d); //如果切換GWP版本 可能會造成GWP為0報錯
+                        table.Rows[rowIndex].Cells[6].Paragraphs.First().Append(GHG.GWP.ToString()).Font(font).FontSize(9d);
+                        table.Rows[rowIndex].Cells[7].Paragraphs.First().Append(GHG.Emission.ToString("N4")).Font(font).FontSize(9d);
+                    }
+                        
                     rowIndex++;
                 }
             }
