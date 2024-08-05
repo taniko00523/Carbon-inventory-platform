@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col">
         <h1>@ViewData["Title"]</h1>
-        <h1>@ViewData["showDrawingError"]</h1>
+        <h3 style="color:red">@TempData["Error"]</h3>
         @if (TempData.Peek("areaName") != "" && TempData.Peek("areaName") != null)
         {
             <h3>@TempData.Peek("companyName")-@TempData.Peek("areaName")-@TempData.Peek("year")盤查年度</h3>
@@ -26,7 +26,6 @@
                 @if (Model.Any(x => x.Area.All != 0))
                 {
                     <a class="btn btn-warning" asp-controller="Emission" asp-action="Chart" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
-                    @* <a class="btn btn-danger" asp-controller="Emission" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">總排放量</a> *@
                 }
                 else
                 {
@@ -40,7 +39,6 @@
                         if (Model.Any(x => x.Area.All != 0))
                         {
                             <a class="btn btn-warning" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
-                            <a class="btn btn-warning" asp-controller="Emission" asp-action="IISReport" asp-route-id="@TempData.Peek("areaId")">資策會版報告書下載</a>
                         }
                         else
                         {
@@ -63,6 +61,7 @@
             }
             @if (User.IsInRole("Admin"))
             {
+                <a class="btn btn-warning" asp-controller="Emission" asp-action="IISReport" asp-route-id="@TempData.Peek("areaId")">資策會版報告書下載</a>
                 <a class="btn btn-warning" asp-controller="Devices" asp-action="DeviceExcel" asp-route-id="@TempData.Peek("areaId")">清冊匯出</a>   
                 <a class="btn btn-secondary" asp-controller="Areas" asp-action="AdminIndex" asp-route-id="@TempData.Peek("companyId")">返回</a>
             }
