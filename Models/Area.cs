@@ -77,7 +77,7 @@ namespace Carbon_inventory_platform.Models
         [NotMapped]
 
         public IFormFile? MapImage { get; set; }
-        [Display(Name = "組織架構圖")]
+        [Display(Name = "廠區配置圖")]
         [NotMapped]
 
         public IFormFile? ShopDrawings { get; set; }
