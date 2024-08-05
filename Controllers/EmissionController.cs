@@ -23,23 +23,35 @@ namespace Carbon_inventory_platform.Controllers
         public async Task<IActionResult> IndexAsync(Guid? id)
         {
             TempData["yearId"] = id;
-            await CountEmissionAsync(id);
+            bool success = await CountEmissionAsync(id);
+            if (!success)
+            {
+                return NotFound();
+            }
 
-            var emissions = await _context.Areas.Include(y => y.Company).Where(x => x.Id == id).FirstOrDefaultAsync();
+            var emissions = await _context.Areas
+                .Include(y => y.Company)
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
+
             return View(emissions);
-
         }
+
 
         public async Task<IActionResult> ChartAsync(Guid? id)
         {
             TempData["yearId"] = id;
-            await CountEmissionAsync(id);
+            bool success = await CountEmissionAsync(id);
+            if (!success)
+            {
+                return NotFound();
+            }
 
             var emissions = await _context.Areas.Include(y => y.Company).Where(x => x.Id == id).FirstOrDefaultAsync();
             return View(emissions);
 
         }
-        public async Task<Area> CountEmissionAsync(Guid? id)
+        public async Task<bool> CountEmissionAsync(Guid? id)
         {
             // 合并数据库查询
             var areaData = await _context.Areas
@@ -49,8 +61,8 @@ namespace Carbon_inventory_platform.Controllers
     .FirstOrDefaultAsync();
 
 
-            if (areaData == null) return null;
-            if (areaData.Devices == null) return null;
+            if (areaData == null) return false;
+            if (areaData.Devices == null) return false;
             // 初始化所有需要的变量
             decimal sumHardlyMove = 0, sumMove = 0, sumEscape = 0, sumProcess = 0, sumElectricity = 0;
             decimal sum1_CO2 = 0, sum2_CO2 = 0, sum1_CH4 = 0, sum2_CH4 = 0, sum1_N2O = 0, sum2_N2O = 0;
@@ -63,36 +75,39 @@ namespace Carbon_inventory_platform.Controllers
             // 計算排放量及
             foreach (var device in areaData.Devices)
             {
-                foreach (var GHG in device.GHGs)
+                if (device.GHGs != null)
                 {
-                    if (device.Scope == "類別一")
+                    foreach (var GHG in device.GHGs)
                     {
-                        switch (GHG.Name)
+                        if (device.Scope == "類別一")
                         {
-                            case "CO2": sum1_CO2 += GHG.Emission; break;
-                            case "CH4": sum1_CH4 += GHG.Emission; break;
-                            case "N2O": sum1_N2O += GHG.Emission; break;
-                            case "HFCS": sum1_HFCS += GHG.Emission; break;
-                            case "PFCS": sum1_PFCS += GHG.Emission; break;
-                            case "SF6": sum1_SF6 += GHG.Emission; break;
-                            case "NF3": sum1_NF3 += GHG.Emission; break;
+                            switch (GHG.Name)
+                            {
+                                case "CO2": sum1_CO2 += GHG.Emission; break;
+                                case "CH4": sum1_CH4 += GHG.Emission; break;
+                                case "N2O": sum1_N2O += GHG.Emission; break;
+                                case "HFCS": sum1_HFCS += GHG.Emission; break;
+                                case "PFCS": sum1_PFCS += GHG.Emission; break;
+                                case "SF6": sum1_SF6 += GHG.Emission; break;
+                                case "NF3": sum1_NF3 += GHG.Emission; break;
+                            }
                         }
-                    }
-                    else if (device.Scope == "類別二")
-                    {
-                        switch (GHG.Name)
+                        else if (device.Scope == "類別二")
                         {
-                            case "CO2": sum2_CO2 += GHG.Emission; break;
-                            case "CH4": sum2_CH4 += GHG.Emission; break;
-                            case "N2O": sum2_N2O += GHG.Emission; break;
-                            case "HFCS": sum2_HFCS += GHG.Emission; break;
-                            case "PFCS": sum2_PFCS += GHG.Emission; break;
-                            case "SF6": sum2_SF6 += GHG.Emission; break;
-                            case "NF3": sum2_NF3 += GHG.Emission; break;
+                            switch (GHG.Name)
+                            {
+                                case "CO2": sum2_CO2 += GHG.Emission; break;
+                                case "CH4": sum2_CH4 += GHG.Emission; break;
+                                case "N2O": sum2_N2O += GHG.Emission; break;
+                                case "HFCS": sum2_HFCS += GHG.Emission; break;
+                                case "PFCS": sum2_PFCS += GHG.Emission; break;
+                                case "SF6": sum2_SF6 += GHG.Emission; break;
+                                case "NF3": sum2_NF3 += GHG.Emission; break;
+                            }
                         }
                     }
                 }
-
+               
                 switch (device.EmissionPattern)
                 {
                     case "固定": sumHardlyMove += device.Emissions; break;
@@ -155,7 +170,7 @@ namespace Carbon_inventory_platform.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return areaData;
+            return true;
         }
         private void UpdateEmissionData(Area areaData,
             decimal sum1_CO2, decimal sum1_CH4, decimal sum1_N2O, decimal sum1_HFCS, decimal sum1_PFCS, decimal sum1_SF6, decimal sum1_NF3,
@@ -291,7 +306,11 @@ namespace Carbon_inventory_platform.Controllers
 
         public async Task<IActionResult> Word3Async(Guid id)
         {
-            await CountEmissionAsync(id);
+            bool success = await CountEmissionAsync(id);
+            if (!success)
+            {
+                return NotFound();
+            }
 
             var dataQuery = _context.Areas
                 .Where(x => x.Id == id && x.isDeleted == 0)
@@ -312,6 +331,10 @@ namespace Carbon_inventory_platform.Controllers
             if (dataResult == null) return NotFound();
             var AllActivityData = dataResult.AllActivityData;
             var data = dataResult.Area;
+            if (data.Company == null)
+            {
+                return NotFound();
+            }
             var device = dataResult.Devices;
             var AllGHGs = dataResult.AllGHGs;
 
@@ -649,7 +672,7 @@ namespace Carbon_inventory_platform.Controllers
                 GenerateActivityDataTable(doc, device, AllActivityData);
 
                 //--------------------------------圖片                               
-                if (data.ShopDrawingsPath != "")
+                if (!string.IsNullOrEmpty(data.ShopDrawingsPath))
                 {
                     try
                     {
@@ -658,7 +681,9 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     catch (Exception e)
                     {
-                        ViewData["showDrawingError"] = e.Message;
+                        TempData["Error"] = e.Message;
+                        Guid areaId = (Guid)TempData.Peek("areaId");
+                        return RedirectToAction("Index", "Devices", new { id = areaId });
                         throw;
                     }
                 }
@@ -666,8 +691,7 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     UpdateReplacePattern("廠區圖", "");
                 }
-
-                if (data.OrganizationImagePath != "")
+                if (!string.IsNullOrEmpty(data.OrganizationImagePath))
                 {
                     try
                     {
@@ -676,7 +700,9 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     catch (Exception e)
                     {
-                        ViewData["organiztionError"] = e.Message;
+                        TempData["Error"] = e.Message;
+                        Guid areaId = (Guid)TempData.Peek("areaId");
+                        return RedirectToAction("Index", "Devices", new { id = areaId });
                         throw;
                     }
 
@@ -685,7 +711,7 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     UpdateReplacePattern("公司組織圖", "");
                 }
-                if (data.MapImagePath != "")
+                if (!string.IsNullOrEmpty(data.MapImagePath))
                 {
                     try
                     {
@@ -694,7 +720,9 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     catch (Exception e)
                     {
-                        ViewData["mapError"] = e.Message;
+                        TempData["Error"] = e.Message;
+                        Guid areaId = (Guid)TempData.Peek("areaId");
+                        return RedirectToAction("Index", "Devices", new { id = areaId });
                         throw;
                     }
 
@@ -725,7 +753,11 @@ namespace Carbon_inventory_platform.Controllers
         }
         public async Task<IActionResult> IISReportAsync(Guid id)
         {
-            await CountEmissionAsync(id);
+            bool success = await CountEmissionAsync(id);
+            if (!success)
+            {
+                return NotFound();
+            }
 
             var dataQuery = _context.Areas
                 .Where(x => x.Id == id && x.isDeleted == 0)
@@ -746,6 +778,10 @@ namespace Carbon_inventory_platform.Controllers
             if (dataResult == null) return NotFound();
             var AllActivityData = dataResult.AllActivityData;
             var data = dataResult.Area;
+            if (data.Company == null)
+            {
+                return NotFound();
+            }
             var device = dataResult.Devices;
             var AllGHGs = dataResult.AllGHGs;
 
@@ -1081,8 +1117,8 @@ namespace Carbon_inventory_platform.Controllers
                 //--------------------------------報告邊界
                 GenerateActivityDataTable(doc, device, AllActivityData);
 
-                //--------------------------------圖片                               
-                if (data.ShopDrawingsPath != "")
+                //--------------------------------圖片
+                if (!string.IsNullOrEmpty(data.ShopDrawingsPath))
                 {
                     try
                     {
@@ -1091,7 +1127,9 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     catch (Exception e)
                     {
-                        ViewData["showDrawingError"] = e.Message;
+                        TempData["Error"] = e.Message;
+                        Guid areaId = (Guid)TempData.Peek("areaId");
+                        return RedirectToAction("Index", "Devices", new { id = areaId });
                         throw;
                     }
                 }
@@ -1100,7 +1138,7 @@ namespace Carbon_inventory_platform.Controllers
                     UpdateReplacePattern("廠區圖", "");
                 }
 
-                if (data.OrganizationImagePath != "")
+                if (!string.IsNullOrEmpty(data.OrganizationImagePath))
                 {
                     try
                     {
@@ -1109,7 +1147,9 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     catch (Exception e)
                     {
-                        ViewData["organiztionError"] = e.Message;
+                        TempData["Error"] = e.Message;
+                        Guid areaId = (Guid)TempData.Peek("areaId");
+                        return RedirectToAction("Index", "Devices", new { id = areaId });
                         throw;
                     }
 
@@ -1118,7 +1158,7 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     UpdateReplacePattern("公司組織圖", "");
                 }
-                if (data.MapImagePath != "")
+                if (!string.IsNullOrEmpty(data.MapImagePath))
                 {
                     try
                     {
@@ -1127,7 +1167,9 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     catch (Exception e)
                     {
-                        ViewData["mapError"] = e.Message;
+                        TempData["Error"] = e.Message;
+                        Guid areaId = (Guid)TempData.Peek("areaId");
+                        return RedirectToAction("Index", "Devices", new { id = areaId });
                         throw;
                     }
 
@@ -1263,7 +1305,7 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     string deviceCellString = GHG.Device.Name + (!string.IsNullOrWhiteSpace(GHG.Device.NameRemark) ? $"({GHG.Device.NameRemark})" : "");
 
-                    if (GHG.GWP ==0)
+                    if (GHG.GWP == 0)
                     {
                         table.Rows[rowIndex].MergeCells(0, 7);
                         var paragraph = table.Rows[rowIndex].Cells[0].Paragraphs.First().Append($"找不到{deviceCellString}{GHG.Device.Material}{GHG.Name}的GWP，請確認是否有誤").Font(font).FontSize(19d);
@@ -1282,7 +1324,7 @@ namespace Carbon_inventory_platform.Controllers
                         table.Rows[rowIndex].Cells[6].Paragraphs.First().Append(GHG.GWP.ToString()).Font(font).FontSize(9d);
                         table.Rows[rowIndex].Cells[7].Paragraphs.First().Append(GHG.Emission.ToString("N4")).Font(font).FontSize(9d);
                     }
-                        
+
                     rowIndex++;
                 }
             }
@@ -1296,8 +1338,6 @@ namespace Carbon_inventory_platform.Controllers
 
             doc.ReplaceTextWithObject(tableName, table);
         }
-
-
         public string SwitchGasName(string gasName)
         {
             string returnGasName = string.Empty;
