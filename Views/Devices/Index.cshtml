@@ -6,7 +6,6 @@
 <div class="row">
     <div class="col">
         <h1>@ViewData["Title"]</h1>
-        <h3 style="color:red">@TempData["Error"]</h3>
         @if (TempData.Peek("areaName") != "" && TempData.Peek("areaName") != null)
         {
             <h3>@TempData.Peek("companyName")-@TempData.Peek("areaName")-@TempData.Peek("year")盤查年度</h3>
@@ -65,6 +64,7 @@
                 <a class="btn btn-warning" asp-controller="Devices" asp-action="DeviceExcel" asp-route-id="@TempData.Peek("areaId")">清冊匯出</a>   
                 <a class="btn btn-secondary" asp-controller="Areas" asp-action="AdminIndex" asp-route-id="@TempData.Peek("companyId")">返回</a>
             }
+            <h7 style="color:red">@TempData["Error"]</h7>
         </p>
     </div>
 </div>

@@ -681,7 +681,7 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     catch (Exception e)
                     {
-                        TempData["Error"] = e.Message;
+                        TempData["Error"] = "請上傳圖片檔案";
                         Guid areaId = (Guid)TempData.Peek("areaId");
                         return RedirectToAction("Index", "Devices", new { id = areaId });
                         throw;
@@ -690,26 +690,6 @@ namespace Carbon_inventory_platform.Controllers
                 else
                 {
                     UpdateReplacePattern("廠區圖", "");
-                }
-                if (!string.IsNullOrEmpty(data.OrganizationImagePath))
-                {
-                    try
-                    {
-                        string organiztionPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", data.CompanyId.ToString(), data.Id.ToString(), data.OrganizationImagePath);
-                        replaceImage(doc, "公司組織圖", organiztionPath);
-                    }
-                    catch (Exception e)
-                    {
-                        TempData["Error"] = e.Message;
-                        Guid areaId = (Guid)TempData.Peek("areaId");
-                        return RedirectToAction("Index", "Devices", new { id = areaId });
-                        throw;
-                    }
-
-                }
-                else
-                {
-                    UpdateReplacePattern("公司組織圖", "");
                 }
                 if (!string.IsNullOrEmpty(data.MapImagePath))
                 {
@@ -720,7 +700,7 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     catch (Exception e)
                     {
-                        TempData["Error"] = e.Message;
+                        TempData["Error"] = "請上傳圖片檔案";
                         Guid areaId = (Guid)TempData.Peek("areaId");
                         return RedirectToAction("Index", "Devices", new { id = areaId });
                         throw;
@@ -1127,7 +1107,7 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     catch (Exception e)
                     {
-                        TempData["Error"] = e.Message;
+                        TempData["Error"] = "請上傳圖片檔案";
                         Guid areaId = (Guid)TempData.Peek("areaId");
                         return RedirectToAction("Index", "Devices", new { id = areaId });
                         throw;
@@ -1147,7 +1127,7 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     catch (Exception e)
                     {
-                        TempData["Error"] = e.Message;
+                        TempData["Error"] = "請上傳圖片檔案";
                         Guid areaId = (Guid)TempData.Peek("areaId");
                         return RedirectToAction("Index", "Devices", new { id = areaId });
                         throw;
@@ -1167,7 +1147,8 @@ namespace Carbon_inventory_platform.Controllers
                     }
                     catch (Exception e)
                     {
-                        TempData["Error"] = e.Message;
+                        //TempData["Error"] = e.Message;
+                        TempData["Error"] = "請上傳圖片檔案";
                         Guid areaId = (Guid)TempData.Peek("areaId");
                         return RedirectToAction("Index", "Devices", new { id = areaId });
                         throw;
