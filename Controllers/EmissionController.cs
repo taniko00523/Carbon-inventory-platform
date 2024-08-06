@@ -13,10 +13,10 @@ namespace Carbon_inventory_platform.Controllers
 {
     [CheckSubscriptionData]
     [Authorize]
-    public class EmissionController : Controller
+    public class EmissionController : CountController
     {
         private readonly ApplicationDbContext _context;
-        public EmissionController(ApplicationDbContext context)
+        public EmissionController(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
@@ -36,8 +36,6 @@ namespace Carbon_inventory_platform.Controllers
 
             return View(emissions);
         }
-
-
         public async Task<IActionResult> ChartAsync(Guid? id)
         {
             TempData["yearId"] = id;
@@ -280,30 +278,6 @@ namespace Carbon_inventory_platform.Controllers
             areaData.ULL = all_ULL;
             areaData.UUL = all_UUL;
         }
-        public decimal DecimalSqrt(decimal value, int iterations = 20) //用牛頓法逼近Decimal的平方根
-        {
-            if (value < 0)
-            {
-                throw new ArgumentException("不能計算負數的平方根");
-            }
-
-            if (value != 0)
-            {
-                decimal guess = value / 2;
-                for (int i = 0; i < iterations; i++)
-                {
-                    guess = 0.5m * (guess + value / guess);
-                }
-
-                return guess;
-            }
-            else
-            {
-                return 0;
-            }
-
-        }
-
         public async Task<IActionResult> Word3Async(Guid id)
         {
             bool success = await CountEmissionAsync(id);
@@ -1179,7 +1153,6 @@ namespace Carbon_inventory_platform.Controllers
             byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(newFile);
             return File(fileBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         }
-
         private static Dictionary<string, string> _replacePatterns = new Dictionary<string, string>() { };
         private static string ReplaceFunc(string findStr)
         {
