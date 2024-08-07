@@ -91,7 +91,7 @@
                 }
                 @if (User.IsInRole("Admin"))
                 {
-                    <a class="btn btn-secondary" asp-controller="Areas" asp-action="AdminIndex" asp-route-id="@TempData.Peek("companyId")">返回</a>
+                    <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
                 }
             </div>
         </form>
