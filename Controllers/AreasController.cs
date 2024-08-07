@@ -23,51 +23,29 @@ namespace Carbon_inventory_platform.Controllers
             _userManager = userManager;
 
         }
-        public async Task<IActionResult> Index() //非同步方法
+        public async Task<IActionResult> Index(Guid? Id) //非同步方法
         {
-            string userId = _userManager.GetUserId(User);
-
-            var compnay = await _context.Companies // 暫存目前所在的公司名稱 顯示在畫面上方
-                               .Where(a => a.UserId == userId)
-                               .FirstOrDefaultAsync();
-
-            Guid Id = compnay.Id;
-            TempData["companyId"] = Id; //暫存進入畫面所查詢的CompanyId
-            TempData["companyName"] = compnay.Name;
-            var area = await _context.Areas
-                       .Include(x => x.Company)
-                       .Include(x => x.Analysis)
-                       .Where(x => x.isDeleted == 0 && x.CompanyId == Id) //抓出資料表裡面沒被刪除的
-                       .OrderBy(x => x.CreateTime)
-                       .ToListAsync();
-            foreach (var item in area)
+            if(Id == null) //使用者不用給AreaId
             {
-                item.MapImagePath = !string.IsNullOrEmpty(item.MapImagePath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", item.CompanyId.ToString(), item.Id.ToString(), item.MapImagePath)) : "";
-                item.OrganizationImagePath = !string.IsNullOrEmpty(item.OrganizationImagePath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", item.CompanyId.ToString(), item.Id.ToString(), item.OrganizationImagePath)) : "";
-                item.ShopDrawingsPath = !string.IsNullOrEmpty(item.ShopDrawingsPath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", item.CompanyId.ToString(), item.Id.ToString(), item.ShopDrawingsPath)) : "";
+                string userId = _userManager.GetUserId(User);
+
+                var compnay = await _context.Companies // 暫存目前所在的公司名稱 顯示在畫面上方
+                                   .Where(a => a.UserId == userId)
+                                   .FirstOrDefaultAsync();
+
+                Id = compnay.Id;
+                TempData["companyId"] = Id; //暫存進入畫面所查詢的CompanyId
+                TempData["companyName"] = compnay.Name;
             }
-            if (area[0].Analysis == null)
+            else //管理員要給AreaId
             {
-                var Analysis_id = Guid.NewGuid();
-                Guid Area_id = area[0].Id;
-                await _context.Analyses.AddAsync(new Analysis()
-                {
-                    Id = Analysis_id,
-                    AreaId = Area_id,
-                    CreateTime = DateTime.Now
-                });
-                await _context.SaveChangesAsync();
+                TempData["companyId"] = Id; //暫存進入畫面所查詢的CompanyId
+                TempData["companyName"] = await _context.Companies // 暫存目前所在的公司名稱 顯示在畫面上方
+                                                       .Where(a => a.Id == Id)
+                                                       .Select(a => a.Name)
+                                                       .FirstOrDefaultAsync();
             }
-            return View(area);
-        }
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AdminIndex(Guid Id) //非同步方法
-        {
-            TempData["companyId"] = Id; //暫存進入畫面所查詢的CompanyId
-            TempData["companyName"] = await _context.Companies // 暫存目前所在的公司名稱 顯示在畫面上方
-           .Where(a => a.Id == Id)
-           .Select(a => a.Name)
-           .FirstOrDefaultAsync();
+
             var area = await _context.Areas
                           .Include(x => x.Company)
                           .Where(x => x.isDeleted == 0 && x.CompanyId == Id) //抓出資料表裡面沒被刪除的
@@ -212,14 +190,8 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 _context.Add(toCreate);
                 await _context.SaveChangesAsync();
-                if (User.IsInRole("User"))
-                {
-                    return RedirectToAction(nameof(Index), new { id = companyId });
-                }
-                else if (User.IsInRole("Admin"))
-                {
-                    return RedirectToAction(nameof(AdminIndex), new { id = companyId });
-                }
+                return RedirectToAction(nameof(Index), new { id = companyId });
+
 
             }
             ViewBag.ARVersion = _context.GWPs.Select(x => x.ARCount).Distinct().ToList();
@@ -336,14 +308,8 @@ namespace Carbon_inventory_platform.Controllers
                 }
             }
 
-            if (User.IsInRole("User"))
-            {
-                return RedirectToAction(nameof(Index), new { id = companyId });
-            }
-            else if (User.IsInRole("Admin"))
-            {
-                return RedirectToAction(nameof(AdminIndex), new { id = companyId });
-            }
+            return RedirectToAction(nameof(Index), new { id = companyId });
+
 
             ViewBag.ARVersion = _context.GWPs.Select(x => x.ARCount).Distinct().ToList();
             return View(area);
@@ -663,14 +629,8 @@ namespace Carbon_inventory_platform.Controllers
                         throw;
                     }
                 }
-                if (User.IsInRole("User"))
-                {
-                    return RedirectToAction(nameof(Index), new { id = companyId });
-                }
-                else if (User.IsInRole("Admin"))
-                {
-                    return RedirectToAction(nameof(AdminIndex), new { id = companyId });
-                }
+                return RedirectToAction(nameof(Index), new { id = companyId });
+
             }
             return View(analysis);
         }
@@ -886,13 +846,9 @@ namespace Carbon_inventory_platform.Controllers
                 await _context.SaveChangesAsync();
             }
             var companyId = area.CompanyId;
-            if (User.IsInRole("Admin"))
-            {
-                return RedirectToAction(nameof(AdminIndex), new { id = companyId });
-            }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { id = companyId });
         }
-        
+
     }
 
 }
