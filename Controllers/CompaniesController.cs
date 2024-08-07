@@ -23,7 +23,7 @@ namespace Carbon_inventory_platform.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> AdminIndex(string searchTerm, int pageNumber = 1)
+        public async Task<IActionResult> Index(string searchTerm, int pageNumber = 1)
         {
             const int pageSize = 10;
             List<ApplicationUser> users = _userManager.Users.ToList();
@@ -125,7 +125,7 @@ namespace Carbon_inventory_platform.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(AdminIndex));
+                return RedirectToAction(nameof(Index));
             }
             return View(company);
         }
