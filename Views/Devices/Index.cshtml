@@ -47,15 +47,15 @@
             @if (User.IsInRole("Admin"))
             {
                 <a class="btn btn-warning" asp-controller="Emission" asp-action="IISReport" asp-route-id="@TempData.Peek("areaId")">資策會版報告書下載</a>
-                <a class="btn btn-warning" asp-controller="Devices" asp-action="DeviceExcel" asp-route-id="@TempData.Peek("areaId")">清冊匯出</a>   
-                <a class="btn btn-secondary" asp-controller="Areas" asp-action="AdminIndex" asp-route-id="@TempData.Peek("companyId")">返回</a>
+                <a class="btn btn-warning" asp-controller="Devices" asp-action="DeviceExcel" asp-route-id="@TempData.Peek("areaId")">清冊匯出</a>
+                <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
             }
             <h7 style="color:red">@TempData["Error"]</h7>
         </p>
     </div>
 </div>
 
-<div class="table-responsive">
+<div class="table-computer-w1024">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -108,7 +108,7 @@
                 <th></th>
             </tr>
         </thead>
-        @for (int i = 0; i <= 5; i++) 
+        @for (int i = 0; i <= 5; i++)
         {
             string EmissPattern = "";
             string style = "";
@@ -121,12 +121,12 @@
                 case 2: EmissPattern = "逸散"; style = "success"; break;
                 case 3: EmissPattern = "製程"; style = "danger"; break;
                 case 4: EmissPattern = "外購電力"; style = "primary"; break;
-                case 5: isOtherPattern = true; style = "info"; break; 
+                case 5: isOtherPattern = true; style = "info"; break;
             }
             <tbody>
                 @foreach (var item in Model)
                 {
-                    if ((!isOtherPattern && item.EmissionPattern == EmissPattern) || (isOtherPattern && item.EmissionPattern != "固定" && item.EmissionPattern != "移動" && item.EmissionPattern != "逸散" && item.EmissionPattern != "製程" && item.EmissionPattern != "外購電力")) 
+                    if ((!isOtherPattern && item.EmissionPattern == EmissPattern) || (isOtherPattern && item.EmissionPattern != "固定" && item.EmissionPattern != "移動" && item.EmissionPattern != "逸散" && item.EmissionPattern != "製程" && item.EmissionPattern != "外購電力"))
                     {
                         <tr class="table-@style">
                             @*
@@ -137,7 +137,9 @@
                                 @if (User.IsInRole("Admin"))
                                 {
                                     <a asp-action="Detail" asp-route-id="@item.Id"> @item.Name @(!string.IsNullOrEmpty(item.NameRemark) ? "(" + item.NameRemark + ")" : "")</a>
-                                }else{
+                                }
+                                else
+                                {
                                     <p>@item.Name @(!string.IsNullOrEmpty(item.NameRemark) ? "(" + item.NameRemark + ")" : "")</p>
                                 }
                             </td>
@@ -273,6 +275,94 @@
     </table>
 
 </div>
+<div class="table-phone-w1024">
+    @for (int i = 0; i <= 5; i++)
+    {
+        string EmissPattern = "";
+        string style = "";
+        bool isOtherPattern = false;
+
+        switch (i)
+        {
+            case 0: EmissPattern = "固定"; style = "warning"; break;
+            case 1: EmissPattern = "移動"; style = "secondary"; break;
+            case 2: EmissPattern = "逸散"; style = "success"; break;
+            case 3: EmissPattern = "製程"; style = "danger"; break;
+            case 4: EmissPattern = "外購電力"; style = "primary"; break;
+            case 5: isOtherPattern = true; style = "info"; break;
+        }
+
+        <div class="mb-3">
+            @foreach (var item in Model)
+            {
+                if ((!isOtherPattern && item.EmissionPattern == EmissPattern) || (isOtherPattern && item.EmissionPattern != "固定" && item.EmissionPattern != "移動" && item.EmissionPattern != "逸散" && item.EmissionPattern != "製程" && item.EmissionPattern != "外購電力"))
+                {
+                    <div class="card border-@style mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-action="Detail" asp-route-id="@item.Id">@item.Name @(!string.IsNullOrEmpty(item.NameRemark) ? "(" + item.NameRemark + ")" : "")</a>
+                                }
+                                else
+                                {
+                                    <p>@item.Name @(!string.IsNullOrEmpty(item.NameRemark) ? "(" + item.NameRemark + ")" : "")</p>
+                                }
+                            </h5>
+                            <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Scope):</strong> @Html.DisplayFor(modelItem => item.Scope)</p>
+                            <p class="card-text"><strong>@Html.DisplayNameFor(model => model.EmissionPattern):</strong> @Html.DisplayFor(modelItem => item.EmissionPattern)</p>
+                            <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Material):</strong> @Html.DisplayFor(modelItem => item.Material)</p>
+
+                            <p class="card-text"><strong>CO₂:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "CO2") ? "Y" : "")</p>
+                            <p class="card-text"><strong>CH₄:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "CH4") ? "Y" : "")</p>
+                            <p class="card-text"><strong>N₂O:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "N2O") ? "Y" : "")</p>
+                            <p class="card-text"><strong>HFCₛ:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "HFCS") ? "Y" : "")</p>
+                            <p class="card-text"><strong>PFCₛ:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "PFCS") ? "Y" : "")</p>
+                            <p class="card-text"><strong>SF₆:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "SF6") ? "Y" : "")</p>
+                            <p class="card-text"><strong>NF₃:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "NF3") ? "Y" : "")</p>
+                            @if (item.ActivityDatas.Count != 0)
+                            {
+                                string displayUnit;
+                                switch (item.Unit)
+                                {
+                                    case "公斤":
+                                        displayUnit = "公噸";
+                                        break;
+                                    case "公升":
+                                        displayUnit = "公秉";
+                                        break;
+                                    case "立方公尺":
+                                        displayUnit = "千立方公尺";
+                                        break;
+                                    case "度":
+                                        displayUnit = "千度";
+                                        break;
+                                    default:
+                                        displayUnit = item.Unit;
+                                        break;
+                                }
+                                <p class="card-text"><strong>活動數據:</strong>@($"{item.ActivityDatas.Sum(ad => ad.Num) / 1000:F4} {displayUnit}")</p>
+                            }
+                            else
+                            {
+                                <p class="card-text"><strong>活動數據:</strong>未填寫</p>
+                            }
+                            <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Emissions):</strong> @item.Emissions.ToString("N4") 噸CO₂e</p>
+
+                            <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">@((item.ActivityDatas.Count != 0) ? "修改活動數據" : "新增活動數據")</a>
+                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
+                            <a class="btn btn-success" asp-action="Copy" asp-route-id="@item.Id">複製</a>
+                            <form method="post" asp-controller="Devices" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');" class="d-inline">
+                                <button type="submit" class="btn btn-danger">刪除</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+</div>
+
 
 <script>
     function showAlert(text) {
