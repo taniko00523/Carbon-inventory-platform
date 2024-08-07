@@ -1,10 +1,47 @@
 ﻿@model IEnumerable<Carbon_inventory_platform.ViewModel.CompanyUserViewModel>
-@{
-    ViewData["Title"] = "用戶總覽";
-}
 
-<h2>@ViewData["Title"]</h2>
-<a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">新增用戶</a>
+<h2>用戶總覽</h2>
+<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">新增用戶</a>
+@if (ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+<!-- 新增用戶資料的模態框 -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="Add" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">新增用戶資料</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="addUserName">使用者名稱：</label>
+                        <input class="form-control" id="addUserName" name="ApplicationUser.UserName" required />
+
+                        <label for="addPassword">密碼：</label>
+                        <input class="form-control" id="addPassword" name="Password" type="password" required />
+
+                        <label for="addUserLimitData">使用期限：</label>
+                        <input type="date" class="form-control" id="addUserLimitData" name="UserLimitData" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <input type="submit" value="儲存" class="btn btn-primary" />
+                </div>
+            </div>
+            @Html.AntiForgeryToken()
+        </form>
+    </div>
+</div>
+
 <table class="table">
     <thead>
         <tr>
@@ -49,24 +86,34 @@
             <!-- 編輯用戶資料的模態框 -->
             <div class="modal fade" id="editModal_@user.ApplicationUser.Id" tabindex="-1" role="dialog" aria-labelledby="editModalLabel_@user.ApplicationUser.Id" aria-hidden="true">
                 <div class="modal-dialog" role="document">
-                    <form asp-action="Edit" method="post" id="editUserForm_@user.ApplicationUser.Id">
+                    <form asp-action="Edit" method="post">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="editModalLabel_@user.ApplicationUser.Id">編輯用戶資料</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
+                                @if (ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
+                                {
+                                    <div class="alert alert-danger">
+                                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                        {
+                                            <p>@error.ErrorMessage</p>
+                                        }
+                                    </div>
+                                }
+
                                 <div class="form-group">
                                     <input type="hidden" name="ApplicationUser.Id" value="@user.ApplicationUser.Id" />
 
                                     <label for="editUserName_@user.ApplicationUser.Id">使用者名稱：</label>
-                                    <input class="form-control" id="editUserName_@user.ApplicationUser.Id" name="ApplicationUser.UserName" value="@user.ApplicationUser.UserName">
+                                    <input class="form-control" id="editUserName_@user.ApplicationUser.Id" name="ApplicationUser.UserName" value="@user.ApplicationUser.UserName" required />
 
                                     <label for="editPassword_@user.ApplicationUser.Id">密碼：</label>
-                                    <input class="form-control" id="editPassword_@user.ApplicationUser.Id" name="Password" value="@user.Password">
+                                    <input class="form-control" id="editPassword_@user.ApplicationUser.Id" name="Password" type="password" />
 
                                     <label for="editUserLimitData_@user.ApplicationUser.Id">使用期限：</label>
-                                    <input type="date" class="form-control" id="editUserLimitData_@user.ApplicationUser.Id" name="ApplicationUser.UserLimitData" value="@user.ApplicationUser.UserLimitData?.ToString("yyyy-MM-dd")">
+                                    <input type="date" class="form-control" id="editUserLimitData_@user.ApplicationUser.Id" name="ApplicationUser.UserLimitData" value="@user.ApplicationUser.UserLimitData?.ToString("yyyy-MM-dd")" />
                                 </div>
                             </div>
                             <div class="modal-footer">
