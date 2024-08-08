@@ -74,6 +74,7 @@ public class UserController : Controller
             }
             user.UserLimitData = model.UserLimitData;
             await _userManager.UpdateAsync(user);
+            await CreateCompanyAsync(user);
             return RedirectToAction(nameof(Index));
         }
 
@@ -106,36 +107,49 @@ public class UserController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(CompanyUserViewModel model)
     {
-        if (ModelState.IsValid)
+
+        var user = await _userManager.FindByIdAsync(model.ApplicationUser.Id);
+        if (user != null)
         {
-            var user = await _userManager.FindByIdAsync(model.ApplicationUser.Id);
-            if (user != null)
+            if (user.UserName != model.ApplicationUser.UserName)
             {
-                if (user.UserName != model.ApplicationUser.UserName)
-                {
-                    await _userManager.SetUserNameAsync(user, model.ApplicationUser.UserName);
-                }
-
-                if (!string.IsNullOrEmpty(model.Password))
-                {
-                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var result = await _userManager.ResetPasswordAsync(user, token, model.Password);
-                    if (!result.Succeeded)
-                    {
-                        foreach (var error in result.Errors)
-                        {
-                            ModelState.AddModelError(string.Empty, error.Description);
-                        }
-                        return View(model);
-                    }
-                }
-
-                user.UserLimitData = model.ApplicationUser.UserLimitData;
-                await _userManager.UpdateAsync(user);
-                return RedirectToAction(nameof(Index));
+                await _userManager.SetUserNameAsync(user, model.ApplicationUser.UserName);
             }
+
+            if (!string.IsNullOrEmpty(model.Password))
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await _userManager.ResetPasswordAsync(user, token, model.Password);
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return View(model);
+                }
+            }
+
+            user.UserLimitData = model.ApplicationUser.UserLimitData;
+            await _userManager.UpdateAsync(user);
+            return RedirectToAction(nameof(Index));
         }
-        return View(model);
+        // Return the Index view with a model that matches the expected type
+        var users = _userManager.Users.ToList();
+        var viewModel = new List<CompanyUserViewModel>();
+
+        foreach (var single_user in users)
+        {
+            CompanyUserViewModel userModel = new CompanyUserViewModel
+            {
+                ApplicationUser = single_user,
+                Company = _context.Companies.FirstOrDefault(x => x.UserId == single_user.Id)
+            };
+            viewModel.Add(userModel);
+        }
+        viewModel.Remove(viewModel.FirstOrDefault(x => x.ApplicationUser.Email == "Admin"));
+
+        return View("Index", viewModel);
     }
 
     public async Task<IActionResult> Delete(string id)
@@ -164,6 +178,37 @@ public class UserController : Controller
             throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
                 $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor.");
         }
+    }
+    public async Task CreateCompanyAsync(ApplicationUser user)
+    {
+        var userId = await _userManager.GetUserIdAsync(user);
+
+        var Company_id = Guid.NewGuid();
+        var Area_id = Guid.NewGuid();
+        var Analysis_id = Guid.NewGuid();
+        await _context.Companies.AddAsync(new Company()
+        {
+            Id = Company_id,
+            UserId = userId,
+            CreateTime = DateTime.Now
+        });
+        await _context.SaveChangesAsync();
+        await _context.Areas.AddAsync(new Area()
+        {
+            Id = Area_id,
+            CompanyId = Company_id,
+            Year = DateTime.Now.Year - 1912, //減去1911取得民國年 再減去1盤去年
+            ARVersion = 6,
+            BaseYear = true,
+            CreateTime = DateTime.Now
+        });
+        await _context.Analyses.AddAsync(new Analysis()
+        {
+            Id = Analysis_id,
+            AreaId = Area_id,
+            CreateTime = DateTime.Now
+        });
+        await _context.SaveChangesAsync();  
     }
 
     private IUserEmailStore<ApplicationUser> GetEmailStore()
