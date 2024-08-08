@@ -25,7 +25,7 @@ namespace Carbon_inventory_platform.Controllers
         }
         public async Task<IActionResult> Index(Guid? Id) //非同步方法
         {
-            if(Id == null) //使用者不用給AreaId
+            if (Id == null) //使用者不用給AreaId
             {
                 string userId = _userManager.GetUserId(User);
 
@@ -662,49 +662,50 @@ namespace Carbon_inventory_platform.Controllers
                     }
                 }
             }
-
-            if (CO2CEF != 0)
+            if (device.Customize == true)
             {
-                await CEFAddAsync(device, "CO2", CO2CEF);
-                Default = false;
-            }
-            if (CH4CEF != 0)
-            {
-                await CEFAddAsync(device, "CH4", CH4CEF);
-                Default = false;
-            }
-            if (N2OCEF != 0)
-            {
-                await CEFAddAsync(device, "N2O", N2OCEF);
-                Default = false;
+                if (CO2CEF != 0)
+                {
+                    await CEFAddAsync(device, "CO2", CO2CEF);
+                    Default = false;
+                }
+                if (CH4CEF != 0)
+                {
+                    await CEFAddAsync(device, "CH4", CH4CEF);
+                    Default = false;
+                }
+                if (N2OCEF != 0)
+                {
+                    await CEFAddAsync(device, "N2O", N2OCEF);
+                    Default = false;
 
-            }
-            if (HFCSCEF != 0)
-            {
-                await CEFAddAsync(device, "HFCS", HFCSCEF);
-                Default = false;
+                }
+                if (HFCSCEF != 0)
+                {
+                    await CEFAddAsync(device, "HFCS", HFCSCEF);
+                    Default = false;
 
-            }
-            if (PFCSCEF != 0)
-            {
-                await CEFAddAsync(device, "PFCS", PFCSCEF);
-                Default = false;
+                }
+                if (PFCSCEF != 0)
+                {
+                    await CEFAddAsync(device, "PFCS", PFCSCEF);
+                    Default = false;
 
-            }
-            if (NF3CEF != 0)
-            {
-                await CEFAddAsync(device, "NF3", NF3CEF);
-                Default = false;
+                }
+                if (NF3CEF != 0)
+                {
+                    await CEFAddAsync(device, "NF3", NF3CEF);
+                    Default = false;
 
-            }
-            if (SF6CEF != 0)
-            {
-                await CEFAddAsync(device, "SF6", SF6CEF);
-                Default = false;
+                }
+                if (SF6CEF != 0)
+                {
+                    await CEFAddAsync(device, "SF6", SF6CEF);
+                    Default = false;
 
+                }
             }
-
-            if (Default) //預設排放係數
+            else
             {
                 await GHGCheckAsync(device.Id, device.Name, device.Material, device.Scope, device.EmissionPattern, _context.Areas.FirstOrDefault(x => x.Id == device.AreaId).Year);
             }
@@ -717,7 +718,7 @@ namespace Carbon_inventory_platform.Controllers
                 }
             }
         }
-        
+
         #endregion
         public async Task<IActionResult> CopyArea(Guid id)
         {
