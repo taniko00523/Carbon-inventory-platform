@@ -1,10 +1,12 @@
 ﻿using Carbon_inventory_platform.Data;
+using Carbon_inventory_platform.Filters;
 using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [CheckSubscriptionData]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -16,6 +18,10 @@ namespace Carbon_inventory_platform.Controllers
 
         // GET: Companies
         public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult OutOfLimitTime()
         {
             return View();
         }
