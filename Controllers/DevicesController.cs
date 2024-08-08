@@ -151,8 +151,8 @@ namespace Carbon_inventory_platform.Controllers
             }
             Guid newDeviceId = Guid.NewGuid();
             Guid areaId = device.AreaId;
-            Device newDevice = CopyDevice(device,areaId,newDeviceId);
-           
+            Device newDevice = CopyDevice(device, areaId, newDeviceId);
+
             _context.Devices.Add(newDevice);
             await _context.SaveChangesAsync();
 
@@ -713,7 +713,7 @@ namespace Carbon_inventory_platform.Controllers
             var areaId = TempData.Peek("areaId");
             return RedirectToAction("Index", "Devices", new { id = areaId });
         }
-       
+
         public async Task<IActionResult> Default(Guid id)
         {
             var defaultDevice = await _context.defaultDevices.ToListAsync();
@@ -743,7 +743,7 @@ namespace Carbon_inventory_platform.Controllers
 
             return RedirectToAction(nameof(Index), new { id = id });
         }
-        
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DetailAsync(Guid Id)
         {
@@ -764,14 +764,17 @@ namespace Carbon_inventory_platform.Controllers
             {
                 workbook = new XSSFWorkbook(file);
             }
-
             // 抓取工作表
             ISheet basicDataSheet = workbook.GetSheetAt(workbook.GetSheetIndex("邊界資料"));
             ISheet deviesDataSheet = workbook.GetSheetAt(workbook.GetSheetIndex("排放源資料"));
             ISheet countingDataSheet = workbook.GetSheetAt(workbook.GetSheetIndex("排放量計算資料"));
             ISheet emissionDataSheet = workbook.GetSheetAt(workbook.GetSheetIndex("溫室氣體排放量彙總"));
-            
 
+            bool success = await CountEmissionAsync(id);
+            if (!success)
+            {
+                return NotFound();
+            }
             // 抓取列索引
             var basicDataIndexes = GetColumnIndexes(basicDataSheet.GetRow(0));
             var devicesDataIndexs = GetColumnIndexes(deviesDataSheet.GetRow(0));
@@ -800,7 +803,7 @@ namespace Carbon_inventory_platform.Controllers
 
 
             FillBasicData(basicDataSheet, company, area, basicDataIndexes);
-            FillDeviceData(deviesDataSheet, devices,allGHGs, activityDatas, devicesDataIndexs); ;
+            FillDeviceData(deviesDataSheet, devices, allGHGs, activityDatas, devicesDataIndexs); ;
             FillCountingData(countingDataSheet, allGHGs, coutingDataIndexs);
             FillEmissionData(emissionDataSheet, area);
 
@@ -849,7 +852,7 @@ namespace Carbon_inventory_platform.Controllers
             return columnIndexes;
         }
 
-        private void FillBasicData(ISheet sheet,Company company,Area area, Dictionary<string, int> columnIndexes)
+        private void FillBasicData(ISheet sheet, Company company, Area area, Dictionary<string, int> columnIndexes)
         {
             IRow row = sheet.GetRow(1) ?? sheet.CreateRow(1);
             row.CreateCell(columnIndexes["公司名稱"]).SetCellValue(company.Name);
@@ -861,6 +864,7 @@ namespace Carbon_inventory_platform.Controllers
             row.CreateCell(columnIndexes["工廠登記編號"]).SetCellValue(area.FactorCode);
             row.CreateCell(columnIndexes["統一編號"]).SetCellValue(area.UniqueCode);
             row.CreateCell(columnIndexes["盤查年度"]).SetCellValue(area.Year);
+            row.CreateCell(columnIndexes["GWP版本"]).SetCellValue("AR" + area.ARVersion);
         }
         private void FillDeviceData(ISheet sheet, List<Device> devices, List<GHG> ghgs, List<ActivityData> activityDatas, Dictionary<string, int> columnIndexes)
         {
@@ -869,12 +873,16 @@ namespace Carbon_inventory_platform.Controllers
                 IRow row = sheet.GetRow(i + 1) ?? sheet.CreateRow(i + 1);
                 var device = devices[i];
                 List<GHG> selectGHG = ghgs.Where(x => x.DeviceId == devices[i].Id).ToList();
+                string displayUnit = GetDisplayUnit(device.Unit);
+
                 row.CreateCell(columnIndexes["排放源名稱"]).SetCellValue(device.Name);
                 row.CreateCell(columnIndexes["類別"]).SetCellValue(device.Scope);
                 row.CreateCell(columnIndexes["排放型式"]).SetCellValue(device.EmissionPattern);
                 row.CreateCell(columnIndexes["原燃物料"]).SetCellValue(device.Material);
-                row.CreateCell(columnIndexes["CO2排放當量"]).SetCellValue(device.Emissions.ToString());
+                row.CreateCell(columnIndexes["CO2排放當量"]).SetCellValue(device.Emissions.ToString() + "公噸/" + displayUnit);
                 row.CreateCell(columnIndexes["數據來源名稱"]).SetCellValue(device.Source);
+                row.CreateCell(columnIndexes["不確定性定量上限"]).SetCellValue("+" + device.all_UUL.ToString("N2") + "%");
+                row.CreateCell(columnIndexes["不確定性定量下限"]).SetCellValue("+" + device.all_ULL.ToString("N2") + "%");
 
                 FillCorrectionData(row, device, columnIndexes);
                 FillActivityData(row, device, activityDatas, columnIndexes);
@@ -918,7 +926,7 @@ namespace Carbon_inventory_platform.Controllers
             ReplaceTextInSheet(sheet, "[SF6排放]", data.SF6.ToString("N4"));
             ReplaceTextInSheet(sheet, "[NF3排放]", data.NF3.ToString("N4"));
 
-           
+
 
             //ReplaceTextInSheet(sheet, "[範疇二CO2排放]", (data.Devices.Where(x => x.isDeleted == 0 && x.Scope == "類別二").Sum(x => x.GHGs.Where(g => g.Name == "CO2").FirstOrDefault()?.Emission ?? 0).ToString("N4")));
             //ReplaceTextInSheet(sheet, "[範疇二CH4排放]", (data.Devices.Where(x => x.isDeleted == 0 && x.Scope == "類別二").Sum(x => x.GHGs.Where(g => g.Name == "CH4").FirstOrDefault()?.Emission ?? 0).ToString("N4")));
@@ -941,7 +949,7 @@ namespace Carbon_inventory_platform.Controllers
             ReplaceTextInSheet(sheet, "[移動排放量]", data.move.ToString("N4"));
             ReplaceTextInSheet(sheet, "[製程排放量]", data.process.ToString("N4"));
             ReplaceTextInSheet(sheet, "[逸散排放量]", data.escape.ToString("N4"));
-           
+
             ReplaceTextInSheet(sheet, "[類別一總排放]", data.Scope1.ToString("N4"));
             ReplaceTextInSheet(sheet, "[類別二總排放]", data.Devices.Where(x => x.Scope == "類別二").Sum(x => x.Emissions).ToString("N4"));
             ReplaceTextInSheet(sheet, "[進行評估排放當量]", data.cal_all.ToString("N4"));
@@ -960,49 +968,49 @@ namespace Carbon_inventory_platform.Controllers
             switch (device.CEF_Correction)
             {
                 case 1:
-                    row.CreateCell(columnIndexes["排放係數誤差等級"]).SetCellValue("自廠發展係數/質量平衡所得係數/同製程/設備經驗係數");
+                    row.CreateCell(columnIndexes["排放係數誤差等級(C)"]).SetCellValue("1.自廠發展係數/質量平衡所得係數/同製程/設備經驗係數");
                     break;
                 case 2:
-                    row.CreateCell(columnIndexes["排放係數誤差等級"]).SetCellValue("製造商提供係數/區域排放係數");
+                    row.CreateCell(columnIndexes["排放係數誤差等級(C)"]).SetCellValue("2.製造商提供係數/區域排放係數");
                     break;
                 case 3:
-                    row.CreateCell(columnIndexes["排放係數誤差等級"]).SetCellValue("國家/國際排放係數");
+                    row.CreateCell(columnIndexes["排放係數誤差等級(C)"]).SetCellValue("3.國家/國際排放係數");
                     break;
             }
 
             switch (device.Data_Correction)
             {
                 case 1:
-                    row.CreateCell(columnIndexes["活動數據誤差等級"]).SetCellValue("連續監測");
+                    row.CreateCell(columnIndexes["活動數據誤差等級(A)"]).SetCellValue("1.連續監測");
                     break;
                 case 2:
-                    row.CreateCell(columnIndexes["活動數據誤差等級"]).SetCellValue("定期/間歇量測");
+                    row.CreateCell(columnIndexes["活動數據誤差等級(A)"]).SetCellValue("2.定期/間歇量測");
                     break;
                 case 3:
-                    row.CreateCell(columnIndexes["活動數據誤差等級"]).SetCellValue("自行/財務推估");
+                    row.CreateCell(columnIndexes["活動數據誤差等級(A)"]).SetCellValue("3.自行/財務推估");
                     break;
             }
 
             switch (device.Device_Correction)
             {
                 case 1:
-                    row.CreateCell(columnIndexes["儀器校正等級"]).SetCellValue("有外部校正或多組數據佐證者");
+                    row.CreateCell(columnIndexes["儀器校正等級(B)"]).SetCellValue("1.有外部校正或多組數據佐證者");
                     break;
                 case 2:
-                    row.CreateCell(columnIndexes["儀器校正等級"]).SetCellValue("有內部校正或經過會計簽證等證明者");
+                    row.CreateCell(columnIndexes["儀器校正等級(B)"]).SetCellValue("2.有內部校正或經過會計簽證等證明者");
                     break;
                 case 3:
-                    row.CreateCell(columnIndexes["儀器校正等級"]).SetCellValue("為進行儀器校正或未進行紀錄彙整者");
+                    row.CreateCell(columnIndexes["儀器校正等級(B)"]).SetCellValue("3.為進行儀器校正或未進行紀錄彙整者");
                     break;
             }
 
-            row.CreateCell(columnIndexes["數據等級評分"]).SetCellValue(device.Grade);
+            row.CreateCell(columnIndexes["數據等級評分(AxBxC)"]).SetCellValue(device.Grade);
             row.CreateCell(columnIndexes["活動數據信賴區間上限"]).SetCellValue(device.data_UUL.ToString());
             row.CreateCell(columnIndexes["活動數據信賴區間下限"]).SetCellValue(device.data_ULL.ToString());
             row.CreateCell(columnIndexes["CO2排放當量"]).SetCellValue(device.Emissions.ToString());
         }
 
-        private void FillActivityData(IRow row, Device device ,List<ActivityData> activityData, Dictionary<string, int> columnIndexes)
+        private void FillActivityData(IRow row, Device device, List<ActivityData> activityData, Dictionary<string, int> columnIndexes)
         {
             activityData = activityData.Where(x => x.DeviceId == device.Id).ToList();
             string displayUnit = GetDisplayUnit(device.Unit);
