@@ -46,6 +46,9 @@
             }
             @if (User.IsInRole("Admin"))
             {
+                <a class="btn btn-warning" asp-controller="Emission" asp-action="AR5Report" asp-route-id="@TempData.Peek("areaId")">AR5報告書下載</a>
+                <a class="btn btn-warning" asp-controller="Emission" asp-action="AR6Report" asp-route-id="@TempData.Peek("areaId")">AR6報告書下載</a>
+
                 <a class="btn btn-warning" asp-controller="Emission" asp-action="IISReport" asp-route-id="@TempData.Peek("areaId")">資策會版報告書下載</a>
                 <a class="btn btn-warning" asp-controller="Devices" asp-action="DeviceExcel" asp-route-id="@TempData.Peek("areaId")">清冊匯出</a>
                 <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
