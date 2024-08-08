@@ -26,7 +26,7 @@
                         <input class="form-control" id="addUserName" name="ApplicationUser.UserName" required />
 
                         <label for="addPassword">密碼：</label>
-                        <input class="form-control" id="addPassword" name="Password" type="password" required />
+                        <input class="form-control" id="addPassword" name="Password"  required />
 
                         <label for="addUserLimitData">使用期限：</label>
                         <input type="date" class="form-control" id="addUserLimitData" name="UserLimitData" required />
@@ -217,3 +217,15 @@
         }
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 獲取今天的日期
+        var today = new Date().toISOString().split('T')[0];
+
+        // 設置模態框中日期輸入欄位的值為今天的日期
+        var userLimitDataInput = document.getElementById('addUserLimitData');
+        if (userLimitDataInput) {
+            userLimitDataInput.value = today;
+        }
+    });
+</script>
