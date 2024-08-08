@@ -23,6 +23,7 @@ namespace Carbon_inventory_platform.Data
         public DbSet<GWP> GWPs { get; set; }
         public DbSet<DeviceData> deviceDatas { get; set; } = null!;
         public DbSet<DefaultDevices> defaultDevices { get; set; } = null!;
+        public DbSet<Feedback> Feedbacks { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder builder)
