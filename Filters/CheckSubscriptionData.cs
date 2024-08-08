@@ -7,6 +7,8 @@ namespace Carbon_inventory_platform.Filters
 {
     public class CheckSubscriptionData : Attribute, IAuthorizationFilter
     {
+        private readonly string _renewalUrl = "/Home/Index"; // 續費頁面的 URL
+
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             // 獲取用戶管理器
@@ -16,22 +18,22 @@ namespace Carbon_inventory_platform.Filters
             var user = userManager.GetUserAsync(context.HttpContext.User).Result;
 
             // 檢查使用期限
-            if(user != null && user.Email != "Admin")
+            if (user != null && user.Email != "Admin")
             {
                 if (user.UserLimitData.HasValue)
                 {
                     if (user.UserLimitData < DateTime.UtcNow)
                     {
-                        //如果小於存取時間，則禁止存取
-                        context.Result = new ForbidResult();
+                        // 如果使用期限已過，則重定向到續費頁面
+                        context.Result = new RedirectResult(_renewalUrl);
                     }
                 }
-                else // 如果沒有使用時間限制，則直接禁止存取
+                else
                 {
-                    context.Result = new ForbidResult();
+                    // 如果沒有設定使用期限，則重定向到續費頁面
+                    context.Result = new RedirectResult(_renewalUrl);
                 }
             }
-
         }
     }
 }
