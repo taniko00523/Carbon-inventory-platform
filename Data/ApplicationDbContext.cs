@@ -216,7 +216,8 @@ new DefaultDevices { Id = 6, Name = "乾燥機", Material = "R-134A", Scope = "�
 new DefaultDevices { Id = 7, Name = "冰水主機", Material = "R-134A", Scope = "類別一", EmissionPattern = "逸散" },
 new DefaultDevices { Id = 8, Name = "車用空調", Material = "R-134A", Scope = "類別一", EmissionPattern = "逸散" },
 new DefaultDevices { Id = 9, Name = "化糞池", Material = "廢水處理", Scope = "類別一", EmissionPattern = "逸散" },
-new DefaultDevices { Id = 10, Name = "電力", Material = "外購電力", Scope = "類別二", EmissionPattern = "外購電力" }
+new DefaultDevices { Id = 10, Name = "電力", Material = "外購電力", Scope = "類別二", EmissionPattern = "外購電力" },
+new DefaultDevices { Id = 11, Name = "冰箱", Material = "R-134A", Scope = "類別一", EmissionPattern = "逸散" }
                 );
         }
     }
