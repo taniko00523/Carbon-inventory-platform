@@ -58,24 +58,24 @@ namespace Carbon_inventory_platform.Controllers
                 item.OrganizationImagePath = !string.IsNullOrEmpty(item.OrganizationImagePath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", item.CompanyId.ToString(), item.Id.ToString(), item.OrganizationImagePath)) : "";
                 item.ShopDrawingsPath = !string.IsNullOrEmpty(item.ShopDrawingsPath) ? (string.Format("/{0}/{1}/{2}/{3}", "images", item.CompanyId.ToString(), item.Id.ToString(), item.ShopDrawingsPath)) : "";
             }
-            if (area[0].Analysis == null)
-            {
-                var Analysis_id = Guid.NewGuid();
-                Guid Area_id = area[0].Id;
-                await _context.Analyses.AddAsync(new Analysis()
-                {
-                    Id = Analysis_id,
-                    AreaId = Area_id,
-                    CreateTime = DateTime.Now
-                });
-                await _context.SaveChangesAsync();
-                area = await _context.Areas
-                          .Include(x => x.Company)
-                          .Where(x => x.isDeleted == 0 && x.CompanyId == Id) //抓出資料表裡面沒被刪除的
-                          .OrderBy(x => x.CreateTime)
-                          .Include(x => x.Analysis)
-                          .ToListAsync();
-            }
+            //if (area[0].Analysis == null)
+            //{
+            //    var Analysis_id = Guid.NewGuid();
+            //    Guid Area_id = area[0].Id;
+            //    await _context.Analyses.AddAsync(new Analysis()
+            //    {
+            //        Id = Analysis_id,
+            //        AreaId = Area_id,
+            //        CreateTime = DateTime.Now
+            //    });
+            //    await _context.SaveChangesAsync();
+            //    area = await _context.Areas
+            //              .Include(x => x.Company)
+            //              .Where(x => x.isDeleted == 0 && x.CompanyId == Id) //抓出資料表裡面沒被刪除的
+            //              .OrderBy(x => x.CreateTime)
+            //              .Include(x => x.Analysis)
+            //              .ToListAsync();
+            //}
             return View(area);
         }
         [HttpPost]
