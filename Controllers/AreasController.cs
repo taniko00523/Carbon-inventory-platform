@@ -707,7 +707,8 @@ namespace Carbon_inventory_platform.Controllers
             }
             else
             {
-                await GHGCheckAsync(device.Id, device.Name, device.Material, device.Scope, device.EmissionPattern, _context.Areas.FirstOrDefault(x => x.Id == device.AreaId).Year);
+                var area = _context.Areas.FirstOrDefault(x => x.Id == device.AreaId);
+                await GHGCheckAsync(device, device.Name, device.Material, device.Scope, device.EmissionPattern, area.Year, area.ARVersion);
             }
 
             if (device.Id != Guid.Empty)

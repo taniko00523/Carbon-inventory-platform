@@ -158,10 +158,8 @@ namespace Carbon_inventory_platform.Controllers
 
             return true;
         }
-        public async Task<GHG?> GHGCheckAsync(Guid id, string deviceName, string material, string scope, string emisspatern, int year) //設定資料庫排碳係數及GWP
+        public async Task<GHG?> GHGCheckAsync(Device device, string deviceName, string material, string scope, string emisspatern, int year, int ARVersion) //設定資料庫排碳係數及GWP
         {
-            var Device = await _context.Devices.Include(x => x.Area).Where(x => x.Id == id).FirstOrDefaultAsync();
-            int ARVersion = Device.Area.ARVersion;
             var GWP = await _context.GWPs.ToListAsync();
             var MaterialList = await _context.Materials
                                     .Where(x => x.Name == material && x.Scope == scope && x.EmissionPattern == emisspatern && x.Year <= year).ToListAsync();
@@ -177,7 +175,7 @@ namespace Carbon_inventory_platform.Controllers
                         var toCreateCO2 = new GHG();
                         toCreateCO2.Id = Guid.NewGuid();
                         toCreateCO2.Name = "CO2";
-                        toCreateCO2.DeviceId = id;
+                        toCreateCO2.DeviceId = device.Id;
                         toCreateCO2.CEF = Material.CO2CEF;
                         toCreateCO2.CEF_UUL = Material.CO2UUL;
                         toCreateCO2.CEF_ULL = Material.CO2ULL;
@@ -186,9 +184,9 @@ namespace Carbon_inventory_platform.Controllers
                         toCreateCO2.all_ULL = CalculateRoundDistance(Material.CO2ULL, Material.DataULL);
                         toCreateCO2.CreateTime = DateTime.Now;
                         _context.AddRange(toCreateCO2);
-                        Device.CEF_Correction = Material.CEF_Correction;
-                        Device.data_UUL = Material.DataUUL;
-                        Device.data_ULL = Material.DataULL;
+                        device.CEF_Correction = Material.CEF_Correction;
+                        device.data_UUL = Material.DataUUL;
+                        device.data_ULL = Material.DataULL;
 
                     }
                     if (Material.CH4CEF != 0)
@@ -223,7 +221,7 @@ namespace Carbon_inventory_platform.Controllers
                         }
                         toCreateCH4.Id = Guid.NewGuid();
                         toCreateCH4.Name = "CH4";
-                        toCreateCH4.DeviceId = id;
+                        toCreateCH4.DeviceId = device.Id;
                         toCreateCH4.CEF = Material.CH4CEF;
                         toCreateCH4.CEF_UUL = Material.CH4UUL;
                         toCreateCH4.CEF_ULL = Material.CH4ULL;
@@ -231,16 +229,16 @@ namespace Carbon_inventory_platform.Controllers
                         toCreateCH4.all_ULL = CalculateRoundDistance(Material.CH4ULL, Material.DataULL);
                         toCreateCH4.CreateTime = DateTime.Now;
                         _context.Add(toCreateCH4);
-                        Device.CEF_Correction = Material.CEF_Correction;
-                        Device.data_UUL = Material.DataUUL;
-                        Device.data_ULL = Material.DataULL;
+                        device.CEF_Correction = Material.CEF_Correction;
+                        device.data_UUL = Material.DataUUL;
+                        device.data_ULL = Material.DataULL;
                     }
                     if (Material.N2OCEF != 0)
                     {
                         var toCreateN2O = new GHG();
                         toCreateN2O.Id = Guid.NewGuid();
                         toCreateN2O.Name = "N2O";
-                        toCreateN2O.DeviceId = id;
+                        toCreateN2O.DeviceId = device.Id;
                         toCreateN2O.CEF = Material.N2OCEF;
                         toCreateN2O.CEF_UUL = Material.N2OUUL;
                         toCreateN2O.CEF_ULL = Material.N2OULL;
@@ -249,16 +247,16 @@ namespace Carbon_inventory_platform.Controllers
                         toCreateN2O.all_ULL = CalculateRoundDistance(Material.N2OULL, Material.DataULL);
                         toCreateN2O.CreateTime = DateTime.Now;
                         _context.Add(toCreateN2O);
-                        Device.CEF_Correction = Material.CEF_Correction;
-                        Device.data_UUL = Material.DataUUL;
-                        Device.data_ULL = Material.DataULL;
+                        device.CEF_Correction = Material.CEF_Correction;
+                        device.data_UUL = Material.DataUUL;
+                        device.data_ULL = Material.DataULL;
                     }
                     if (Material.HFCSCEF != 0)
                     {
                         var toCreateHFCS = new GHG();
                         toCreateHFCS.Id = Guid.NewGuid();
                         toCreateHFCS.Name = "HFCS";
-                        toCreateHFCS.DeviceId = id;
+                        toCreateHFCS.DeviceId = device.Id;
                         toCreateHFCS.CEF = Material.HFCSCEF;
                         toCreateHFCS.CEF_UUL = Material.HFCSUUL;
                         toCreateHFCS.CEF_ULL = Material.HFCSULL;
@@ -267,16 +265,16 @@ namespace Carbon_inventory_platform.Controllers
                         toCreateHFCS.all_ULL = CalculateRoundDistance(Material.HFCSULL, Material.DataULL);
                         toCreateHFCS.CreateTime = DateTime.Now;
                         _context.Add(toCreateHFCS);
-                        Device.CEF_Correction = Material.CEF_Correction;
-                        Device.data_UUL = Material.DataUUL;
-                        Device.data_ULL = Material.DataULL;
+                        device.CEF_Correction = Material.CEF_Correction;
+                        device.data_UUL = Material.DataUUL;
+                        device.data_ULL = Material.DataULL;
                     }
                     if (Material.PFCSCEF != 0)
                     {
                         var toCreatePFCS = new GHG();
                         toCreatePFCS.Id = Guid.NewGuid();
                         toCreatePFCS.Name = "PFCS";
-                        toCreatePFCS.DeviceId = id;
+                        toCreatePFCS.DeviceId = device.Id;
                         toCreatePFCS.CEF = Material.PFCSCEF;
                         toCreatePFCS.CEF_UUL = Material.PFCSUUL;
                         toCreatePFCS.CEF_ULL = Material.PFCSULL;
@@ -285,16 +283,16 @@ namespace Carbon_inventory_platform.Controllers
                         toCreatePFCS.all_ULL = CalculateRoundDistance(Material.PFCSULL, Material.DataULL);
                         toCreatePFCS.CreateTime = DateTime.Now;
                         _context.Add(toCreatePFCS);
-                        Device.CEF_Correction = Material.CEF_Correction;
-                        Device.data_UUL = Material.DataUUL;
-                        Device.data_ULL = Material.DataULL;
+                        device.CEF_Correction = Material.CEF_Correction;
+                        device.data_UUL = Material.DataUUL;
+                        device.data_ULL = Material.DataULL;
                     }
                     if (Material.SF6CEF != 0)
                     {
                         var toCreateSF6 = new GHG();
                         toCreateSF6.Id = Guid.NewGuid();
                         toCreateSF6.Name = "SF6";
-                        toCreateSF6.DeviceId = id;
+                        toCreateSF6.DeviceId = device.Id;
                         toCreateSF6.CEF = Material.SF6CEF;
                         toCreateSF6.CEF_UUL = Material.SF6UUL;
                         toCreateSF6.CEF_ULL = Material.SF6ULL;
@@ -303,16 +301,16 @@ namespace Carbon_inventory_platform.Controllers
                         toCreateSF6.all_ULL = CalculateRoundDistance(Material.SF6ULL, Material.DataULL);
                         toCreateSF6.CreateTime = DateTime.Now;
                         _context.Add(toCreateSF6);
-                        Device.CEF_Correction = Material.CEF_Correction;
-                        Device.data_UUL = Material.DataUUL;
-                        Device.data_ULL = Material.DataULL;
+                        device.CEF_Correction = Material.CEF_Correction;
+                        device.data_UUL = Material.DataUUL;
+                        device.data_ULL = Material.DataULL;
                     }
                     if (Material.NF3CEF != 0)
                     {
                         var toCreateNF3 = new GHG();
                         toCreateNF3.Id = Guid.NewGuid();
                         toCreateNF3.Name = "NF3";
-                        toCreateNF3.DeviceId = id;
+                        toCreateNF3.DeviceId = device.Id;
                         toCreateNF3.CEF = Material.NF3CEF;
                         toCreateNF3.CEF_UUL = Material.NF3UUL;
                         toCreateNF3.CEF_ULL = Material.NF3ULL;
@@ -321,9 +319,9 @@ namespace Carbon_inventory_platform.Controllers
                         toCreateNF3.all_ULL = CalculateRoundDistance(Material.NF3ULL, Material.DataULL);
                         toCreateNF3.CreateTime = DateTime.Now;
                         _context.Add(toCreateNF3);
-                        Device.CEF_Correction = Material.CEF_Correction;
-                        Device.data_UUL = Material.DataUUL;
-                        Device.data_ULL = Material.DataULL;
+                        device.CEF_Correction = Material.CEF_Correction;
+                        device.data_UUL = Material.DataUUL;
+                        device.data_ULL = Material.DataULL;
                     }
                 }
                 else if (otherMaterial != null) //目前只有冷媒設備，但我包含了PFCS以防萬一
@@ -333,7 +331,7 @@ namespace Carbon_inventory_platform.Controllers
                         var toCreateHFCS = new GHG();
                         toCreateHFCS.Id = Guid.NewGuid();
                         toCreateHFCS.Name = "HFCS";
-                        toCreateHFCS.DeviceId = id;
+                        toCreateHFCS.DeviceId = device.Id;
                         toCreateHFCS.CEF = otherMaterial.HFCSCEF;
                         toCreateHFCS.CEF_UUL = otherMaterial.HFCSUUL;
                         toCreateHFCS.CEF_ULL = otherMaterial.HFCSULL;
@@ -352,16 +350,16 @@ namespace Carbon_inventory_platform.Controllers
                         toCreateHFCS.all_ULL = CalculateRoundDistance(otherMaterial.HFCSULL, otherMaterial.DataULL);
                         toCreateHFCS.CreateTime = DateTime.Now;
                         _context.Add(toCreateHFCS);
-                        Device.CEF_Correction = otherMaterial.CEF_Correction;
-                        Device.data_UUL = otherMaterial.DataUUL;
-                        Device.data_ULL = otherMaterial.DataULL;
+                        device.CEF_Correction = otherMaterial.CEF_Correction;
+                        device.data_UUL = otherMaterial.DataUUL;
+                        device.data_ULL = otherMaterial.DataULL;
                     }
                     if (otherMaterial.PFCSCEF != 0)
                     {
                         var toCreatePFCS = new GHG();
                         toCreatePFCS.Id = Guid.NewGuid();
                         toCreatePFCS.Name = "PFCS";
-                        toCreatePFCS.DeviceId = id;
+                        toCreatePFCS.DeviceId = device.Id;
                         toCreatePFCS.CEF = otherMaterial.PFCSCEF;
                         toCreatePFCS.CEF_UUL = otherMaterial.PFCSUUL;
                         toCreatePFCS.CEF_ULL = otherMaterial.PFCSULL;
@@ -370,9 +368,9 @@ namespace Carbon_inventory_platform.Controllers
                         toCreatePFCS.all_ULL = CalculateRoundDistance(otherMaterial.PFCSULL, otherMaterial.DataULL);
                         toCreatePFCS.CreateTime = DateTime.Now;
                         _context.Add(toCreatePFCS);
-                        Device.CEF_Correction = otherMaterial.CEF_Correction;
-                        Device.data_UUL = otherMaterial.DataUUL;
-                        Device.data_ULL = otherMaterial.DataULL;
+                        device.CEF_Correction = otherMaterial.CEF_Correction;
+                        device.data_UUL = otherMaterial.DataUUL;
+                        device.data_ULL = otherMaterial.DataULL;
 
                     }
 
