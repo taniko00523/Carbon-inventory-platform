@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Carbon_inventory_platform.Controllers
@@ -39,14 +40,14 @@ namespace Carbon_inventory_platform.Controllers
         public async Task<IActionResult> AR5ReportAsync(Guid? id)
         {
             // 跳轉到Area修改AR版本
-            // 完後跳到Word3Aync
+            // 完後跳到MOEReportAync
             var areaId = TempData.Peek("areaId");
             return RedirectToAction("Index", "Devices", new { id = areaId });
-        } 
+        }
         public async Task<IActionResult> AR6ReportAsync(Guid? id)
         {
             // 跳轉到Area修改AR版本
-            // 完後跳到Word3Aync
+            // 完後跳到MOEReportAync
             var areaId = TempData.Peek("areaId");
             return RedirectToAction("Index", "Devices", new { id = areaId });
         }
@@ -63,8 +64,8 @@ namespace Carbon_inventory_platform.Controllers
             return View(emissions);
 
         }
-        
-        public async Task<IActionResult> Word3Async(Guid id)
+
+        public async Task<IActionResult> MOEReportAsync(Guid id)
         {
             bool success = await CountEmissionAsync(id);
             if (!success)
@@ -72,35 +73,48 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
 
-            var dataQuery = _context.Areas
-                .Where(x => x.Id == id && x.isDeleted == 0)
-                .Include(x => x.Company)
-                .Select(area => new
-                {
-                    Area = area,
-                    Devices = _context.Devices.Where(d => d.AreaId == area.Id && d.isDeleted == 0)
-                                               .OrderBy(d => d.Scope)
-                                               .ThenBy(d => d.EmissionPattern).ToList(),
-                    AllGHGs = _context.Devices.Where(d => d.AreaId == area.Id && d.isDeleted == 0)
-                                               .SelectMany(d => d.GHGs).ToList(),
-                    AllActivityData = _context.ActivityDatas.ToList()
+            var dataResult = await _context.Areas
+                                        .Where(x => x.Id == id && x.isDeleted == 0)
+                                        .Include(x => x.Company)
+                                        .Select(area => new
+                                        {
+                                            Area = area,
+                                            Devices = _context.Devices
+                                                              .Where(d => d.AreaId == area.Id && d.isDeleted == 0)
+                                                              .OrderBy(d => d.Scope)
+                                                              .ThenBy(d => d.EmissionPattern)
+                                                              .ToList(),
+                                            AllGHGs = _context.Devices
+                                                              .Where(d => d.AreaId == area.Id && d.isDeleted == 0)
+                                                              .SelectMany(d => d.GHGs)
+                                                              .ToList(),
+                                            AllActivityData = _context.ActivityDatas.ToList()
+                                        })
+                                        .FirstOrDefaultAsync();
 
-                });
+            if (dataResult == null)
+                return NotFound();
 
-            var dataResult = await dataQuery.FirstOrDefaultAsync();
-            if (dataResult == null) return NotFound();
-            var AllActivityData = dataResult.AllActivityData;
             var data = dataResult.Area;
             if (data.Company == null)
-            {
                 return NotFound();
-            }
+
             var device = dataResult.Devices;
             var AllGHGs = dataResult.AllGHGs;
+            var AllActivityData = dataResult.AllActivityData;
+
+            var baseYear = await _context.Areas
+                .Where(x => x.CompanyId == data.Company.Id && x.BaseYear && x.isDeleted==0)
+                .Select(x => x.Year)
+                .FirstOrDefaultAsync();
+
+            if (baseYear == null)
+                return NotFound();
+
 
             //-----------------檔案設定
             string currentDirectory = Directory.GetCurrentDirectory();
-            string filePath = Path.Combine(currentDirectory, "wwwroot\\doc\\", "溫盤報告書範本3.docx");
+            string filePath = Path.Combine(currentDirectory, "wwwroot\\doc\\", "MOEReport.docx");
             string newFilePath = Path.Combine(currentDirectory, "wwwroot\\output\\");
             string fileName = data.Year + "年度" + "-" + data.Company.Name + (data.Name != null ? ("-" + data.Name) : "") + "-溫室氣體盤查報告書.docx";
             string newFile = Path.Combine(newFilePath, fileName);
@@ -152,12 +166,12 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     string trimCM = data.Company.CompanyInformation.Replace(" ", "");
                     trimCM = trimCM.Replace("\r\n", "\r\n    ");
-                    UpdateReplacePattern("公司基本資料", trimCM);
+                    UpdateReplacePattern("公司簡介", trimCM);
                 }
                 else
                 {
 
-                    UpdateReplacePattern("公司基本資料", " ");
+                    UpdateReplacePattern("公司簡介", " ");
                 }
                 if (data.Company.ReportingPurposes != null)
                 {
@@ -336,7 +350,8 @@ namespace Carbon_inventory_platform.Controllers
                 UpdateReplacePattern("盤查月", DateTime.Now.Month.ToString());
                 UpdateReplacePattern("盤查日", DateTime.Now.Day.ToString());
                 UpdateReplacePattern("地址", data.FullAddress);
-                UpdateReplacePattern("民國基準年", data.Year.ToString());
+                UpdateReplacePattern("民國基準年", baseYear.ToString());
+                UpdateReplacePattern("西元基準年", (baseYear + 1911).ToString());
 
                 ScopeDevice(doc, device, "類別一");
                 ScopeDevice(doc, device, "類別二");
@@ -499,35 +514,48 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
 
-            var dataQuery = _context.Areas
-                .Where(x => x.Id == id && x.isDeleted == 0)
-                .Include(x => x.Company)
-                .Select(area => new
-                {
-                    Area = area,
-                    Devices = _context.Devices.Where(d => d.AreaId == area.Id && d.isDeleted == 0)
-                                               .OrderBy(d => d.Scope)
-                                               .ThenBy(d => d.EmissionPattern).ToList(),
-                    AllGHGs = _context.Devices.Where(d => d.AreaId == area.Id && d.isDeleted == 0)
-                                               .SelectMany(d => d.GHGs).ToList(),
-                    AllActivityData = _context.ActivityDatas.ToList()
 
-                });
+            var dataResult = await _context.Areas
+                                        .Where(x => x.Id == id && x.isDeleted == 0)
+                                        .Include(x => x.Company)
+                                        .Select(area => new
+                                        {
+                                            Area = area,
+                                            Devices = _context.Devices
+                                                              .Where(d => d.AreaId == area.Id && d.isDeleted == 0)
+                                                              .OrderBy(d => d.Scope)
+                                                              .ThenBy(d => d.EmissionPattern)
+                                                              .ToList(),
+                                            AllGHGs = _context.Devices
+                                                              .Where(d => d.AreaId == area.Id && d.isDeleted == 0)
+                                                              .SelectMany(d => d.GHGs)
+                                                              .ToList(),
+                                            AllActivityData = _context.ActivityDatas.ToList()
+                                        })
+                                        .FirstOrDefaultAsync();
 
-            var dataResult = await dataQuery.FirstOrDefaultAsync();
-            if (dataResult == null) return NotFound();
-            var AllActivityData = dataResult.AllActivityData;
+            if (dataResult == null)
+                return NotFound();
+
             var data = dataResult.Area;
             if (data.Company == null)
-            {
                 return NotFound();
-            }
+
             var device = dataResult.Devices;
             var AllGHGs = dataResult.AllGHGs;
+            var AllActivityData = dataResult.AllActivityData;
+
+            var baseYear = await _context.Areas
+                .Where(x => x.CompanyId == data.Company.Id && x.BaseYear)
+                .Select(x => x.Year)
+                .FirstOrDefaultAsync();
+
+            if (baseYear == null)
+                return NotFound();
 
             //-----------------檔案設定
             string currentDirectory = Directory.GetCurrentDirectory();
-            string filePath = Path.Combine(currentDirectory, "wwwroot\\doc\\", "資策會版.docx");
+            string filePath = Path.Combine(currentDirectory, "wwwroot\\doc\\", "IIIReport.docx");
             string newFilePath = Path.Combine(currentDirectory, "wwwroot\\output\\");
             string fileName = data.Year + "年度" + "-" + data.Company.Name + (data.Name != null ? ("-" + data.Name) : "") + "-溫室氣體盤查報告書.docx";
             string newFile = Path.Combine(newFilePath, fileName);
@@ -578,12 +606,12 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     string trimCM = data.Company.CompanyInformation.Replace(" ", "");
                     trimCM = trimCM.Replace("\r\n", "\r\n    ");
-                    UpdateReplacePattern("公司基本資料", trimCM);
+                    UpdateReplacePattern("公司簡介", trimCM);
                 }
                 else
                 {
 
-                    UpdateReplacePattern("公司基本資料", " ");
+                    UpdateReplacePattern("公司簡介", " ");
                 }
                 if (data.Company.ReportingPurposes != null)
                 {
@@ -762,7 +790,8 @@ namespace Carbon_inventory_platform.Controllers
                 UpdateReplacePattern("盤查月", DateTime.Now.Month.ToString());
                 UpdateReplacePattern("盤查日", DateTime.Now.Day.ToString());
                 UpdateReplacePattern("地址", data.FullAddress);
-                UpdateReplacePattern("民國基準年", data.Year.ToString());
+                UpdateReplacePattern("民國基準年", baseYear.ToString());
+                UpdateReplacePattern("西元基準年", (baseYear + 1911).ToString());
 
                 ScopeDevice(doc, device, "類別一");
                 ScopeDevice(doc, device, "類別二");
