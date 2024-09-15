@@ -68,48 +68,48 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-using (var scope = app.Services.CreateScope())
-{
-    // setting initial data in system, Role, Account...
-    // Role:
-    var roleManager =
-        scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var roles = new[] { "Admin", "User"};
+//using (var scope = app.Services.CreateScope())
+//{
+//    // setting initial data in system, Role, Account...
+//    // Role:
+//    var roleManager =
+//        scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+//    string[] roles = { "SuperAdmin", "Admin", "PowerUser", "User" };
 
-    foreach (var role in roles)
-    {
-        if(!await roleManager.RoleExistsAsync(role)) // 如果角色不存在
-        {
-            // 建立角色
-            await roleManager.CreateAsync(new IdentityRole(role));
-        }
-    }
-}
+//    foreach (var role in roles)
+//    {
+//        if(!await roleManager.RoleExistsAsync(role)) // 如果角色不存在
+//        {
+//            // 建立角色
+//            await roleManager.CreateAsync(new IdentityRole(role));
+//        }
+//    }
+//}
 
-using (var scope = app.Services.CreateScope())
-{
-    // setting initial data in system, Role, User...
-    // User:
-    var UserManager =
-        scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+//using (var scope = app.Services.CreateScope())
+//{
+//    // setting initial data in system, Role, User...
+//    // User:
+//    var UserManager =
+//        scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-    string account = "Admin"; //新增一個預設的管理員帳號
-    string password = "!Admin1234";
+//    string account = "Admin"; //新增一個預設的管理員帳號
+//    string password = "!Admin1234";
 
-    if(await UserManager.FindByEmailAsync(account) == null) // 如果Admin 帳號不存在
-    {
-        // 建立一個Admin用戶
-        var user = new ApplicationUser();
-        user.UserName = account;
-        user.Email = account;
+//    if(await UserManager.FindByEmailAsync(account) == null) // 如果Admin 帳號不存在
+//    {
+//        // 建立一個Admin用戶
+//        var user = new ApplicationUser();
+//        user.UserName = account;
+//        user.Email = account;
 
-        // 新增至資料庫
-        await UserManager.CreateAsync(user, password);
+//        // 新增至資料庫
+//        await UserManager.CreateAsync(user, password);
 
-        // 賦予Admin身分
-        await UserManager.AddToRoleAsync(user, "Admin");    
-    }
-}
+//        // 賦予Admin身分
+//        await UserManager.AddToRoleAsync(user, "Admin");    
+//    }
+//}
 
 app.Run();
 
