@@ -14,47 +14,109 @@
         {
             <h3>@TempData.Peek("companyName")-@TempData.Peek("year")盤查年度</h3>
         }
-        <p>
-            @if (Model.Count() < 1)
-            {
-                <a class="btn btn-primary" asp-action="Default" asp-route-id="@TempData.Peek("areaId")">導入預設</a>
-            }
-            <a class="btn btn-primary" asp-action="Create">新增設備</a>
-            @if (Model.Count() > 1)
-            {
-                @if (Model.Any(x => x.Area.All != 0))
-                {
-                    <a class="btn btn-warning" asp-controller="Emission" asp-action="Chart" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
-                }
-                else
-                {
-                    <a class="btn btn-warning" onclick="showAlert('尚未設定活動數據！\r\n請先設定活動數據！');">總排放量</a>
+        <div class="table-computer-w1024">
+            <div class="d-flex justify-content-between">
+                <div class="mr-auto">
+                    <a class="btn btn-primary" asp-action="Create">新增設備</a>
+                    <form id="uploadForm" enctype="multipart/form-data" style="display: inline-block; width:500px">
+                        <input type="hidden" id="areaId" value="@TempData.Peek("areaId")" />
+                        <input class="form-control" type="file" id="excelFile" name="file" accept=".xlsx, .xls" style="width:50%; display:inline-block;" />
+                        <button class="btn btn-primary" type="submit">匯入</button>
+                    </form>
+                </div>
 
-                }
-                if (Model.Any(x => x.Area.All != 0))
-                {
-                    <a class="btn btn-warning" asp-controller="Emission" asp-action="Word3" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
-                }
-                else
-                {
-                    <a class="btn btn-warning" onclick="showAlert('尚未設定公司資料！\r\n請先至右上角點擊使用者名稱設定公司資料！');" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
-                }
-            }
-            @if (User.IsInRole("User"))
-            {
-                <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
-            }
-            @if (User.IsInRole("Admin"))
-            {
-                <a class="btn btn-warning" asp-controller="Emission" asp-action="AR5Report" asp-route-id="@TempData.Peek("areaId")">AR5報告書下載</a>
-                <a class="btn btn-warning" asp-controller="Emission" asp-action="AR6Report" asp-route-id="@TempData.Peek("areaId")">AR6報告書下載</a>
+                <div>
+                    @if (Model.Count() < 1)
+                    {
+                        <a class="btn btn-primary" asp-action="Default" asp-route-id="@TempData.Peek("areaId")">導入預設</a>
+                        <a href="@Url.Action("DownloadSampleFile", "Devices")" class="btn btn-primary">下載範例檔</a>
+                    }
+                    else
+                    {
+                        @if (Model.Any(x => x.Area.All != 0))
+                        {
+                            <a class="btn btn-warning" asp-controller="Emission" asp-action="Chart" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-warning" onclick="showAlert('尚未設定活動數據！\r\n請先設定活動數據！');">排放量圖表</a>
+                        }
+                        @if (Model.Any(x => x.Area.All != 0))
+                        {
+                            <a class="btn btn-warning" asp-controller="Emission" asp-action="MOEReport" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-warning" onclick="showAlert('尚未設定公司資料！\r\n請先至右上角點擊使用者名稱設定公司資料！');" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
+                        }
+                        @if (User.IsInRole("User"))
+                        {
+                            <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a class="btn btn-warning" asp-controller="Emission" asp-action="IISReport" asp-route-id="@TempData.Peek("areaId")">資策會版報告書下載</a>
+                            <a class="btn btn-warning" asp-controller="Devices" asp-action="DeviceExcel" asp-route-id="@TempData.Peek("areaId")">清冊匯出</a>
+                            <a class="btn btn-warning" asp-controller="Devices" asp-action="ExportDeviceExcel" asp-route-id="@TempData.Peek("areaId")">排放源資料匯出</a>
+                            <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="table-phone-w1024">
+            <div >
+                <div class="mr-auto">
+                    <a class="btn btn-primary" asp-action="Create">新增設備</a>
+                    <form id="uploadForm" enctype="multipart/form-data" style="display: inline-block; width:500px">
+                        <input type="hidden" id="areaId" value="@TempData.Peek("areaId")" />
+                        <input class="form-control" type="file" id="excelFile" name="file" accept=".xlsx, .xls" style="width:50%; display:inline-block;" />
+                        <button class="btn btn-primary" type="submit">匯入</button>
+                    </form>
+                </div>
 
-                <a class="btn btn-warning" asp-controller="Emission" asp-action="IISReport" asp-route-id="@TempData.Peek("areaId")">資策會版報告書下載</a>
-                <a class="btn btn-warning" asp-controller="Devices" asp-action="DeviceExcel" asp-route-id="@TempData.Peek("areaId")">清冊匯出</a>
-                <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
-            }
-            <h7 style="color:red">@TempData["Error"]</h7>
-        </p>
+                <div>
+                    @if (Model.Count() < 1)
+                    {
+                        <a class="btn btn-primary" asp-action="Default" asp-route-id="@TempData.Peek("areaId")">導入預設</a>
+                        <a href="@Url.Action("DownloadSampleFile", "Devices")" class="btn btn-primary">下載範例檔</a>
+                    }
+                    else
+                    {
+                        @if (Model.Any(x => x.Area.All != 0))
+                        {
+                            <a class="btn btn-warning" asp-controller="Emission" asp-action="Chart" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-warning" onclick="showAlert('尚未設定活動數據！\r\n請先設定活動數據！');">總排放量</a>
+                        }
+                        @if (Model.Any(x => x.Area.All != 0))
+                        {
+                            <a class="btn btn-warning" asp-controller="Emission" asp-action="MOEReport" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-warning" onclick="showAlert('尚未設定公司資料！\r\n請先至右上角點擊使用者名稱設定公司資料！');" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
+                        }
+                        @if (User.IsInRole("User"))
+                        {
+                            <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a class="btn btn-warning" asp-controller="Emission" asp-action="IISReport" asp-route-id="@TempData.Peek("areaId")">資策會版報告書下載</a>
+                            <a class="btn btn-warning" asp-controller="Devices" asp-action="DeviceExcel" asp-route-id="@TempData.Peek("areaId")">清冊匯出</a>
+                            <a class="btn btn-warning" asp-controller="Devices" asp-action="ExportDeviceExcel" asp-route-id="@TempData.Peek("areaId")">排放源資料匯出</a>
+                            <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+
+        <h7 style="color:red">@TempData["Error"]</h7>
     </div>
 </div>
 
@@ -366,9 +428,48 @@
     }
 </div>
 
+@section scripts
+{
+    <script>
+        function showAlert(text) {
+            alert(text);
+        }
 
-<script>
-    function showAlert(text) {
-        alert(text);
-    }
-</script>
+        $(document).ready(function () {
+            $("#uploadForm").on('submit', function (event) {
+                event.preventDefault(); // 防止表單的默認提交動作
+                var formData = new FormData();
+                var fileInput = $('#excelFile')[0].files[0];
+                var areaId = $('#areaId').val(); // 獲取隱藏的id值
+                if (!fileInput) {
+                    alert("請選擇一個Excel文件");
+                    return;
+                }
+
+                formData.append("file", fileInput);
+                formData.append("id", areaId); // 添加id到FormData
+                // 發送Ajax請求
+                $.ajax({
+                    url: '@Url.Action("ImportDeviceExcel", "Devices")', // 確保 URL 正確
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        alert("匯入成功！");
+                        window.location.reload();
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("匯入失敗：" + error);
+                        console.log(xhr.responseText);
+                    }
+                });
+
+            });
+        });
+
+
+    </script>
+
+}
