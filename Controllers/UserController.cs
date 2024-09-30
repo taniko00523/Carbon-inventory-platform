@@ -5,6 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using System.Collections.Generic;
+using System.Globalization;
+using Xceed.Document.NET;
 
 [Authorize(Roles = "Admin")]
 public class UserController : Controller
@@ -52,6 +57,103 @@ public class UserController : Controller
         }
         viewModel.Remove(viewModel.FirstOrDefault(x => x.ApplicationUser.Email == "Admin"));
         return View(viewModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> BulkAdd(IFormFile excelFile)
+    {
+        if (excelFile == null || excelFile.Length == 0)
+        {
+            ModelState.AddModelError("", "Please upload a valid Excel file.");
+            return RedirectToAction(nameof(Index));
+        }
+
+        var usersToAdd = new List<CompanyUserViewModel>();
+
+        try
+        {
+            using (var stream = new MemoryStream())
+            {
+                await excelFile.CopyToAsync(stream);
+                stream.Position = 0;
+
+                // 使用 NPOI 讀取 Excel 文件
+                IWorkbook workbook = new XSSFWorkbook(stream);
+                ISheet sheet = workbook.GetSheetAt(0);
+
+                // 假設第一行是標題行，從第二行開始讀取
+                for (int row = 1; row <= sheet.LastRowNum; row++)
+                {
+                    IRow currentRow = sheet.GetRow(row);
+                    if (currentRow == null) continue;
+
+                    var userModel = new CompanyUserViewModel
+                    {
+                        ApplicationUser = new ApplicationUser
+                        {
+                            UserName = currentRow.GetCell(0)?.ToString(),  // 假設第一列是帳號
+                        },
+                        Password = currentRow.GetCell(1)?.ToString(),       // 假設第三列是密碼
+                        UserLimitData = DateTime.ParseExact(currentRow.GetCell(2)?.ToString(), "yyyyMMdd", CultureInfo.InvariantCulture)
+                        // 假設第四列是使用期限
+                    };
+
+                    usersToAdd.Add(userModel);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("", $"Error reading Excel file: {ex.Message}");
+            return RedirectToAction(nameof(Index));
+        }
+
+        // 批量創建用戶
+        foreach (var model in usersToAdd)
+        {
+            var user = CreateUser();
+            await _userStore.SetUserNameAsync(user, model.ApplicationUser.UserName, CancellationToken.None);
+            await _emailStore.SetEmailAsync(user, model.ApplicationUser.UserName, CancellationToken.None);
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                var role = await _roleManager.FindByNameAsync("Guest");
+
+                if (role != null)
+                {
+                    await _userManager.AddToRoleAsync(user, role.Name);
+                }
+                user.UserLimitData = model.UserLimitData;
+                await _userManager.UpdateAsync(user);
+                await CreateCompanyAsync(user);
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, $"Error creating user {model.ApplicationUser.UserName}: {error.Description}");
+                }
+            }
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> SearchByRole(string role)
+    {
+        // 根據角色過濾用戶
+        var usersInRole = await _userManager.GetUsersInRoleAsync(role);
+
+        // 構建對應的 ViewModel
+        var viewModel = usersInRole.Select(user => new CompanyUserViewModel
+        {
+            ApplicationUser = user,
+            Company = _context.Companies.FirstOrDefault(x => x.UserId == user.Id)
+        }).ToList();
+
+        return View("Index", viewModel);
     }
 
     [HttpPost]

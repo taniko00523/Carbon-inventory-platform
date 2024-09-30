@@ -1,7 +1,28 @@
 ﻿@model IEnumerable<Carbon_inventory_platform.ViewModel.CompanyUserViewModel>
 
 <h2>用戶總覽</h2>
-<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">新增用戶</a>
+<div class="d-flex justify-content-between">
+    <div class="">
+        <form asp-action="BulkAdd" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="excelFile">匯入批次新增用戶名單</label>
+                <input type="file" name="excelFile" class="form-control" style="width:50%; display:inline-block;" />
+            </div>
+            <button type="submit" class="btn btn-primary">匯入</button>
+        </form>
+    </div>
+    <div>
+        <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">新增用戶</a>
+    </div>
+</div>
+<hr>
+<div class="d-flex justify-content-start mb-3">
+    <button class="btn btn-outline-primary me-2" onclick="searchByRole('Guest')">搜尋 Guest</button>
+    <button class="btn btn-outline-primary me-2" onclick="searchByRole('User')">搜尋 User</button>
+    <button class="btn btn-outline-primary me-2" onclick="searchByRole('PowerUser')">搜尋 PowerUser</button>
+</div>
+<hr>
+
 @if (ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
 {
     <div class="alert alert-danger">
@@ -228,4 +249,9 @@
             userLimitDataInput.value = today;
         }
     });
+
+    function searchByRole(role) {
+        // 使用 JavaScript 發送請求以過濾角色
+        window.location.href = '@Url.Action("SearchByRole", "User")' + '?role=' + role;
+    }
 </script>
