@@ -764,7 +764,7 @@ namespace Carbon_inventory_platform.Controllers
         public async Task<IActionResult> DeviceExcelAsync(Guid id)
         {
             // 读取现有的Excel文件
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ExcelReport.xlsx");
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "excel", "ExcelReport.xlsx");
             IWorkbook workbook;
             using (var file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
