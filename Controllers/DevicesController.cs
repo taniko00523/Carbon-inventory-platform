@@ -246,7 +246,7 @@ namespace Carbon_inventory_platform.Controllers
                 };
 
                 gwpNames = _context.GWPs
-                    .Where(x => x.ARCount == arVersion)
+                    .Where(x => x.ARVersion == arVersion)
                     .Select(x => new { name = x.Name })
                     .Distinct()
                     .ToList<object>();

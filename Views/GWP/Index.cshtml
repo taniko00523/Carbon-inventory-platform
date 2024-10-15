@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Carbon_inventory_platform.Models.GWP>
 @{
-    int searchARcount = ViewBag.SearchARcount != null ? (int)ViewBag.SearchARcount : 0;
+    int searchARVersion = ViewBag.SearchARVersion != null ? (int)ViewBag.SearchARVersion : 0;
     ViewData["Title"] = "GWP總覽";
 }
 
@@ -9,12 +9,12 @@
     <div class="row">
         <div class="form-inline col-sm-3">
             <label>輸入AR版本:</label>
-            <input name="year" type="number" class="form-control" value="@searchARcount" />
+            <input name="year" type="number" class="form-control" value="@searchARVersion" />
             <button type="submit" class="btn btn-primary mt-2">查詢</button>
         </div>
     </div>
 </form>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddModal" @(ViewBag.SearchARcount != null ? "" : "disabled")>新增</button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddModal" @(ViewBag.SearchARVersion != null ? "" : "disabled")>新增</button>
 
 
 <!-- 新增用戶資料的模態框 -->
@@ -34,7 +34,7 @@
                         <label for="GWP_Num">GWP值：</label>
                         <input class="form-control" id="GWP_Num" name="Num" required />
 
-                        <input type="hidden" name="searchARcount" value="@searchARcount" />
+                        <input type="hidden" name="searchARVersion" value="@searchARVersion" />
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -65,7 +65,7 @@
                     <td>@gwp.Num.ToString("F2")</td>
                     <td>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal_@gwp.Id">編輯</button>
-                        <form method="post" asp-action="Delete" asp-route-id="@gwp.Id" asp-route-searchARcount="@searchARcount" onsubmit="return confirm('確定要刪除嗎？');">
+                        <form method="post" asp-action="Delete" asp-route-id="@gwp.Id" asp-route-searchARVersion="@searchARVersion" onsubmit="return confirm('確定要刪除嗎？');">
                             <button type="submit" class="btn btn-danger">刪除</button>
                         </form>
                     </td>
@@ -89,7 +89,7 @@
                                         <label for="editGWP_Num_@gwp.Id">GWP值：</label>
                                         <input class="form-control" id="editGWP_Num_@gwp.Id" name="Num" value="@gwp.Num" required />
 
-                                        <input type="hidden" name="searchARcount" value="@searchARcount" />
+                                        <input type="hidden" name="searchARVersion" value="@searchARVersion" />
                                     </div>
                                 </div>
                                 <div class="modal-footer">

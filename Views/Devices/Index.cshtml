@@ -55,6 +55,7 @@
                         }
                         @if (User.IsInRole("Admin"))
                         {
+                            <a class="btn btn-warning" asp-controller="Emission" asp-action="ISOReport" asp-route-id="@TempData.Peek("areaId")">ISO版報告書下載</a>
                             <a class="btn btn-warning" asp-controller="Emission" asp-action="IISReport" asp-route-id="@TempData.Peek("areaId")">資策會版報告書下載</a>
                             <a class="btn btn-warning" asp-controller="Devices" asp-action="DeviceExcel" asp-route-id="@TempData.Peek("areaId")">清冊匯出</a>
                             <a class="btn btn-warning" asp-controller="Devices" asp-action="ExportDeviceExcel" asp-route-id="@TempData.Peek("areaId")">排放源資料匯出</a>

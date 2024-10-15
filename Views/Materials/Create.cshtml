@@ -1,0 +1,173 @@
+﻿@model Carbon_inventory_platform.Models.Material
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Material</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Scope" class="control-label"></label>
+                <input asp-for="Scope" class="form-control" />
+                <span asp-validation-for="Scope" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmissionPattern" class="control-label"></label>
+                <input asp-for="EmissionPattern" class="form-control" />
+                <span asp-validation-for="EmissionPattern" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CO2CEF" class="control-label"></label>
+                <input asp-for="CO2CEF" class="form-control" />
+                <span asp-validation-for="CO2CEF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CO2ULL" class="control-label"></label>
+                <input asp-for="CO2ULL" class="form-control" />
+                <span asp-validation-for="CO2ULL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CO2UUL" class="control-label"></label>
+                <input asp-for="CO2UUL" class="form-control" />
+                <span asp-validation-for="CO2UUL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CH4CEF" class="control-label"></label>
+                <input asp-for="CH4CEF" class="form-control" />
+                <span asp-validation-for="CH4CEF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CH4ULL" class="control-label"></label>
+                <input asp-for="CH4ULL" class="form-control" />
+                <span asp-validation-for="CH4ULL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CH4UUL" class="control-label"></label>
+                <input asp-for="CH4UUL" class="form-control" />
+                <span asp-validation-for="CH4UUL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="N2OCEF" class="control-label"></label>
+                <input asp-for="N2OCEF" class="form-control" />
+                <span asp-validation-for="N2OCEF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="N2OULL" class="control-label"></label>
+                <input asp-for="N2OULL" class="form-control" />
+                <span asp-validation-for="N2OULL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="N2OUUL" class="control-label"></label>
+                <input asp-for="N2OUUL" class="form-control" />
+                <span asp-validation-for="N2OUUL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HFCSCEF" class="control-label"></label>
+                <input asp-for="HFCSCEF" class="form-control" />
+                <span asp-validation-for="HFCSCEF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HFCSULL" class="control-label"></label>
+                <input asp-for="HFCSULL" class="form-control" />
+                <span asp-validation-for="HFCSULL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HFCSUUL" class="control-label"></label>
+                <input asp-for="HFCSUUL" class="form-control" />
+                <span asp-validation-for="HFCSUUL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PFCSCEF" class="control-label"></label>
+                <input asp-for="PFCSCEF" class="form-control" />
+                <span asp-validation-for="PFCSCEF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PFCSULL" class="control-label"></label>
+                <input asp-for="PFCSULL" class="form-control" />
+                <span asp-validation-for="PFCSULL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PFCSUUL" class="control-label"></label>
+                <input asp-for="PFCSUUL" class="form-control" />
+                <span asp-validation-for="PFCSUUL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SF6CEF" class="control-label"></label>
+                <input asp-for="SF6CEF" class="form-control" />
+                <span asp-validation-for="SF6CEF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SF6ULL" class="control-label"></label>
+                <input asp-for="SF6ULL" class="form-control" />
+                <span asp-validation-for="SF6ULL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NF3UUL" class="control-label"></label>
+                <input asp-for="NF3UUL" class="form-control" />
+                <span asp-validation-for="NF3UUL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NF3CEF" class="control-label"></label>
+                <input asp-for="NF3CEF" class="form-control" />
+                <span asp-validation-for="NF3CEF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NF3ULL" class="control-label"></label>
+                <input asp-for="NF3ULL" class="form-control" />
+                <span asp-validation-for="NF3ULL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SF6UUL" class="control-label"></label>
+                <input asp-for="SF6UUL" class="form-control" />
+                <span asp-validation-for="SF6UUL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CEF_Correction" class="control-label"></label>
+                <input asp-for="CEF_Correction" class="form-control" />
+                <span asp-validation-for="CEF_Correction" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataUUL" class="control-label"></label>
+                <input asp-for="DataUUL" class="form-control" />
+                <span asp-validation-for="DataUUL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataULL" class="control-label"></label>
+                <input asp-for="DataULL" class="form-control" />
+                <span asp-validation-for="DataULL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Year" class="control-label"></label>
+                <input asp-for="Year" class="form-control" />
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Unit" class="control-label"></label>
+                <input asp-for="Unit" class="form-control" />
+                <span asp-validation-for="Unit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

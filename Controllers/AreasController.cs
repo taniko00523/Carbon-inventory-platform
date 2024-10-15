@@ -133,7 +133,7 @@ namespace Carbon_inventory_platform.Controllers
         }
         public IActionResult Create()
         {
-            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARCount).Distinct().ToList();
+            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARVersion).Distinct().ToList();
             return View();
         }
         [HttpPost]
@@ -194,12 +194,12 @@ namespace Carbon_inventory_platform.Controllers
 
 
             }
-            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARCount).Distinct().ToList();
+            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARVersion).Distinct().ToList();
             return View(area);
         }
         public async Task<IActionResult> Edit(Guid? id)
         {
-            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARCount).Distinct().ToList();
+            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARVersion).Distinct().ToList();
             var area = await _context.Areas
                 .Include(x => x.Company)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -222,7 +222,7 @@ namespace Carbon_inventory_platform.Controllers
             var companyId = TempData.Peek("companyId") as Guid?;
             if (!ModelState.IsValid)
             {
-                ViewBag.ARVersion = _context.GWPs.Select(x => x.ARCount).Distinct().ToList();
+                ViewBag.ARVersion = _context.GWPs.Select(x => x.ARVersion).Distinct().ToList();
                 return View(area);
             }
 
@@ -311,7 +311,7 @@ namespace Carbon_inventory_platform.Controllers
             return RedirectToAction(nameof(Index), new { id = companyId });
 
 
-            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARCount).Distinct().ToList();
+            ViewBag.ARVersion = _context.GWPs.Select(x => x.ARVersion).Distinct().ToList();
             return View(area);
         }
         public async Task<IActionResult> Delete(Guid? id)

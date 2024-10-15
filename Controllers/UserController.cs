@@ -20,13 +20,13 @@ public class UserController : Controller
     private readonly IUserEmailStore<ApplicationUser> _emailStore;
     private readonly ILogger<UserController> _logger;
     private readonly IEmailSender _emailSender;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly ApplicationDbContext _context;
 
     public UserController(UserManager<ApplicationUser> userManager,
         IUserStore<ApplicationUser> userStore,
         SignInManager<ApplicationUser> signInManager,
-        RoleManager<IdentityRole> roleManager,
+        RoleManager<ApplicationRole> roleManager,
         ILogger<UserController> logger,
         IEmailSender emailSender,
         ApplicationDbContext context)

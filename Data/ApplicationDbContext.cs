@@ -21,10 +21,15 @@ namespace Carbon_inventory_platform.Data
         public DbSet<Material> Materials { get; set; } = null!;
         public DbSet<ActivityData> ActivityDatas { get; set; }
         public DbSet<GWP> GWPs { get; set; }
+        //public DbSet<GWPVersion> GWPVersions { get; set; }
         public DbSet<DeviceData> deviceDatas { get; set; } = null!;
         public DbSet<DefaultDevices> defaultDevices { get; set; } = null!;
         public DbSet<Feedback> Feedbacks { get; set; } = null!;
-
+        public DbSet<Permission> Permissions { get; set; } = null!;
+        public DbSet<RolePermission> RolePermissions { get; set; } = null!;
+        public DbSet<UserPermission> UserPermissions { get; set; } = null!;
+        public DbSet<Function> Functions { get; set; } = null!;
+        public DbSet<FunctionAction> FunctionActions { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -64,6 +69,34 @@ namespace Carbon_inventory_platform.Data
                 entity.HasOne(e => e.Device);
             });
 
+            builder.Entity<GWP>(entity =>
+            {
+                //entity.HasOne(e => e.GWPVersion);
+            });
+
+            builder.Entity<GWPVersion>(entity =>
+            {
+                entity.HasMany(e => e.GWPs);
+            });
+
+            builder.Entity<RolePermission>(entity =>
+            {
+                entity.HasMany(e => e.Permissions);
+                entity.HasMany(e => e.Roles);
+            });
+
+            builder.Entity<UserPermission>(entity =>
+            {
+                entity.HasMany(e => e.Permissions);
+                entity.HasMany(e => e.Users);
+            });
+
+            builder.Entity<Permission>(entity =>
+            {
+                entity.HasMany(e => e.RolePermissions);
+                entity.HasOne(e => e.Function);
+                entity.HasOne(e => e.FunctionAction);
+            });
             DataSeed(builder);
         }
         private void DataSeed(ModelBuilder builder)
@@ -152,29 +185,29 @@ new Material { Id = 80, Name = "HFC-236fa", Scope = "類別一", EmissionPattern
 new Material { Id = 81, Name = "二氟一氯一溴甲烷", Scope = "類別一", EmissionPattern = "逸散", HFCSCEF = 1, CEF_Correction = 1 }
 );
             builder.Entity<GWP>().HasData(
-new GWP { Id = 1, Name = "CO2", Num = 1, ARCount = 6 },
-new GWP { Id =2, Name = "CH4", Num = 27.9M, ARCount = 6 },
-new GWP { Id =3, Name = "N2O", Num = 273, ARCount = 6 },
-new GWP { Id =4, Name = "R-12", Num = 12500, ARCount = 6 },
-new GWP { Id =5, Name = "R-125", Num = 3740, ARCount = 6 },
-new GWP { Id =6, Name = "R-1234yf", Num = 0.501M, ARCount = 6 },
-new GWP { Id =7, Name = "R-23", Num = 14600, ARCount = 6 },
-new GWP { Id =8, Name = "R-32", Num = 771, ARCount = 6 },
-new GWP { Id=9, Name = "R-134A", Num = 1530, ARCount = 6 },
-new GWP { Id =10, Name = "FM200", Num = 3600, ARCount = 6 },
-new GWP { Id =11, Name = "R-22", Num = 1960, ARCount = 6 },
-new GWP { Id =12, Name = "R-410A", Num = 2255.5M, ARCount = 6 },
-new GWP { Id =13, Name = "R-600A", Num = 0.006M, ARCount = 6 },
-new GWP { Id =14, Name = "R-417A", Num = 2127, ARCount = 6 },
-new GWP { Id =15, Name = "R-404A", Num = 4728, ARCount = 6 },
-new GWP { Id =16, Name = "R-407C", Num = 1908, ARCount = 6 },
-new GWP { Id =17, Name = "R-407F", Num = 1965.3M, ARCount = 6 }, //40% R-134a / 30% R-125 / 30% R-32
-new GWP { Id =18, Name = "R-452A", Num = 2291.5603M, ARCount = 6 }, //30 % R-1234yf / 11% R-32 / 59% R-125 
-new GWP { Id =19, Name = "R-507A", Num = 4475, ARCount = 6 },
-new GWP { Id =20, Name = "NF3", Num = 17400, ARCount = 6 },
-new GWP { Id =21, Name = "SF6", Num = 24300, ARCount = 6 },
-new GWP { Id =22, Name = "二氟一氯一溴甲烷", Num = 1930, ARCount = 6 },
-new GWP { Id =23, Name = "HFC-236fa", Num = 8690, ARCount = 6 }
+new GWP { Id = 1, Name = "CO2", Num = 1, ARVersion = 6 },
+new GWP { Id = 2, Name = "CH4", Num = 27.9M, ARVersion = 6 },
+new GWP { Id = 3, Name = "N2O", Num = 273, ARVersion = 6 },
+new GWP { Id = 4, Name = "R-12", Num = 12500, ARVersion = 6 },
+new GWP { Id = 5, Name = "R-125", Num = 3740, ARVersion = 6 },
+new GWP { Id = 6, Name = "R-1234yf", Num = 0.501M, ARVersion = 6 },
+new GWP { Id = 7, Name = "R-23", Num = 14600, ARVersion = 6 },
+new GWP { Id = 8, Name = "R-32", Num = 771, ARVersion = 6 },
+new GWP { Id = 9, Name = "R-134A", Num = 1530, ARVersion = 6 },
+new GWP { Id = 10, Name = "FM200", Num = 3600, ARVersion = 6 },
+new GWP { Id = 11, Name = "R-22", Num = 1960, ARVersion = 6 },
+new GWP { Id = 12, Name = "R-410A", Num = 2255.5M, ARVersion = 6 },
+new GWP { Id = 13, Name = "R-600A", Num = 0.006M, ARVersion = 6 },
+new GWP { Id = 14, Name = "R-417A", Num = 2127, ARVersion = 6 },
+new GWP { Id = 15, Name = "R-404A", Num = 4728, ARVersion = 6 },
+new GWP { Id = 16, Name = "R-407C", Num = 1908, ARVersion = 6 },
+new GWP { Id = 17, Name = "R-407F", Num = 1965.3M, ARVersion = 6 }, //40% R-134a / 30% R-125 / 30% R-32
+new GWP { Id = 18, Name = "R-452A", Num = 2291.5603M, ARVersion = 6 }, //30 % R-1234yf / 11% R-32 / 59% R-125 
+new GWP { Id = 19, Name = "R-507A", Num = 4475, ARVersion = 6 },
+new GWP { Id = 20, Name = "NF3", Num = 17400, ARVersion = 6 },
+new GWP { Id = 21, Name = "SF6", Num = 24300, ARVersion = 6 },
+new GWP { Id = 22, Name = "二氟一氯一溴甲烷", Num = 1930, ARVersion = 6 },
+new GWP { Id = 23, Name = "HFC-236fa", Num = 8690, ARVersion = 6 }
                 );
             builder.Entity<DeviceData>().HasData(
                 new DeviceData { Id = 1, Name = "冷氣機", Scope = "類別一", EmissionPattern = "逸散", Material = "R-410A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },

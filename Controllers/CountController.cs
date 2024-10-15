@@ -113,7 +113,7 @@ namespace Carbon_inventory_platform.Controllers
                     decimal hfcsGWP = 0;
                     for (int i = ARVersion; i > 0; i--) // 找HFCS的GWP，如果沒有找到該版本的GWP則降版本
                     {
-                        hfcsGWP = GWP.Where(x => x.Name == device.Material && x.ARCount == ARVersion).Select(x => x.Num).FirstOrDefault();
+                        hfcsGWP = GWP.Where(x => x.Name == device.Material && x.ARVersion == ARVersion).Select(x => x.Num).FirstOrDefault();
                         if (hfcsGWP != 0)
                         {
                             break;
@@ -140,14 +140,14 @@ namespace Carbon_inventory_platform.Controllers
                             ch4GWP = 28;
                             break;
                         default:
-                            ch4GWP = toCreate.GWP = GWP.Where(x => x.Name == "CH4" && x.ARCount == ARVersion).Select(x => x.Num).FirstOrDefault(); //石化甲烷
+                            ch4GWP = toCreate.GWP = GWP.Where(x => x.Name == "CH4" && x.ARVersion == ARVersion).Select(x => x.Num).FirstOrDefault(); //石化甲烷
                             break;
                     }
                     toCreate.GWP = ch4GWP;
                 }
                 else //其他GHG
                 {
-                    toCreate.GWP = GWP.Where(x => x.Name == GHG && x.ARCount == ARVersion).Select(x => x.Num).FirstOrDefault();
+                    toCreate.GWP = GWP.Where(x => x.Name == GHG && x.ARVersion == ARVersion).Select(x => x.Num).FirstOrDefault();
                 }
                 toCreate.CreateTime = DateTime.Now;
                 device.CEF_Correction = 1;//輸入?
@@ -179,7 +179,7 @@ namespace Carbon_inventory_platform.Controllers
                         toCreateCO2.CEF = Material.CO2CEF;
                         toCreateCO2.CEF_UUL = Material.CO2UUL;
                         toCreateCO2.CEF_ULL = Material.CO2ULL;
-                        toCreateCO2.GWP = GWP.Where(x => x.Name == "CO2" && x.ARCount == ARVersion).Select(x => x.Num).FirstOrDefault();
+                        toCreateCO2.GWP = GWP.Where(x => x.Name == "CO2" && x.ARVersion == ARVersion).Select(x => x.Num).FirstOrDefault();
                         toCreateCO2.all_UUL = CalculateRoundDistance(Material.CO2UUL, Material.DataUUL);
                         toCreateCO2.all_ULL = CalculateRoundDistance(Material.CO2ULL, Material.DataULL);
                         toCreateCO2.CreateTime = DateTime.Now;
@@ -210,14 +210,14 @@ namespace Carbon_inventory_platform.Controllers
                                     ch4GWP = 28;
                                     break;
                                 default:
-                                    ch4GWP = toCreateCH4.GWP = GWP.Where(x => x.Name == "CH4" && x.ARCount == ARVersion).Select(x => x.Num).FirstOrDefault();
+                                    ch4GWP = toCreateCH4.GWP = GWP.Where(x => x.Name == "CH4" && x.ARVersion == ARVersion).Select(x => x.Num).FirstOrDefault();
                                     break;
                             }
                             toCreateCH4.GWP = ch4GWP;
                         }
                         else // 石化甲烷
                         {
-                            toCreateCH4.GWP = GWP.Where(x => x.Name == "CH4" && x.ARCount == ARVersion).Select(x => x.Num).FirstOrDefault();
+                            toCreateCH4.GWP = GWP.Where(x => x.Name == "CH4" && x.ARVersion == ARVersion).Select(x => x.Num).FirstOrDefault();
                         }
                         toCreateCH4.Id = Guid.NewGuid();
                         toCreateCH4.Name = "CH4";
@@ -242,7 +242,7 @@ namespace Carbon_inventory_platform.Controllers
                         toCreateN2O.CEF = Material.N2OCEF;
                         toCreateN2O.CEF_UUL = Material.N2OUUL;
                         toCreateN2O.CEF_ULL = Material.N2OULL;
-                        toCreateN2O.GWP = GWP.Where(x => x.Name == "N2O" && x.ARCount == ARVersion).Select(x => x.Num).FirstOrDefault();
+                        toCreateN2O.GWP = GWP.Where(x => x.Name == "N2O" && x.ARVersion == ARVersion).Select(x => x.Num).FirstOrDefault();
                         toCreateN2O.all_UUL = CalculateRoundDistance(Material.N2OUUL, Material.DataUUL);
                         toCreateN2O.all_ULL = CalculateRoundDistance(Material.N2OULL, Material.DataULL);
                         toCreateN2O.CreateTime = DateTime.Now;
@@ -260,7 +260,7 @@ namespace Carbon_inventory_platform.Controllers
                         toCreateHFCS.CEF = Material.HFCSCEF;
                         toCreateHFCS.CEF_UUL = Material.HFCSUUL;
                         toCreateHFCS.CEF_ULL = Material.HFCSULL;
-                        toCreateHFCS.GWP = GWP.Where(x => x.Name == material && x.ARCount == ARVersion).Select(x => x.Num).FirstOrDefault();
+                        toCreateHFCS.GWP = GWP.Where(x => x.Name == material && x.ARVersion == ARVersion).Select(x => x.Num).FirstOrDefault();
                         toCreateHFCS.all_UUL = CalculateRoundDistance(Material.HFCSUUL, Material.DataUUL);
                         toCreateHFCS.all_ULL = CalculateRoundDistance(Material.HFCSULL, Material.DataULL);
                         toCreateHFCS.CreateTime = DateTime.Now;
@@ -278,7 +278,7 @@ namespace Carbon_inventory_platform.Controllers
                         toCreatePFCS.CEF = Material.PFCSCEF;
                         toCreatePFCS.CEF_UUL = Material.PFCSUUL;
                         toCreatePFCS.CEF_ULL = Material.PFCSULL;
-                        toCreatePFCS.GWP = GWP.Where(x => x.Name == material && x.ARCount == ARVersion).Select(x => x.Num).FirstOrDefault();
+                        toCreatePFCS.GWP = GWP.Where(x => x.Name == material && x.ARVersion == ARVersion).Select(x => x.Num).FirstOrDefault();
                         toCreatePFCS.all_UUL = CalculateRoundDistance(Material.PFCSUUL, Material.DataUUL);
                         toCreatePFCS.all_ULL = CalculateRoundDistance(Material.PFCSULL, Material.DataULL);
                         toCreatePFCS.CreateTime = DateTime.Now;
@@ -296,7 +296,7 @@ namespace Carbon_inventory_platform.Controllers
                         toCreateSF6.CEF = Material.SF6CEF;
                         toCreateSF6.CEF_UUL = Material.SF6UUL;
                         toCreateSF6.CEF_ULL = Material.SF6ULL;
-                        toCreateSF6.GWP = GWP.Where(x => x.Name == "SF6" && x.ARCount == ARVersion).Select(x => x.Num).FirstOrDefault();
+                        toCreateSF6.GWP = GWP.Where(x => x.Name == "SF6" && x.ARVersion == ARVersion).Select(x => x.Num).FirstOrDefault();
                         toCreateSF6.all_UUL = CalculateRoundDistance(Material.SF6UUL, Material.DataUUL);
                         toCreateSF6.all_ULL = CalculateRoundDistance(Material.SF6ULL, Material.DataULL);
                         toCreateSF6.CreateTime = DateTime.Now;
@@ -314,7 +314,7 @@ namespace Carbon_inventory_platform.Controllers
                         toCreateNF3.CEF = Material.NF3CEF;
                         toCreateNF3.CEF_UUL = Material.NF3UUL;
                         toCreateNF3.CEF_ULL = Material.NF3ULL;
-                        toCreateNF3.GWP = GWP.Where(x => x.Name == "NF3" && x.ARCount == ARVersion).Select(x => x.Num).FirstOrDefault();
+                        toCreateNF3.GWP = GWP.Where(x => x.Name == "NF3" && x.ARVersion == ARVersion).Select(x => x.Num).FirstOrDefault();
                         toCreateNF3.all_UUL = CalculateRoundDistance(Material.NF3UUL, Material.DataUUL);
                         toCreateNF3.all_ULL = CalculateRoundDistance(Material.NF3ULL, Material.DataULL);
                         toCreateNF3.CreateTime = DateTime.Now;
@@ -338,7 +338,7 @@ namespace Carbon_inventory_platform.Controllers
                         decimal hfcsGWP = 0;
                         for (int i = ARVersion; i > 0; i--) // 找HFCS的GWP，如果沒有找到該版本的GWP則降版本
                         {
-                            hfcsGWP = GWP.Where(x => x.Name == material && x.ARCount == i).Select(x => x.Num).FirstOrDefault();
+                            hfcsGWP = GWP.Where(x => x.Name == material && x.ARVersion == i).Select(x => x.Num).FirstOrDefault();
                             if (hfcsGWP != 0)
                             {
                                 break;
@@ -535,6 +535,7 @@ namespace Carbon_inventory_platform.Controllers
             // 計算排放量及
             foreach (var device in areaData.Devices)
             {
+                sumAll += device.Emissions;
                 if (device.GHGs != null)
                 {
                     foreach (var GHG in device.GHGs)
@@ -600,7 +601,6 @@ namespace Carbon_inventory_platform.Controllers
 
             sumScope1 = sum1_CO2 + sum1_CH4 + sum1_N2O + sum1_HFCS + sum1_PFCS + sum1_NF3 + sum1_SF6;
             sumScope2 = sum2_CO2 + sum2_CH4 + sum2_N2O + sum2_HFCS + sum2_PFCS + sum2_NF3 + sum2_SF6;
-            sumAll = sumScope1 + sumScope2;
 
             foreach (var device in areaData.Devices)
             {

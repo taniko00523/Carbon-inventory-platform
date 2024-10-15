@@ -17,10 +17,25 @@ namespace Carbon_inventory_platform.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ApplicationRoleRolePermission", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RolesId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("RoleId", "RolesId");
+
+                    b.HasIndex("RolesId");
+
+                    b.ToTable("ApplicationRoleRolePermission", (string)null);
+                });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.ActivityData", b =>
                 {
@@ -46,7 +61,7 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.HasIndex("DeviceId");
 
-                    b.ToTable("ActivityDatas");
+                    b.ToTable("ActivityDatas", (string)null);
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Analysis", b =>
@@ -67,6 +82,9 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Target")
+                        .HasColumnType("int");
+
                     b.Property<int>("_21")
                         .HasColumnType("int");
 
@@ -77,6 +95,16 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("_21C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_21D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_21Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_21isCal")
                         .HasColumnType("int");
 
                     b.Property<int>("_22")
@@ -91,6 +119,16 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("_22C")
                         .HasColumnType("int");
 
+                    b.Property<int>("_22D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_22Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_22isCal")
+                        .HasColumnType("int");
+
                     b.Property<int>("_31")
                         .HasColumnType("int");
 
@@ -101,6 +139,16 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("_31C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_31D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_31Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_31isCal")
                         .HasColumnType("int");
 
                     b.Property<int>("_32")
@@ -115,6 +163,16 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("_32C")
                         .HasColumnType("int");
 
+                    b.Property<int>("_32D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_32Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_32isCal")
+                        .HasColumnType("int");
+
                     b.Property<int>("_33")
                         .HasColumnType("int");
 
@@ -125,6 +183,16 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("_33C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_33D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_33Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_33isCal")
                         .HasColumnType("int");
 
                     b.Property<int>("_34")
@@ -139,6 +207,16 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("_34C")
                         .HasColumnType("int");
 
+                    b.Property<int>("_34D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_34Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_34isCal")
+                        .HasColumnType("int");
+
                     b.Property<int>("_35")
                         .HasColumnType("int");
 
@@ -149,6 +227,16 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("_35C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_35D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_35Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_35isCal")
                         .HasColumnType("int");
 
                     b.Property<int>("_41")
@@ -166,6 +254,16 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("_410C")
                         .HasColumnType("int");
 
+                    b.Property<int>("_410D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_410Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_410isCal")
+                        .HasColumnType("int");
+
                     b.Property<int>("_411")
                         .HasColumnType("int");
 
@@ -178,6 +276,16 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("_411C")
                         .HasColumnType("int");
 
+                    b.Property<int>("_411D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_411Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_411isCal")
+                        .HasColumnType("int");
+
                     b.Property<int>("_41A")
                         .HasColumnType("int");
 
@@ -185,6 +293,16 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("_41C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_41D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_41Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_41isCal")
                         .HasColumnType("int");
 
                     b.Property<int>("_42")
@@ -199,6 +317,16 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("_42C")
                         .HasColumnType("int");
 
+                    b.Property<int>("_42D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_42Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_42isCal")
+                        .HasColumnType("int");
+
                     b.Property<int>("_43")
                         .HasColumnType("int");
 
@@ -209,6 +337,16 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("_43C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_43D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_43Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_43isCal")
                         .HasColumnType("int");
 
                     b.Property<int>("_44")
@@ -223,6 +361,16 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("_44C")
                         .HasColumnType("int");
 
+                    b.Property<int>("_44D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_44Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_44isCal")
+                        .HasColumnType("int");
+
                     b.Property<int>("_45")
                         .HasColumnType("int");
 
@@ -233,6 +381,16 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("_45C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_45D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_45Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_45isCal")
                         .HasColumnType("int");
 
                     b.Property<int>("_46")
@@ -247,6 +405,16 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("_46C")
                         .HasColumnType("int");
 
+                    b.Property<int>("_46D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_46Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_46isCal")
+                        .HasColumnType("int");
+
                     b.Property<int>("_47")
                         .HasColumnType("int");
 
@@ -257,6 +425,16 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("_47C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_47D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_47Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_47isCal")
                         .HasColumnType("int");
 
                     b.Property<int>("_48")
@@ -271,6 +449,16 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("_48C")
                         .HasColumnType("int");
 
+                    b.Property<int>("_48D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_48Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_48isCal")
+                        .HasColumnType("int");
+
                     b.Property<int>("_49")
                         .HasColumnType("int");
 
@@ -281,6 +469,16 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("_49C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_49D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_49Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_49isCal")
                         .HasColumnType("int");
 
                     b.Property<int>("_51")
@@ -295,6 +493,16 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("_51C")
                         .HasColumnType("int");
 
+                    b.Property<int>("_51D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_51Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_51isCal")
+                        .HasColumnType("int");
+
                     b.Property<int>("_52")
                         .HasColumnType("int");
 
@@ -305,6 +513,16 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("_52C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_52D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_52Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_52isCal")
                         .HasColumnType("int");
 
                     b.Property<int>("_53")
@@ -319,6 +537,16 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("_53C")
                         .HasColumnType("int");
 
+                    b.Property<int>("_53D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_53Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_53isCal")
+                        .HasColumnType("int");
+
                     b.Property<int>("_54")
                         .HasColumnType("int");
 
@@ -329,6 +557,16 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("_54C")
+                        .HasColumnType("int");
+
+                    b.Property<int>("_54D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_54Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_54isCal")
                         .HasColumnType("int");
 
                     b.Property<int>("_55")
@@ -343,6 +581,16 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("_55C")
                         .HasColumnType("int");
 
+                    b.Property<int>("_55D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_55Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_55isCal")
+                        .HasColumnType("int");
+
                     b.Property<int>("_61")
                         .HasColumnType("int");
 
@@ -355,6 +603,16 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("_61C")
                         .HasColumnType("int");
 
+                    b.Property<int>("_61D")
+                        .HasColumnType("int");
+
+                    b.Property<string>("_61Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("_61isCal")
+                        .HasColumnType("int");
+
                     b.Property<byte>("isDeleted")
                         .HasColumnType("tinyint");
 
@@ -363,7 +621,7 @@ namespace Carbon_inventory_platform.Migrations
                     b.HasIndex("AreaId")
                         .IsUnique();
 
-                    b.ToTable("Analyses");
+                    b.ToTable("Analyses", (string)null);
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
@@ -618,7 +876,7 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Areas");
+                    b.ToTable("Areas", (string)null);
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Company", b =>
@@ -704,7 +962,7 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.DefaultDevices", b =>
@@ -737,7 +995,7 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("defaultDevices");
+                    b.ToTable("defaultDevices", (string)null);
 
                     b.HasData(
                         new
@@ -828,6 +1086,15 @@ namespace Carbon_inventory_platform.Migrations
                             Material = "外購電力",
                             Name = "電力",
                             Scope = "類別二",
+                            Type = ""
+                        },
+                        new
+                        {
+                            Id = 11,
+                            EmissionPattern = "逸散",
+                            Material = "R-134A",
+                            Name = "冰箱",
+                            Scope = "類別一",
                             Type = ""
                         });
                 });
@@ -943,7 +1210,7 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.HasIndex("AreaId");
 
-                    b.ToTable("Devices");
+                    b.ToTable("Devices", (string)null);
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.DeviceData", b =>
@@ -985,7 +1252,7 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("deviceDatas");
+                    b.ToTable("deviceDatas", (string)null);
 
                     b.HasData(
                         new
@@ -1287,6 +1554,97 @@ namespace Carbon_inventory_platform.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Feedback", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Feedbacks", (string)null);
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Function", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Class")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FLevel")
+                        .HasColumnType("int");
+
+                    b.Property<byte?>("IsDefault")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("IsShow")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpperFunction")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Functions", (string)null);
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.FunctionAction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("IsDefault")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FunctionActions", (string)null);
+                });
+
             modelBuilder.Entity("Carbon_inventory_platform.Models.GHG", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1337,7 +1695,7 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.HasIndex("DeviceId");
 
-                    b.ToTable("GHGs");
+                    b.ToTable("GHGs", (string)null);
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.GWP", b =>
@@ -1348,7 +1706,10 @@ namespace Carbon_inventory_platform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ARCount")
+                    b.Property<int>("ARVersion")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GWPVersionVersion")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -1358,172 +1719,216 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<decimal>("Num")
                         .HasColumnType("decimal(18, 10)");
 
+                    b.Property<string>("Source")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("GWPs");
+                    b.HasIndex("GWPVersionVersion");
+
+                    b.ToTable("GWPs", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "CO2",
-                            Num = 1m
+                            Num = 1m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 2,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "CH4",
-                            Num = 27.9m
+                            Num = 27.9m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 3,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "N2O",
-                            Num = 273m
+                            Num = 273m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 4,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-12",
-                            Num = 12500m
+                            Num = 12500m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 5,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-125",
-                            Num = 3740m
+                            Num = 3740m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 6,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-1234yf",
-                            Num = 0.501m
+                            Num = 0.501m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 7,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-23",
-                            Num = 14600m
+                            Num = 14600m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 8,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-32",
-                            Num = 771m
+                            Num = 771m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 9,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-134A",
-                            Num = 1530m
+                            Num = 1530m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 10,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "FM200",
-                            Num = 3600m
+                            Num = 3600m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 11,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-22",
-                            Num = 1960m
+                            Num = 1960m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 12,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-410A",
-                            Num = 2255.5m
+                            Num = 2255.5m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 13,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-600A",
-                            Num = 0.006m
+                            Num = 0.006m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 14,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-417A",
-                            Num = 2127m
+                            Num = 2127m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 15,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-404A",
-                            Num = 4728m
+                            Num = 4728m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 16,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-407C",
-                            Num = 1908m
+                            Num = 1908m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 17,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-407F",
-                            Num = 1965.3m
+                            Num = 1965.3m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 18,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-452A",
-                            Num = 2291.5603m
+                            Num = 2291.5603m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 19,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "R-507A",
-                            Num = 4475m
+                            Num = 4475m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 20,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "NF3",
-                            Num = 17400m
+                            Num = 17400m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 21,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "SF6",
-                            Num = 24300m
+                            Num = 24300m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 22,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "二氟一氯一溴甲烷",
-                            Num = 1930m
+                            Num = 1930m,
+                            Source = "MOE"
                         },
                         new
                         {
                             Id = 23,
-                            ARCount = 6,
+                            ARVersion = 6,
                             Name = "HFC-236fa",
-                            Num = 8690m
+                            Num = 8690m,
+                            Source = "MOE"
                         });
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.GWPVersion", b =>
+                {
+                    b.Property<int>("Version")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Version"));
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Version");
+
+                    b.ToTable("GWPVersions", (string)null);
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Material", b =>
@@ -1631,7 +2036,7 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Materials");
+                    b.ToTable("Materials", (string)null);
 
                     b.HasData(
                         new
@@ -4309,6 +4714,90 @@ namespace Carbon_inventory_platform.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeleteTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FunctionActionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FunctionId")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("IsDeleted")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime?>("ModifyTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FunctionActionId");
+
+                    b.HasIndex("FunctionId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("Permissions", (string)null);
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.RolePermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RolePermissions", (string)null);
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.UserPermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserPermissions", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -4317,6 +4806,11 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
@@ -4334,6 +4828,10 @@ namespace Carbon_inventory_platform.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasDiscriminator().HasValue("IdentityRole");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -4430,7 +4928,7 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.ToTable("AspNetUsers", (string)null);
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+                    b.HasDiscriminator().HasValue("IdentityUser");
 
                     b.UseTphMappingStrategy();
                 });
@@ -4520,14 +5018,56 @@ namespace Carbon_inventory_platform.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PermissionRolePermission", b =>
+                {
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermissionsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PermissionId", "PermissionsId");
+
+                    b.HasIndex("PermissionsId");
+
+                    b.ToTable("PermissionRolePermission", (string)null);
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.ApplicationRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+
+                    b.HasDiscriminator().HasValue("ApplicationRole");
+                });
+
             modelBuilder.Entity("Carbon_inventory_platform.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UserLimitData")
                         .HasColumnType("datetime2");
 
+                    b.HasIndex("UserId");
+
                     b.HasDiscriminator().HasValue("ApplicationUser");
+                });
+
+            modelBuilder.Entity("ApplicationRoleRolePermission", b =>
+                {
+                    b.HasOne("Carbon_inventory_platform.Models.RolePermission", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Carbon_inventory_platform.Models.ApplicationRole", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.ActivityData", b =>
@@ -4596,6 +5136,38 @@ namespace Carbon_inventory_platform.Migrations
                     b.Navigation("Device");
                 });
 
+            modelBuilder.Entity("Carbon_inventory_platform.Models.GWP", b =>
+                {
+                    b.HasOne("Carbon_inventory_platform.Models.GWPVersion", "GWPVersion")
+                        .WithMany("GWPs")
+                        .HasForeignKey("GWPVersionVersion");
+
+                    b.Navigation("GWPVersion");
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Permission", b =>
+                {
+                    b.HasOne("Carbon_inventory_platform.Models.FunctionAction", "FunctionAction")
+                        .WithMany()
+                        .HasForeignKey("FunctionActionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Carbon_inventory_platform.Models.Function", "Function")
+                        .WithMany()
+                        .HasForeignKey("FunctionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Carbon_inventory_platform.Models.UserPermission", null)
+                        .WithMany("Permissions")
+                        .HasForeignKey("PermissionId");
+
+                    b.Navigation("Function");
+
+                    b.Navigation("FunctionAction");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -4647,6 +5219,28 @@ namespace Carbon_inventory_platform.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PermissionRolePermission", b =>
+                {
+                    b.HasOne("Carbon_inventory_platform.Models.RolePermission", null)
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Carbon_inventory_platform.Models.Permission", null)
+                        .WithMany()
+                        .HasForeignKey("PermissionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("Carbon_inventory_platform.Models.UserPermission", null)
+                        .WithMany("Users")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
                 {
                     b.Navigation("Analysis");
@@ -4664,6 +5258,18 @@ namespace Carbon_inventory_platform.Migrations
                     b.Navigation("ActivityDatas");
 
                     b.Navigation("GHGs");
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.GWPVersion", b =>
+                {
+                    b.Navigation("GWPs");
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.UserPermission", b =>
+                {
+                    b.Navigation("Permissions");
+
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

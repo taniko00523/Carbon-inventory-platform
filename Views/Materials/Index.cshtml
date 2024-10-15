@@ -1,0 +1,203 @@
+﻿@model IEnumerable<Carbon_inventory_platform.Models.Material>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Scope)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmissionPattern)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CO2CEF)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CO2ULL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CO2UUL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CH4CEF)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CH4ULL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CH4UUL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.N2OCEF)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.N2OULL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.N2OUUL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HFCSCEF)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HFCSULL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HFCSUUL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PFCSCEF)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PFCSULL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PFCSUUL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SF6CEF)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SF6ULL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NF3UUL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NF3CEF)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NF3ULL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SF6UUL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CEF_Correction)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataUUL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataULL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Unit)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Scope)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmissionPattern)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CO2CEF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CO2ULL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CO2UUL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CH4CEF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CH4ULL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CH4UUL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.N2OCEF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.N2OULL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.N2OUUL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HFCSCEF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HFCSULL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HFCSUUL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PFCSCEF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PFCSULL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PFCSUUL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SF6CEF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SF6ULL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NF3UUL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NF3CEF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NF3ULL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SF6UUL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CEF_Correction)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataUUL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataULL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Unit)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

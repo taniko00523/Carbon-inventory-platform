@@ -1,5 +1,6 @@
 using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
+using Carbon_inventory_platform.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +13,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false) //Email驗證關閉
-    .AddRoles<IdentityRole>()
+    .AddRoles<ApplicationRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<RolePermissionService>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -31,7 +33,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireLowercase = false; //密碼中需要小寫字元。	
     options.Password.RequireNonAlphanumeric = false; //密碼中需要非英數字元。	
     options.Password.RequireUppercase = false; //密碼中需要大寫字元。	
-    options.Password.RequiredLength = 6; //密碼長度下限。
+    options.Password.RequiredLength = 1; //密碼長度下限。
     options.Password.RequiredUniqueChars = 1; //需要密碼中的相異字元數。
 
     // Default SignIn settings.
@@ -73,15 +75,17 @@ app.MapRazorPages();
 //    // setting initial data in system, Role, Account...
 //    // Role:
 //    var roleManager =
-//        scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-//    string[] roles = { "SuperAdmin", "Admin", "PowerUser", "User" };
+//        scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+//    string[] roles = { "SuperAdmin", "Admin", "PowerUser", "User", "Guest" };
 
 //    foreach (var role in roles)
 //    {
-//        if(!await roleManager.RoleExistsAsync(role)) // 如果角色不存在
+//        if (!await roleManager.RoleExistsAsync(role)) // 如果角色不存在
 //        {
 //            // 建立角色
-//            await roleManager.CreateAsync(new IdentityRole(role));
+//            var applicationRole = new ApplicationRole();
+//            applicationRole.Name = role;
+//            await roleManager.CreateAsync(applicationRole);
 //        }
 //    }
 //}

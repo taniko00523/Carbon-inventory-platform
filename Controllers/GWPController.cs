@@ -20,8 +20,8 @@ namespace Carbon_inventory_platform.Controllers
         {
             if (year != 0)
             {
-                ViewBag.SearchARcount = year;
-                var gwps = await _context.GWPs.Where(x => x.ARCount == year).ToListAsync();
+                ViewBag.SearchARVersion = year;
+                var gwps = await _context.GWPs.Where(x => x.ARVersion == year).ToListAsync();
                 return gwps != null ? View(gwps) : Problem("沒有找到資料表");
             }
             return View();
@@ -29,33 +29,33 @@ namespace Carbon_inventory_platform.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(GWP model, int searchARcount)
+        public async Task<IActionResult> Add(GWP model, int searchARVersion)
         {
             if (ModelState.IsValid)
             {
-                model.ARCount = searchARcount;
+                model.ARVersion = searchARVersion;
                 _context.Add(model);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { year = searchARcount });
+                return RedirectToAction(nameof(Index), new { year = searchARVersion });
             }
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(GWP model, int searchARcount)
+        public async Task<IActionResult> Edit(GWP model, int searchARVersion)
         {
             if (ModelState.IsValid)
             {
-                model.ARCount = searchARcount;
+                model.ARVersion = searchARVersion;
                 _context.Update(model);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { year = searchARcount });
+                return RedirectToAction(nameof(Index), new { year = searchARVersion });
             }
             return View(model);
         }
 
-        public async Task<IActionResult> Delete(int id, int searchARcount)
+        public async Task<IActionResult> Delete(int id, int searchARVersion)
         {
             if (id == null)
             {
@@ -68,7 +68,7 @@ namespace Carbon_inventory_platform.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction(nameof(Index), new { year = searchARcount });
+            return RedirectToAction(nameof(Index), new { year = searchARVersion });
         }
     }
 }

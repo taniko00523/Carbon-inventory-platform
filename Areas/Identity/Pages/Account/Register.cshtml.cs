@@ -33,14 +33,14 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly RoleManager<IdentityRole> _roleManager; //新增RoleManager
+        private readonly RoleManager<ApplicationRole> _roleManager; //新增RoleManager
         private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole> roleManager, //新增RoleManager
+            RoleManager<ApplicationRole> roleManager, //新增RoleManager
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             ApplicationDbContext context)

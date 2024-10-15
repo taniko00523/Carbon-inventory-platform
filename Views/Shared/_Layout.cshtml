@@ -1,6 +1,15 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<ApplicationUser> SignInManager
+﻿@using Carbon_inventory_platform.Services
+@using Microsoft.AspNetCore.Identity
+@using Carbon_inventory_platform.Data
 
+@inject RolePermissionService rolePermissionService
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    string? userId = UserManager.GetUserId(User);
+    //var rolePermissions = await RolePermissionService.GetPermissionAsync(userId);
+    var rolePermissions = await rolePermissionService.GetPermissionAsync(userId); //RolePermissionService 應透過依賴注入而不是靜態方法
+}
 
 <!DOCTYPE html>
 <html lang="zh-tw">
@@ -108,19 +117,127 @@
                                     <a class="nav-link text-dark" asp-controller="Areas" asp-action="Index"><img src="~/logo/navigation.png" width="25px" /><span> 邊界總覽</span></a>
                                 </li>
                             }
-                            @if (User.IsInRole("Admin"))
+                            else if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Companies" asp-action="Index"><img src="~/logo/briefcase.png" width="25px"/><span> 公司總覽</span></a>
+                                    <a class="nav-link text-dark" asp-controller="Companies" asp-action="Index"><img src="" width="25px" /><span> 公司總覽</span></a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="GWP" asp-action="Index"><img src="~/logo/leaf.png" width="25px" /><span> GWP總覽</span></a>
+                                <!-- #基本管理 -->
+                                <li class="nav-item dropdown">
+                                    
+                                    <a class="nav-link dropdown-toggle" href="#" id="baseDataDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        基本設定管理
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="baseDataDropdownMenuLink">
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-controller="GWP" asp-action="Index"><img src="" width="25px" /><span> GWP總覽</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-controller="Materials" asp-action="Index"><img src="" width="25px" /><span> 排放係數設定總覽</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-controller="DefaultDevices" asp-action="Index"><img src="" width="25px" /><span> 預設排放源總覽</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-controller="DeviceDatas" asp-action="Index"><img src="" width="25px" /><span> 排放源設定總覽</span></a>
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="User" asp-action="Index"><img src="~/logo/group.png" width="25px" /><span> 用戶總覽</span></a>
+                                <!-- #endregion -->
+                                <!-- #用戶管理 -->
+                                <li class="nav-item dropdown">
+
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDataDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        用戶管理
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="userDataDropdownMenuLink">
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-controller="User" asp-action="Index"><img src="" width="25px" /><span> 用戶總覽</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-controller="Functions" asp-action="Index"><img src="" width="25px" /><span> 畫面總覽</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-controller="FunctionActions" asp-action="Index"><img src="" width="25px" /><span> 功能畫面總覽</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-controller="Permissions" asp-action="Index"><img src="" width="25px" /><span> 權限總覽</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-controller="Feedbacks" asp-action="Index"><img src="" width="25px" /><span> 回報問題總覽</span></a>
+                                        </li>
+                                    </ul>
                                 </li>
+                                <!-- #endregion -->
+                                
+                                
+                                
+                                
+                               
+                            }
+                            else if (User.IsInRole("SuperAdmin"))
+                            {
+                                
                             }
                         }
+@* 
+                        @foreach (var rolePermission in rolePermissions)
+                        {
+                            string IconUrl = string.Format("../images/{0}", item.Icon);
+                            foreach (var Permission in rolePermission.Permissions)
+                            {
+                                var item = Permission.Function.
+                                item.Function.Id
+                            } 
+                            @if (item.Permissions.)
+                            {
+                                <li>
+                                    <a class="" href="@Url.Action("Index", item.Name)">
+                                        &nbsp; 
+                                        <span style="font-size:20px;font-weight:600; vertical-align:bottom; ">@item.CName</span>
+                                    </a>
+                                </li>  
+                            }
+                            else
+                            {
+                                <li class="" style="float:left">
+                                    <a class=" " href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span style="font-size:20px;font-weight:600; vertical-align:bottom; ">@(item.CName)&nbsp;</span><span style="font-size:16px;font-weight:600; vertical-align:bottom; ">▼</span>
+                                    </a>
+                                    <!-- Dropdown - 2層 User Information -->
+                                    <div class="accordion-content">
+                                        <ul>
+                                            @foreach (ChildFunctionData childitem in item.ChildFunctionList)
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("Index",childitem.Name)"><span style="font-size:18px;font-weight:600; vertical-align:bottom; ">&nbsp;&nbsp;&nbsp;&nbsp;@(childitem.CName)</span></a>
+                                                    
+                                                    @if (childitem.ThreeFunctionList == null)
+                                                    { }
+                                                    else if (childitem.ThreeFunctionList.Count <= 0)
+                                                    { }
+                                                    else
+                                                    {
+                                                        <ul>
+                                                            @foreach (ThreeFunctionData childitem1 in childitem.ThreeFunctionList)
+                                                            {
+                                                                <li>
+                                                                    <a href="@Url.Action("Index", childitem1.Name)">
+                                                                        <span style="font-size:18px;font-weight:600; vertical-align:bottom; ">&nbsp;&nbsp;&nbsp;&nbsp;@(childitem1.CName)</span>
+                                                                    </a>
+                                                                </li>
+                                                            }
+                                                        </ul>
+
+                                                    }
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+
+                                </li>
+                            }
+                        } *@
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
