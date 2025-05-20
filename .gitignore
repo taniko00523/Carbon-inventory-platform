@@ -1,0 +1,51 @@
+# 一般 Visual Studio 相關
+.vscode/
+*.user
+*.suo
+*.cache
+*.pdb
+*.log
+*.ilk
+*.ncb
+*.obj
+*.tlb
+*.tlh
+*.tmp
+*.vs/
+
+# .NET 相關
+bin/
+obj/
+*.dll
+*.exe
+*.nuget
+*.nupkg
+*.snupkg
+*.dotCover
+
+# ASP.NET MVC 相關
+App_Data/
+App_Files/
+App_Temp/
+App_Logs/
+
+# 環境設定與憑證
+.env
+*.config.user
+secrets.json
+
+# NuGet 套件
+packages/
+project.lock.json
+project.assets.json
+*.props
+*.targets
+
+# SQL Server 相關
+*.mdf
+*.ldf
+*.bak
+
+# 輸出文件
+*.publish/
+wwwroot/
