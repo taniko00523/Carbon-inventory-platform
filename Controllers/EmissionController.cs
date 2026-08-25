@@ -22,12 +22,34 @@ namespace Carbon_inventory_platform.Controllers
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly Services.CompanyOwnershipService _ownership;
-        public EmissionController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, Services.CompanyOwnershipService ownership) : base(context)
+        private readonly Services.AreaTrendService _trend;
+        public EmissionController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, Services.CompanyOwnershipService ownership, Services.AreaTrendService trend) : base(context)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _userManager = userManager;
             _ownership = ownership;
+            _trend = trend;
+        }
+
+        // B2：歷年趨勢頁。用點進來的這個 Area 找出「同一個廠區」（CompanyId + FullAddress）
+        // 歷年的排放量資料，畫成趨勢圖；只有 1 個年度時交給 View 自己顯示空狀態，不在這裡擋。
+        public async Task<IActionResult> Trend(Guid id)
+        {
+            if (!await CanAccessAreaAsync(id))
+            {
+                return NotFound();
+            }
+
+            var area = await _context.Areas.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
+            if (area == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.AreaName = string.IsNullOrEmpty(area.Name) ? area.FullAddress : area.Name;
+            var trend = await _trend.GetTrendAsync(area.CompanyId, area.FullAddress);
+            return View(trend);
         }
 
         // 原本報表/圖表動作只用 Area Id 查詢，任何登入者拿到別家公司的 Area Id 就能取得對方完整盤查資料，
@@ -63,6 +85,7 @@ namespace Carbon_inventory_platform.Controllers
             }
 
             var emissions = await _context.Areas
+                .AsNoTracking()
                 .Include(y => y.Company)
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
@@ -97,7 +120,7 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
 
-            var emissions = await _context.Areas.Include(y => y.Company).Where(x => x.Id == id).FirstOrDefaultAsync();
+            var emissions = await _context.Areas.AsNoTracking().Include(y => y.Company).Where(x => x.Id == id).FirstOrDefaultAsync();
             return View(emissions);
 
         }
@@ -214,6 +237,7 @@ namespace Carbon_inventory_platform.Controllers
 
             // 原本只過濾 GHGs 沒有過濾 Devices，已軟刪除的排放源仍會被加總，會導致報告書數字與畫面不一致。
             Area? data = await _context.Areas
+                                        .AsNoTracking()
                                         .Where(a => a.Id == id) // isDeleted 由全域查詢過濾器處理（Area/Device/GHG 皆已套用）
                                         .Include(a => a.Company)
                                         .Include(a => a.Devices)
@@ -248,7 +272,7 @@ namespace Carbon_inventory_platform.Controllers
             // 使用排序方法來排序 GHGs
             List<Device> device = data.Devices.OrderBy(SortByDeviceScope).ToList();
             List<GHG> AllGHGs = device.SelectMany(d => d.GHGs).ToList();
-            List<ActivityData> AllActivityData = _context.ActivityDatas.ToList();
+            List<ActivityData> AllActivityData = _context.ActivityDatas.AsNoTracking().ToList();
             Area? baseYear_Area = new Area();
             if (data.BaseYear)
             {
@@ -257,6 +281,7 @@ namespace Carbon_inventory_platform.Controllers
             else
             {
                 baseYear_Area = await _context.Areas // isDeleted 由全域查詢過濾器處理
+                                        .AsNoTracking()
                                         .Where(a => a.CompanyId == data.CompanyId && a.BaseYear)
                                         .Include(a => a.Company)
                                         .Include(a => a.Devices)
@@ -594,7 +619,8 @@ namespace Carbon_inventory_platform.Controllers
                 UpdateReplacePattern(replacePatterns, "比較類別四排放差異", SumBaseAreaScope4_Emission != 0 ? ((SumScope4_Emission - SumBaseAreaScope4_Emission) / SumBaseAreaScope4_Emission * 100).ToString("N2") + "%" : "0.00%");
                 UpdateReplacePattern(replacePatterns, "比較類別五排放差異", SumBaseAreaScope5_Emission != 0 ? ((SumScope5_Emission - SumBaseAreaScope5_Emission) / SumBaseAreaScope5_Emission * 100).ToString("N2") + "%" : "0.00%");
                 UpdateReplacePattern(replacePatterns, "比較類別六排放差異", SumBaseAreaScope6_Emission != 0 ? ((SumScope6_Emission - SumBaseAreaScope6_Emission) / SumBaseAreaScope6_Emission * 100).ToString("N2") + "%" : "0.00%");
-                UpdateReplacePattern(replacePatterns, "比較總排放差異", SumBaseAreaAll_Emission != 0 ? ((SumAll_Emission - SumBaseAreaAll_Emission) / SumBaseAreaAll_Emission).ToString("N2") + "%" : "0.00%");
+                // 原本這裡漏了 * 100（上面類別一~六的差異都有乘），總排放差異在報告書上會顯示成正確值的 1/100。
+                UpdateReplacePattern(replacePatterns, "比較總排放差異", SumBaseAreaAll_Emission != 0 ? ((SumAll_Emission - SumBaseAreaAll_Emission) / SumBaseAreaAll_Emission * 100).ToString("N2") + "%" : "0.00%");
 
                 UpdateReplacePattern(replacePatterns, "基準年類別一佔比", (SumBaseAreaScope1_Emission / SumBaseAreaAll_Emission * 100).ToString("N2") + "%");
                 UpdateReplacePattern(replacePatterns, "基準年類別二佔比", (SumBaseAreaScope2_Emission / SumBaseAreaAll_Emission * 100).ToString("N2") + "%");
@@ -719,21 +745,30 @@ namespace Carbon_inventory_platform.Controllers
 
             // isDeleted 由全域查詢過濾器處理（Area/Device/GHG 皆已套用），不需要重複寫。
             var dataResult = await _context.Areas
+                                        .AsNoTracking()
                                         .Where(x => x.Id == id)
                                         .Include(x => x.Company)
                                         .Select(area => new
                                         {
                                             Area = area,
                                             Devices = _context.Devices
+                                                              .AsNoTracking()
                                                               .Where(d => d.AreaId == area.Id)
                                                               .OrderBy(d => d.Scope)
                                                               .ThenBy(d => d.EmissionPattern)
                                                               .ToList(),
-                                            AllGHGs = _context.Devices
-                                                              .Where(d => d.AreaId == area.Id)
-                                                              .SelectMany(d => d.GHGs)
+                                            // 原本用 _context.Devices.Where(...).SelectMany(d => d.GHGs) 撈 GHG，
+                                            // GenerateGHGsTable 內部要用 x.Device.EmissionPattern 篩選，
+                                            // 但這種寫法不會帶出 GHG.Device 反向導覽屬性——沒加 AsNoTracking 時，
+                                            // 是靠同一個 DbContext 裡剛好也查過 Device 讓變更追蹤器順便接上，
+                                            // 一旦改成 NoTracking（或哪天 Devices 那份查詢被拿掉）就會是 null，
+                                            // 報告書產生時整頁 500。改成直接查 GHG 並明確 Include(Device)。
+                                            AllGHGs = _context.GHGs
+                                                              .AsNoTracking()
+                                                              .Where(g => g.Device!.AreaId == area.Id)
+                                                              .Include(g => g.Device)
                                                               .ToList(),
-                                            AllActivityData = _context.ActivityDatas.ToList()
+                                            AllActivityData = _context.ActivityDatas.AsNoTracking().ToList()
                                         })
                                         .FirstOrDefaultAsync();
 
@@ -750,6 +785,7 @@ namespace Carbon_inventory_platform.Controllers
 
             // 原本用 .Select(x => x.Year) 取得不可為 null 的 int，「baseYear == null」永遠不成立，公司尚未設定基準年時會直接把 0 當作基準年印進報告書。
             var baseYear_Area = await _context.Areas // isDeleted 由全域查詢過濾器處理
+                .AsNoTracking()
                 .Where(x => x.CompanyId == data.Company.Id && x.BaseYear)
                 .FirstOrDefaultAsync();
 
@@ -1175,21 +1211,30 @@ namespace Carbon_inventory_platform.Controllers
 
             // isDeleted 由全域查詢過濾器處理（Area/Device/GHG 皆已套用），不需要重複寫。
             var dataResult = await _context.Areas
+                                        .AsNoTracking()
                                         .Where(x => x.Id == id)
                                         .Include(x => x.Company)
                                         .Select(area => new
                                         {
                                             Area = area,
                                             Devices = _context.Devices
+                                                              .AsNoTracking()
                                                               .Where(d => d.AreaId == area.Id)
                                                               .OrderBy(d => d.Scope)
                                                               .ThenBy(d => d.EmissionPattern)
                                                               .ToList(),
-                                            AllGHGs = _context.Devices
-                                                              .Where(d => d.AreaId == area.Id)
-                                                              .SelectMany(d => d.GHGs)
+                                            // 原本用 _context.Devices.Where(...).SelectMany(d => d.GHGs) 撈 GHG，
+                                            // GenerateGHGsTable 內部要用 x.Device.EmissionPattern 篩選，
+                                            // 但這種寫法不會帶出 GHG.Device 反向導覽屬性——沒加 AsNoTracking 時，
+                                            // 是靠同一個 DbContext 裡剛好也查過 Device 讓變更追蹤器順便接上，
+                                            // 一旦改成 NoTracking（或哪天 Devices 那份查詢被拿掉）就會是 null，
+                                            // 報告書產生時整頁 500。改成直接查 GHG 並明確 Include(Device)。
+                                            AllGHGs = _context.GHGs
+                                                              .AsNoTracking()
+                                                              .Where(g => g.Device!.AreaId == area.Id)
+                                                              .Include(g => g.Device)
                                                               .ToList(),
-                                            AllActivityData = _context.ActivityDatas.ToList()
+                                            AllActivityData = _context.ActivityDatas.AsNoTracking().ToList()
                                         })
                                         .FirstOrDefaultAsync();
 
@@ -1206,6 +1251,7 @@ namespace Carbon_inventory_platform.Controllers
 
             // 原本用 .Select(x => x.Year) 取得不可為 null 的 int，「baseYear == null」永遠不成立；且沒有濾除已軟刪除的基準年廠區，公司尚未設定基準年時會把 0 當作基準年印進報告書。
             var baseYear_Area = await _context.Areas // isDeleted 由全域查詢過濾器處理
+                .AsNoTracking()
                 .Where(x => x.CompanyId == data.Company.Id && x.BaseYear)
                 .FirstOrDefaultAsync();
 

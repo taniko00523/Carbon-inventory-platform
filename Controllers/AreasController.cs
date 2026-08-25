@@ -17,12 +17,14 @@ namespace Carbon_inventory_platform.Controllers
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly Services.CompanyOwnershipService _ownership;
-        public AreasController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, Services.CompanyOwnershipService ownership) : base(context)
+        private readonly Services.AreaLockService _areaLock;
+        public AreasController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, Services.CompanyOwnershipService ownership, Services.AreaLockService areaLock) : base(context)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _userManager = userManager;
             _ownership = ownership;
+            _areaLock = areaLock;
 
         }
 
@@ -105,6 +107,7 @@ namespace Carbon_inventory_platform.Controllers
             }
 
             var area = await _context.Areas
+                          .AsNoTracking()
                           .Include(x => x.Company)
                           .Where(x => x.CompanyId == Id) // isDeleted 已由全域查詢過濾器處理
                           .OrderBy(x => x.CreateTime)
@@ -257,6 +260,12 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return NotFound();
             }
+            // B5：已鎖定的年度資料視為唯讀，畫面上的編輯入口已經隱藏，這裡是防止直接送網址繞過。
+            if (await IsAreaLockedAsync(id))
+            {
+                TempData["Error"] = "此廠區已鎖定，無法修改。請聯絡管理員解鎖。";
+                return RedirectToAction(nameof(Edit), new { id });
+            }
 
             var companyId = TempData.Peek("companyId") as Guid?;
             // City / District / Address / all_Grade 是不可為 null 的字串欄位，但這個表單並沒有蒐集它們，
@@ -384,6 +393,13 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return NotFound();
             }
+            // B5：已鎖定的年度資料視為唯讀，不能刪除。
+            if (toDelete.IsLocked)
+            {
+                TempData["Error"] = "此廠區已鎖定，無法刪除。請聯絡管理員解鎖。";
+                var lockedCompanyId = TempData.Peek("companyId") as Guid?;
+                return RedirectToAction(nameof(Index), new { id = lockedCompanyId });
+            }
             // 原本依 ModifiedTime 是否為 null 決定「硬刪除」或「軟刪除」，沒改過的廠區會被硬刪除，
             // 而 Devices 對 Area 的外鍵是 Cascade，等於連帶把底下所有排放源資料一起刪光；
             // 統一改成軟刪除（isDeleted=1 + DeleteTime），不再有任何情況會真的刪掉資料列。
@@ -393,6 +409,42 @@ namespace Carbon_inventory_platform.Controllers
             var companyId = TempData.Peek("companyId") as Guid?;
             return RedirectToAction(nameof(Index), new { id = companyId });
         }
+
+        // B5：填報單位確認資料填完之後可以自己鎖定，避免之後被誤改；
+        // 但解鎖（發現填錯要改）只給 Admin，鎖定才有意義。
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Lock(Guid id)
+        {
+            if (await FindOwnedAreaAsync(id) == null)
+            {
+                return NotFound();
+            }
+
+            var userId = _userManager.GetUserId(User);
+            var userName = User.Identity?.Name;
+            await _areaLock.LockAsync(id, userId, userName);
+
+            var companyId = TempData.Peek("companyId") as Guid?;
+            return RedirectToAction(nameof(Index), new { id = companyId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,SuperAdmin")]
+        public async Task<IActionResult> Unlock(Guid id)
+        {
+            if (await FindOwnedAreaAsync(id) == null)
+            {
+                return NotFound();
+            }
+
+            await _areaLock.UnlockAsync(id);
+
+            var companyId = TempData.Peek("companyId") as Guid?;
+            return RedirectToAction(nameof(Index), new { id = companyId });
+        }
+
         private bool AreaExists(Guid id)
         {
             return (_context.Areas?.Any(e => e.Id == id)).GetValueOrDefault();
@@ -483,6 +535,12 @@ namespace Carbon_inventory_platform.Controllers
             if (existing == null || await FindOwnedAreaAsync(existing.AreaId) == null)
             {
                 return NotFound();
+            }
+            // B5：已鎖定的年度資料視為唯讀，重大性評估也不能再改。
+            if (await IsAreaLockedAsync(existing.AreaId))
+            {
+                TempData["Error"] = "此廠區已鎖定，無法修改重大性評估。請聯絡管理員解鎖。";
+                return RedirectToAction(nameof(Analyses), new { Id = existing.AreaId });
             }
             // 24 個 Remark 欄位是不可為 null 的字串，但屬於選填備註，在 <Nullable>enable</Nullable> 下
             // 會被 MVC 視為隱含必填，只要使用者清空備註就會導致 ModelState 永遠失敗、儲存完全沒反應。

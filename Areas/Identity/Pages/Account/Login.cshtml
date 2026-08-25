@@ -31,10 +31,16 @@
                 </div>
                 <div>
                     <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">登入</button>
-                </div>@*  <div>
+                </div>
+                @* B6：忘記密碼現在有真正會寄信的 IEmailSender 可用，恢復這個連結。
+                   註冊/重寄確認信的連結仍保留註解——這個系統的帳號一律由管理員建立，
+                   沒有開放自行註冊的流程。 *@
+                <div>
                     <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        <a id="forgot-password" asp-page="./ForgotPassword">忘記密碼？</a>
                     </p>
+                </div>
+                @* <div>
                     <p>
                         <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
                     </p>

@@ -24,7 +24,7 @@ namespace Carbon_inventory_platform.Controllers
         // GET: FunctionActions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.FunctionActions.ToListAsync());
+            return View(await _context.FunctionActions.AsNoTracking().ToListAsync());
         }
 
         // GET: FunctionActions/Details/5
@@ -35,7 +35,7 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
 
-            var functionAction = await _context.FunctionActions
+            var functionAction = await _context.FunctionActions.AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (functionAction == null)
             {
@@ -77,7 +77,7 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
 
-            var functionAction = await _context.FunctionActions.FindAsync(id);
+            var functionAction = await _context.FunctionActions.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id);
             if (functionAction == null)
             {
                 return NotFound();
@@ -128,7 +128,7 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
 
-            var functionAction = await _context.FunctionActions
+            var functionAction = await _context.FunctionActions.AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (functionAction == null)
             {

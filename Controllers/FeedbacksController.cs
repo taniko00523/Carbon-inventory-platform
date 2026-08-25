@@ -43,7 +43,7 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Feedbacks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Feedbacks.OrderByDescending(f => f.CreatedAt).ToListAsync());
+            return View(await _context.Feedbacks.AsNoTracking().OrderByDescending(f => f.CreatedAt).ToListAsync());
         }
 
         // GET: Feedbacks/Details/5
@@ -54,7 +54,7 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
 
-            var feedback = await _context.Feedbacks
+            var feedback = await _context.Feedbacks.AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (feedback == null)
             {
@@ -97,7 +97,7 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
 
-            var feedback = await _context.Feedbacks.FindAsync(id);
+            var feedback = await _context.Feedbacks.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id);
             if (feedback == null)
             {
                 return NotFound();
@@ -148,7 +148,7 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
 
-            var feedback = await _context.Feedbacks
+            var feedback = await _context.Feedbacks.AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (feedback == null)
             {
@@ -222,7 +222,7 @@ namespace Carbon_inventory_platform.Controllers
             if (_signInManager.IsSignedIn(User))
             {
                 var userId = _userManager.GetUserId(User);
-                var company = await _context.Companies.FirstOrDefaultAsync(x => x.UserId == userId);
+                var company = await _context.Companies.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == userId);
                 if (company != null)
                 {
                     companyName = company.Name;

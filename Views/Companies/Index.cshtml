@@ -1,21 +1,13 @@
+@using Carbon_inventory_platform.Services
 @model IEnumerable<Carbon_inventory_platform.ViewModel.CompanyUserViewModel>
 @{
     ViewData["Title"] = "公司總覽";
 
     // 原本這裡是 8 個獨立欄位，每個只顯示「V」或空白，代表公司簡介/前言/報告用途…
     // 是否已填寫，資訊密度很低又佔掉一大片橫向空間。改成單一「填寫進度」欄位。
-    // 這 8 個欄位同時也是報告書會用到的內容，所以用同一份清單驅動兩份渲染邏輯。
-    (string Label, Func<Carbon_inventory_platform.Models.Company, bool> Filled)[] reportFields =
-    {
-        ("公司簡介", c => !string.IsNullOrEmpty(c.CompanyInformation)),
-        ("前言", c => !string.IsNullOrEmpty(c.ReportOpening)),
-        ("報告用途", c => !string.IsNullOrEmpty(c.ReportingPurposes)),
-        ("組織邊界", c => !string.IsNullOrEmpty(c.AddressInformation)),
-        ("報告邊界", c => !string.IsNullOrEmpty(c.ReportingInformation)),
-        ("溫室氣體", c => !string.IsNullOrEmpty(c.GHGInformation)),
-        ("直接溫室氣體", c => !string.IsNullOrEmpty(c.Scope1Information)),
-        ("間接溫室氣體", c => !string.IsNullOrEmpty(c.Scope2Information)),
-    };
+    // 這 8 個欄位同時也是報告書會用到的內容，定義抽到 Services/CompanyReportProgress.cs，
+    // 首頁儀表板（B3）統計「本年度已完成盤查數」時也用同一套定義，避免兩處各自維護一份。
+    var reportFields = CompanyReportProgress.ReportFields;
 }
 
 <div class="cip-page-head">
@@ -134,19 +126,9 @@ else
     </div>
 }
 
-@if (ViewData["TotalPages"] != null)
+@await Html.PartialAsync("_Pagination", new Carbon_inventory_platform.ViewModel.PaginationViewModel
 {
-    int totalPages = (int)ViewData["TotalPages"];
-    int currentPage = (int)ViewData["PageNumber"];
-
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            @for (int i = 1; i <= totalPages; i++)
-            {
-                <li class="page-item @(i == currentPage ? "active" : "")">
-                    <a class="page-link" href="?searchTerm=@ViewData["SearchTerm"]&pageNumber=@i">@i</a>
-                </li>
-            }
-        </ul>
-    </nav>
-}
+    CurrentPage = (int)ViewData["PageNumber"]!,
+    TotalPages = (int)ViewData["TotalPages"]!,
+    PageUrl = i => Url.Action("Index", new { searchTerm = ViewData["SearchTerm"], pageNumber = i })!,
+})

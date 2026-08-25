@@ -217,6 +217,22 @@ namespace Carbon_inventory_platform.Models
         [Column(TypeName = "decimal(18, 2)")]
         public decimal UUL { get; set; } = 0;
 
+        // ---- B5：盤查年度鎖定與簽核 ----------------------------------------
+        [Display(Name = "是否已鎖定")]
+        public bool IsLocked { get; set; } = false;
+        [Display(Name = "鎖定時間")]
+        public DateTime? LockedAt { get; set; }
+        [MaxLength(450)]
+        [Display(Name = "鎖定者")]
+        public string? LockedByUserId { get; set; }
+        [MaxLength(100)]
+        [Display(Name = "鎖定者名稱")]
+        public string? LockedByUserName { get; set; }
+        // 鎖定當下的總排放量快照，之後即使 All 因為其他原因被改變，仍能對照「鎖定時是多少」。
+        [Column(TypeName = "decimal(18, 4)")]
+        [Display(Name = "鎖定時的總排放量")]
+        public decimal? LockedSnapshotAll { get; set; }
+
         //Navigation導覽屬性
         [ForeignKey("CompanyId")]
         public Company? Company { get; set; }

@@ -60,6 +60,11 @@
                                     <span>邊界總覽</span>
                                 </a>
                             </li>
+                            @* 依角色權限總覽的設定，動態列出這個角色被額外開放的後台畫面
+                               （例如唯讀稽核員被開放檢視「排放係數設定」）。原本這裡完全沒有
+                               任何連結能進到這些畫面，即使角色權限總覽已經授權，使用者也只能
+                               手動輸入網址才能用到被開放的功能。 *@
+                            @await Component.InvokeAsync("BackendMenu")
                         }
                         else if (isAdmin)
                         {
@@ -99,6 +104,7 @@
                                     @* 原本選單沒有「角色權限總覽」，只能手動輸入網址才進得去 *@
                                     <li><a class="dropdown-item" asp-controller="RolePermissions" asp-action="Index">角色權限總覽</a></li>
                                     <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" asp-controller="AuditLogs" asp-action="Index">稽核軌跡</a></li>
                                     <li><a class="dropdown-item" asp-controller="Feedbacks" asp-action="Index">回報問題總覽</a></li>
                                 </ul>
                             </li>

@@ -36,7 +36,9 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        [Display(Name = "帳號")]
+        // 這裡管理的是「通知信箱」（忘記密碼、帳號到期等通知信要寄去的地址），
+        // 不是登入用的帳號名稱（登入仍然用 UserName）。
+        [Display(Name = "通知信箱")]
         public string Email { get; set; }
 
         /// <summary>
@@ -70,7 +72,8 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [Display(Name = "新的帳號")]
+            [EmailAddress(ErrorMessage = "請輸入正確的電子郵件格式。")]
+            [Display(Name = "新的通知信箱")]
             public string NewEmail { get; set; }
         }
 
@@ -116,33 +119,22 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
             var email = await _userManager.GetEmailAsync(user);
             if (Input.NewEmail != email)
             {
-                // set the email on the user, but don't send any email
-                await _userManager.SetEmailAsync(user, Input.NewEmail) ;
+                // 這裡的「Email」在這個系統裡不是另外驗證的信箱，而是忘記密碼／帳號通知信要
+                // 寄去的地址，直接設定並標記為已確認，不用先寄一封確認信才能生效（B6：這裡
+                // 改好之後，使用者才有地方能把系統預設塞進去的「帳號當 Email」換成真正收得到
+                // 信的地址，忘記密碼流程才有意義）。
+                await _userManager.SetEmailAsync(user, Input.NewEmail);
 
-                //generate an email confirmation token
                 var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                await _userManager.ConfirmEmailAsync(user, emailConfirmationToken);
 
-                //confirm the new email right away
-                var result = await _userManager.ConfirmEmailAsync(user, emailConfirmationToken);
-                ////改
-                //var userId = await _userManager.GetUserIdAsync(user);
-                //var code = await _userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
-                //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                //var callbackUrl = Url.Page(
-                //    "/Account/ConfirmEmailChange",
-                //    pageHandler: null,
-                //    values: new { area = "Identity", userId = userId, email = Input.NewEmail, code = code },
-                //    protocol: Request.Scheme);
-                //await _emailSender.SendEmailAsync(
-                //    Input.NewEmail,
-                //    "Confirm your email",
-                //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                //StatusMessage = "Confirmation link to change email sent. Please check your email.";
-                //return RedirectToPage();
+                // 原本這行寫在 if 區塊外面，不管有沒有真的換成功都顯示「未變更」，使用者換好信箱
+                // 也看不出來是否成功。
+                StatusMessage = "電子郵件已更新。";
+                return RedirectToPage();
             }
 
-            StatusMessage = "Your email is unchanged.";
+            StatusMessage = "電子郵件未變更。";
             return RedirectToPage();
         }
 

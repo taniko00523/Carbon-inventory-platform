@@ -3,25 +3,75 @@ using Carbon_inventory_platform.Models;
 using Carbon_inventory_platform.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 namespace Carbon_inventory_platform.Controllers
 {
     public class CountController : Controller
     {
+        // A3：Excel 匯入排放源時，這裡的計算方法會「每一筆排放源」呼叫一次，原本每次都把
+        // 整張 GWP 表載入記憶體。GWP 幾乎不會變動，快取起來即可；GWPController 的
+        // Add/Edit/DeleteConfirmed 存檔成功後會清除這個快取鍵，確保後台改了 GWP 值後立即生效。
+        public const string GwpCacheKey = "CountController:GWPs";
+
         private readonly ApplicationDbContext _context;
         public CountController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // 找不到GWP或排放係數時原本完全沒有任何提示，排放量會靜靜地變成0，這裡至少寫一筆警告到記錄檔。
-        // 不改建構子(三個子控制器都繼承本類別)，直接向請求範圍要 ILogger，取不到就跳過。
-        // protected: 讓 Devices/Emission/Areas 三個子類別也能記錄「係數缺漏」的警告。
+        // 不改建構子(三個子控制器都繼承本類別)，直接向請求範圍要服務，取不到就跳過／退回查資料庫。
+        // protected: 讓 Devices/Emission/Areas 三個子類別也能用。
+        [NonAction]
         protected void WarnMissingFactor(string message)
         {
             var logger = HttpContext?.RequestServices?.GetService(typeof(ILogger<CountController>)) as ILogger<CountController>;
             logger?.LogWarning("{Message}", message);
+        }
+
+        [NonAction]
+        protected async Task<List<GWP>> GetGWPListAsync()
+        {
+            var cache = HttpContext?.RequestServices?.GetService(typeof(IMemoryCache)) as IMemoryCache;
+            if (cache == null)
+            {
+                return await _context.GWPs.AsNoTracking().ToListAsync();
+            }
+            if (cache.TryGetValue(GwpCacheKey, out List<GWP>? cached) && cached != null)
+            {
+                return cached;
+            }
+            // AsNoTracking 在這裡不只是省追蹤開銷：這份清單會被快取 30 分鐘、跨請求／跨
+            // DbContext 執行個體重複使用，若是追蹤中的實體，會被綁在早就處置(Dispose)的
+            // DbContext 上，之後任何人碰到都可能出問題。
+            var list = await _context.GWPs.AsNoTracking().ToListAsync();
+            cache.Set(GwpCacheKey, list, TimeSpan.FromMinutes(30));
+            return list;
+        }
+
+        // B5：Areas/Devices/Emission 三個子類別共用，判斷這個廠區是否已鎖定。
+        // 沿用 WarnMissingFactor／GetGWPListAsync 的作法：不改建構子，直接向請求範圍要服務。
+        [NonAction]
+        protected async Task<bool> IsAreaLockedAsync(Guid? areaId)
+        {
+            var lockService = HttpContext?.RequestServices?.GetService(typeof(AreaLockService)) as AreaLockService;
+            if (lockService == null)
+            {
+                return false;
+            }
+            return await lockService.IsAreaLockedAsync(areaId);
+        }
+
+        [NonAction]
+        protected async Task<bool> IsAreaLockedByDeviceIdAsync(Guid? deviceId)
+        {
+            var lockService = HttpContext?.RequestServices?.GetService(typeof(AreaLockService)) as AreaLockService;
+            if (lockService == null)
+            {
+                return false;
+            }
+            return await lockService.IsAreaLockedByDeviceIdAsync(deviceId);
         }
 
         // 這三個純數學函式已抽到 Services/EmissionMath.cs（方便直接寫單元測試，
@@ -39,7 +89,7 @@ namespace Carbon_inventory_platform.Controllers
         public async Task<bool> CEFAddAsync(Device device, string GHG, decimal? CEF) //自訂排碳係數
         {
             int ARVersion = await _context.Areas.Where(x => x.Id == device.AreaId).Select(x => x.ARVersion).FirstOrDefaultAsync();
-            var GWP = await _context.GWPs.ToListAsync();
+            var GWP = await GetGWPListAsync();
             if (GWP == null)
             {
                 return false;
@@ -109,12 +159,12 @@ namespace Carbon_inventory_platform.Controllers
         [NonAction]
         public async Task<GHG?> GHGCheckAsync(Device device, string deviceName, string material, string scope, string emisspatern, int year, int ARVersion) //設定資料庫排碳係數及GWP
         {
-            var GWP = await _context.GWPs.ToListAsync();
-            var MaterialList = await _context.Materials
+            var GWP = await GetGWPListAsync();
+            var MaterialList = await _context.Materials.AsNoTracking()
                                     .Where(x => x.Name == material && x.Scope == scope && x.EmissionPattern == emisspatern && x.Year <= year).ToListAsync();
             var Material = MaterialList.OrderByDescending(x => x.Year).FirstOrDefault();
 
-            var otherMaterial = await _context.Materials.Where(x => x.Name == deviceName && x.Scope == scope && x.EmissionPattern == emisspatern).FirstOrDefaultAsync(); //目前只有冷媒設備，但我包含了PFCS以防萬一
+            var otherMaterial = await _context.Materials.AsNoTracking().Where(x => x.Name == deviceName && x.Scope == scope && x.EmissionPattern == emisspatern).FirstOrDefaultAsync(); //目前只有冷媒設備，但我包含了PFCS以防萬一
             if (ModelState.IsValid)
             {
                 if (Material != null)
@@ -414,7 +464,7 @@ namespace Carbon_inventory_platform.Controllers
         [NonAction]
         public async Task CountEmissionData(Guid? id)
         {
-            var activityDatas = await _context.ActivityDatas.Where(x => x.DeviceId == id).ToListAsync();
+            var activityDatas = await _context.ActivityDatas.AsNoTracking().Where(x => x.DeviceId == id).ToListAsync();
             decimal Num = activityDatas.Sum(x => x.Num);
 
 

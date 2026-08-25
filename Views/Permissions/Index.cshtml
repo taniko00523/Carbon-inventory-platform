@@ -71,3 +71,10 @@
     </tbody>
 </table>
 </div>
+
+@await Html.PartialAsync("_Pagination", new Carbon_inventory_platform.ViewModel.PaginationViewModel
+{
+    CurrentPage = (int)ViewData["PageNumber"]!,
+    TotalPages = (int)ViewData["TotalPages"]!,
+    PageUrl = i => Url.Action("Index", new { pageNumber = i })!,
+})

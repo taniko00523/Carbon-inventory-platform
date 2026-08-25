@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System.Collections.Generic;
@@ -150,6 +151,10 @@ public class UserController : Controller
             var user = CreateUser();
             await _userStore.SetUserNameAsync(user, account, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, account, CancellationToken.None);
+            // 這些帳號是管理員直接設定密碼建立的，不是使用者自行註冊，沒有「先確認信箱才能用」的
+            // 必要；EmailConfirmed 預設是 false，會讓 B6 的忘記密碼流程（ForgotPassword.cshtml.cs
+            // 會檢查 IsEmailConfirmedAsync）對每一個帳號都直接判定失敗、安靜地不寄信。
+            user.EmailConfirmed = true;
             var result = await _userManager.CreateAsync(user, model.Password!);
 
             if (result.Succeeded)
@@ -211,7 +216,7 @@ public class UserController : Controller
             .Select(user => new CompanyUserViewModel
             {
                 ApplicationUser = user,
-                Company = _context.Companies.FirstOrDefault(x => x.UserId == user.Id)
+                Company = _context.Companies.AsNoTracking().FirstOrDefault(x => x.UserId == user.Id)
             }).ToList();
 
         return View("Index", viewModel);
@@ -249,6 +254,9 @@ public class UserController : Controller
         await _emailStore.SetEmailAsync(user,
             string.IsNullOrWhiteSpace(model.ApplicationUser.Email) ? model.ApplicationUser.UserName : model.ApplicationUser.Email,
             CancellationToken.None);
+        // 管理員直接設定密碼建立的帳號，不需要「先確認信箱才能用」；否則 B6 的忘記密碼流程
+        // （檢查 IsEmailConfirmedAsync）會對每個帳號直接判定失敗、安靜地不寄信。
+        user.EmailConfirmed = true;
         var result = await _userManager.CreateAsync(user, model.Password);
 
         if (result.Succeeded)
@@ -406,7 +414,7 @@ public class UserController : Controller
             CompanyUserViewModel model = new CompanyUserViewModel
             {
                 ApplicationUser = user,
-                Company = _context.Companies.FirstOrDefault(x => x.UserId == user.Id)
+                Company = _context.Companies.AsNoTracking().FirstOrDefault(x => x.UserId == user.Id)
             };
             viewModel.Add(model);
         }

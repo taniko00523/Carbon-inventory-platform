@@ -1,0 +1,98 @@
+@model List<Carbon_inventory_platform.Models.AuditLog>
+@{
+    ViewData["Title"] = "稽核軌跡";
+    var entityNames = (string[])ViewBag.EntityNames;
+}
+
+<div class="cip-page-head">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+        <p class="cip-page-sub">共 @ViewBag.TotalCount 筆紀錄。這裡的紀錄無法透過任何介面修改或刪除。</p>
+    </div>
+</div>
+
+<form method="get" asp-action="Index" class="cip-section d-flex flex-wrap gap-2 align-items-end">
+    <div>
+        <label class="form-label" for="entityName">實體</label>
+        <select id="entityName" name="entityName" class="form-select">
+            <option value="">全部</option>
+            @foreach (var name in entityNames)
+            {
+                <option value="@name" selected="@(name == (string)ViewBag.EntityName ? "selected" : null)">@name</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label class="form-label" for="userName">使用者名稱</label>
+        <input type="text" id="userName" name="userName" class="form-control" value="@ViewBag.UserName" placeholder="部分比對" />
+    </div>
+    <div>
+        <label class="form-label" for="from">起始日期</label>
+        <input type="date" id="from" name="from" class="form-control" value="@ViewBag.From" />
+    </div>
+    <div>
+        <label class="form-label" for="to">結束日期</label>
+        <input type="date" id="to" name="to" class="form-control" value="@ViewBag.To" />
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">篩選</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">清除</a>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="cip-empty cip-section">
+        <div class="cip-empty-icon" aria-hidden="true">🗒️</div>
+        <p class="cip-empty-title">沒有符合條件的稽核紀錄</p>
+    </div>
+}
+else
+{
+    <div class="cip-table-wrap">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>時間</th>
+                    <th>使用者</th>
+                    <th>動作</th>
+                    <th>實體</th>
+                    <th>資料 Id</th>
+                    <th>來源 IP</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model)
+                {
+                    <tr>
+                        <td>@log.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        <td>@(log.UserName ?? "(不明使用者)")</td>
+                        <td>
+                            @{
+                                var badgeClass = log.Action switch
+                                {
+                                    "Create" => "cip-badge-success",
+                                    "Delete" => "cip-badge-danger",
+                                    _ => "cip-badge-warning",
+                                };
+                            }
+                            <span class="cip-badge @badgeClass">@log.Action</span>
+                        </td>
+                        <td>@log.EntityName</td>
+                        <td class="cip-num" style="max-width:220px; overflow:hidden; text-overflow:ellipsis;" title="@log.EntityId">@log.EntityId</td>
+                        <td>@(log.IpAddress ?? "—")</td>
+                        <td><a class="btn btn-sm btn-outline-info" asp-action="Details" asp-route-id="@log.Id">詳細</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@await Html.PartialAsync("_Pagination", new Carbon_inventory_platform.ViewModel.PaginationViewModel
+{
+    CurrentPage = (int)ViewBag.PageNumber,
+    TotalPages = (int)ViewBag.TotalPages,
+    PageUrl = i => Url.Action("Index", new { entityName = ViewBag.EntityName, userName = ViewBag.UserName, from = ViewBag.From, to = ViewBag.To, pageNumber = i })!,
+})

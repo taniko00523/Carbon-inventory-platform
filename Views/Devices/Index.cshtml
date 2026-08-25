@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "排放源資料";
+    // B5：已鎖定的年度資料視為唯讀，這個旗標決定要不要顯示新增/修改/刪除/匯入等編輯入口。
+    var isLocked = TempData.Peek("areaIsLocked") is true;
 }
 <div class="cip-page-head">
     <div>
@@ -22,27 +24,40 @@
     </div>
 </div>
 
+@if (isLocked)
+{
+    <div class="alert alert-warning" role="status">
+        此廠區已鎖定，排放源與活動數據皆為唯讀。如需修改請聯絡管理員解鎖。
+    </div>
+}
+
 <section class="cip-section">
     @* 原本這組「新增設備」按鈕與匯入表單在桌機版、手機版各寫了一份，且 id/name 完全相同，
        手機版的 input 永遠抓不到（document.getElementById 只會抓到第一份），造成手機版匯入功能失效；
        桌機版也可能被瀏覽器誤判成同一份表單。這裡合併成單一一份，不需要依斷點各放一份。 *@
     <div class="d-flex justify-content-between flex-wrap gap-2">
         <div class="d-flex align-items-center gap-2 flex-wrap">
-            <a class="btn btn-primary" asp-action="Create">新增設備</a>
-            <form id="uploadForm" enctype="multipart/form-data" class="d-flex align-items-center gap-2">
-                @Html.AntiForgeryToken()
-                <input type="hidden" id="areaId" value="@TempData.Peek("areaId")" />
-                <input class="form-control" type="file" id="excelFile" name="file" accept=".xlsx, .xls" style="max-width:280px;" />
-                <button class="btn btn-primary" type="submit">匯入</button>
-            </form>
+            @if (!isLocked)
+            {
+                <a class="btn btn-primary" asp-action="Create">新增設備</a>
+                <form id="uploadForm" enctype="multipart/form-data" class="d-flex align-items-center gap-2">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="areaId" value="@TempData.Peek("areaId")" />
+                    <input class="form-control" type="file" id="excelFile" name="file" accept=".xlsx, .xls" style="max-width:280px;" />
+                    <button class="btn btn-primary" type="submit">匯入</button>
+                </form>
+            }
         </div>
             @* 原本這組操作按鈕在桌機版、手機版各寫了一份（只有部分文字不同），完全是同一組按鈕，
                沒有理由要維護兩份。按鈕本身沒有 id，用 flex-wrap 就能同時支援兩種螢幕寬度，合併成一份。 *@
             <div class="cip-page-actions flex-wrap">
                 @if (Model.Count() < 1)
                 {
-                    <a class="btn btn-primary" asp-action="Default" asp-route-id="@TempData.Peek("areaId")">導入預設</a>
-                    <a href="@Url.Action("DownloadSampleFile", "Devices")" class="btn btn-primary">下載範例檔</a>
+                    @if (!isLocked)
+                    {
+                        <a class="btn btn-primary" asp-action="Default" asp-route-id="@TempData.Peek("areaId")">導入預設</a>
+                        <a href="@Url.Action("DownloadSampleFile", "Devices")" class="btn btn-primary">下載範例檔</a>
+                    }
                 }
                 else
                 {
@@ -247,23 +262,29 @@
                                 @item.Emissions.ToString("N4") 噸CO₂e
                             </td>
                             <td>
-                                @if (item.ActivityDatas.Count != 0)
+                                @if (!isLocked)
                                 {
-                                    <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">修改活動數據</a>
+                                    @if (item.ActivityDatas.Count != 0)
+                                    {
+                                        <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">修改活動數據</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
+                                    }
+                                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
+                                    <a class="btn btn-success" asp-action="Copy" asp-route-id="@item.Id">
+                                        複製
+                                    </a>
                                 }
-                                else
-                                {
-                                    <a class="btn btn-primary" asp-action="AddActivityData" asp-route-id="@item.Id">新增活動數據</a>
-                                }
-                                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
-                                <a class="btn btn-success" asp-action="Copy" asp-route-id="@item.Id">
-                                    複製
-                                </a>
                             </td>
                             <td>
-                                <form method="post" asp-controller="Devices" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">
-                                    <button type="submit" class="btn btn-danger">刪除</button>
-                                </form>
+                                @if (!isLocked)
+                                {
+                                    <form method="post" asp-controller="Devices" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">
+                                        <button type="submit" class="btn btn-danger">刪除</button>
+                                    </form>
+                                }
                             </td>
                         </tr>
                     }
@@ -376,12 +397,15 @@
                             }
                             <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Emissions):</strong> @item.Emissions.ToString("N4") 噸CO₂e</p>
 
-                            <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">@((item.ActivityDatas.Count != 0) ? "修改活動數據" : "新增活動數據")</a>
-                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
-                            <a class="btn btn-success" asp-action="Copy" asp-route-id="@item.Id">複製</a>
-                            <form method="post" asp-controller="Devices" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');" class="d-inline">
-                                <button type="submit" class="btn btn-danger">刪除</button>
-                            </form>
+                            @if (!isLocked)
+                            {
+                                <a class="btn btn-success" asp-action="AddActivityData" asp-route-id="@item.Id">@((item.ActivityDatas.Count != 0) ? "修改活動數據" : "新增活動數據")</a>
+                                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">修改</a>
+                                <a class="btn btn-success" asp-action="Copy" asp-route-id="@item.Id">複製</a>
+                                <form method="post" asp-controller="Devices" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');" class="d-inline">
+                                    <button type="submit" class="btn btn-danger">刪除</button>
+                                </form>
+                            }
                         </div>
                     </div>
                 }

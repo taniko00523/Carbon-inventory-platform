@@ -30,6 +30,7 @@ namespace Carbon_inventory_platform.Controllers
             // 是典型的 N+1；而且完全沒有濾掉已軟刪除（isDeleted=1）的公司，全部撈進記憶體之後才做搜尋跟分頁。
             // 改成從 Companies 直接下手，一次查詢、交給資料庫做搜尋與分頁；isDeleted 現在由全域查詢過濾器處理。
             IQueryable<Company> query = _context.Companies
+                .AsNoTracking()
                 .Where(c => c.User == null || c.User.Email != "Admin")
                 .Include(c => c.User);
 
@@ -38,16 +39,9 @@ namespace Carbon_inventory_platform.Controllers
                 query = query.Where(c => c.Name.Contains(searchTerm));
             }
 
-            int totalItems = await query.CountAsync();
-            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            var paged = await PagedResult<Company>.CreateAsync(query.OrderBy(c => c.CreateTime), pageNumber, pageSize);
 
-            var companies = await query
-                .OrderBy(c => c.CreateTime)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-
-            var viewModel = companies.Select(c => new CompanyUserViewModel
+            var viewModel = paged.Items.Select(c => new CompanyUserViewModel
             {
                 Company = c,
                 ApplicationUser = c.User
@@ -55,8 +49,8 @@ namespace Carbon_inventory_platform.Controllers
 
             // 將搜尋和分頁資訊加入ViewData
             ViewData["SearchTerm"] = searchTerm;
-            ViewData["PageNumber"] = pageNumber;
-            ViewData["TotalPages"] = totalPages;
+            ViewData["PageNumber"] = paged.PageNumber;
+            ViewData["TotalPages"] = paged.TotalPages;
 
             return View(viewModel);
         }
@@ -65,7 +59,7 @@ namespace Carbon_inventory_platform.Controllers
             // 原本用 FindAsync 直接找，沒有濾掉已軟刪除（isDeleted=1）的公司，
             // 站內找不到任何「復原已刪除公司」的功能，等於讓已刪除的公司還能被打開來改。
             // isDeleted 現在由全域查詢過濾器處理，這裡不需要重複寫。
-            Company? company = await _context.Companies.FirstOrDefaultAsync(x => x.Id == id);
+            Company? company = await _context.Companies.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
             if (company == null)
             {

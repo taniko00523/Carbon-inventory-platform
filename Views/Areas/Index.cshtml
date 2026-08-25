@@ -59,6 +59,10 @@ else
                             {
                                 <span class="cip-badge cip-badge-success">基準年</span>
                             }
+                            @if (item.IsLocked)
+                            {
+                                <span class="cip-badge cip-badge-warning" title="鎖定時間：@item.LockedAt?.ToString("yyyy-MM-dd HH:mm")　鎖定者：@item.LockedByUserName">已鎖定</span>
+                            }
                         </td>
                         <td>@Html.DisplayFor(modelItem => item.Type)</td>
                         <td>
@@ -91,26 +95,48 @@ else
                             </div>
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-info" asp-controller="Areas" asp-action="Analyses" asp-route-id="@item.Id">設定</a>
+                            @if (!item.IsLocked)
+                            {
+                                <a class="btn btn-sm btn-info" asp-controller="Areas" asp-action="Analyses" asp-route-id="@item.Id">設定</a>
+                            }
                         </td>
                         <td class="cip-table-actions">
-                            <form method="post" asp-action="CopyArea" asp-route-id="@item.Id" onsubmit="return confirm('確定要複製這個廠區嗎？');" class="d-inline">
-                                <button type="submit" class="btn btn-sm btn-outline-primary">複製</button>
-                            </form>
-                            @if (item.Name != "")
+                            @if (!item.IsLocked)
                             {
-                                <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">修改</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id">填寫</a>
+                                <form method="post" asp-action="CopyArea" asp-route-id="@item.Id" onsubmit="return confirm('確定要複製這個廠區嗎？');" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">複製</button>
+                                </form>
+                                @if (item.Name != "")
+                                {
+                                    <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">修改</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id">填寫</a>
+                                }
                             }
                             <a class="btn btn-sm btn-info" asp-controller="Devices" asp-action="Index" asp-route-id="@item.Id">排放源資料</a>
+                            <a class="btn btn-sm btn-outline-info" asp-controller="Emission" asp-action="Trend" asp-route-id="@item.Id">歷年趨勢</a>
+                            @if (!item.IsLocked)
+                            {
+                                <form method="post" asp-action="Lock" asp-route-id="@item.Id" onsubmit="return confirm('鎖定後這個廠區的資料就不能再修改，只有管理員能解鎖，確定要鎖定嗎？');" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-warning">鎖定</button>
+                                </form>
+                            }
+                            else if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                            {
+                                <form method="post" asp-action="Unlock" asp-route-id="@item.Id" onsubmit="return confirm('確定要解鎖這個廠區嗎？');" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">解鎖</button>
+                                </form>
+                            }
                         </td>
                         <td>
-                            <form method="post" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">
-                                <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
-                            </form>
+                            @if (!item.IsLocked)
+                            {
+                                <form method="post" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
+                                </form>
+                            }
                         </td>
                     </tr>
                 }
@@ -134,6 +160,10 @@ else
                             {
                                 <span class="cip-badge cip-badge-success">基準年</span>
                             }
+                            @if (item.IsLocked)
+                            {
+                                <span class="cip-badge cip-badge-warning">已鎖定</span>
+                            }
                         </p>
                         <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Type):</strong> @Html.DisplayFor(modelItem => item.Type)</p>
 
@@ -154,27 +184,46 @@ else
                                 }
                             </span>
                         </p>
-                        <p class="card-text">
-                            <strong>重大性評估:</strong>
-                            <a class="btn btn-sm btn-info" asp-controller="Areas" asp-action="Analyses" asp-route-id="@item.Id">設定</a>
-                        </p>
+                        @if (!item.IsLocked)
+                        {
+                            <p class="card-text">
+                                <strong>重大性評估:</strong>
+                                <a class="btn btn-sm btn-info" asp-controller="Areas" asp-action="Analyses" asp-route-id="@item.Id">設定</a>
+                            </p>
+                        }
                         <div class="btn-group" role="group">
-                            <form method="post" asp-action="CopyArea" asp-route-id="@item.Id" onsubmit="return confirm('確定要複製這個廠區嗎？');" class="d-inline">
-                                <button type="submit" class="btn btn-sm btn-outline-primary">複製</button>
-                            </form>
-                            @if (!string.IsNullOrEmpty(item.Name))
+                            @if (!item.IsLocked)
                             {
-                                <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">修改</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id">填寫</a>
+                                <form method="post" asp-action="CopyArea" asp-route-id="@item.Id" onsubmit="return confirm('確定要複製這個廠區嗎？');" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">複製</button>
+                                </form>
+                                @if (!string.IsNullOrEmpty(item.Name))
+                                {
+                                    <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">修改</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id">填寫</a>
+                                }
                             }
                             <a class="btn btn-sm btn-info" asp-controller="Devices" asp-action="Index" asp-route-id="@item.Id">排放源資料</a>
+                            <a class="btn btn-sm btn-outline-info" asp-controller="Emission" asp-action="Trend" asp-route-id="@item.Id">歷年趨勢</a>
                         </div>
-                        <form method="post" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');" class="d-inline">
-                            <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
-                        </form>
+                        @if (!item.IsLocked)
+                        {
+                            <form method="post" asp-action="Lock" asp-route-id="@item.Id" onsubmit="return confirm('鎖定後這個廠區的資料就不能再修改，只有管理員能解鎖，確定要鎖定嗎？');" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-warning">鎖定</button>
+                            </form>
+                            <form method="post" asp-action="Delete" asp-route-id="@item.Id" onsubmit="return confirm('確定要刪除嗎？');" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
+                            </form>
+                        }
+                        else if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                        {
+                            <form method="post" asp-action="Unlock" asp-route-id="@item.Id" onsubmit="return confirm('確定要解鎖這個廠區嗎？');" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">解鎖</button>
+                            </form>
+                        }
                     </div>
                 </div>
             }

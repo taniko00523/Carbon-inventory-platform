@@ -14,6 +14,8 @@ namespace Carbon_inventory_platform.Controllers
     [Authorize(Roles = "Admin")]
     public class PermissionsController : Controller
     {
+        private const int PageSize = 20; // A5：75 筆種子資料一次全部渲染會拖慢畫面，分頁顯示。
+
         private readonly ApplicationDbContext _context;
 
         public PermissionsController(ApplicationDbContext context)
@@ -22,13 +24,18 @@ namespace Carbon_inventory_platform.Controllers
         }
 
         // GET: Permissions
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1)
         {
             // IsDeleted 現在由全域查詢過濾器處理（Data/ApplicationDbContext.cs），不需要重複寫。
-            var applicationDbContext = _context.Permissions
+            var query = _context.Permissions
+                .AsNoTracking()
                 .Include(p => p.FunctionAction)
-                .Include(p => p.Function);
-            return View(await applicationDbContext.ToListAsync());
+                .Include(p => p.Function)
+                .OrderBy(p => p.Id);
+            var paged = await Carbon_inventory_platform.ViewModel.PagedResult<Permission>.CreateAsync(query, pageNumber, PageSize);
+            ViewData["PageNumber"] = paged.PageNumber;
+            ViewData["TotalPages"] = paged.TotalPages;
+            return View(paged.Items);
         }
 
         // GET: Permissions/Details/5

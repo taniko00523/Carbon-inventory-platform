@@ -55,7 +55,7 @@ namespace Carbon_inventory_platform.Controllers
         public async Task<IActionResult> Index(Guid Id)
         {
             TempData["areaId"] = Id; // 暫存目前所在的廠區ID
-            var AreaData = await _context.Areas.Where(x => x.Id == Id).Include(x => x.Company).FirstOrDefaultAsync(); // isDeleted 由全域查詢過濾器處理
+            var AreaData = await _context.Areas.AsNoTracking().Where(x => x.Id == Id).Include(x => x.Company).FirstOrDefaultAsync(); // isDeleted 由全域查詢過濾器處理
             if (AreaData == null)
             {
                 // 原本回傳沒有 Model 的 View()，而 Index.cshtml 是 @model IEnumerable<Device> 並直接呼叫
@@ -73,8 +73,11 @@ namespace Carbon_inventory_platform.Controllers
             }
 
             TempData["year"] = AreaData.Year;
+            // B5：已鎖定的年度資料視為唯讀，畫面用這個旗標決定要不要顯示編輯/刪除/新增入口。
+            TempData["areaIsLocked"] = AreaData.IsLocked;
             return _context.Devices != null ? //如果有抓到資料表Null
                          View(await _context.Devices
+                         .AsNoTracking()
                          .Where(x => x.AreaId == Id) // isDeleted 由全域查詢過濾器處理
                          .Include(x => x.GHGs)
                          .Include(x => x.ActivityDatas)
@@ -105,6 +108,12 @@ namespace Carbon_inventory_platform.Controllers
                 if (!await CanAccessAreaAsync(device.AreaId))
                 {
                     return Forbid();
+                }
+                // B5：已鎖定的年度資料視為唯讀，不能再新增排放源。
+                if (await IsAreaLockedAsync(device.AreaId))
+                {
+                    TempData["Error"] = "此廠區已鎖定，無法新增排放源。請聯絡管理員解鎖。";
+                    return RedirectToAction(nameof(Index), new { Id = device.AreaId });
                 }
                 var deviceId = Guid.NewGuid();
                 var toCreate = new Device
@@ -195,6 +204,12 @@ namespace Carbon_inventory_platform.Controllers
             if (!await CanAccessAreaAsync(device.AreaId))
             {
                 return Forbid();
+            }
+            // B5：已鎖定的年度資料視為唯讀，不能再複製新的排放源進來。
+            if (await IsAreaLockedAsync(device.AreaId))
+            {
+                TempData["Error"] = "此廠區已鎖定，無法複製排放源。請聯絡管理員解鎖。";
+                return RedirectToAction(nameof(Index), new { Id = device.AreaId });
             }
             Guid newDeviceId = Guid.NewGuid();
             Guid areaId = device.AreaId;
@@ -460,6 +475,12 @@ namespace Carbon_inventory_platform.Controllers
                     {
                         return Forbid();
                     }
+                    // B5：已鎖定的年度資料視為唯讀，不能再修改排放源。
+                    if (await IsAreaLockedAsync(deviceUpdate.AreaId))
+                    {
+                        TempData["Error"] = "此廠區已鎖定，無法修改排放源。請聯絡管理員解鎖。";
+                        return RedirectToAction(nameof(Index), new { Id = deviceUpdate.AreaId });
+                    }
                     device.AreaId = deviceUpdate.AreaId;
                     var ghgUpdate = await _context.GHGs.Where(x => x.DeviceId == device.Id).ToListAsync();
 
@@ -644,6 +665,12 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return Forbid();
             }
+            // B5：已鎖定的年度資料視為唯讀，不能再刪除排放源。
+            if (await IsAreaLockedAsync(toDeleteDevice.AreaId))
+            {
+                TempData["Error"] = "此廠區已鎖定，無法刪除排放源。請聯絡管理員解鎖。";
+                return RedirectToAction(nameof(Index), new { Id = toDeleteDevice.AreaId });
+            }
             if (toDeleteDevice != null)
             {
                 var emission = await _context.Areas.FindAsync(toDeleteDevice.AreaId);
@@ -750,6 +777,12 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return Forbid();
             }
+            // B5：已鎖定的年度資料視為唯讀，不能再新增/修改活動數據。
+            if (await IsAreaLockedAsync(Device.AreaId))
+            {
+                TempData["Error"] = "此廠區已鎖定，無法修改活動數據。請聯絡管理員解鎖。";
+                return RedirectToAction(nameof(Index), new { Id = Device.AreaId });
+            }
 
             foreach (var data in activityData.ActivityDataList)
             {
@@ -836,6 +869,12 @@ namespace Carbon_inventory_platform.Controllers
             if (!await CanAccessAreaAsync(id))
             {
                 return Forbid();
+            }
+            // B5：已鎖定的年度資料視為唯讀，不能再塞入預設排放源。
+            if (targetArea.IsLocked)
+            {
+                TempData["Error"] = "此廠區已鎖定，無法新增預設排放源。請聯絡管理員解鎖。";
+                return RedirectToAction(nameof(Index), new { Id = id });
             }
             var defaultDevices = await _context.defaultDevices.ToListAsync();
             foreach (var defaultDevice in defaultDevices)
@@ -986,6 +1025,11 @@ namespace Carbon_inventory_platform.Controllers
             if (area == null)
             {
                 return NotFound();
+            }
+            // B5：已鎖定的年度資料視為唯讀，不能再用匯入覆寫排放源清單。
+            if (area.IsLocked)
+            {
+                return BadRequest("此廠區已鎖定，無法匯入排放源。請聯絡管理員解鎖。");
             }
 
             // 原本先把既有排放源全部軟刪除、存檔，再開始逐列解析；只要中途拋出未被

@@ -4,6 +4,7 @@ using Carbon_inventory_platform.Models;
 using Carbon_inventory_platform.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
@@ -27,6 +28,12 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddRoles<ApplicationRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+// B6：用真正會寄信的 SmtpEmailSender 取代 Identity 預設的 no-op 實作（AddDefaultIdentity 內部用
+// TryAddTransient 註冊 no-op，這裡的 AddTransient 會覆蓋掉它）。Email:Host 沒設定時安靜地不寄，
+// 跟現有 LINE 通知的作法一致。正式環境請用 dotnet user-secrets 或環境變數 Email__Password 等提供密碼。
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Email"));
+builder.Services.AddTransient<IEmailSender, SmtpEmailSender>();
+
 builder.Services.AddControllersWithViews(options =>
 {
     // 所有 POST/PUT/DELETE 一律驗證防偽 Token。
@@ -45,8 +52,21 @@ builder.Services.AddAuthorization(options =>
         .Build();
 });
 
+// ApplicationDbContext 的稽核軌跡（B4）需要透過 IHttpContextAccessor 取得目前登入者與 IP。
+builder.Services.AddHttpContextAccessor();
+// CountController 快取 GWP 清單用（A3），避免匯入排放源時每一筆都重新查一次幾乎不變動的主檔。
+builder.Services.AddMemoryCache();
+// A9：/healthz 健康檢查，上線後至少能知道資料庫連不連得上。
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>();
+// A9：結構化日誌／APM。沒有設定連線字串時 SDK 只是安靜地不送遙測（不會拋例外、不影響啟動），
+// 跟現有 LINE Token 沒設定就安靜停用的作法一致。正式環境請用
+// dotnet user-secrets 或環境變數 ApplicationInsights__ConnectionString 提供連線字串。
+builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddScoped<RolePermissionService>();
 builder.Services.AddScoped<CompanyOwnershipService>();
+builder.Services.AddScoped<AreaTrendService>();
+builder.Services.AddScoped<AreaLockService>();
 // PermissionFilterAttribute 建構子依賴 UserManager/RoleManager/RolePermissionService，
 // 必須透過 [ServiceFilter(typeof(PermissionFilterAttribute))] 由 DI 容器建立，故需在此註冊。
 builder.Services.AddScoped<PermissionFilterAttribute>();
@@ -115,6 +135,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+// A9：全域「預設要登入」的授權原則對 Endpoint Routing 也生效，這裡要明確允許匿名存取，
+// 否則監控系統打 /healthz 只會拿到 302 轉去登入頁，而不是真正的健康狀態。
+app.MapHealthChecks("/healthz").AllowAnonymous();
 
 // 報表輸出目錄必須存在，否則第一次產生報表會拋 DirectoryNotFoundException
 // （wwwroot/output 在 csproj 裡只是個空資料夾宣告，git 不會保留空目錄）。

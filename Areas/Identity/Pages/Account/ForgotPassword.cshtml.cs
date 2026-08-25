@@ -74,8 +74,8 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "碳盤查平台 - 重設密碼",
+                    $"請點擊<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>這裡</a>重設您的密碼。若您沒有提出這個請求，請忽略此信件。");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

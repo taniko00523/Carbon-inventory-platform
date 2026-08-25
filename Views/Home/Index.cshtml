@@ -1,120 +1,287 @@
 @using Microsoft.AspNetCore.Identity
 @using Carbon_inventory_platform.Models
-@inject SignInManager<ApplicationUser> SignInManager
+@model Carbon_inventory_platform.ViewModel.HomeDashboardViewModel?
 @{
     ViewData["Title"] = "首頁";
-    var isAdmin = User.IsInRole("Admin") || User.IsInRole("SuperAdmin");
 }
 
-<section class="cip-hero">
-    <h1>碳盤查平台</h1>
-    <p class="cip-hero-lead">
-        現今溫室氣體盤查工具大多缺乏統一及完整性的盤查方式，造成整體盤查困難且準確率欠佳，
-        故開發此平台，協助中小企業向淨零邁出一步。
-    </p>
+@if (Model == null)
+{
+    <section class="cip-hero">
+        <h1>碳盤查平台</h1>
+        <p class="cip-hero-lead">
+            現今溫室氣體盤查工具大多缺乏統一及完整性的盤查方式，造成整體盤查困難且準確率欠佳，
+            故開發此平台，協助中小企業向淨零邁出一步。
+        </p>
 
-    <div class="d-flex gap-2 justify-content-center flex-wrap">
-        @if (SignInManager.IsSignedIn(User))
-        {
-            @if (isAdmin)
+        <div class="d-flex gap-2 justify-content-center flex-wrap">
+            <a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login">登入開始盤查</a>
+        </div>
+
+        @* 原本這裡嵌入一張 photo.stust.edu.tw 的外部圖片，網址帶有會過期的
+           SynoToken，一旦失效首頁就是一個破圖。改用自繪的 SVG，不依賴外部資源。 *@
+        <svg class="cip-hero-art" viewBox="0 0 640 240" role="img"
+             aria-label="以柱狀圖與趨勢線呈現逐年下降的溫室氣體排放量示意圖">
+            <defs>
+                <linearGradient id="cipBar" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="var(--cip-brand-400)" />
+                    <stop offset="100%" stop-color="var(--cip-brand-600)" />
+                </linearGradient>
+            </defs>
+
+            <line x1="56" y1="200" x2="600" y2="200" stroke="var(--cip-border-strong)" stroke-width="1.5" />
+
+            <g fill="url(#cipBar)" opacity="0.92">
+                <rect x="84"  y="60"  width="46" height="140" rx="6" />
+                <rect x="160" y="82"  width="46" height="118" rx="6" />
+                <rect x="236" y="98"  width="46" height="102" rx="6" />
+                <rect x="312" y="122" width="46" height="78"  rx="6" />
+                <rect x="388" y="146" width="46" height="54"  rx="6" />
+                <rect x="464" y="164" width="46" height="36"  rx="6" />
+            </g>
+
+            <polyline points="107,60 183,82 259,98 335,122 411,146 487,164"
+                      fill="none" stroke="var(--cip-scope1)" stroke-width="2.5"
+                      stroke-linecap="round" stroke-linejoin="round" />
+
+            <g fill="var(--cip-scope1)">
+                <circle cx="107" cy="60" r="4" />
+                <circle cx="183" cy="82" r="4" />
+                <circle cx="259" cy="98" r="4" />
+                <circle cx="335" cy="122" r="4" />
+                <circle cx="411" cy="146" r="4" />
+                <circle cx="487" cy="164" r="4" />
+            </g>
+
+            <g transform="translate(536, 84)" fill="none" stroke="var(--cip-brand-500)"
+               stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M28 6c0 15-11 26-26 26C2 17 13 6 28 6z" />
+                <path d="M2 32C10 24 18 18 28 12" />
+            </g>
+
+            <g fill="var(--cip-text-faint)" font-size="12" text-anchor="middle"
+               font-family="var(--cip-font-sans)">
+                <text x="107" y="220">基準年</text>
+                <text x="183" y="220">+1</text>
+                <text x="259" y="220">+2</text>
+                <text x="335" y="220">+3</text>
+                <text x="411" y="220">+4</text>
+                <text x="487" y="220">+5</text>
+            </g>
+        </svg>
+    </section>
+
+    <div class="cip-feature-grid">
+        <article class="cip-section">
+            <h2 class="cip-section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V8l6-4 6 4v13" /><path d="M15 21V12h6v9" /></svg>
+                組織邊界與盤查年度
+            </h2>
+            <p class="mb-0 text-muted">
+                以公司、廠區、盤查年度三層結構管理組織邊界，可設定基準年、AR 版本，
+                並上傳組織架構圖、地理位置圖與廠區配置圖。
+            </p>
+        </article>
+
+        <article class="cip-section">
+            <h2 class="cip-section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="8" ry="3" /><path d="M4 6v6c0 1.66 3.58 3 8 3s8-1.34 8-3V6" /><path d="M4 12v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" /></svg>
+                排放源與活動數據
+            </h2>
+            <p class="mb-0 text-muted">
+                內建環境部公告的排放係數與 GWP 值，依原燃物料自動帶入各溫室氣體係數，
+                並支援 Excel 批次匯入排放源清單。
+            </p>
+        </article>
+
+        <article class="cip-section">
+            <h2 class="cip-section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></svg>
+                統計與報告書
+            </h2>
+            <p class="mb-0 text-muted">
+                自動計算類別一、類別二排放當量、不確定性與數據品質等級，
+                並可輸出 ISO、環境部與工業局格式的盤查報告書。
+            </p>
+        </article>
+    </div>
+}
+else if (Model.IsAdmin)
+{
+    <div class="cip-page-head">
+        <div>
+            <h1>管理總覽</h1>
+        </div>
+    </div>
+
+    <div class="cip-stats">
+        <a class="cip-stat" asp-controller="Companies" asp-action="Index" style="text-decoration:none;">
+            <span class="cip-stat-label">公司總數</span>
+            <span class="cip-stat-value">@Model.TotalCompanies</span>
+        </a>
+        <a class="cip-stat" asp-controller="Companies" asp-action="Index" style="text-decoration:none;">
+            <span class="cip-stat-label">報告書內容已完成</span>
+            <span class="cip-stat-value">@Model.CompletedReportCount<span class="cip-stat-unit">/ @Model.TotalCompanies 家</span></span>
+        </a>
+        <a class="cip-stat" asp-controller="Feedbacks" asp-action="Index" style="text-decoration:none;">
+            <span class="cip-stat-label">近期回報問題</span>
+            <span class="cip-stat-value">@Model.RecentFeedbacks.Count</span>
+        </a>
+        <a class="cip-stat" asp-controller="User" asp-action="Index" style="text-decoration:none;">
+            <span class="cip-stat-label">即將到期帳號（30 天內）</span>
+            <span class="cip-stat-value">@Model.ExpiringSoonAccounts.Count</span>
+        </a>
+    </div>
+
+    <div class="cip-feature-grid">
+        <article class="cip-section">
+            <h2 class="cip-section-title">尚未完成報告書內容的公司</h2>
+            @if (Model.IncompleteCompanies.Count == 0)
             {
-                <a class="btn btn-primary btn-lg" asp-controller="Companies" asp-action="Index">開始盤查</a>
+                <p class="text-muted mb-0">所有公司的報告書內容都已填寫完成。</p>
             }
             else
             {
-                <a class="btn btn-primary btn-lg" asp-controller="Areas" asp-action="Index">開始盤查</a>
+                <ul class="list-unstyled mb-0">
+                    @foreach (var company in Model.IncompleteCompanies.Take(8))
+                    {
+                        <li class="mb-1">
+                            <a asp-controller="Companies" asp-action="Edit" asp-route-id="@company.CompanyId">@company.Name</a>
+                        </li>
+                    }
+                    @if (Model.IncompleteCompanies.Count > 8)
+                    {
+                        <li class="text-muted">還有 @(Model.IncompleteCompanies.Count - 8) 家...</li>
+                    }
+                </ul>
             }
-        }
-        else
-        {
-            <a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login">登入開始盤查</a>
-        }
+        </article>
+
+        <article class="cip-section">
+            <h2 class="cip-section-title">近期回報問題</h2>
+            @if (Model.RecentFeedbacks.Count == 0)
+            {
+                <p class="text-muted mb-0">目前沒有任何回報。</p>
+            }
+            else
+            {
+                <ul class="list-unstyled mb-0">
+                    @foreach (var feedback in Model.RecentFeedbacks)
+                    {
+                        <li class="mb-2">
+                            <div class="text-muted" style="font-size:.82rem;">@feedback.CreatedAt.ToString("yyyy-MM-dd HH:mm") · @feedback.UserName</div>
+                            <div>@feedback.Message</div>
+                        </li>
+                    }
+                </ul>
+                <a asp-controller="Feedbacks" asp-action="Index" class="btn btn-sm btn-outline-secondary">查看全部</a>
+            }
+        </article>
+
+        <article class="cip-section">
+            <h2 class="cip-section-title">即將到期的帳號</h2>
+            @if (Model.ExpiringSoonAccounts.Count == 0)
+            {
+                <p class="text-muted mb-0">近 30 天內沒有即將到期的帳號。</p>
+            }
+            else
+            {
+                <ul class="list-unstyled mb-0">
+                    @foreach (var account in Model.ExpiringSoonAccounts)
+                    {
+                        <li class="mb-1">@account.UserName — @account.Limit.ToString("yyyy-MM-dd")</li>
+                    }
+                </ul>
+                <a asp-controller="User" asp-action="Index" class="btn btn-sm btn-outline-secondary mt-2">查看全部用戶</a>
+            }
+        </article>
+    </div>
+}
+else
+{
+    <div class="cip-page-head">
+        <div>
+            <h1>我的盤查進度</h1>
+        </div>
     </div>
 
-    @* 原本這裡嵌入一張 photo.stust.edu.tw 的外部圖片，網址帶有會過期的
-       SynoToken，一旦失效首頁就是一個破圖。改用自繪的 SVG，不依賴外部資源。 *@
-    <svg class="cip-hero-art" viewBox="0 0 640 240" role="img"
-         aria-label="以柱狀圖與趨勢線呈現逐年下降的溫室氣體排放量示意圖">
-        <defs>
-            <linearGradient id="cipBar" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="var(--cip-brand-400)" />
-                <stop offset="100%" stop-color="var(--cip-brand-600)" />
-            </linearGradient>
-        </defs>
+    string StepClass(bool done) => "cip-badge " + (done ? "cip-badge-success" : "cip-badge-warning");
+    string StepText(bool done, string label) => (done ? "✓ " : "○ ") + label;
 
-        <line x1="56" y1="200" x2="600" y2="200" stroke="var(--cip-border-strong)" stroke-width="1.5" />
+    <div class="cip-section">
+        <div class="d-flex flex-wrap gap-2">
+            <a class="@StepClass(Model.HasCompany)" style="text-decoration:none;"
+               asp-area="Identity" asp-page="/Account/Manage/CompanyDataEdit">@StepText(Model.HasCompany, "公司資料")</a>
 
-        <g fill="url(#cipBar)" opacity="0.92">
-            <rect x="84"  y="60"  width="46" height="140" rx="6" />
-            <rect x="160" y="82"  width="46" height="118" rx="6" />
-            <rect x="236" y="98"  width="46" height="102" rx="6" />
-            <rect x="312" y="122" width="46" height="78"  rx="6" />
-            <rect x="388" y="146" width="46" height="54"  rx="6" />
-            <rect x="464" y="164" width="46" height="36"  rx="6" />
-        </g>
+            <a class="@StepClass(Model.HasArea)" style="text-decoration:none;"
+               asp-controller="Areas" asp-action="Index">@StepText(Model.HasArea, "邊界資料")</a>
 
-        <polyline points="107,60 183,82 259,98 335,122 411,146 487,164"
-                  fill="none" stroke="var(--cip-scope1)" stroke-width="2.5"
-                  stroke-linecap="round" stroke-linejoin="round" />
+            @if (Model.CurrentAreaId is Guid areaId)
+            {
+                <a class="@StepClass(Model.HasDevice)" style="text-decoration:none;"
+                   asp-controller="Devices" asp-action="Index" asp-route-id="@areaId">@StepText(Model.HasDevice, "排放源")</a>
 
-        <g fill="var(--cip-scope1)">
-            <circle cx="107" cy="60" r="4" />
-            <circle cx="183" cy="82" r="4" />
-            <circle cx="259" cy="98" r="4" />
-            <circle cx="335" cy="122" r="4" />
-            <circle cx="411" cy="146" r="4" />
-            <circle cx="487" cy="164" r="4" />
-        </g>
+                <a class="@StepClass(Model.HasActivityData)" style="text-decoration:none;"
+                   asp-controller="Devices" asp-action="Index" asp-route-id="@areaId">@StepText(Model.HasActivityData, "活動數據")</a>
 
-        <g transform="translate(536, 84)" fill="none" stroke="var(--cip-brand-500)"
-           stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M28 6c0 15-11 26-26 26C2 17 13 6 28 6z" />
-            <path d="M2 32C10 24 18 18 28 12" />
-        </g>
+                <a class="@StepClass(Model.HasActivityData)" style="text-decoration:none;"
+                   asp-controller="Emission" asp-action="MOEReport" asp-route-id="@areaId">@StepText(Model.HasActivityData, "報告書")</a>
+            }
+            else
+            {
+                <span class="cip-badge cip-badge-warning">○ 排放源</span>
+                <span class="cip-badge cip-badge-warning">○ 活動數據</span>
+                <span class="cip-badge cip-badge-warning">○ 報告書</span>
+            }
+        </div>
+    </div>
 
-        <g fill="var(--cip-text-faint)" font-size="12" text-anchor="middle"
-           font-family="var(--cip-font-sans)">
-            <text x="107" y="220">基準年</text>
-            <text x="183" y="220">+1</text>
-            <text x="259" y="220">+2</text>
-            <text x="335" y="220">+3</text>
-            <text x="411" y="220">+4</text>
-            <text x="487" y="220">+5</text>
-        </g>
-    </svg>
-</section>
-
-<div class="cip-feature-grid">
-    <article class="cip-section">
-        <h2 class="cip-section-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V8l6-4 6 4v13" /><path d="M15 21V12h6v9" /></svg>
-            組織邊界與盤查年度
-        </h2>
-        <p class="mb-0 text-muted">
-            以公司、廠區、盤查年度三層結構管理組織邊界，可設定基準年、AR 版本，
-            並上傳組織架構圖、地理位置圖與廠區配置圖。
-        </p>
-    </article>
-
-    <article class="cip-section">
-        <h2 class="cip-section-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="8" ry="3" /><path d="M4 6v6c0 1.66 3.58 3 8 3s8-1.34 8-3V6" /><path d="M4 12v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" /></svg>
-            排放源與活動數據
-        </h2>
-        <p class="mb-0 text-muted">
-            內建環境部公告的排放係數與 GWP 值，依原燃物料自動帶入各溫室氣體係數，
-            並支援 Excel 批次匯入排放源清單。
-        </p>
-    </article>
-
-    <article class="cip-section">
-        <h2 class="cip-section-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></svg>
-            統計與報告書
-        </h2>
-        <p class="mb-0 text-muted">
-            自動計算類別一、類別二排放當量、不確定性與數據品質等級，
-            並可輸出 ISO、環境部與工業局格式的盤查報告書。
-        </p>
-    </article>
-</div>
+    @if (!Model.HasCompany)
+    {
+        <div class="cip-empty cip-section">
+            <div class="cip-empty-icon" aria-hidden="true">🏢</div>
+            <p class="cip-empty-title">尚未建立公司資料</p>
+            <p>請聯絡管理員為您的帳號建立公司資料後即可開始盤查。</p>
+        </div>
+    }
+    else if (!Model.HasArea)
+    {
+        <div class="cip-empty cip-section">
+            <div class="cip-empty-icon" aria-hidden="true">🏭</div>
+            <p class="cip-empty-title">尚未建立盤查邊界</p>
+            <p>先建立廠區資料，才能開始登記排放源與活動數據。</p>
+            <a class="btn btn-primary" asp-controller="Areas" asp-action="Index">前往邊界總覽</a>
+        </div>
+    }
+    else
+    {
+        <div class="cip-stats">
+            <div class="cip-stat">
+                <span class="cip-stat-label">@(Model.CurrentAreaYear) 年度總排放當量</span>
+                <span class="cip-stat-value">@(Model.CurrentAreaTrend?.All.ToString("N4") ?? "—")</span>
+                <span class="cip-stat-unit">噸CO₂e</span>
+            </div>
+            <div class="cip-stat">
+                <span class="cip-stat-label">相對基準年增減</span>
+                @if (Model.CurrentAreaTrend?.PercentVsBaseYear is decimal pct)
+                {
+                    <span class="cip-badge @(pct > 0 ? "cip-badge-danger" : pct < 0 ? "cip-badge-success" : "cip-badge-warning")">
+                        @(pct > 0 ? "+" : "")@pct.ToString("N2")%
+                    </span>
+                }
+                else
+                {
+                    <span class="cip-stat-value text-muted" style="font-size:1rem;">尚未設定基準年</span>
+                }
+            </div>
+            <a class="cip-stat" asp-controller="Devices" asp-action="Index" asp-route-id="@Model.CurrentAreaId" style="text-decoration:none;">
+                <span class="cip-stat-label">尚未填寫活動數據的排放源</span>
+                <span class="cip-stat-value">@Model.MissingActivityDataDeviceCount</span>
+            </a>
+            <a class="cip-stat" asp-controller="Emission" asp-action="Trend" asp-route-id="@Model.CurrentAreaId" style="text-decoration:none;">
+                <span class="cip-stat-label">查看</span>
+                <span class="cip-stat-value" style="font-size:1.1rem;">歷年趨勢 →</span>
+            </a>
+        </div>
+    }
+}

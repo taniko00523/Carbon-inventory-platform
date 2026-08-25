@@ -1,15 +1,42 @@
 ﻿using Carbon_inventory_platform.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Security.Claims;
 
 namespace Carbon_inventory_platform.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
+        private readonly IHttpContextAccessor? _httpContextAccessor;
+
+        // 保留原本無參數建構子的呼叫方式（單元測試的 TestDb 都是這樣建立），
+        // 這種情境下沒有 HttpContext，稽核紀錄的使用者/IP 欄位就留空。
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+            : this(options, null)
         {
         }
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor? httpContextAccessor)
+            : base(options)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        // B4：稽核軌跡優先記錄的實體（見 plan.md），刻意不是「全部」——Identity 內部表、
+        // 權限目錄（Function/FunctionAction/Permission）等變動頻率低或本身已有其他追蹤機制，
+        // 全部都記會讓資料量與雜訊一起暴增。
+        private static readonly HashSet<Type> AuditedEntityTypes = new()
+        {
+            typeof(Material),
+            typeof(GWP),
+            typeof(Device),
+            typeof(ActivityData),
+            typeof(Area),
+            typeof(Company),
+            typeof(RolePermission),
+        };
 
         public DbSet<Company> Companies { get; set; } = null!;
         public DbSet<Area> Areas { get; set; } = null!;
@@ -28,6 +55,7 @@ namespace Carbon_inventory_platform.Data
         public DbSet<UserPermission> UserPermissions { get; set; } = null!;
         public DbSet<Function> Functions { get; set; } = null!;
         public DbSet<FunctionAction> FunctionActions { get; set; } = null!;
+        public DbSet<AuditLog> AuditLogs { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -165,6 +193,16 @@ namespace Carbon_inventory_platform.Data
             // 一個角色/使用者對已刪除權限的授權理應跟著失效，所以串接 Permission 的旗標。
             builder.Entity<RolePermission>().HasQueryFilter(e => e.Permission!.IsDeleted == 0);
             builder.Entity<UserPermission>().HasQueryFilter(e => e.Permission!.IsDeleted == 0);
+
+            // ---- 稽核軌跡 ----------------------------------------------------
+            // EntityName+EntityId：查「這一筆資料的變更歷史」。CreatedAt：依期間篩選／保留政策。
+            // UserId：查「這個人改過哪些東西」。稽核紀錄只會新增，不會修改或刪除，也不需要軟刪除旗標。
+            builder.Entity<AuditLog>(entity =>
+            {
+                entity.HasIndex(e => new { e.EntityName, e.EntityId });
+                entity.HasIndex(e => e.UserId);
+                entity.HasIndex(e => e.CreatedAt);
+            });
 
             DataSeed(builder);
         }
@@ -321,6 +359,156 @@ new DefaultDevices { Id = 9, Name = "化糞池", Material = "廢水處理", Scop
 new DefaultDevices { Id = 10, Name = "電力", Material = "外購電力", Scope = "類別二", EmissionPattern = "外購電力" },
 new DefaultDevices { Id = 11, Name = "冰箱", Material = "R-134A", Scope = "類別一", EmissionPattern = "逸散" }
                 );
+        }
+
+        // ---- B4：稽核軌跡 ------------------------------------------------------
+        // 覆寫 SaveChanges(bool)／SaveChangesAsync(bool, CancellationToken) 這兩個
+        // EF Core 實際執行存檔的核心多載，而不是在每個 Controller 手動寫入稽核紀錄——
+        // 後者只要漏掉一個地方就會有存檔沒被記錄到。無參數的 SaveChanges()／
+        // SaveChangesAsync() 內部本來就是呼叫這兩個多載，所以兩者都會被涵蓋到。
+        //
+        // 新增(Added) 的實體在存檔前還沒有資料庫產生的主鍵，因此分兩階段：
+        // 存檔前先記下「哪些屬性要等存檔後才知道值」，存檔後再回填、補寫一筆稽核紀錄。
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            // OnBeforeSaveChangesAsync 需要查資料庫（見下方說明），這裡沒有同步版本可用；
+            // 目前專案裡沒有任何地方呼叫同步的 SaveChanges，這個多載只是防呆用。
+            var auditEntries = OnBeforeSaveChangesAsync().GetAwaiter().GetResult();
+            var result = base.SaveChanges(acceptAllChangesOnSuccess);
+            OnAfterSaveChangesAsync(auditEntries).GetAwaiter().GetResult();
+            return result;
+        }
+
+        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            var auditEntries = await OnBeforeSaveChangesAsync(cancellationToken);
+            var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+            await OnAfterSaveChangesAsync(auditEntries, cancellationToken);
+            return result;
+        }
+
+        private async Task<List<AuditEntry>> OnBeforeSaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            ChangeTracker.DetectChanges();
+
+            var httpContext = _httpContextAccessor?.HttpContext;
+            var userId = httpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userName = httpContext?.User?.Identity?.Name;
+            var ipAddress = httpContext?.Connection?.RemoteIpAddress?.ToString();
+
+            var pendingEntries = new List<AuditEntry>();
+
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if (entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+                {
+                    continue;
+                }
+                if (!AuditedEntityTypes.Contains(entry.Entity.GetType()))
+                {
+                    continue;
+                }
+
+                var auditEntry = new AuditEntry(entry)
+                {
+                    EntityName = entry.Entity.GetType().Name,
+                    UserId = userId,
+                    UserName = userName,
+                    IpAddress = ipAddress,
+                };
+
+                // Modified／Deleted 時，EF 在記憶體裡的 OriginalValue 不一定可靠：常見的 scaffold
+                // 寫法（例如 MaterialsController.Edit 用的 _context.Update(model)）是把整個表單
+                // 綁出來的物件直接標成 Modified，這個 DbContext 從沒真正查過資料庫的原始值，
+                // OriginalValue 會被誤設成跟 CurrentValue 一樣——稽核紀錄會變成「改成什麼」跟
+                // 「改之前」顯示成同一個值，等於白記。改成直接查一次資料庫目前真正存的值再比較。
+                // 這只有 Modified/Deleted（通常是單筆編輯/刪除）才會多一次查詢；Excel 大量匯入
+                // 是新增(Added)排放源，不會走到這裡，不影響大量寫入的效能。
+                PropertyValues? databaseValues = null;
+                if (entry.State == EntityState.Modified || entry.State == EntityState.Deleted)
+                {
+                    databaseValues = await entry.GetDatabaseValuesAsync(cancellationToken);
+                }
+
+                foreach (var property in entry.Properties)
+                {
+                    if (property.IsTemporary)
+                    {
+                        // 通常是資料庫產生的主鍵，存檔後才知道實際值。
+                        auditEntry.TemporaryProperties.Add(property);
+                        continue;
+                    }
+
+                    var propertyName = property.Metadata.Name;
+                    if (property.Metadata.IsPrimaryKey())
+                    {
+                        auditEntry.KeyValues[propertyName] = property.CurrentValue;
+                        continue;
+                    }
+
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            auditEntry.NewValues[propertyName] = property.CurrentValue;
+                            break;
+                        case EntityState.Deleted:
+                            auditEntry.OldValues[propertyName] = databaseValues?.GetValue<object?>(propertyName) ?? property.OriginalValue;
+                            break;
+                        case EntityState.Modified:
+                            var oldValue = databaseValues?.GetValue<object?>(propertyName) ?? property.OriginalValue;
+                            var newValue = property.CurrentValue;
+                            // 用「資料庫目前的值 vs. 現在要存的值」判斷是否真的變了，
+                            // 而不是 property.IsModified——後者在整個物件被標成 Modified 時
+                            // 對每個屬性都是 true，會讓沒改動的欄位也被當成「變更」記錄下來。
+                            if (!Equals(oldValue, newValue))
+                            {
+                                auditEntry.OldValues[propertyName] = oldValue;
+                                auditEntry.NewValues[propertyName] = newValue;
+                            }
+                            break;
+                    }
+                }
+
+                pendingEntries.Add(auditEntry);
+            }
+
+            // 主鍵已知的（Modified／Deleted）現在就能寫入稽核紀錄，會跟著這次 SaveChanges
+            // 一起存進去；主鍵未知的（Added）留到存檔後的 OnAfterSaveChangesAsync 處理。
+            // Modified 但比對後其實沒有任何欄位真的變動的（例如表單原封不動送出），不記錄。
+            foreach (var auditEntry in pendingEntries.Where(e =>
+                         !e.HasTemporaryProperties && !(e.Action == "Update" && e.OldValues.Count == 0)))
+            {
+                AuditLogs.Add(auditEntry.ToAuditLog());
+            }
+
+            return pendingEntries.Where(e => e.HasTemporaryProperties).ToList();
+        }
+
+        private async Task OnAfterSaveChangesAsync(List<AuditEntry> pendingEntries, CancellationToken cancellationToken = default)
+        {
+            if (pendingEntries.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var auditEntry in pendingEntries)
+            {
+                foreach (var property in auditEntry.TemporaryProperties)
+                {
+                    if (property.Metadata.IsPrimaryKey())
+                    {
+                        auditEntry.KeyValues[property.Metadata.Name] = property.CurrentValue;
+                    }
+                    else
+                    {
+                        auditEntry.NewValues[property.Metadata.Name] = property.CurrentValue;
+                    }
+                }
+                AuditLogs.Add(auditEntry.ToAuditLog());
+            }
+
+            // 這是新增的一筆或多筆 AuditLog，不會再觸發遞迴（AuditLog 不在 AuditedEntityTypes 裡）。
+            await base.SaveChangesAsync(true, cancellationToken);
         }
     }
 }

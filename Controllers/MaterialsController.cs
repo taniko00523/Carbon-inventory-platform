@@ -19,6 +19,8 @@ namespace Carbon_inventory_platform.Controllers
     [ServiceFilter(typeof(PermissionFilterAttribute))]
     public class MaterialsController : Controller
     {
+        private const int PageSize = 20; // A5：81 筆種子資料一次全部渲染會拖慢畫面，分頁顯示。
+
         private readonly ApplicationDbContext _context;
 
         public MaterialsController(ApplicationDbContext context)
@@ -27,9 +29,13 @@ namespace Carbon_inventory_platform.Controllers
         }
 
         // GET: Materials
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1)
         {
-            return View(await _context.Materials.ToListAsync());
+            var query = _context.Materials.AsNoTracking().OrderBy(m => m.Id);
+            var paged = await ViewModel.PagedResult<Material>.CreateAsync(query, pageNumber, PageSize);
+            ViewData["PageNumber"] = paged.PageNumber;
+            ViewData["TotalPages"] = paged.TotalPages;
+            return View(paged.Items);
         }
 
         // GET: Materials/Details/5
@@ -40,7 +46,7 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
 
-            var material = await _context.Materials
+            var material = await _context.Materials.AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (material == null)
             {
@@ -82,7 +88,7 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
 
-            var material = await _context.Materials.FindAsync(id);
+            var material = await _context.Materials.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
             if (material == null)
             {
                 return NotFound();
@@ -133,7 +139,7 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
 
-            var material = await _context.Materials
+            var material = await _context.Materials.AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (material == null)
             {

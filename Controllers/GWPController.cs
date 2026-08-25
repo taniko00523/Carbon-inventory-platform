@@ -4,6 +4,7 @@ using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -15,10 +16,12 @@ namespace Carbon_inventory_platform.Controllers
     public class GWPController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMemoryCache _cache;
 
-        public GWPController(ApplicationDbContext context)
+        public GWPController(ApplicationDbContext context, IMemoryCache cache)
         {
             _context = context;
+            _cache = cache;
         }
 
         public async Task<IActionResult> Index(int year)
@@ -26,7 +29,7 @@ namespace Carbon_inventory_platform.Controllers
             if (year != 0)
             {
                 ViewBag.SearchARVersion = year;
-                var gwps = await _context.GWPs.Where(x => x.ARVersion == year).ToListAsync();
+                var gwps = await _context.GWPs.AsNoTracking().Where(x => x.ARVersion == year).ToListAsync();
                 return gwps != null ? View(gwps) : Problem("沒有找到資料表");
             }
             return View();
@@ -41,6 +44,7 @@ namespace Carbon_inventory_platform.Controllers
                 model.ARVersion = searchARVersion;
                 _context.Add(model);
                 await _context.SaveChangesAsync();
+                _cache.Remove(CountController.GwpCacheKey); // A3：GWP 改了要讓計算引擎的快取立即失效。
                 return RedirectToAction(nameof(Index), new { year = searchARVersion });
             }
             // 原本驗證失敗時 return View(model)，但 Views/GWP 底下只有 Index.cshtml，
@@ -68,6 +72,7 @@ namespace Carbon_inventory_platform.Controllers
                 gwpToUpdate.Num = model.Num;
                 gwpToUpdate.ARVersion = searchARVersion;
                 await _context.SaveChangesAsync();
+                _cache.Remove(CountController.GwpCacheKey); // A3：GWP 改了要讓計算引擎的快取立即失效。
                 return RedirectToAction(nameof(Index), new { year = searchARVersion });
             }
             // 同 Add：Views/GWP 沒有 Edit.cshtml，原本的 return View(model) 是保證的 500。
@@ -86,6 +91,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 _context.GWPs.Remove(gwp);
                 await _context.SaveChangesAsync();
+                _cache.Remove(CountController.GwpCacheKey); // A3：GWP 改了要讓計算引擎的快取立即失效。
             }
 
             return RedirectToAction(nameof(Index), new { year = searchARVersion });

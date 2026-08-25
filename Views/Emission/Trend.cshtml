@@ -1,0 +1,142 @@
+@model List<Carbon_inventory_platform.Services.AreaTrendPoint>
+@{
+    ViewData["Title"] = "歷年趨勢";
+    var latest = Model.Count > 0 ? Model[^1] : null;
+}
+
+<div class="cip-page-head">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+        <p class="cip-page-sub">@ViewBag.AreaName</p>
+    </div>
+    <div class="cip-page-actions">
+        <a class="btn btn-outline-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@(latest?.AreaId)">返回排放源資料</a>
+    </div>
+</div>
+
+@if (Model.Count <= 1)
+{
+    <div class="cip-empty cip-section">
+        <div class="cip-empty-icon" aria-hidden="true">📈</div>
+        <p class="cip-empty-title">目前只有一個年度的資料</p>
+        <p>累積 2 個年度以上的盤查結果後，這裡會顯示逐年排放趨勢與相對基準年的增減幅度。</p>
+    </div>
+}
+else
+{
+    <div class="cip-stats">
+        <div class="cip-stat">
+            <span class="cip-stat-label">最新年度</span>
+            <span class="cip-stat-value">@latest!.Year</span>
+        </div>
+        <div class="cip-stat">
+            <span class="cip-stat-label">最新年度總排放當量</span>
+            <span class="cip-stat-value">@latest.All.ToString("N4")</span>
+            <span class="cip-stat-unit">噸CO₂e</span>
+        </div>
+        <div class="cip-stat">
+            <span class="cip-stat-label">相對基準年增減</span>
+            @if (latest.PercentVsBaseYear.HasValue)
+            {
+                var pct = latest.PercentVsBaseYear.Value;
+                <span class="cip-badge @(pct > 0 ? "cip-badge-danger" : pct < 0 ? "cip-badge-success" : "cip-badge-warning")">
+                    @(pct > 0 ? "+" : "")@pct.ToString("N2")%
+                </span>
+            }
+            else
+            {
+                <span class="cip-stat-value text-muted" style="font-size:1rem;">尚未設定基準年</span>
+            }
+        </div>
+        <div class="cip-stat">
+            <span class="cip-stat-label">數據品質等級</span>
+            <span class="cip-stat-value">@latest.AllGrade</span>
+        </div>
+    </div>
+
+    <div class="cip-section">
+        <h2 class="cip-section-title">總排放當量趨勢</h2>
+        <canvas id="cipTrendAllChart" height="100"></canvas>
+    </div>
+
+    <div class="cip-section">
+        <h2 class="cip-section-title">類別一／類別二排放趨勢</h2>
+        <canvas id="cipTrendScopeChart" height="100"></canvas>
+    </div>
+
+    <div class="cip-section cip-table-wrap">
+        <h2 class="cip-section-title">歷年數據</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>年度</th>
+                    <th>總排放當量（噸CO₂e）</th>
+                    <th>相對基準年增減</th>
+                    <th>類別一</th>
+                    <th>類別二</th>
+                    <th>數據品質等級</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var point in Model)
+                {
+                    <tr>
+                        <td class="cip-num">
+                            @point.Year
+                            @if (point.IsBaseYear)
+                            {
+                                <span class="cip-badge cip-badge-success">基準年</span>
+                            }
+                        </td>
+                        <td class="cip-num">@point.All.ToString("N4")</td>
+                        <td class="cip-num">@(point.PercentVsBaseYear.HasValue ? $"{(point.PercentVsBaseYear.Value > 0 ? "+" : "")}{point.PercentVsBaseYear.Value:N2}%" : "—")</td>
+                        <td class="cip-num">@point.Scope1.ToString("N4")</td>
+                        <td class="cip-num">@point.Scope2.ToString("N4")</td>
+                        <td>@point.AllGrade</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        (function () {
+            var years = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(p => p.Year)));
+            var allValues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(p => p.All)));
+            var scope1Values = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(p => p.Scope1)));
+            var scope2Values = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(p => p.Scope2)));
+
+            new Chart(document.getElementById('cipTrendAllChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [{
+                        label: '總排放當量（噸CO₂e）',
+                        data: allValues,
+                        borderColor: '#2f9e6b',
+                        backgroundColor: 'rgba(47, 158, 107, 0.15)',
+                        tension: 0.25,
+                        fill: true,
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { display: false } } }
+            });
+
+            new Chart(document.getElementById('cipTrendScopeChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: years,
+                    datasets: [
+                        { label: '類別一', data: scope1Values, backgroundColor: '#4c7ef3' },
+                        { label: '類別二', data: scope2Values, backgroundColor: '#f39c4c' },
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: { x: { stacked: true }, y: { stacked: true } }
+                }
+            });
+        })();
+    </script>
+}

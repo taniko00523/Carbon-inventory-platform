@@ -9,6 +9,10 @@
         <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">帳號資訊</a></li>
         <li class="nav-item"><a class="nav-link @ManageNavPages.CompanyDataEditNavClass(ViewContext)" id="companyData" asp-page="./CompanyDataEdit"><span style="color:red">*</span>公司資訊</a></li>
         <li class="nav-item"><a class="nav-link @ManageNavPages.ReportDataEditNavClass(ViewContext)" id="reportData" asp-page="./ReportDataEdit">報告資料</a></li>
+        @* B6：原本這個頁面就已經做好了（Email.cshtml／.cs），只是沒有連結能點進去，
+           使用者永遠沒有機會把系統預設塞進去的「帳號當通知信箱」換成真正收得到信的地址，
+           忘記密碼功能因此對每個帳號都是死路。 *@
+        <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">通知信箱</a></li>
         <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">密碼修改</a></li>
     }
     @if (hasExternalLogins)

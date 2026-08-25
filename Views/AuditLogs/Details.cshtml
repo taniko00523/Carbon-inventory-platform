@@ -1,0 +1,64 @@
+@model Carbon_inventory_platform.ViewModel.AuditLogDetailViewModel
+@{
+    ViewData["Title"] = "稽核紀錄詳細";
+    var log = Model.Log;
+}
+
+<div class="cip-page-head">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div class="cip-page-actions">
+        <a class="btn btn-outline-secondary" asp-action="Index">返回清單</a>
+    </div>
+</div>
+
+<div class="cip-stats">
+    <div class="cip-stat">
+        <span class="cip-stat-label">時間</span>
+        <span class="cip-stat-value" style="font-size:1.1rem;">@log.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</span>
+    </div>
+    <div class="cip-stat">
+        <span class="cip-stat-label">使用者</span>
+        <span class="cip-stat-value" style="font-size:1.1rem;">@(log.UserName ?? "(不明使用者)")</span>
+    </div>
+    <div class="cip-stat">
+        <span class="cip-stat-label">動作</span>
+        <span class="cip-stat-value" style="font-size:1.1rem;">@log.Action</span>
+    </div>
+    <div class="cip-stat">
+        <span class="cip-stat-label">實體 / 資料 Id</span>
+        <span class="cip-stat-value" style="font-size:1.1rem;">@log.EntityName</span>
+        <span class="cip-stat-unit">@log.EntityId</span>
+    </div>
+</div>
+
+<div class="cip-section cip-table-wrap">
+    <h2 class="cip-section-title">變更內容</h2>
+    @if (Model.Changes.Count == 0)
+    {
+        <p class="text-muted mb-0">沒有記錄到欄位層級的變更內容。</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>欄位</th>
+                    <th>變更前</th>
+                    <th>變更後</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var change in Model.Changes)
+                {
+                    <tr>
+                        <td>@change.Field</td>
+                        <td>@(change.OldValue ?? "—")</td>
+                        <td>@(change.NewValue ?? "—")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
