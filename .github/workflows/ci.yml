@@ -1,0 +1,36 @@
+# 原本唯一的 workflow 只在 push 到 master 時觸發，且只有 build 沒有 test，
+# 等於實際開發用的 develop / Fix 分支完全沒有任何自動化檢查。
+# 這個 workflow 只負責 build + test，不會部署到任何環境，
+# 正式環境的部署仍完全交給 master_NSRC-Carbon-inventory-platform.yml 控制。
+name: CI (build & test)
+
+on:
+  push:
+    branches:
+      - develop
+      - Fix
+  pull_request:
+    branches:
+      - develop
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --configuration Release --no-build

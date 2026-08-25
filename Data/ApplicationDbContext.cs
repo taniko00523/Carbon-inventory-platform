@@ -139,6 +139,33 @@ namespace Carbon_inventory_platform.Data
             builder.Entity<Function>().HasIndex(e => e.Name).IsUnique();
             builder.Entity<FunctionAction>().HasIndex(e => e.Name).IsUnique();
 
+            // ---- 全域軟刪除查詢過濾器 --------------------------------------
+            // 原本每一支查詢都要自己記得加 isDeleted == 0（散落在 7 個 Controller、
+            // 共 67 處），漏掉一處，已刪除的資料就會混進排放量統計與報告書
+            // （本次修復的幾個 bug 正是這個原因）。改成在這裡集中設定一次。
+            //
+            // 這裡只對「該實體自己的旗標」做過濾，不透過關聯往上/往下鏈接
+            // （例如不會因為 Company 被刪除就連帶把它底下的 Area 濾掉）——
+            // 因為目前應用程式邏輯本身也沒有這種連鎖刪除語意，這裡只是把
+            // 既有的手動檢查收斂成全域機制，不新增原本不存在的行為。
+            builder.Entity<Company>().HasQueryFilter(e => e.isDeleted == 0);
+            builder.Entity<Area>().HasQueryFilter(e => e.isDeleted == 0);
+            builder.Entity<Analysis>().HasQueryFilter(e => e.isDeleted == 0);
+            builder.Entity<Device>().HasQueryFilter(e => e.isDeleted == 0);
+            builder.Entity<GHG>().HasQueryFilter(e => e.isDeleted == 0);
+            // ActivityData 沒有自己的軟刪除旗標，但對 Device 是必要關聯；Device 確實會被軟刪除
+            // （DevicesController.DeleteConfirmed），例如 CountController 常常直接用
+            // DeviceId 查 ActivityDatas，不會經過 Device 的過濾器，所以在這裡串接。
+            builder.Entity<ActivityData>().HasQueryFilter(e => e.Device!.isDeleted == 0);
+            builder.Entity<Permission>().HasQueryFilter(e => e.IsDeleted == 0);
+
+            // RolePermission/UserPermission 對 Permission 是必要的關聯（PermissionId 不可為 null），
+            // 但兩者本身沒有旗標。EF Core 會警告「必要關聯的一端有過濾器、另一端沒有」，
+            // 而這裡不是誤報：Permission 確實會被軟刪除（PermissionsController.DeleteConfirmed），
+            // 一個角色/使用者對已刪除權限的授權理應跟著失效，所以串接 Permission 的旗標。
+            builder.Entity<RolePermission>().HasQueryFilter(e => e.Permission!.IsDeleted == 0);
+            builder.Entity<UserPermission>().HasQueryFilter(e => e.Permission!.IsDeleted == 0);
+
             DataSeed(builder);
         }
         private void DataSeed(ModelBuilder builder)

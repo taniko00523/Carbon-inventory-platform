@@ -35,8 +35,9 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return null;
             }
+            // isDeleted == 0 已由 ApplicationDbContext 的全域查詢過濾器處理，不需要重複寫。
             return await _context.Companies
-                         .Where(x => x.UserId == userId && x.isDeleted == 0)
+                         .Where(x => x.UserId == userId)
                          .Select(x => (Guid?)x.Id)
                          .FirstOrDefaultAsync();
         }
@@ -68,7 +69,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 query = query.Include(x => x.Company);
             }
-            var area = await query.FirstOrDefaultAsync(x => x.Id == id && x.isDeleted == 0);
+            var area = await query.FirstOrDefaultAsync(x => x.Id == id);
             if (area == null)
             {
                 return null;
@@ -94,7 +95,7 @@ namespace Carbon_inventory_platform.Controllers
             if (Id == null) //使用者不用給AreaId
             {
                 var compnay = await _context.Companies // 暫存目前所在的公司名稱 顯示在畫面上方
-                                   .Where(a => a.UserId == _userManager.GetUserId(User) && a.isDeleted == 0)
+                                   .Where(a => a.UserId == _userManager.GetUserId(User))
                                    .FirstOrDefaultAsync();
 
                 // 原本直接取 compnay.Id，帳號還沒有公司資料時（例如管理員帳號、公司被刪除的帳號）
@@ -127,7 +128,7 @@ namespace Carbon_inventory_platform.Controllers
 
             var area = await _context.Areas
                           .Include(x => x.Company)
-                          .Where(x => x.isDeleted == 0 && x.CompanyId == Id) //抓出資料表裡面沒被刪除的
+                          .Where(x => x.CompanyId == Id) // isDeleted 已由全域查詢過濾器處理
                           .OrderBy(x => x.CreateTime)
                           .Include(x => x.Analysis)
                           .ToListAsync();
@@ -469,16 +470,18 @@ namespace Carbon_inventory_platform.Controllers
                 return null;
             }
         }
-        [Authorize(Roles = "Admin")]
+        // 原本這裡限定 [Authorize(Roles = "Admin")]，但 Views/Areas/Index.cshtml 的「設定」按鈕
+        // 對一般使用者也會顯示，點下去只會拿到 AccessDenied——重大性評估依 ISO 14064-1 慣例
+        // 是由填報單位自行判斷、留給查證單位覆核，因此改為開放給任何擁有該廠區的登入者，
+        // 不再限定角色；資料範圍改由既有的 FindOwnedAreaAsync 擁有權檢查把關。
         public async Task<IActionResult> Analyses(Guid Id) //非同步方法
         {
-            // 原本沒有比對這個廠區屬於哪個公司，此處雖然限定 Admin 角色，仍加上一致的擁有權檢查（防禦性）。
             if (await FindOwnedAreaAsync(Id) == null)
             {
                 return NotFound();
             }
             var analyses = await _context.Analyses
-                          .Where(x => x.isDeleted == 0 && x.AreaId == Id) //抓出資料表裡面沒被刪除的
+                          .Where(x => x.AreaId == Id) // isDeleted 已由全域查詢過濾器處理
                           .FirstOrDefaultAsync();
             if (analyses == null)
             {
@@ -489,9 +492,9 @@ namespace Carbon_inventory_platform.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // 原本 POST 沒有 [Authorize(Roles = "Admin")]，跟上面的 GET 不一致，且完全沒有比對 Analysis 屬於哪個
-        // 廠區/公司，任何登入者只要知道別人的 Analysis Guid 就能竄改該公司的重大性評估資料。
-        [Authorize(Roles = "Admin")]
+        // 同 GET：不再限定 Admin 角色，開放給擁有該廠區的登入者填寫。
+        // 資料保護仍然靠下面的擁有權檢查——原本完全沒有比對 Analysis 屬於哪個廠區/公司，
+        // 任何登入者只要知道別人的 Analysis Guid 就能竄改該公司的重大性評估資料。
         public async Task<IActionResult> Analyses(Guid id, Analysis analysis)
         {
             if (id != analysis.Id)
@@ -915,7 +918,8 @@ namespace Carbon_inventory_platform.Controllers
                 CreateTime = DateTime.Now
             });
 
-            var devices = await _context.Devices.Where(x => x.AreaId == area.Id && x.isDeleted == 0).ToListAsync();
+            // isDeleted 已由全域查詢過濾器處理，這裡不需要重複寫。
+            var devices = await _context.Devices.Where(x => x.AreaId == area.Id).ToListAsync();
             if (devices != null)
             {
                 foreach (var device in devices)
@@ -923,7 +927,7 @@ namespace Carbon_inventory_platform.Controllers
                     Guid newDeviceId = Guid.NewGuid();
                     Device newDevice = CopyDevice(device, newAreaId, newDeviceId);
                     _context.Devices.Add(newDevice);
-                    var GHGs = await _context.GHGs.Where(x => x.DeviceId == device.Id && x.isDeleted == 0).ToListAsync();
+                    var GHGs = await _context.GHGs.Where(x => x.DeviceId == device.Id).ToListAsync();
                     if (GHGs != null)
                     {
                         foreach (var ghg in GHGs)

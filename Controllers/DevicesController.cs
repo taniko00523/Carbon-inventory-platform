@@ -65,7 +65,7 @@ namespace Carbon_inventory_platform.Controllers
         public async Task<IActionResult> Index(Guid Id)
         {
             TempData["areaId"] = Id; // 暫存目前所在的廠區ID
-            var AreaData = await _context.Areas.Where(x => x.Id == Id && x.isDeleted == 0).Include(x => x.Company).FirstOrDefaultAsync();
+            var AreaData = await _context.Areas.Where(x => x.Id == Id).Include(x => x.Company).FirstOrDefaultAsync(); // isDeleted 由全域查詢過濾器處理
             if (AreaData == null)
             {
                 // 原本回傳沒有 Model 的 View()，而 Index.cshtml 是 @model IEnumerable<Device> 並直接呼叫
@@ -85,7 +85,7 @@ namespace Carbon_inventory_platform.Controllers
             TempData["year"] = AreaData.Year;
             return _context.Devices != null ? //如果有抓到資料表Null
                          View(await _context.Devices
-                         .Where(x => x.isDeleted == 0 && x.AreaId == Id) //抓出資料表裡面沒被刪除的
+                         .Where(x => x.AreaId == Id) // isDeleted 由全域查詢過濾器處理
                          .Include(x => x.GHGs)
                          .Include(x => x.ActivityDatas)
                          .Include(x => x.Area.Company)
@@ -98,7 +98,7 @@ namespace Carbon_inventory_platform.Controllers
         {
             var deviceDatas = await _context.deviceDatas.ToListAsync();
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
-            ViewData["AreasId"] = new SelectList(await _context.Areas.Where(x => x.isDeleted == 0).ToListAsync(), "Id", "Name");
+            ViewData["AreasId"] = new SelectList(await _context.Areas.ToListAsync(), "Id", "Name"); // isDeleted 由全域查詢過濾器處理
             ViewData["Scope"] = new SelectList(new List<string> { "類別一", "類別二", "類別三", "類別四", "類別五", "類別六" });
 
             //ViewData["EmissionPattern"] = new SelectList(emissionPattern);
@@ -191,7 +191,7 @@ namespace Carbon_inventory_platform.Controllers
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
             ViewData["Scope"] = new SelectList(new List<string> { "類別一", "類別二", "類別三", "類別四", "類別五", "類別六" });
 
-            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
+            ViewData["AreasId"] = new SelectList(_context.Areas, "Id", "Name"); // isDeleted 由全域查詢過濾器處理
             return View(device);
         }
         public async Task<IActionResult> Copy(Guid? id)
@@ -442,7 +442,7 @@ namespace Carbon_inventory_platform.Controllers
             var deviceDatas = await _context.deviceDatas.ToListAsync();
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
             ViewData["Scope"] = new SelectList(new List<string> { "類別一", "類別二", "類別三", "類別四", "類別五", "類別六" });
-            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
+            ViewData["AreasId"] = new SelectList(_context.Areas, "Id", "Name"); // isDeleted 由全域查詢過濾器處理
             return View(deviceViewModel);
         }
         [HttpPost]
@@ -632,7 +632,7 @@ namespace Carbon_inventory_platform.Controllers
             var deviceDatas = await _context.deviceDatas.ToListAsync();
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
             ViewData["Scope"] = new SelectList(new List<string> { "類別一", "類別二", "類別三", "類別四", "類別五", "類別六" });
-            ViewData["AreasId"] = new SelectList(_context.Areas.Where(x => x.isDeleted == 0), "Id", "Name");
+            ViewData["AreasId"] = new SelectList(_context.Areas, "Id", "Name"); // isDeleted 由全域查詢過濾器處理
 
             return View(device);
         }
@@ -913,13 +913,14 @@ namespace Carbon_inventory_platform.Controllers
             var devicesDataIndexs = GetColumnIndexes(deviesDataSheet.GetRow(0));
             var coutingDataIndexs = GetColumnIndexes(countingDataSheet.GetRow(0));
 
-            var devices = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0)
+            // isDeleted 由全域查詢過濾器處理，Device/GHG 都不需要再手動過濾。
+            var devices = await _context.Devices.Where(x => x.AreaId == id)
                 .OrderBy(x => x.Scope)
                 .ThenBy(x => x.EmissionPattern)
                 .ToListAsync();
             if (devices == null) { return NotFound(); }
             var allGHGs = await _context.GHGs.Include(ghg => ghg.Device)
-                .Where(ghg => ghg.Device.AreaId == id && ghg.Device.isDeleted == 0)
+                .Where(ghg => ghg.Device.AreaId == id)
                 .OrderBy(x => x.Device.Scope)
                 .ThenBy(x => x.Device.EmissionPattern)
                 .ToListAsync();
@@ -932,7 +933,7 @@ namespace Carbon_inventory_platform.Controllers
               .Where(x => x.Id == area.CompanyId)
               .FirstOrDefaultAsync();
             var activityDatas = _context.ActivityDatas.ToList();
-            int baseYear = _context.Areas.Where(x => x.CompanyId == company.Id && x.isDeleted == 0).Select(x => x.Year).FirstOrDefault();
+            int baseYear = _context.Areas.Where(x => x.CompanyId == company.Id).Select(x => x.Year).FirstOrDefault(); // isDeleted 由全域查詢過濾器處理
 
             FillBasicData(basicDataSheet, company, area, basicDataIndexes, baseYear);
             FillDeviceData(deviesDataSheet, devices, allGHGs, activityDatas, devicesDataIndexs); ;
@@ -1005,7 +1006,7 @@ namespace Carbon_inventory_platform.Controllers
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                var devices = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0).ToListAsync();
+                var devices = await _context.Devices.Where(x => x.AreaId == id).ToListAsync(); // isDeleted 由全域查詢過濾器處理
                 foreach (var item in devices)
                 {
                     item.isDeleted = 1;
@@ -1175,7 +1176,7 @@ namespace Carbon_inventory_platform.Controllers
             // 抓取列索引
             var devicesDataIndexs = GetColumnIndexes(deviesDataSheet.GetRow(1));
 
-            var devices = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0)
+            var devices = await _context.Devices.Where(x => x.AreaId == id) // isDeleted 由全域查詢過濾器處理
                 .OrderBy(x => x.Scope)
                 .ThenBy(x => x.EmissionPattern)
                 .ToListAsync();

@@ -24,9 +24,8 @@ namespace Carbon_inventory_platform.Controllers
         // GET: Permissions
         public async Task<IActionResult> Index()
         {
-            // 原本沒有過濾 IsDeleted，已軟刪除的權限還是會列出來。
+            // IsDeleted 現在由全域查詢過濾器處理（Data/ApplicationDbContext.cs），不需要重複寫。
             var applicationDbContext = _context.Permissions
-                .Where(p => p.IsDeleted == 0)
                 .Include(p => p.FunctionAction)
                 .Include(p => p.Function);
             return View(await applicationDbContext.ToListAsync());
@@ -43,7 +42,7 @@ namespace Carbon_inventory_platform.Controllers
             var permission = await _context.Permissions
                 .Include(p => p.FunctionAction)
                 .Include(p => p.Function)
-                .FirstOrDefaultAsync(m => m.Id == id && m.IsDeleted == 0);
+                .FirstOrDefaultAsync(m => m.Id == id); // IsDeleted 由全域查詢過濾器處理
             if (permission == null)
             {
                 return NotFound();
@@ -93,7 +92,7 @@ namespace Carbon_inventory_platform.Controllers
             }
 
             var permission = await _context.Permissions
-                .FirstOrDefaultAsync(m => m.Id == id && m.IsDeleted == 0);
+                .FirstOrDefaultAsync(m => m.Id == id); // IsDeleted 由全域查詢過濾器處理
             if (permission == null)
             {
                 return NotFound();
@@ -122,7 +121,7 @@ namespace Carbon_inventory_platform.Controllers
                 // 新建的實體會把 CreateTime 覆寫成當下時間、把軟刪除旗標一起蓋掉。
                 // 改成讀出現有資料列後只更新可編輯的欄位。
                 var permissionToUpdate = await _context.Permissions
-                    .FirstOrDefaultAsync(p => p.Id == id && p.IsDeleted == 0);
+                    .FirstOrDefaultAsync(p => p.Id == id); // IsDeleted 由全域查詢過濾器處理
                 if (permissionToUpdate == null)
                 {
                     return NotFound();
@@ -165,7 +164,7 @@ namespace Carbon_inventory_platform.Controllers
             var permission = await _context.Permissions
                 .Include(p => p.FunctionAction)
                 .Include(p => p.Function)
-                .FirstOrDefaultAsync(m => m.Id == id && m.IsDeleted == 0);
+                .FirstOrDefaultAsync(m => m.Id == id); // IsDeleted 由全域查詢過濾器處理
             if (permission == null)
             {
                 return NotFound();
@@ -182,8 +181,9 @@ namespace Carbon_inventory_platform.Controllers
             // 原本是實體刪除 (_context.Permissions.Remove)，但模型本來就設計成軟刪除
             // (IsDeleted / DeleteTime)。實體刪除會讓 RolePermissions / UserPermissions
             // 一併被連帶刪除，而且沒有任何稽核紀錄可以追查。
+            // FindAsync 現在也會套用全域查詢過濾器，找到的一定是尚未刪除的權限，不需要再判斷一次。
             var permission = await _context.Permissions.FindAsync(id);
-            if (permission != null && permission.IsDeleted == 0)
+            if (permission != null)
             {
                 permission.IsDeleted = 1;
                 permission.DeleteTime = DateTime.Now;
@@ -219,9 +219,9 @@ namespace Carbon_inventory_platform.Controllers
         /// </summary>
         private async Task ValidateNotDuplicateAsync(Permission permission, int excludeId)
         {
+            // IsDeleted 由全域查詢過濾器處理。
             var duplicated = await _context.Permissions.AnyAsync(p =>
                 p.Id != excludeId
-                && p.IsDeleted == 0
                 && p.FunctionId == permission.FunctionId
                 && p.FunctionActionId == permission.FunctionActionId);
             if (duplicated)

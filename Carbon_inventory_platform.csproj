@@ -6,6 +6,13 @@
     <UserSecretsId>aspnet-Carbon_inventory_platform-f19a92ee-d2ab-4dcf-b9e2-42c55370b2e7</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Carbon_inventory_platform.Tests 是獨立的測試專案，但因為資料夾放在本專案目錄底下，
+         SDK 專案預設的萬用字元 (**/*.cs) 會把它的檔案也一起編譯進來，導致重複定義的錯誤。
+         明確排除，讓它只被自己的 .csproj 編譯。 -->
+    <Compile Remove="Carbon_inventory_platform.Tests\**" />
+    <Content Remove="Carbon_inventory_platform.Tests\**" />
+    <EmbeddedResource Remove="Carbon_inventory_platform.Tests\**" />
+    <None Remove="Carbon_inventory_platform.Tests\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DocX" Version="3.0.0" />

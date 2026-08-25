@@ -48,8 +48,8 @@ namespace Carbon_inventory_platform.Controllers
                                            .Where(c => c.UserId == userId)
                                            .Select(c => c.Id)
                                            .ToListAsync();
-            return await _context.Areas
-                                 .AnyAsync(a => a.Id == areaId && a.isDeleted == 0 && companyIds.Contains(a.CompanyId));
+            return await _context.Areas // isDeleted 由全域查詢過濾器處理
+                                 .AnyAsync(a => a.Id == areaId && companyIds.Contains(a.CompanyId));
         }
 
         // 原本檔名直接串接使用者可編輯的公司/廠區名稱且未過濾路徑字元，會導致寫檔跳出輸出資料夾，或名稱含 / : 等字元時直接 500。
@@ -232,10 +232,10 @@ namespace Carbon_inventory_platform.Controllers
 
             // 原本只過濾 GHGs 沒有過濾 Devices，已軟刪除的排放源仍會被加總，會導致報告書數字與畫面不一致。
             Area? data = await _context.Areas
-                                        .Where(a => a.Id == id && a.isDeleted == 0)
+                                        .Where(a => a.Id == id) // isDeleted 由全域查詢過濾器處理（Area/Device/GHG 皆已套用）
                                         .Include(a => a.Company)
-                                        .Include(a => a.Devices.Where(d => d.isDeleted == 0))
-                                            .ThenInclude(d => d.GHGs.Where(g => g.isDeleted == 0))
+                                        .Include(a => a.Devices)
+                                            .ThenInclude(d => d.GHGs)
                                         .Include(a => a.Analysis)
                                         .FirstOrDefaultAsync();
 
@@ -274,11 +274,11 @@ namespace Carbon_inventory_platform.Controllers
             }
             else
             {
-                baseYear_Area = await _context.Areas
-                                        .Where(a => a.CompanyId == data.CompanyId && a.isDeleted == 0 && a.BaseYear)
+                baseYear_Area = await _context.Areas // isDeleted 由全域查詢過濾器處理
+                                        .Where(a => a.CompanyId == data.CompanyId && a.BaseYear)
                                         .Include(a => a.Company)
-                                        .Include(a => a.Devices.Where(d => d.isDeleted == 0))
-                                            .ThenInclude(d => d.GHGs.Where(g => g.isDeleted == 0))
+                                        .Include(a => a.Devices)
+                                            .ThenInclude(d => d.GHGs)
                                         .Include(a => a.Analysis)
                                         .FirstOrDefaultAsync();
             }
@@ -735,19 +735,20 @@ namespace Carbon_inventory_platform.Controllers
                 return NotFound();
             }
 
+            // isDeleted 由全域查詢過濾器處理（Area/Device/GHG 皆已套用），不需要重複寫。
             var dataResult = await _context.Areas
-                                        .Where(x => x.Id == id && x.isDeleted == 0)
+                                        .Where(x => x.Id == id)
                                         .Include(x => x.Company)
                                         .Select(area => new
                                         {
                                             Area = area,
                                             Devices = _context.Devices
-                                                              .Where(d => d.AreaId == area.Id && d.isDeleted == 0)
+                                                              .Where(d => d.AreaId == area.Id)
                                                               .OrderBy(d => d.Scope)
                                                               .ThenBy(d => d.EmissionPattern)
                                                               .ToList(),
                                             AllGHGs = _context.Devices
-                                                              .Where(d => d.AreaId == area.Id && d.isDeleted == 0)
+                                                              .Where(d => d.AreaId == area.Id)
                                                               .SelectMany(d => d.GHGs)
                                                               .ToList(),
                                             AllActivityData = _context.ActivityDatas.ToList()
@@ -766,8 +767,8 @@ namespace Carbon_inventory_platform.Controllers
             var AllActivityData = dataResult.AllActivityData;
 
             // 原本用 .Select(x => x.Year) 取得不可為 null 的 int，「baseYear == null」永遠不成立，公司尚未設定基準年時會直接把 0 當作基準年印進報告書。
-            var baseYear_Area = await _context.Areas
-                .Where(x => x.CompanyId == data.Company.Id && x.BaseYear && x.isDeleted == 0)
+            var baseYear_Area = await _context.Areas // isDeleted 由全域查詢過濾器處理
+                .Where(x => x.CompanyId == data.Company.Id && x.BaseYear)
                 .FirstOrDefaultAsync();
 
             if (baseYear_Area == null)
@@ -1190,19 +1191,20 @@ namespace Carbon_inventory_platform.Controllers
             }
 
 
+            // isDeleted 由全域查詢過濾器處理（Area/Device/GHG 皆已套用），不需要重複寫。
             var dataResult = await _context.Areas
-                                        .Where(x => x.Id == id && x.isDeleted == 0)
+                                        .Where(x => x.Id == id)
                                         .Include(x => x.Company)
                                         .Select(area => new
                                         {
                                             Area = area,
                                             Devices = _context.Devices
-                                                              .Where(d => d.AreaId == area.Id && d.isDeleted == 0)
+                                                              .Where(d => d.AreaId == area.Id)
                                                               .OrderBy(d => d.Scope)
                                                               .ThenBy(d => d.EmissionPattern)
                                                               .ToList(),
                                             AllGHGs = _context.Devices
-                                                              .Where(d => d.AreaId == area.Id && d.isDeleted == 0)
+                                                              .Where(d => d.AreaId == area.Id)
                                                               .SelectMany(d => d.GHGs)
                                                               .ToList(),
                                             AllActivityData = _context.ActivityDatas.ToList()
@@ -1221,8 +1223,8 @@ namespace Carbon_inventory_platform.Controllers
             var AllActivityData = dataResult.AllActivityData;
 
             // 原本用 .Select(x => x.Year) 取得不可為 null 的 int，「baseYear == null」永遠不成立；且沒有濾除已軟刪除的基準年廠區，公司尚未設定基準年時會把 0 當作基準年印進報告書。
-            var baseYear_Area = await _context.Areas
-                .Where(x => x.CompanyId == data.Company.Id && x.BaseYear && x.isDeleted == 0)
+            var baseYear_Area = await _context.Areas // isDeleted 由全域查詢過濾器處理
+                .Where(x => x.CompanyId == data.Company.Id && x.BaseYear)
                 .FirstOrDefaultAsync();
 
             if (baseYear_Area == null)

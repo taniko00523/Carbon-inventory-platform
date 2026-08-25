@@ -28,9 +28,9 @@ namespace Carbon_inventory_platform.Controllers
             const int pageSize = 10;
             // 原本用 _userManager.Users.ToList() 撈出「全部」使用者，再對每一個使用者各自查一次 Companies，
             // 是典型的 N+1；而且完全沒有濾掉已軟刪除（isDeleted=1）的公司，全部撈進記憶體之後才做搜尋跟分頁。
-            // 改成從 Companies 直接下手，一次查詢、篩掉軟刪除，交給資料庫做搜尋與分頁。
+            // 改成從 Companies 直接下手，一次查詢、交給資料庫做搜尋與分頁；isDeleted 現在由全域查詢過濾器處理。
             IQueryable<Company> query = _context.Companies
-                .Where(c => c.isDeleted == 0 && (c.User == null || c.User.Email != "Admin"))
+                .Where(c => c.User == null || c.User.Email != "Admin")
                 .Include(c => c.User);
 
             if (!string.IsNullOrEmpty(searchTerm))
@@ -64,7 +64,8 @@ namespace Carbon_inventory_platform.Controllers
         {
             // 原本用 FindAsync 直接找，沒有濾掉已軟刪除（isDeleted=1）的公司，
             // 站內找不到任何「復原已刪除公司」的功能，等於讓已刪除的公司還能被打開來改。
-            Company? company = await _context.Companies.FirstOrDefaultAsync(x => x.Id == id && x.isDeleted == 0);
+            // isDeleted 現在由全域查詢過濾器處理，這裡不需要重複寫。
+            Company? company = await _context.Companies.FirstOrDefaultAsync(x => x.Id == id);
 
             if (company == null)
             {
@@ -91,8 +92,8 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     // 原本用 FindAsync 直接找，且不論找到的公司是否已被軟刪除都會把 isDeleted 蓋回 0，
                     // 等於讓 Edit 表單變成一個隱藏的「復原已刪除公司」功能；站內找不到對應的復原介面，
-                    // 因此改成已刪除的公司一律回 NotFound，不再讓 Edit 動到它。
-                    var toUpdate = await _context.Companies.FirstOrDefaultAsync(x => x.Id == id && x.isDeleted == 0);
+                    // 因此改成已刪除的公司一律回 NotFound，不再讓 Edit 動到它（isDeleted 由全域過濾器處理）。
+                    var toUpdate = await _context.Companies.FirstOrDefaultAsync(x => x.Id == id);
                     if (toUpdate == null)
                     {
                         return NotFound();

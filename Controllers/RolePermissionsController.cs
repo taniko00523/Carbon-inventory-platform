@@ -190,9 +190,8 @@ namespace Carbon_inventory_platform.Controllers
                 .ToListAsync();
             ViewData["RoleId"] = new SelectList(roles, "Id", "Name", selectedRoleId);
 
-            var permissions = await _context.Permissions
+            var permissions = await _context.Permissions // IsDeleted 由全域查詢過濾器處理
                 .AsNoTracking()
-                .Where(p => p.IsDeleted == 0)
                 .OrderBy(p => p.Name)
                 .Select(p => new { p.Id, p.Name })
                 .ToListAsync();

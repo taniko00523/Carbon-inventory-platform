@@ -1,5 +1,6 @@
 ﻿using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
+using Carbon_inventory_platform.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,69 +24,17 @@ namespace Carbon_inventory_platform.Controllers
             logger?.LogWarning("{Message}", message);
         }
 
-        public static decimal DecimalSqrt(decimal value) //用牛頓法逼近Decimal的平方根
-        {
-            if (value < 0)
-            {
-                throw new ArgumentException("不能計算負數的平方根");
-            }
-            // 原本固定只跑20次牛頓法且起始值為 value/2，大數值(廠區不確定性平方和常達1e12以上)還沒收斂就回傳，會導致95%信賴區間被高估；
-            // 而且 value == 0 時 guess 也是0，value / guess 會丟出 DivideByZeroException。
-            if (value == 0)
-            {
-                return 0;
-            }
+        // 這三個純數學函式已抽到 Services/EmissionMath.cs（方便直接寫單元測試，
+        // 不用透過 ApplicationDbContext），這裡保留同名方法只是委派過去，
+        // 檔案內另外 27 處呼叫端完全不用修改。
+        public static decimal DecimalSqrt(decimal value) => EmissionMath.DecimalSqrt(value);
 
-            decimal guess = (decimal)Math.Sqrt((double)value); //先用double開根號當起始值，收斂快很多
-            if (guess <= 0)
-            {
-                guess = value;
-            }
-
-            for (int i = 0; i < 100; i++) //逼近到收斂為止，並保留次數上限避免無窮迴圈
-            {
-                decimal next = 0.5m * (guess + value / guess);
-                if (Math.Abs(next - guess) <= 0.0000000001m)
-                {
-                    return next;
-                }
-                guess = next;
-            }
-
-            return guess;
-        }
         [NonAction]
-        public decimal CalculateRoundDistance(decimal num1, decimal num2) // 計算兩數平方和的平方根，並四捨五入到小數點後5位
-        {
-            // 原本只要其中一個參數為0就直接回傳0，但 sqrt(x²+0²) 應該是 |x|，
-            // 會導致大部分 Materials(DataUUL/DataULL 未填為0)的不確定性整個被歸零。
-            if (num1 == 0 && num2 == 0)
-            {
-                return 0;
-            }
-            decimal distance = DecimalSqrt(num1 * num1 + num2 * num2);
-            return Math.Round(distance, 5);
-        }
+        public decimal CalculateRoundDistance(decimal num1, decimal num2) => EmissionMath.CalculateRoundDistance(num1, num2);
+
         [NonAction]
-        public decimal Calculate95U(decimal GHG1, decimal GHG2, decimal GHG3, decimal GHG1UUL, decimal GHG2UUL, decimal GHG3UUL) //計算95%信賴區間 
-        {
-            // 原本整段合成邏輯都包在「第一個氣體的排放量與不確定性都不為0」的條件裡，
-            // 只要CO2排放量或其不確定性為0(很常見)就直接回傳0，會導致後面CH4/N2O的不確定性被整個丟掉。
-            // 改成直接對三個氣體做「排放量×不確定性」的平方和開根號，再除以總排放量(單一氣體的結果與原本相同)。
-            decimal count1 = GHG1 * GHG1UUL;
-            decimal count2 = GHG2 * GHG2UUL;
-            decimal count3 = GHG3 * GHG3UUL;
-
-            decimal count = DecimalSqrt((count1 * count1) + (count2 * count2) + (count3 * count3));
-            decimal allGHG = GHG1 + GHG2 + GHG3;
-
-            if (allGHG == 0)
-            {
-                return 0;
-            }
-
-            return count / allGHG;
-        }
+        public decimal Calculate95U(decimal GHG1, decimal GHG2, decimal GHG3, decimal GHG1UUL, decimal GHG2UUL, decimal GHG3UUL)
+            => EmissionMath.Calculate95U(GHG1, GHG2, GHG3, GHG1UUL, GHG2UUL, GHG3UUL);
         [NonAction]
         public async Task<bool> CEFAddAsync(Device device, string GHG, decimal? CEF) //自訂排碳係數
         {
@@ -530,9 +479,10 @@ namespace Carbon_inventory_platform.Controllers
                 if (emission != null)
                 {
                     // 原本是 emission.All += all_Emission;，每次重算都把這台設備的排放量整份再加一次，
-                    // 會導致廠區總量(Area.All)每存一次活動數據就往上虛增，改成重新彙總廠區內所有未刪除設備。
+                    // 會導致廠區總量(Area.All)每存一次活動數據就往上虛增，改成重新彙總廠區內所有未刪除設備
+                    // （isDeleted 現在由全域查詢過濾器處理，不需要重複寫）。
                     decimal otherEmissions = await _context.Devices
-                                                    .Where(x => x.AreaId == emission.Id && x.isDeleted == 0 && x.Id != Device.Id)
+                                                    .Where(x => x.AreaId == emission.Id && x.Id != Device.Id)
                                                     .SumAsync(x => (decimal?)x.Emissions) ?? 0;
                     emission.All = otherEmissions + all_Emission;
                 }
@@ -549,11 +499,11 @@ namespace Carbon_inventory_platform.Controllers
         [NonAction]
         public async Task<bool> CountEmissionAsync(Guid? id)
         {
-            // 合并数据库查询
+            // 合併資料庫查詢。isDeleted 現在由全域查詢過濾器處理，不需要另外過濾。
             var areaData = await _context.Areas
-    .Include(a => a.Devices.Where(d => d.isDeleted == 0))  // 只包含 isDeleted == 0 的 Devices
+    .Include(a => a.Devices)
     .ThenInclude(d => d.GHGs)
-    .Where(a => a.Id == id && a.isDeleted == 0)  // Area 的 Id 等于 id，且 IsDeleted == 0
+    .Where(a => a.Id == id)
     .FirstOrDefaultAsync();
 
 
@@ -615,9 +565,13 @@ namespace Carbon_inventory_platform.Controllers
                 }
 
                 // 原本第一級多了 device.Grade > 0 的條件，等級為0(修正係數沒填)的設備會被算進第二級，與下方 all_Grade 的分級方式不一致。
-                if (device.Grade < 10) no1Grade++;
-                else if (device.Grade < 19) no2Grade++;
-                else no3Grade++;
+                // 分級門檻現在跟 EmissionMath.GradeLabel 共用同一組定義，避免兩處各自維護一份數字。
+                switch (EmissionMath.GradeBucket(device.Grade))
+                {
+                    case 1: no1Grade++; break;
+                    case 2: no2Grade++; break;
+                    default: no3Grade++; break;
+                }
 
                 allCountULL += device.count_ULL;
                 allCountUUL += device.count_UUL;
@@ -776,7 +730,7 @@ namespace Carbon_inventory_platform.Controllers
             areaData.no2_Grade = no2Grade;
             areaData.no3_Grade = no3Grade;
             areaData.avg_Grade = avgGrade;
-            areaData.all_Grade = avgGrade < 10 ? "第一級" : (avgGrade < 19 ? "第二級" : "第三級");
+            areaData.all_Grade = EmissionMath.GradeLabel(avgGrade);
             // 原本這行的除法寫在 if (sumAll != 0) 之外，sumAll 為0時會丟出 DivideByZeroException。
             areaData.percentage_CalAll = sumAll != 0 ? (sumUncertainty / sumAll * 100) : 0;
             areaData.ULL = all_ULL;

@@ -17,19 +17,23 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-          include-prerelease: true
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
+
+      # 原本這裡完全沒有跑測試，build 成功就直接發布/部署到正式環境。
+      # 測試失敗時要讓這個 job 失敗，部署才會被擋下來。
+      - name: Test with dotnet
+        run: dotnet test --configuration Release --no-build
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
@@ -40,10 +44,10 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: .net-app
       
