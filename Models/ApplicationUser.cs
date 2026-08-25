@@ -9,7 +9,6 @@ namespace Carbon_inventory_platform.Models
         public DateTime? UserLimitData { get; set; }
 
         // 添加自訂的屬性
+        public ICollection<UserPermission>? UserPermissions { get; set; }
     }
 }
-
-

@@ -133,6 +133,12 @@
                     data: { id: id },
                     async: false,
                     success: function (data) {
+                        // 原本沒有檢查 data 是否為 null，但 GetDeviceData 在找不到設備或沒有權限存取時
+                        // 會回傳 200 + null，直接解構 null 會丟出 JS 例外，讓下拉選單完全載入不出來且沒有提示。
+                        if (!data) {
+                            alert("讀取設備資料失敗，請重新整理頁面");
+                            return;
+                        }
                         var { scope, emissionPattern, material } = data;
                         loadEmissions(scope, function () {
                             var selectedMaterial = $('#Material').val()

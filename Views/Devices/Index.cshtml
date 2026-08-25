@@ -6,25 +6,33 @@
 <div class="row">
     <div class="col">
         <h1>@ViewData["Title"]</h1>
-        @if (TempData.Peek("areaName") != "" && TempData.Peek("areaName") != null)
+        @{
+            // 原本用 TempData.Peek("areaName") != "" 跟字串比較，Peek 回傳 object，
+            // 會變成參考比較（永遠不相等於空字串），導致這個判斷式永遠成立。
+            var areaName = TempData.Peek("areaName") as string;
+        }
+        @if (!string.IsNullOrEmpty(areaName))
         {
-            <h3>@TempData.Peek("companyName")-@TempData.Peek("areaName")-@TempData.Peek("year")盤查年度</h3>
+            <h3>@TempData.Peek("companyName")-@areaName-@TempData.Peek("year")盤查年度</h3>
         }
         else
         {
             <h3>@TempData.Peek("companyName")-@TempData.Peek("year")盤查年度</h3>
         }
-        <div class="table-computer-w1024">
-            <div class="d-flex justify-content-between">
-                <div class="mr-auto">
-                    <a class="btn btn-primary" asp-action="Create">新增設備</a>
-                    <form id="uploadForm" enctype="multipart/form-data" style="display: inline-block; width:500px">
-                        <input type="hidden" id="areaId" value="@TempData.Peek("areaId")" />
-                        <input class="form-control" type="file" id="excelFile" name="file" accept=".xlsx, .xls" style="width:50%; display:inline-block;" />
-                        <button class="btn btn-primary" type="submit">匯入</button>
-                    </form>
-                </div>
-
+        @* 原本這組「新增設備」按鈕與匯入表單在桌機版、手機版各寫了一份，且 id/name 完全相同，
+           手機版的 input 永遠抓不到（document.getElementById 只會抓到第一份），造成手機版匯入功能失效；
+           桌機版也可能被瀏覽器誤判成同一份表單。這裡合併成單一一份，不需要依斷點各放一份。 *@
+        <div class="d-flex justify-content-between flex-wrap">
+            <div class="mr-auto">
+                <a class="btn btn-primary" asp-action="Create">新增設備</a>
+                <form id="uploadForm" enctype="multipart/form-data" style="display: inline-block; width:500px">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="areaId" value="@TempData.Peek("areaId")" />
+                    <input class="form-control" type="file" id="excelFile" name="file" accept=".xlsx, .xls" style="width:50%; display:inline-block;" />
+                    <button class="btn btn-primary" type="submit">匯入</button>
+                </form>
+            </div>
+            <div class="table-computer-w1024">
                 <div>
                     @if (Model.Count() < 1)
                     {
@@ -64,18 +72,7 @@
                     }
                 </div>
             </div>
-        </div>
-        <div class="table-phone-w1024">
-            <div >
-                <div class="mr-auto">
-                    <a class="btn btn-primary" asp-action="Create">新增設備</a>
-                    <form id="uploadForm" enctype="multipart/form-data" style="display: inline-block; width:500px">
-                        <input type="hidden" id="areaId" value="@TempData.Peek("areaId")" />
-                        <input class="form-control" type="file" id="excelFile" name="file" accept=".xlsx, .xls" style="width:50%; display:inline-block;" />
-                        <button class="btn btn-primary" type="submit">匯入</button>
-                    </form>
-                </div>
-
+            <div class="table-phone-w1024">
                 <div>
                     @if (Model.Count() < 1)
                     {
@@ -117,7 +114,9 @@
         </div>
 
 
-        <h7 style="color:red">@TempData["Error"]</h7>
+        @* 原本用 <h7 style="color:red">（h7 不是合法的 HTML 標籤，且顏色是內嵌樣式），
+           改用 Bootstrap 既有的 .text-danger，與本頁其他錯誤訊息一致。 *@
+        <p class="text-danger">@TempData["Error"]</p>
     </div>
 </div>
 
@@ -407,7 +406,16 @@
                                         displayUnit = item.Unit;
                                         break;
                                 }
-                                <p class="card-text"><strong>活動數據:</strong>@($"{item.ActivityDatas.Sum(ad => ad.Num) / 1000:F4} {displayUnit}")</p>
+                                @* 原本手機版一律除以 1000，但桌機版的表格在單位是「人-年」（頭數，非重量/能源單位）
+                                   時不會除以 1000；同一筆資料在手機、桌機會顯示成不同數字。改成和桌機版一致。 *@
+                                @if (displayUnit != "人-年")
+                                {
+                                    <p class="card-text"><strong>活動數據:</strong>@($"{item.ActivityDatas.Sum(ad => ad.Num) / 1000:F4} {displayUnit}")</p>
+                                }
+                                else
+                                {
+                                    <p class="card-text"><strong>活動數據:</strong>@($"{item.ActivityDatas.Sum(ad => ad.Num):F4} {displayUnit}")</p>
+                                }
                             }
                             else
                             {
@@ -449,6 +457,9 @@
 
                 formData.append("file", fileInput);
                 formData.append("id", areaId); // 添加id到FormData
+                // 原本這個表單沒有防偽 Token，而 ImportDeviceExcel 現在已納入全站的
+                // AutoValidateAntiforgeryToken 檢查，會導致匯入永遠回傳 400。
+                formData.append("__RequestVerificationToken", $("#uploadForm input[name='__RequestVerificationToken']").val());
                 // 發送Ajax請求
                 $.ajax({
                     url: '@Url.Action("ImportDeviceExcel", "Devices")', // 確保 URL 正確
@@ -462,7 +473,14 @@
                         console.log(response);
                     },
                     error: function (xhr, status, error) {
-                        alert("匯入失敗：" + error);
+                        // 原本只顯示 status text（例如 Forbidden／Bad Request），
+                        // 現在 Controller 會依情況回傳 Forbid()／NotFound()／說明文字，
+                        // 改為優先顯示伺服器回傳的內容，避免使用者看不出失敗原因。
+                        var message = (xhr.responseText && xhr.responseText.length < 300) ? xhr.responseText : error;
+                        if (xhr.status === 403) {
+                            message = "沒有權限匯入此盤查邊界的資料";
+                        }
+                        alert("匯入失敗：" + message);
                         console.log(xhr.responseText);
                     }
                 });

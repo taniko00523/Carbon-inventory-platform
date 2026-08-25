@@ -175,39 +175,42 @@
         
     </dl>
 </div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>溫室氣體</th>
-            <th>排放係數</th>
-            <th>GWP</th>
-            <th>上限</th>
-            <th>下限</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.GHG)
-        {
+@* 加上 cip-table-wrap，窄螢幕時表格改成自己內部水平捲動，不會撐開整個頁面。 *@
+<div class="cip-table-wrap">
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @item.Name
-                </td>
-                <td>
-                    @item.CEF
-                </td>
-                <td>
-                    @item.GWP
-                </td>
-                <td>
-                    @item.CEF_ULL
-                </td>
-                <td>
-                    @item.CEF_UUL
-                </td>                
+                <th>溫室氣體</th>
+                <th>排放係數</th>
+                <th>GWP</th>
+                <th>上限</th>
+                <th>下限</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.GHG)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.CEF
+                    </td>
+                    <td>
+                        @item.GWP
+                    </td>
+                    <td>
+                        @item.CEF_ULL
+                    </td>
+                    <td>
+                        @item.CEF_UUL
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -229,6 +232,8 @@
 </table>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Device.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @* 原本「返回列表」沒有帶 areaId，Index 需要 Guid Id 才能找到盤查邊界，
+       不帶會找不到盤查邊界（"找不到此盤查邊界"）。改用目前暫存的 areaId。 *@
+    <a asp-action="Edit" asp-route-id="@Model?.Device.Id">編輯</a> |
+    <a asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回列表</a>
 </div>

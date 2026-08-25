@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Carbon_inventory_platform.Models;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class FunctionActionsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -54,7 +56,9 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,CName,IsDefault")] FunctionAction functionAction)
+        // 原本新增時也綁定了自動編號主鍵 Id，只要有人多送一個 Id 欄位，
+        // INSERT 就會帶上明確的 Id 而觸發 IDENTITY_INSERT 錯誤（500）。
+        public async Task<IActionResult> Create([Bind("Name,CName,IsDefault")] FunctionAction functionAction)
         {
             if (ModelState.IsValid)
             {

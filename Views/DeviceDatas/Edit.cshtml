@@ -1,12 +1,13 @@
 ﻿@model Carbon_inventory_platform.Models.DeviceData
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "編輯裝置資料";
 }
 
-<h1>Edit</h1>
+<h1>編輯裝置資料</h1>
 
-<h4>DeviceData</h4>
+<h4>裝置資料</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -20,17 +21,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="Scope" class="control-label"></label>
-                <input asp-for="Scope" class="form-control" />
+                <select asp-for="Scope" class="form-control" asp-items="ViewBag.ScopeList"></select>
                 <span asp-validation-for="Scope" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EmissionPattern" class="control-label"></label>
-                <input asp-for="EmissionPattern" class="form-control" />
+                <select asp-for="EmissionPattern" class="form-control" asp-items="ViewBag.EmissionPatternList"></select>
                 <span asp-validation-for="EmissionPattern" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Material" class="control-label"></label>
-                <input asp-for="Material" class="form-control" />
+                <select asp-for="Material" class="form-control" asp-items="ViewBag.MaterialList"></select>
                 <span asp-validation-for="Material" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -49,14 +50,14 @@
                 <span asp-validation-for="unit" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="儲存" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">回列表</a>
 </div>
 
 @section Scripts {

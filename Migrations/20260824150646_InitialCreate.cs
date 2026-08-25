@@ -14,26 +14,10 @@ namespace Carbon_inventory_platform.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Action",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDefault = table.Column<byte>(type: "tinyint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Action", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -44,16 +28,42 @@ namespace Carbon_inventory_platform.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserLimitData = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "defaultDevices",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Material = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Scope = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmissionPattern = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Material = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Scope = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    EmissionPattern = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -69,10 +79,10 @@ namespace Carbon_inventory_platform.Migrations
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Scope = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     EmissionPattern = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Material = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Material = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Data_Correction = table.Column<int>(type: "int", nullable: false),
                     Device_Correction = table.Column<int>(type: "int", nullable: false),
-                    unit = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    unit = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,9 +95,9 @@ namespace Carbon_inventory_platform.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -96,13 +106,28 @@ namespace Carbon_inventory_platform.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Function",
+                name: "FunctionActions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IsDefault = table.Column<byte>(type: "tinyint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FunctionActions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Functions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     FLevel = table.Column<int>(type: "int", nullable: true),
                     UpperFunction = table.Column<int>(type: "int", nullable: false),
                     Sort = table.Column<int>(type: "int", nullable: false),
@@ -112,7 +137,7 @@ namespace Carbon_inventory_platform.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Function", x => x.Id);
+                    table.PrimaryKey("PK_Functions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -121,10 +146,10 @@ namespace Carbon_inventory_platform.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Num = table.Column<decimal>(type: "decimal(18,10)", nullable: false),
                     ARVersion = table.Column<int>(type: "int", nullable: false),
-                    Source = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Source = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -173,34 +198,6 @@ namespace Carbon_inventory_platform.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RolePermissions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PermissionId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RolePermissions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserPermissions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PermissionId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserPermissions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -219,100 +216,6 @@ namespace Carbon_inventory_platform.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ApplicationRoleRolePermission",
-                columns: table => new
-                {
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    RolesId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApplicationRoleRolePermission", x => new { x.RoleId, x.RolesId });
-                    table.ForeignKey(
-                        name: "FK_ApplicationRoleRolePermission_AspNetRoles_RolesId",
-                        column: x => x.RolesId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ApplicationRoleRolePermission_RolePermissions_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "RolePermissions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
-                    UserLimitData = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_UserPermissions_UserId",
-                        column: x => x.UserId,
-                        principalTable: "UserPermissions",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Permissions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FunctionId = table.Column<int>(type: "int", nullable: false),
-                    ActionId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<byte>(type: "tinyint", nullable: false),
-                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifyTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeleteTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PermissionId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Permissions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Permissions_Action_ActionId",
-                        column: x => x.ActionId,
-                        principalTable: "Action",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Permissions_Function_FunctionId",
-                        column: x => x.FunctionId,
-                        principalTable: "Function",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Permissions_UserPermissions_PermissionId",
-                        column: x => x.PermissionId,
-                        principalTable: "UserPermissions",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -405,7 +308,7 @@ namespace Carbon_inventory_platform.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     EasyName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     EnglishName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -434,31 +337,38 @@ namespace Carbon_inventory_platform.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PermissionRolePermission",
+                name: "Permissions",
                 columns: table => new
                 {
-                    PermissionId = table.Column<int>(type: "int", nullable: false),
-                    PermissionsId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FunctionId = table.Column<int>(type: "int", nullable: false),
+                    FunctionActionId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifyTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeleteTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PermissionRolePermission", x => new { x.PermissionId, x.PermissionsId });
+                    table.PrimaryKey("PK_Permissions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PermissionRolePermission_Permissions_PermissionsId",
-                        column: x => x.PermissionsId,
-                        principalTable: "Permissions",
+                        name: "FK_Permissions_FunctionActions_FunctionActionId",
+                        column: x => x.FunctionActionId,
+                        principalTable: "FunctionActions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PermissionRolePermission_RolePermissions_PermissionId",
-                        column: x => x.PermissionId,
-                        principalTable: "RolePermissions",
+                        name: "FK_Permissions_Functions_FunctionId",
+                        column: x => x.FunctionId,
+                        principalTable: "Functions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -533,14 +443,14 @@ namespace Carbon_inventory_platform.Migrations
                     percentage_Scope2 = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Scope1 = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     Scope2 = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
-                    All = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
+                    All = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     cal_all = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     percentage_CalAll = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     no1_Grade = table.Column<int>(type: "int", nullable: false),
                     no2_Grade = table.Column<int>(type: "int", nullable: false),
                     no3_Grade = table.Column<int>(type: "int", nullable: false),
                     avg_Grade = table.Column<float>(type: "real", nullable: false),
-                    all_Grade = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    all_Grade = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     ULL = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     UUL = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
@@ -551,6 +461,58 @@ namespace Carbon_inventory_platform.Migrations
                         name: "FK_Areas_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RolePermissions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PermissionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RolePermissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RolePermissions_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RolePermissions_Permissions_PermissionId",
+                        column: x => x.PermissionId,
+                        principalTable: "Permissions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserPermissions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PermissionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserPermissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserPermissions_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserPermissions_Permissions_PermissionId",
+                        column: x => x.PermissionId,
+                        principalTable: "Permissions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -757,9 +719,9 @@ namespace Carbon_inventory_platform.Migrations
                     OtherName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Scope = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     EmissionPattern = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Material = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Material = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Customize = table.Column<bool>(type: "bit", nullable: false),
-                    Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Remark = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     AssetNo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Provess = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Source = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
@@ -820,8 +782,8 @@ namespace Carbon_inventory_platform.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DeviceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GWP = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    GWP = table.Column<decimal>(type: "decimal(18,10)", nullable: false),
                     CEF = table.Column<decimal>(type: "decimal(18,10)", nullable: false),
                     all_UUL = table.Column<decimal>(type: "decimal(18,10)", nullable: false),
                     all_ULL = table.Column<decimal>(type: "decimal(18,10)", nullable: false),
@@ -1005,7 +967,6 @@ namespace Carbon_inventory_platform.Migrations
                     { 18, 1, 1, "外購電力", "外購電力", "電力", "類別二", "度" },
                     { 19, 3, 3, "製程", "乙炔", "乙炔", "類別一", "公斤" },
                     { 20, 3, 3, "製程", "焊條", "焊條", "類別一", "公斤" },
-                    { 21, 3, 3, "逸散", "R-134A", "工業冷藏、冷凍", "類別一", "公斤" },
                     { 22, 3, 3, "逸散", "R-134A", "商用冰箱", "類別一", "公斤" },
                     { 23, 3, 3, "逸散", "R-134A", "中、大型冰箱", "類別一", "公斤" },
                     { 24, 3, 3, "逸散", "R-134A", "低溫冷凍車", "類別一", "公斤" },
@@ -1026,14 +987,9 @@ namespace Carbon_inventory_platform.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationRoleRolePermission_RolesId",
-                table: "ApplicationRoleRolePermission",
-                column: "RolesId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Areas_CompanyId",
+                name: "IX_Areas_CompanyId_isDeleted",
                 table: "Areas",
-                column: "CompanyId");
+                columns: new[] { "CompanyId", "isDeleted" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -1068,11 +1024,6 @@ namespace Carbon_inventory_platform.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_UserId",
-                table: "AspNetUsers",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -1085,9 +1036,21 @@ namespace Carbon_inventory_platform.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Devices_AreaId",
+                name: "IX_Devices_AreaId_isDeleted",
                 table: "Devices",
-                column: "AreaId");
+                columns: new[] { "AreaId", "isDeleted" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FunctionActions_Name",
+                table: "FunctionActions",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Functions_Name",
+                table: "Functions",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_GHGs_DeviceId",
@@ -1095,24 +1058,48 @@ namespace Carbon_inventory_platform.Migrations
                 column: "DeviceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PermissionRolePermission_PermissionsId",
-                table: "PermissionRolePermission",
-                column: "PermissionsId");
+                name: "IX_GWPs_Name_ARVersion",
+                table: "GWPs",
+                columns: new[] { "Name", "ARVersion" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Permissions_ActionId",
-                table: "Permissions",
-                column: "ActionId");
+                name: "IX_Materials_Name_Scope_EmissionPattern_Year",
+                table: "Materials",
+                columns: new[] { "Name", "Scope", "EmissionPattern", "Year" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Permissions_FunctionId",
+                name: "IX_Permissions_FunctionActionId",
                 table: "Permissions",
-                column: "FunctionId");
+                column: "FunctionActionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Permissions_PermissionId",
+                name: "IX_Permissions_FunctionId_FunctionActionId",
                 table: "Permissions",
+                columns: new[] { "FunctionId", "FunctionActionId" },
+                unique: true,
+                filter: "[IsDeleted] = 0");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RolePermissions_PermissionId",
+                table: "RolePermissions",
                 column: "PermissionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RolePermissions_RoleId_PermissionId",
+                table: "RolePermissions",
+                columns: new[] { "RoleId", "PermissionId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserPermissions_PermissionId",
+                table: "UserPermissions",
+                column: "PermissionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserPermissions_UserId_PermissionId",
+                table: "UserPermissions",
+                columns: new[] { "UserId", "PermissionId" },
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -1123,9 +1110,6 @@ namespace Carbon_inventory_platform.Migrations
 
             migrationBuilder.DropTable(
                 name: "Analyses");
-
-            migrationBuilder.DropTable(
-                name: "ApplicationRoleRolePermission");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -1161,37 +1145,34 @@ namespace Carbon_inventory_platform.Migrations
                 name: "Materials");
 
             migrationBuilder.DropTable(
-                name: "PermissionRolePermission");
+                name: "RolePermissions");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "UserPermissions");
 
             migrationBuilder.DropTable(
                 name: "Devices");
 
             migrationBuilder.DropTable(
-                name: "Permissions");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "RolePermissions");
+                name: "Permissions");
 
             migrationBuilder.DropTable(
                 name: "Areas");
 
             migrationBuilder.DropTable(
-                name: "Action");
+                name: "FunctionActions");
 
             migrationBuilder.DropTable(
-                name: "Function");
+                name: "Functions");
 
             migrationBuilder.DropTable(
                 name: "Companies");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "UserPermissions");
         }
     }
 }

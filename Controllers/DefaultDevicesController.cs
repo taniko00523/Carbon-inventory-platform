@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Carbon_inventory_platform.Models;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class DefaultDevicesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -44,8 +46,9 @@ namespace Carbon_inventory_platform.Controllers
         }
 
         // GET: DefaultDevices/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            await PopulateMaterialSelectListsAsync(null, null, null);
             return View();
         }
 
@@ -54,14 +57,19 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Material,Scope,EmissionPattern,Type")] DefaultDevices defaultDevices)
+        // 原本新增時也綁定了自動編號主鍵 Id，只要有人多送一個 Id 欄位，
+        // INSERT 就會帶上明確的 Id 而觸發 IDENTITY_INSERT 錯誤（500）。
+        public async Task<IActionResult> Create([Bind("Name,Material,Scope,EmissionPattern,Type")] DefaultDevices defaultDevices)
         {
+            await ValidateMaterialAsync(defaultDevices);
+
             if (ModelState.IsValid)
             {
                 _context.Add(defaultDevices);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            await PopulateMaterialSelectListsAsync(defaultDevices.Material, defaultDevices.Scope, defaultDevices.EmissionPattern);
             return View(defaultDevices);
         }
 
@@ -78,6 +86,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return NotFound();
             }
+            await PopulateMaterialSelectListsAsync(defaultDevices.Material, defaultDevices.Scope, defaultDevices.EmissionPattern);
             return View(defaultDevices);
         }
 
@@ -92,6 +101,8 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return NotFound();
             }
+
+            await ValidateMaterialAsync(defaultDevices);
 
             if (ModelState.IsValid)
             {
@@ -113,6 +124,7 @@ namespace Carbon_inventory_platform.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            await PopulateMaterialSelectListsAsync(defaultDevices.Material, defaultDevices.Scope, defaultDevices.EmissionPattern);
             return View(defaultDevices);
         }
 
@@ -152,6 +164,49 @@ namespace Carbon_inventory_platform.Controllers
         private bool DefaultDevicesExists(int id)
         {
             return _context.defaultDevices.Any(e => e.Id == id);
+        }
+
+        /// <summary>
+        /// 原燃物料 / 類別 / 排放型式原本是純文字輸入框，打錯字不會有任何提示，
+        /// 之後用這台預設裝置產生的排放資料就會靜靜地對不到係數。改為由現有資料產生下拉選單，
+        /// 作法與 DeviceDatasController 的 PopulateMaterialSelectListsAsync 相同。
+        /// </summary>
+        private async Task PopulateMaterialSelectListsAsync(string? selectedMaterial, string? selectedScope, string? selectedEmissionPattern)
+        {
+            ViewData["MaterialList"] = new SelectList(await GetMaterialNamesAsync(), selectedMaterial);
+
+            var scopes = await _context.Materials
+                .AsNoTracking()
+                .Select(m => m.Scope)
+                .Distinct()
+                .OrderBy(s => s)
+                .ToListAsync();
+            ViewData["ScopeList"] = new SelectList(scopes, selectedScope);
+
+            var emissionPatterns = await _context.Materials
+                .AsNoTracking()
+                .Select(m => m.EmissionPattern)
+                .Distinct()
+                .OrderBy(e => e)
+                .ToListAsync();
+            ViewData["EmissionPatternList"] = new SelectList(emissionPatterns, selectedEmissionPattern);
+        }
+
+        private async Task<List<string>> GetMaterialNamesAsync()
+        {
+            var fromMaterials = await _context.Materials.AsNoTracking().Select(m => m.Name).Distinct().ToListAsync();
+            var fromGwps = await _context.GWPs.AsNoTracking().Select(g => g.Name).Distinct().ToListAsync();
+            return fromMaterials.Union(fromGwps).OrderBy(n => n).ToList();
+        }
+
+        /// <summary>伺服器端也要擋，避免有人繞過下拉選單直接送出不存在的原燃物料。</summary>
+        private async Task ValidateMaterialAsync(DefaultDevices defaultDevices)
+        {
+            var names = await GetMaterialNamesAsync();
+            if (!names.Contains(defaultDevices.Material))
+            {
+                ModelState.AddModelError(nameof(DefaultDevices.Material), "原燃物料必須是排放係數表或 GWP 表中已存在的名稱，請重新選擇。");
+            }
         }
     }
 }

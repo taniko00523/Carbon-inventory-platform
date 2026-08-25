@@ -5,6 +5,11 @@
 }
 
 <h2>@ViewData["Title"]</h2>
+@* 新增/編輯失敗時原本會找不到檢視而 500，現在改由 Controller 帶回錯誤訊息顯示在這裡。 *@
+@if (TempData["GWPError"] != null)
+{
+    <div class="alert alert-danger" role="alert">@TempData["GWPError"]</div>
+}
 <form asp-action="Index" id="SelectGWPForm">
     <div class="row">
         <div class="form-inline col-sm-3">
@@ -32,7 +37,8 @@
                         <input class="form-control" id="GWP_Name" name="Name" required />
 
                         <label for="GWP_Num">GWP值：</label>
-                        <input class="form-control" id="GWP_Num" name="Num" required />
+                        @* 原本是純文字輸入框，打字打成非數字會讓 Model 綁定失敗。 *@
+                        <input class="form-control" id="GWP_Num" name="Num" type="number" step="any" min="0" required />
 
                         <input type="hidden" name="searchARVersion" value="@searchARVersion" />
                     </div>
@@ -87,7 +93,7 @@
                                         <input class="form-control" id="editGWP_Name_@gwp.Id" name="Name" value="@gwp.Name" required />
 
                                         <label for="editGWP_Num_@gwp.Id">GWP值：</label>
-                                        <input class="form-control" id="editGWP_Num_@gwp.Id" name="Num" value="@gwp.Num" required />
+                                        <input class="form-control" id="editGWP_Num_@gwp.Id" name="Num" type="number" step="any" min="0" value="@gwp.Num" required />
 
                                         <input type="hidden" name="searchARVersion" value="@searchARVersion" />
                                     </div>

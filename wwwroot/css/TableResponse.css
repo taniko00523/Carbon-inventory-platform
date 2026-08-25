@@ -1,6 +1,28 @@
+/* ==========================================================================
+   桌機 / 手機 版面切換
+   --------------------------------------------------------------------------
+   Companies / Areas / Devices / User 的清單頁各自維護一份「桌機表格」與
+   一份「手機卡片」的重複標記，靠這兩個 class 切換。
+   保留這組 class 以維持既有畫面，但改用 Bootstrap 5.1 的中斷點（md = 768px）
+   並補上寬表格的水平滾動容器，避免整頁被 29 欄的表格撐開。
+
+   新的畫面請直接使用 .cip-table-wrap（見 site.css），不需要維護兩份標記。
+   ========================================================================== */
+
+.table-computer-w1024,
+.table-phone-w1024 {
+    /* 預設先隱藏，交給下面的 media query 決定顯示哪一份，
+       避免 CSS 還沒載入時兩份內容同時閃出來。 */
+    display: none;
+}
+
 @media (min-width: 768px) {
     .table-computer-w1024 {
         display: block;
+        /* 寬表格只在自己的容器內滾動 */
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .table-phone-w1024 {
@@ -8,7 +30,7 @@
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767.98px) {
     .table-computer-w1024 {
         display: none;
     }
@@ -16,5 +38,16 @@
     .table-phone-w1024 {
         display: block;
     }
+
+    /* 手機卡片：讓每一張卡片有明確的邊界與間距 */
+    .table-phone-w1024 > .card,
+    .table-phone-w1024 > .list-group {
+        margin-bottom: .75rem;
+    }
 }
-    
+
+/* 列印時一律用桌機版表格 */
+@media print {
+    .table-computer-w1024 { display: block !important; overflow: visible !important; }
+    .table-phone-w1024 { display: none !important; }
+}

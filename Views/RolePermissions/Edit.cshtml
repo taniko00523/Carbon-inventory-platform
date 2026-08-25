@@ -1,12 +1,13 @@
 ﻿@model Carbon_inventory_platform.Models.RolePermission
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "編輯角色權限";
 }
 
-<h1>Edit</h1>
+<h1>編輯角色權限</h1>
 
-<h4>RolePermission</h4>
+<h4>角色權限</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,23 +16,23 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="RoleId" class="control-label"></label>
-                <input asp-for="RoleId" class="form-control" />
+                <select asp-for="RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
                 <span asp-validation-for="RoleId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PermissionId" class="control-label"></label>
-                <input asp-for="PermissionId" class="form-control" />
+                <select asp-for="PermissionId" class="form-control" asp-items="ViewBag.PermissionId"></select>
                 <span asp-validation-for="PermissionId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="儲存" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">回列表</a>
 </div>
 
 @section Scripts {

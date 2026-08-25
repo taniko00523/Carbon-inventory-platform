@@ -1,299 +1,206 @@
-﻿@using Carbon_inventory_platform.Services
 @using Microsoft.AspNetCore.Identity
-@using Carbon_inventory_platform.Data
+@using Carbon_inventory_platform.Models
 
-@inject RolePermissionService rolePermissionService
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @{
-    string? userId = UserManager.GetUserId(User);
-    //var rolePermissions = await RolePermissionService.GetPermissionAsync(userId);
-    var rolePermissions = await rolePermissionService.GetPermissionAsync(userId); //RolePermissionService 應透過依賴注入而不是靜態方法
+    // 註：不要在版面配置裡無條件查資料庫 —— 登入頁與錯誤頁也會套用這個版面，
+    // 資料庫不可用時連錯誤頁都會再次拋出例外。選單依角色決定，不需要查詢。
+    var isSignedIn = SignInManager.IsSignedIn(User);
+    var isAdmin = User.IsInRole("Admin") || User.IsInRole("SuperAdmin");
+    // 原本只判斷 "User" 與 "Admin"，Guest / PowerUser / SuperAdmin 會拿到
+    // 完全空白的導覽列（批次匯入的帳號預設就是 Guest，等於無法操作系統）。
+    var isInventoryUser = isSignedIn && !isAdmin;
+    var displayName = User.Identity?.Name ?? "";
 }
 
 <!DOCTYPE html>
-<html lang="zh-tw">
+<html lang="zh-Hant-TW">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="協助中小企業進行溫室氣體盤查與報告的碳盤查平台。" />
     <title>@ViewData["Title"] - 碳盤查平台</title>
+    <link rel="icon" href="~/favicon.ico" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/TableResponse.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Carbon_inventory_platform.styles.css" asp-append-version="true" />
-     <style>
-        body {
-            font-family: 'Segoe UI','微軟正黑體','Microsoft JhengHei', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            background-color: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 15px;
-        }
-
-        header {
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar {
-            padding: 0.5rem 1rem;
-        }
-
-        .navbar-brand img {
-            height: 50px;
-            transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
-        }
-
-        .navbar-brand img:hover {
-            transform: scale(1.1);
-            filter: brightness(1.2);
-        }
-
-        .nav-link {
-            color: #333;
-            font-size: 1rem;
-            transition: color 0.3s, text-decoration 0.3s;
-        }
-
-        .nav-link:hover {
-            color: #007bff;
-            text-decoration: underline;
-        }
-
-        .nav-link img {
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .nav-link img:hover {
-            transform: scale(1.2);
-        }
-
-        footer {
-            height:20px;
-            text-align: center;
-        }
-
-        footer a {
-            color: #007bff;
-            text-decoration: none;
-            transition: color 0.3s, text-decoration 0.3s;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-            color: #0056b3;
-        }
-
-        .btn-secondary {
-            transition: background-color 0.3s, box-shadow 0.3s;
-        }
-
-        .btn-secondary:hover {
-            background-color: #0056b3;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index"><img src="~/Logo/HeadLogo.jpg" height="50px"></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+    <a class="visually-hidden-focusable" href="#cip-content">跳至主要內容</a>
+
+    <header class="cip-header">
+        <nav class="navbar navbar-expand-lg" aria-label="主要導覽">
+            <div class="container-fluid cip-nav-container">
+                <a class="cip-brand" asp-controller="Home" asp-action="Index">
+                    @* 原本圖片路徑寫成 ~/logo/...（小寫 l），Linux 容器大小寫敏感會 404 *@
+                    <span class="cip-brand-text">
+                        碳盤查平台
+                        <small>GHG INVENTORY</small>
+                    </span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#cipNav" aria-controls="cipNav"
+                        aria-expanded="false" aria-label="開啟或收起導覽選單">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            @if (User.IsInRole("User"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Areas" asp-action="Index"><img src="~/logo/navigation.png" width="25px" /><span> 邊界總覽</span></a>
-                                </li>
-                            }
-                            else if (User.IsInRole("Admin"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Companies" asp-action="Index"><img src="" width="25px" /><span> 公司總覽</span></a>
-                                </li>
-                                <!-- #基本管理 -->
-                                <li class="nav-item dropdown">
-                                    
-                                    <a class="nav-link dropdown-toggle" href="#" id="baseDataDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        基本設定管理
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="baseDataDropdownMenuLink">
-                                        <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-controller="GWP" asp-action="Index"><img src="" width="25px" /><span> GWP總覽</span></a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-controller="Materials" asp-action="Index"><img src="" width="25px" /><span> 排放係數設定總覽</span></a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-controller="DefaultDevices" asp-action="Index"><img src="" width="25px" /><span> 預設排放源總覽</span></a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-controller="DeviceDatas" asp-action="Index"><img src="" width="25px" /><span> 排放源設定總覽</span></a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <!-- #endregion -->
-                                <!-- #用戶管理 -->
-                                <li class="nav-item dropdown">
 
-                                    <a class="nav-link dropdown-toggle" href="#" id="userDataDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        用戶管理
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="userDataDropdownMenuLink">
-                                        <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-controller="User" asp-action="Index"><img src="" width="25px" /><span> 用戶總覽</span></a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-controller="Functions" asp-action="Index"><img src="" width="25px" /><span> 畫面總覽</span></a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-controller="FunctionActions" asp-action="Index"><img src="" width="25px" /><span> 功能畫面總覽</span></a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-controller="Permissions" asp-action="Index"><img src="" width="25px" /><span> 權限總覽</span></a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-controller="Feedbacks" asp-action="Index"><img src="" width="25px" /><span> 回報問題總覽</span></a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <!-- #endregion -->
-                                
-                                
-                                
-                                
-                               
-                            }
-                            else if (User.IsInRole("SuperAdmin"))
-                            {
-                                
-                            }
+                <div class="collapse navbar-collapse" id="cipNav">
+                    @* 原本這裡有 10 個 <img src="">。空的 src 會讓瀏覽器把目前頁面
+                       再抓一次，每個後台頁面因此多送 10 個請求。改用 inline SVG。 *@
+                    <ul class="navbar-nav cip-nav me-auto mb-2 mb-lg-0">
+                        @if (isInventoryUser)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Areas" asp-action="Index">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V8l6-4 6 4v13" /><path d="M15 21V12h6v9" /><path d="M9 21v-5h3v5" /></svg>
+                                    <span>邊界總覽</span>
+                                </a>
+                            </li>
                         }
-@* 
-                        @foreach (var rolePermission in rolePermissions)
+                        else if (isAdmin)
                         {
-                            string IconUrl = string.Format("../images/{0}", item.Icon);
-                            foreach (var Permission in rolePermission.Permissions)
-                            {
-                                var item = Permission.Function.
-                                item.Function.Id
-                            } 
-                            @if (item.Permissions.)
-                            {
-                                <li>
-                                    <a class="" href="@Url.Action("Index", item.Name)">
-                                        &nbsp; 
-                                        <span style="font-size:20px;font-weight:600; vertical-align:bottom; ">@item.CName</span>
-                                    </a>
-                                </li>  
-                            }
-                            else
-                            {
-                                <li class="" style="float:left">
-                                    <a class=" " href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span style="font-size:20px;font-weight:600; vertical-align:bottom; ">@(item.CName)&nbsp;</span><span style="font-size:16px;font-weight:600; vertical-align:bottom; ">▼</span>
-                                    </a>
-                                    <!-- Dropdown - 2層 User Information -->
-                                    <div class="accordion-content">
-                                        <ul>
-                                            @foreach (ChildFunctionData childitem in item.ChildFunctionList)
-                                            {
-                                                <li>
-                                                    <a href="@Url.Action("Index",childitem.Name)"><span style="font-size:18px;font-weight:600; vertical-align:bottom; ">&nbsp;&nbsp;&nbsp;&nbsp;@(childitem.CName)</span></a>
-                                                    
-                                                    @if (childitem.ThreeFunctionList == null)
-                                                    { }
-                                                    else if (childitem.ThreeFunctionList.Count <= 0)
-                                                    { }
-                                                    else
-                                                    {
-                                                        <ul>
-                                                            @foreach (ThreeFunctionData childitem1 in childitem.ThreeFunctionList)
-                                                            {
-                                                                <li>
-                                                                    <a href="@Url.Action("Index", childitem1.Name)">
-                                                                        <span style="font-size:18px;font-weight:600; vertical-align:bottom; ">&nbsp;&nbsp;&nbsp;&nbsp;@(childitem1.CName)</span>
-                                                                    </a>
-                                                                </li>
-                                                            }
-                                                        </ul>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Companies" asp-action="Index">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16" /><path d="M15 9h4a1 1 0 0 1 1 1v11" /><path d="M8 8h3M8 12h3M8 16h3" /></svg>
+                                    <span>公司總覽</span>
+                                </a>
+                            </li>
 
-                                                    }
-                                                </li>
-                                            }
-                                        </ul>
-                                    </div>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="cipBaseData" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="8" ry="3" /><path d="M4 6v6c0 1.66 3.58 3 8 3s8-1.34 8-3V6" /><path d="M4 12v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" /></svg>
+                                    <span>基本設定管理</span>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="cipBaseData">
+                                    <li><a class="dropdown-item" asp-controller="GWP" asp-action="Index">GWP 總覽</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Materials" asp-action="Index">排放係數設定</a></li>
+                                    <li><a class="dropdown-item" asp-controller="DefaultDevices" asp-action="Index">預設排放源</a></li>
+                                    <li><a class="dropdown-item" asp-controller="DeviceDatas" asp-action="Index">排放源設定</a></li>
+                                </ul>
+                            </li>
 
-                                </li>
-                            }
-                        } *@
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="cipUserData" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="3.2" /><path d="M22 20v-2a4 4 0 0 0-3-3.87" /><path d="M16 4.13A4 4 0 0 1 16 11" /></svg>
+                                    <span>用戶與權限管理</span>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="cipUserData">
+                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Index">用戶總覽</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" asp-controller="Functions" asp-action="Index">畫面總覽</a></li>
+                                    <li><a class="dropdown-item" asp-controller="FunctionActions" asp-action="Index">功能動作總覽</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Permissions" asp-action="Index">權限總覽</a></li>
+                                    @* 原本選單沒有「角色權限總覽」，只能手動輸入網址才進得去 *@
+                                    <li><a class="dropdown-item" asp-controller="RolePermissions" asp-action="Index">角色權限總覽</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" asp-controller="Feedbacks" asp-action="Index">回報問題總覽</a></li>
+                                </ul>
+                            </li>
+                        }
                     </ul>
-                    <partial name="_LoginPartial" />
+
+                    <div class="d-flex align-items-center gap-1 flex-wrap">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-cip-theme-toggle
+                                aria-pressed="false" title="切換深色模式">
+                            <span data-cip-theme-icon aria-hidden="true">☾</span>
+                            <span class="cip-sr-only">切換深色／淺色模式</span>
+                        </button>
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 col-sm-12">
-                    <span class="d-none d-md-inline">&copy; 2023 - 碳盤查平台 - 來自 </span>
-                    <a href="https://nsrc-mis.stust.edu.tw/">南臺科技大學 淨零永續科技應用研究中心</a>
-                </div>
-                <div class="col-md-4 col-sm-12 text-md-end mt-2 mt-md-0">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#feedbackModal">回報問題</button>
-                </div>
+    <main id="cip-content" class="cip-main">
+        @if (TempData["FeedbackSuccess"] != null)
+        {
+            <div class="alert alert-success" role="status" data-cip-autodismiss="6000">
+                @TempData["FeedbackSuccess"]
             </div>
+        }
+        @if (TempData["FeedbackError"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["FeedbackError"]
+            </div>
+        }
+        @if (TempData["StatusMessage"] != null)
+        {
+            <div class="alert alert-info" role="status" data-cip-autodismiss="6000">
+                @TempData["StatusMessage"]
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        @RenderBody()
+    </main>
+
+    <footer class="cip-footer">
+        <div class="cip-footer-inner">
+            <div>
+                <span>&copy; @DateTime.Now.Year 碳盤查平台 —— 來自 </span>
+                <a href="https://nsrc-mis.stust.edu.tw/" target="_blank" rel="noopener noreferrer">
+                    南臺科技大學 淨零永續科技應用研究中心
+                </a>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-primary"
+                    data-bs-toggle="modal" data-bs-target="#feedbackModal">
+                回報問題
+            </button>
         </div>
     </footer>
+
+    @* 對話框放在 <footer> 之外。原本它被寫在 footer 裡面，後面還多了一組
+       </div></footer> 收尾標籤，導致每一頁都送出結構錯誤的 HTML。 *@
     <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="feedbackModalLabel">回報問題</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h2 class="modal-title h5" id="feedbackModalLabel">回報問題</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="feedbackForm" asp-action="SubmitFeedback" asp-controller="Feedback" method="post">
+                @* 原本 asp-controller="Feedback"，但 Controller 名稱是 Feedbacks，
+                   產生出來的 action 是空字串，所以每一筆回報都只是重新載入目前頁面。 *@
+                <form asp-action="SubmitFeedback" asp-controller="Feedbacks" method="post">
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="userName" class="form-label">使用者名稱</label>
-                            <input type="text" class="form-control" id="userName" name="UserName" required>
+                            <label for="feedbackUserName" class="form-label cip-required">使用者名稱</label>
+                            <input type="text" class="form-control" id="feedbackUserName" name="UserName"
+                                   maxlength="100" required value="@(isSignedIn ? displayName : "")" />
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label">電子郵件</label>
-                            <input type="email" class="form-control" id="email" name="Email" required>
+                            <label for="feedbackEmail" class="form-label cip-required">電子郵件</label>
+                            <input type="email" class="form-control" id="feedbackEmail" name="Email"
+                                   maxlength="200" required />
                         </div>
                         <div class="mb-3">
-                            <label for="message" class="form-label">訊息</label>
-                            <textarea class="form-control" id="message" name="Message" rows="3" required></textarea>
+                            <label for="feedbackMessage" class="form-label cip-required">問題描述</label>
+                            <textarea class="form-control" id="feedbackMessage" name="Message"
+                                      rows="4" maxlength="2000" required
+                                      placeholder="請描述您遇到的問題，以及發生問題的畫面。"></textarea>
+                            <div class="form-text">最多 2000 字。</div>
                         </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                         <button type="submit" class="btn btn-primary">送出</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-
-
-        </div>
-    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

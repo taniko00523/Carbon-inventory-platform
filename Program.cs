@@ -1,13 +1,23 @@
-using Carbon_inventory_platform.Data;
+﻿using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
 using Carbon_inventory_platform.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "Connection string 'DefaultConnection' not found. " +
+        "請以環境變數 ConnectionStrings__DefaultConnection、Azure App Service 連線字串設定，" +
+        "或 dotnet user-secrets 提供資料庫連線字串。");
+}
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -15,8 +25,27 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false) //Email驗證關閉
     .AddRoles<ApplicationRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
+
+builder.Services.AddControllersWithViews(options =>
+{
+    // 所有 POST/PUT/DELETE 一律驗證防偽 Token。
+    // 之前是逐個 Action 加 [ValidateAntiForgeryToken]，而最危險的兩個
+    // (Devices/ImportDeviceExcel、Feedbacks/SubmitFeedback) 剛好被漏掉。
+    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    // 預設「拒絕」：沒有標註授權屬性的 Controller 一律需要登入。
+    // 之前有 8 個 scaffold 出來的 Controller（含 Permissions / RolePermissions /
+    // Materials）完全沒有 [Authorize]，任何人都能讀寫刪除。
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
+
 builder.Services.AddScoped<RolePermissionService>();
+builder.Services.AddHttpClient();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -28,23 +57,32 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5; //使用者遭到鎖定之前允許的存取嘗試失敗次數上限 (如果已啟用鎖定)。
     options.Lockout.AllowedForNewUsers = true; //判斷是否可以鎖定新的使用者。
 
-    // 預設的密碼格式
+    // 密碼格式：長度可用 Identity:Password:RequiredLength 設定覆寫，
+    // 但不再允許 1 個字元的密碼（原設定讓任何帳號都能被瞬間猜中）。
     options.Password.RequireDigit = false; //密碼中需要介於 0-9 之間的數位(數字)。
-    options.Password.RequireLowercase = false; //密碼中需要小寫字元。	
-    options.Password.RequireNonAlphanumeric = false; //密碼中需要非英數字元。	
-    options.Password.RequireUppercase = false; //密碼中需要大寫字元。	
-    options.Password.RequiredLength = 1; //密碼長度下限。
+    options.Password.RequireLowercase = false; //密碼中需要小寫字元。
+    options.Password.RequireNonAlphanumeric = false; //密碼中需要非英數字元。
+    options.Password.RequireUppercase = false; //密碼中需要大寫字元。
+    options.Password.RequiredLength = builder.Configuration.GetValue<int?>("Identity:Password:RequiredLength") ?? 8;
     options.Password.RequiredUniqueChars = 1; //需要密碼中的相異字元數。
 
     // Default SignIn settings.
-    options.SignIn.RequireConfirmedAccount = false; 
+    options.SignIn.RequireConfirmedAccount = false;
     options.SignIn.RequireConfirmedEmail = false; //需要確認的電子郵件才能登入。
     options.SignIn.RequireConfirmedPhoneNumber = false; //需要確認的電話號碼才能登入。
 });
 
+// 固定使用 zh-TW 格式化與剖析數字/日期。Linux 容器預設是 InvariantCulture，
+// 會讓民國年與小數點的顯示在本機與雲端不一致。
+var supportedCultures = new[] { new CultureInfo("zh-TW") };
+builder.Services.Configure<Microsoft.AspNetCore.Builder.RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("zh-TW");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -61,8 +99,11 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseRequestLocalization();
+
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -70,50 +111,27 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    // setting initial data in system, Role, Account...
-//    // Role:
-//    var roleManager =
-//        scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-//    string[] roles = { "SuperAdmin", "Admin", "PowerUser", "User", "Guest" };
+// 報表輸出目錄必須存在，否則第一次產生報表會拋 DirectoryNotFoundException
+// （wwwroot/output 在 csproj 裡只是個空資料夾宣告，git 不會保留空目錄）。
+Directory.CreateDirectory(Path.Combine(app.Environment.WebRootPath, "output"));
 
-//    foreach (var role in roles)
-//    {
-//        if (!await roleManager.RoleExistsAsync(role)) // 如果角色不存在
-//        {
-//            // 建立角色
-//            var applicationRole = new ApplicationRole();
-//            applicationRole.Name = role;
-//            await roleManager.CreateAsync(applicationRole);
-//        }
-//    }
-//}
+using (var scope = app.Services.CreateScope())
+{
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    try
+    {
+        if (app.Environment.IsDevelopment())
+        {
+            await scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.MigrateAsync();
+        }
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    // setting initial data in system, Role, User...
-//    // User:
-//    var UserManager =
-//        scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-//    string account = "Admin"; //新增一個預設的管理員帳號
-//    string password = "!Admin1234";
-
-//    if(await UserManager.FindByEmailAsync(account) == null) // 如果Admin 帳號不存在
-//    {
-//        // 建立一個Admin用戶
-//        var user = new ApplicationUser();
-//        user.UserName = account;
-//        user.Email = account;
-
-//        // 新增至資料庫
-//        await UserManager.CreateAsync(user, password);
-
-//        // 賦予Admin身分
-//        await UserManager.AddToRoleAsync(user, "Admin");    
-//    }
-//}
+        await DbSeeder.SeedAsync(scope.ServiceProvider, app.Configuration, logger);
+    }
+    catch (Exception ex)
+    {
+        // 種子資料失敗不應該讓整個網站起不來，但一定要留下紀錄。
+        logger.LogError(ex, "初始化基礎資料時發生錯誤");
+    }
+}
 
 app.Run();
-

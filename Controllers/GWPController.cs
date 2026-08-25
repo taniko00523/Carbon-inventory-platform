@@ -38,7 +38,11 @@ namespace Carbon_inventory_platform.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), new { year = searchARVersion });
             }
-            return View(model);
+            // 原本驗證失敗時 return View(model)，但 Views/GWP 底下只有 Index.cshtml，
+            // 會拋 InvalidOperationException（找不到 Add 檢視）而變成 500。
+            // 新增/編輯是 Index 頁裡的模態框，所以改為帶著錯誤訊息回到 Index。
+            TempData["GWPError"] = "資料格式錯誤，GWP值請輸入數字。";
+            return RedirectToAction(nameof(Index), new { year = searchARVersion });
         }
 
         [HttpPost]
@@ -47,20 +51,31 @@ namespace Carbon_inventory_platform.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.ARVersion = searchARVersion;
-                _context.Update(model);
+                // 原本直接 _context.Update(model)，但模態框只送出 Id/Name/Num，
+                // 會把沒送出的 Source 欄位一併覆寫成預設值 "MOE"。改為只更新可編輯欄位。
+                var gwpToUpdate = await _context.GWPs.FindAsync(model.Id);
+                if (gwpToUpdate == null)
+                {
+                    return NotFound();
+                }
+
+                gwpToUpdate.Name = model.Name;
+                gwpToUpdate.Num = model.Num;
+                gwpToUpdate.ARVersion = searchARVersion;
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), new { year = searchARVersion });
             }
-            return View(model);
+            // 同 Add：Views/GWP 沒有 Edit.cshtml，原本的 return View(model) 是保證的 500。
+            TempData["GWPError"] = "資料格式錯誤，GWP值請輸入數字。";
+            return RedirectToAction(nameof(Index), new { year = searchARVersion });
         }
 
-        public async Task<IActionResult> Delete(int id, int searchARVersion)
+        // 原本 Delete 沒有 [HttpPost]，GET 也能刪除資料，
+        // 一個 <img src="/GWP/Delete/21"> 或瀏覽器預先載入就會刪掉 GWP 係數。
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id, int searchARVersion)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
             var gwp = await _context.GWPs.FindAsync(id);
             if (gwp != null)
             {

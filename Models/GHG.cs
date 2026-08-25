@@ -9,10 +9,12 @@ namespace Carbon_inventory_platform.Models
 
         public Guid DeviceId { get; set; }
 
+        [MaxLength(20)]
         [Display(Name = "溫室氣體種類")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        [Column(TypeName = "decimal(18, 2)")]
+        // 與來源欄位 GWP.Num 一致；原本是 decimal(18,2)，會把小數位截掉。
+        [Column(TypeName = "decimal(18, 10)")]
         [Display(Name = "GWP值")]
         public decimal GWP { get; set; }
 

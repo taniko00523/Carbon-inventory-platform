@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,23 +14,36 @@ using System.Text;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class FeedbacksController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _configuration;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<FeedbacksController> _logger;
 
-        public FeedbacksController(ApplicationDbContext context, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        public FeedbacksController(
+            ApplicationDbContext context,
+            SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            IConfiguration configuration,
+            IHttpClientFactory httpClientFactory,
+            ILogger<FeedbacksController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
+            _configuration = configuration;
+            _httpClientFactory = httpClientFactory;
+            _logger = logger;
         }
         
         // GET: Feedbacks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Feedbacks.ToListAsync());
+            return View(await _context.Feedbacks.OrderByDescending(f => f.CreatedAt).ToListAsync());
         }
 
         // GET: Feedbacks/Details/5
@@ -61,10 +75,13 @@ namespace Carbon_inventory_platform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserName,Email,Message,CreatedAt")] Feedback feedback)
+        // 原本新增時也綁定了自動編號主鍵 Id（會觸發 IDENTITY_INSERT 錯誤），
+        // 而回報時間也交給表單決定，改為在伺服器端戳記。
+        public async Task<IActionResult> Create([Bind("UserName,Email,Message")] Feedback feedback)
         {
             if (ModelState.IsValid)
             {
+                feedback.CreatedAt = DateTime.Now;
                 _context.Add(feedback);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -163,50 +180,90 @@ namespace Carbon_inventory_platform.Controllers
 
         
 
+        // 頁尾的「回報問題」表單在每一頁都會出現（包含未登入的首頁），所以維持匿名，
+        // 但改為驗證輸入並回報結果；防偽 Token 由 Program.cs 的全域
+        // AutoValidateAntiforgeryTokenAttribute 統一驗證。
         [HttpPost]
-        public async Task<IActionResult> SubmitFeedback(Feedback feedback)
+        [AllowAnonymous]
+        public async Task<IActionResult> SubmitFeedback([Bind("UserName,Email,Message")] Feedback feedback)
         {
+            if (!ModelState.IsValid)
+            {
+                TempData["FeedbackError"] = string.Join(" ", ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage));
+                return RedirectToAction("Index", "Home");
+            }
+
             feedback.CreatedAt = DateTime.Now;
             _context.Feedbacks.Add(feedback);
             await _context.SaveChangesAsync();
 
-            // 在此處調用 LINE BOT 發送消息給開發者
+            // 在此處調用 LINE BOT 發送消息給開發者。通知失敗不應該讓使用者的回報失敗。
             await SendLineNotification(feedback);
 
+            TempData["FeedbackSuccess"] = "感謝您的回報，我們已收到訊息。";
             return RedirectToAction("Index", "Home");
         }
 
         private async Task SendLineNotification(Feedback feedback)
         {
-            // 使用 LINE BOT SDK 發送通知
-            var lineBotToken = "PIwWKGqT9xvzJZBi9PrqOLMFBhQXXdSNM1esJcb092jPxGgnpILDR3sQSBbowF5oH0/H8zAXKaUaFHkVJqtMeSbL4YnZJ8iOwRkZQiEMsIV87vPeB3dcTw75Vh3owtj6l8+NktYB1RWGp5iaOnZQVgdB04t89/1O/w1cDnyilFU=";
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {lineBotToken}");
+            // Channel Access Token 與收件者 Id 改由設定檔/環境變數提供。
+            // 原本是硬編碼在原始碼中並已進入 git 歷史，該 Token 必須重新發行。
+            var lineBotToken = _configuration["Line:ChannelAccessToken"];
+            var notifyUserId = _configuration["Line:NotifyUserId"];
+            if (string.IsNullOrWhiteSpace(lineBotToken) || string.IsNullOrWhiteSpace(notifyUserId))
+            {
+                _logger.LogInformation("未設定 Line:ChannelAccessToken / Line:NotifyUserId，略過 LINE 通知。");
+                return;
+            }
+
             string companyName = string.Empty;
             if (_signInManager.IsSignedIn(User))
             {
-                string userId = _userManager.GetUserId(User);
-                Company company = await _context.Companies.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+                var userId = _userManager.GetUserId(User);
+                var company = await _context.Companies.FirstOrDefaultAsync(x => x.UserId == userId);
                 if (company != null)
                 {
                     companyName = company.Name;
                 }
             }
+
             var message = new
             {
-                to = "U8d42bf93ed12db68c679b3319a6f8b1a",
+                to = notifyUserId,
                 messages = new[]
                 {
-                new
-                {
-                    type = "text",
-                    text = $"新回報問題\n\n使用者名稱: {feedback.UserName}\n公司: {companyName}\n電子郵件: {feedback.Email}\n訊息: {feedback.Message}"
+                    new
+                    {
+                        type = "text",
+                        text = $"新回報問題\n\n使用者名稱: {feedback.UserName}\n公司: {companyName}\n電子郵件: {feedback.Email}\n訊息: {feedback.Message}"
+                    }
                 }
-            }
             };
 
-            var content = new StringContent(JsonConvert.SerializeObject(message), Encoding.UTF8, "application/json");
-            await httpClient.PostAsync("https://api.line.me/v2/bot/message/push", content);
+            try
+            {
+                // 用 IHttpClientFactory 取得共用的 HttpClient，
+                // 原本每次呼叫都 new HttpClient() 會耗盡通訊埠 (socket exhaustion)。
+                var httpClient = _httpClientFactory.CreateClient();
+                httpClient.Timeout = TimeSpan.FromSeconds(10);
+                using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.line.me/v2/bot/message/push")
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(message), Encoding.UTF8, "application/json")
+                };
+                request.Headers.Add("Authorization", $"Bearer {lineBotToken}");
+
+                var response = await httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning("LINE 通知失敗，狀態碼 {StatusCode}", (int)response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "LINE 通知發送失敗");
+            }
         }
     }
 }

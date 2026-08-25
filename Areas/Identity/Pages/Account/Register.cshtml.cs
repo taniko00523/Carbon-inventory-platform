@@ -111,7 +111,11 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            [Display(Name = "使用期限")]
+            // 原本 Year 沒有任何上限，管理員（或被誘導的管理員帳號）可以填入任意大的數字，
+            // 讓 DateTime.UtcNow.AddYears(Input.Year) 產生超出 DateTime 範圍而丟例外，
+            // 或建立出使用期限長達數百年的帳號；限制在 0~10 年內。
+            [Display(Name = "使用期限（年）")]
+            [Range(0, 10, ErrorMessage = "使用期限僅能設定 0~10 年")]
             public int Year { get; set; }
 
             [Display(Name = "是否為管理員")]
@@ -148,7 +152,8 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
                     {
                         await _userManager.AddToRoleAsync(user, role.Name);
                     }
-                    user.UserLimitData = DateTime.UtcNow.AddYears(Input.Year);
+                    // 雙重保險：即使 [Range] 驗證被繞過，這裡仍強制夾在 0~10 年內。
+                    user.UserLimitData = DateTime.UtcNow.AddYears(Math.Clamp(Input.Year, 0, 10));
                     await _userManager.UpdateAsync(user);
 
                     //if(Input.Manager == true)

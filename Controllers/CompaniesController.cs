@@ -26,30 +26,32 @@ namespace Carbon_inventory_platform.Controllers
         public async Task<IActionResult> Index(string searchTerm, int pageNumber = 1)
         {
             const int pageSize = 10;
-            List<ApplicationUser> users = _userManager.Users.ToList();
-            List<CompanyUserViewModel> viewModel = new List<CompanyUserViewModel>();
+            // 原本用 _userManager.Users.ToList() 撈出「全部」使用者，再對每一個使用者各自查一次 Companies，
+            // 是典型的 N+1；而且完全沒有濾掉已軟刪除（isDeleted=1）的公司，全部撈進記憶體之後才做搜尋跟分頁。
+            // 改成從 Companies 直接下手，一次查詢、篩掉軟刪除，交給資料庫做搜尋與分頁。
+            IQueryable<Company> query = _context.Companies
+                .Where(c => c.isDeleted == 0 && (c.User == null || c.User.Email != "Admin"))
+                .Include(c => c.User);
 
-            foreach (var user in users)
-            {
-                CompanyUserViewModel model = new CompanyUserViewModel();
-                model.ApplicationUser = user;
-                model.Company = _context.Companies.Where(x => x.UserId == user.Id).FirstOrDefault();
-                viewModel.Add(model);
-            }
-            viewModel.Remove(viewModel.FirstOrDefault(x => x.ApplicationUser.Email == "Admin"));
-
-            // 搜尋邏輯
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                viewModel = viewModel.Where(x => x.Company != null && x.Company.Name.Contains(searchTerm)).ToList();
+                query = query.Where(c => c.Name.Contains(searchTerm));
             }
 
-            // 計算總頁數
-            int totalItems = viewModel.Count();
+            int totalItems = await query.CountAsync();
             int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
-            // 分頁邏輯
-            viewModel = viewModel.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            var companies = await query
+                .OrderBy(c => c.CreateTime)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var viewModel = companies.Select(c => new CompanyUserViewModel
+            {
+                Company = c,
+                ApplicationUser = c.User
+            }).ToList();
 
             // 將搜尋和分頁資訊加入ViewData
             ViewData["SearchTerm"] = searchTerm;
@@ -60,13 +62,9 @@ namespace Carbon_inventory_platform.Controllers
         }
         public async Task<IActionResult> Edit(Guid id)
         {
-
-            if (id == null || _context.Companies == null)
-            {
-                return NotFound();
-            }
-
-            Company company = await _context.Companies.FindAsync(id);
+            // 原本用 FindAsync 直接找，沒有濾掉已軟刪除（isDeleted=1）的公司，
+            // 站內找不到任何「復原已刪除公司」的功能，等於讓已刪除的公司還能被打開來改。
+            Company? company = await _context.Companies.FirstOrDefaultAsync(x => x.Id == id && x.isDeleted == 0);
 
             if (company == null)
             {
@@ -91,27 +89,30 @@ namespace Carbon_inventory_platform.Controllers
             {
                 try
                 {
-                    var toUpdate = await _context.Companies.FindAsync(id);
-                    if (toUpdate != null)
+                    // 原本用 FindAsync 直接找，且不論找到的公司是否已被軟刪除都會把 isDeleted 蓋回 0，
+                    // 等於讓 Edit 表單變成一個隱藏的「復原已刪除公司」功能；站內找不到對應的復原介面，
+                    // 因此改成已刪除的公司一律回 NotFound，不再讓 Edit 動到它。
+                    var toUpdate = await _context.Companies.FirstOrDefaultAsync(x => x.Id == id && x.isDeleted == 0);
+                    if (toUpdate == null)
                     {
-                        toUpdate.Name = company.Name;
-                        toUpdate.EasyName = RemoveSuffixes(company.Name);
-                        toUpdate.EasyEnglishName = RemoveENSuffixes(company.EnglishName);
-                        toUpdate.EnglishName = company.EnglishName;
-                        toUpdate.ContactName = company.ContactName;
-                        toUpdate.Email = company.Email;
-                        toUpdate.Phone = company.Phone;
-                        toUpdate.ReportingPurposes = company.ReportingPurposes;
-                        toUpdate.ReportOpening = company.ReportOpening;
-                        toUpdate.CompanyInformation = company.CompanyInformation;
-                        toUpdate.AddressInformation = company.AddressInformation;
-                        toUpdate.ReportingInformation = company.ReportingInformation;
-                        toUpdate.GHGInformation = company.GHGInformation;
-                        toUpdate.Scope1Information = company.Scope1Information;
-                        toUpdate.Scope2Information = company.Scope2Information;
-                        toUpdate.isDeleted = 0;
-                        toUpdate.ModifiedTime = DateTime.Now;
+                        return NotFound();
                     }
+                    toUpdate.Name = company.Name;
+                    toUpdate.EasyName = RemoveSuffixes(company.Name);
+                    toUpdate.EasyEnglishName = RemoveENSuffixes(company.EnglishName);
+                    toUpdate.EnglishName = company.EnglishName;
+                    toUpdate.ContactName = company.ContactName;
+                    toUpdate.Email = company.Email;
+                    toUpdate.Phone = company.Phone;
+                    toUpdate.ReportingPurposes = company.ReportingPurposes;
+                    toUpdate.ReportOpening = company.ReportOpening;
+                    toUpdate.CompanyInformation = company.CompanyInformation;
+                    toUpdate.AddressInformation = company.AddressInformation;
+                    toUpdate.ReportingInformation = company.ReportingInformation;
+                    toUpdate.GHGInformation = company.GHGInformation;
+                    toUpdate.Scope1Information = company.Scope1Information;
+                    toUpdate.Scope2Information = company.Scope2Information;
+                    toUpdate.ModifiedTime = DateTime.Now;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

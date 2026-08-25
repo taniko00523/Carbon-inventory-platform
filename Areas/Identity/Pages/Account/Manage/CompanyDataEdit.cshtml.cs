@@ -103,10 +103,15 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
             public string Phone { get; set; } = "";
         }
 
-        private async Task LoadAsync(string userId)
+        // 原本直接用 company.Id 等欄位組 InputModel，若登入者名下還沒有 Companies 資料
+        // （company 為 null），這裡就會 NullReferenceException 變成 500。改為回傳是否成功並讓呼叫端處理。
+        private async Task<bool> LoadAsync(string userId)
         {
             Company company = await _context.Companies.Where(x => x.UserId == userId).FirstOrDefaultAsync();
-
+            if (company == null)
+            {
+                return false;
+            }
 
             Input = new InputModel
             {
@@ -118,6 +123,7 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
                 Email = company.Email,
                 Phone = company.Phone
             };
+            return true;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -128,7 +134,11 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
                 return NotFound($"找不到用戶 '{_userManager.GetUserId(User)}'.");
             }
 
-            await LoadAsync(userId);
+            if (!await LoadAsync(userId))
+            {
+                StatusMessage = "尚未建立公司資料，請聯絡管理員。";
+                return RedirectToPage("./Index");
+            }
             return Page();
         }
 
@@ -142,22 +152,31 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
 
             if (!ModelState.IsValid)
             {
-                await LoadAsync(userId);
+                if (!await LoadAsync(userId))
+                {
+                    StatusMessage = "尚未建立公司資料，請聯絡管理員。";
+                    return RedirectToPage("./Index");
+                }
                 return Page();
             }
 
-            var toUpdate = await _context.Companies.FindAsync(Input.Id);
-            if (toUpdate != null)
+            // 原本用表單送出的 Input.Id 直接 FindAsync 去更新公司資料，
+            // 使用者只要在畫面上竄改隱藏欄位 Input.Id，就能覆寫別家公司的資料；
+            // 改為一律用登入者自己的 UserId 查出對應公司，忽略表單送來的 Id。
+            var toUpdate = await _context.Companies.FirstOrDefaultAsync(x => x.UserId == userId);
+            if (toUpdate == null)
             {
-                toUpdate.Name = Input.Name;
-                toUpdate.EasyName = RemoveSuffixes(Input.Name);
-                toUpdate.EasyEnglishName = RemoveENSuffixes(Input.EnglishName);
-                toUpdate.EnglishName = Input.EnglishName;
-                toUpdate.ContactName = Input.ContactName;
-                toUpdate.Email = Input.Email;
-                toUpdate.Phone = Input.Phone;
-                toUpdate.ModifiedTime = DateTime.Now;
+                StatusMessage = "尚未建立公司資料，請聯絡管理員。";
+                return RedirectToPage("./Index");
             }
+            toUpdate.Name = Input.Name;
+            toUpdate.EasyName = RemoveSuffixes(Input.Name);
+            toUpdate.EasyEnglishName = RemoveENSuffixes(Input.EnglishName);
+            toUpdate.EnglishName = Input.EnglishName;
+            toUpdate.ContactName = Input.ContactName;
+            toUpdate.Email = Input.Email;
+            toUpdate.Phone = Input.Phone;
+            toUpdate.ModifiedTime = DateTime.Now;
             await _context.SaveChangesAsync();
             StatusMessage = "公司資訊已更新";
             return RedirectToPage();

@@ -1,55 +1,92 @@
-﻿@model IEnumerable<Carbon_inventory_platform.ViewModel.CompanyUserViewModel>
+@model IEnumerable<Carbon_inventory_platform.ViewModel.CompanyUserViewModel>
+@{
+    // 原本沒有實際存在的 ViewData["AdminUserIds"]，管理員判斷只能靠可被使用者自行修改的 UserName == "Admin"；
+    // 現在 UserController(BuildUserListAsync/SearchByRole) 一律會把目前的管理員 Id 清單放進這裡。
+    var adminUserIds = ViewData["AdminUserIds"] as List<string> ?? new List<string>();
+}
 
-<h2>用戶總覽</h2>
-<div class="d-flex justify-content-between">
-    <div class="">
-        <form asp-action="BulkAdd" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="excelFile">匯入批次新增用戶名單</label>
-                <input type="file" name="excelFile" class="form-control" style="width:50%; display:inline-block;" />
-            </div>
-            <button type="submit" class="btn btn-primary">匯入</button>
-        </form>
-    </div>
+<div class="cip-page-head">
     <div>
-        <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">新增用戶</a>
+        <h2>用戶總覽</h2>
+        <p class="cip-page-sub">管理所有已註冊的公司帳號，或依角色搜尋。</p>
+    </div>
+    <div class="cip-page-actions">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">新增用戶</button>
     </div>
 </div>
-<hr>
-<div class="d-flex justify-content-start mb-3">
-    <button class="btn btn-outline-primary me-2" onclick="searchByRole('Guest')">搜尋 Guest</button>
-    <button class="btn btn-outline-primary me-2" onclick="searchByRole('User')">搜尋 User</button>
-    <button class="btn btn-outline-primary me-2" onclick="searchByRole('PowerUser')">搜尋 PowerUser</button>
-</div>
-<hr>
 
+@{
+    // 原本 BulkAdd/Delete 等操作的結果只寫進 ModelState 就轉向，訊息在轉向時會全部遺失；
+    // controller 現在改用 TempData["UserMessage"]／TempData["UserErrors"] 帶回這裡顯示。
+    var userMessage = TempData["UserMessage"] as string;
+    var userErrors = TempData["UserErrors"] as string;
+}
+@if (!string.IsNullOrEmpty(userMessage))
+{
+    <div class="alert alert-success alert-dismissible" role="alert" data-cip-autodismiss="6000">
+        @userMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (!string.IsNullOrEmpty(userErrors))
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <ul class="mb-0">
+            @foreach (var line in userErrors.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+            {
+                <li>@line</li>
+            }
+        </ul>
+    </div>
+}
 @if (ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
 {
     <div class="alert alert-danger">
         @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
         {
-            <p>@error.ErrorMessage</p>
+            <p class="mb-0">@error.ErrorMessage</p>
         }
     </div>
 }
+
+<div class="cip-section">
+    <div class="cip-section-title">批次匯入</div>
+    <form asp-action="BulkAdd" method="post" enctype="multipart/form-data" class="d-flex flex-wrap align-items-end gap-2">
+        <div class="form-group mb-0">
+            <label for="excelFile">匯入批次新增用戶名單（Excel）</label>
+            <input type="file" name="excelFile" id="excelFile" class="form-control" accept=".xlsx,.xls" />
+        </div>
+        <button type="submit" class="btn btn-primary">匯入</button>
+    </form>
+</div>
+
+<div class="d-flex justify-content-start mb-3 flex-wrap gap-2">
+    <span class="align-self-center me-2">依角色搜尋：</span>
+    <button type="button" class="btn btn-outline-primary" onclick="searchByRole('Guest')">Guest</button>
+    <button type="button" class="btn btn-outline-primary" onclick="searchByRole('User')">User</button>
+    <button type="button" class="btn btn-outline-primary" onclick="searchByRole('PowerUser')">PowerUser</button>
+    <a class="btn btn-outline-secondary" asp-action="Index">清除搜尋</a>
+</div>
+
 <!-- 新增用戶資料的模態框 -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form asp-action="Add" method="post">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">新增用戶資料</h5>
+                    <h5 class="modal-title" id="addModalLabel">新增用戶資料</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="addUserName">使用者名稱：</label>
+                        <label for="addUserName" class="cip-required">使用者名稱</label>
                         <input class="form-control" id="addUserName" name="ApplicationUser.UserName" required />
 
-                        <label for="addPassword">密碼：</label>
-                        <input class="form-control" id="addPassword" name="Password"  required />
+                        <label for="addPassword" class="cip-required">密碼</label>
+                        <input class="form-control" id="addPassword" name="Password" type="password" required />
 
-                        <label for="addUserLimitData">使用期限：</label>
+                        <label for="addUserLimitData" class="cip-required">使用期限</label>
                         <input type="date" class="form-control" id="addUserLimitData" name="UserLimitData" required />
                     </div>
                 </div>
@@ -63,181 +100,194 @@
     </div>
 </div>
 
-<div class="table-computer-w1024">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>用戶帳號</th>
-                <th>公司名稱</th>
-                <th>聯絡人</th>
-                <th>電話號碼</th>
-                <th>電子郵件</th>
-                <th>初始註冊帳號</th>
-                <th>使用期限</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model)
-            {
-                <tr>
-                    <td>@user.ApplicationUser.UserName</td>
-                    @if (user.Company != null)
+@{
+    var users = Model?.ToList() ?? new List<Carbon_inventory_platform.ViewModel.CompanyUserViewModel>();
+}
+@if (users.Count == 0)
+{
+    <div class="cip-empty">
+        <div class="cip-empty-icon">👤</div>
+        <div class="cip-empty-title">目前沒有符合條件的用戶</div>
+        <p>可以嘗試新增用戶，或清除目前的角色搜尋。</p>
+    </div>
+}
+else
+{
+    <div class="table-computer-w1024">
+        <div class="cip-table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>用戶帳號</th>
+                        <th>公司名稱</th>
+                        <th>聯絡人</th>
+                        <th>電話號碼</th>
+                        <th>電子郵件</th>
+                        <th>初始註冊帳號</th>
+                        <th>使用期限</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in users)
                     {
-                        <td>@user.Company.Name</td>
-                        <td>@user.Company.ContactName</td>
-                        <td>@user.Company.Phone</td>
-                        <td>@user.Company.Email</td>
-                    }
-                    else
-                    {
-                        <td colspan="4">尚未創建公司資料</td>
-                    }
-                    <td>@user.ApplicationUser.Email</td>
-                    <td>@(user.ApplicationUser.UserLimitData.HasValue ? user.ApplicationUser.UserLimitData.Value.ToString("yyyy-MM-dd") : "未設定")</td>
-                    <td>
-                        @if (user.ApplicationUser.UserName != "Admin")
+                        @* Controller 的 BuildUserListAsync/SearchByRole 一定會塞 ApplicationUser，
+                           這裡多防一手，資料異常時直接跳過該列而不是丟例外。 *@
+                        if (user.ApplicationUser == null) { continue; }
+                        var isAdmin = adminUserIds.Contains(user.ApplicationUser.Id);
+                        <tr>
+                            <td>@user.ApplicationUser.UserName</td>
+                            @if (user.Company != null)
+                            {
+                                <td>@user.Company.Name</td>
+                                <td>@user.Company.ContactName</td>
+                                <td>@user.Company.Phone</td>
+                                <td>@user.Company.Email</td>
+                            }
+                            else
+                            {
+                                <td colspan="4">尚未創建公司資料</td>
+                            }
+                            <td>@user.ApplicationUser.Email</td>
+                            <td>@(user.ApplicationUser.UserLimitData.HasValue ? user.ApplicationUser.UserLimitData.Value.ToString("yyyy-MM-dd") : "未設定")</td>
+                            <td>
+                                @* 原本用 user.ApplicationUser.UserName != "Admin" 判斷要不要顯示編輯/刪除按鈕，
+                                   UserName 是使用者自己可以改的欄位；改用 controller 依 Admin 角色成員算出的 adminUserIds。 *@
+                                @if (!isAdmin)
+                                {
+                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editComputerModal_@user.ApplicationUser.Id">編輯</button>
+                                    <form method="post" asp-action="Delete" asp-route-id="@user.ApplicationUser.Id" class="d-inline" data-cip-confirm="確定要刪除此帳號嗎？刪除後可重新申請，但目前的登入資料將永久移除。">
+                                        <button type="submit" class="btn btn-danger btn-sm">刪除</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                        @if (!isAdmin)
                         {
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editComputerModal_@user.ApplicationUser.Id">編輯</button>
-                            <form method="post" asp-action="Delete" asp-route-id="@user.ApplicationUser.Id" onsubmit="return confirm('注意 此操作極度危險 確定要刪除嗎？');">
-                                <button type="submit" class="btn btn-danger">刪除</button>
-                            </form>
-                        }
-                    </td>
-                </tr>
-                <!-- 編輯用戶資料的模態框 -->
-                <div class="modal fade" id="editComputerModal_@user.ApplicationUser.Id" tabindex="-1" role="dialog" aria-labelledby="editComputerModalLabel_@user.ApplicationUser.Id" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <form asp-action="Edit" method="post">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editComputerModalLabel_@user.ApplicationUser.Id">編輯用戶資料</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    @if (ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
-                                    {
-                                        <div class="alert alert-danger">
-                                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                                            {
-                                                <p>@error.ErrorMessage</p>
-                                            }
+                            <!-- 編輯用戶資料的模態框（沿用原本寫在 tbody 內、由瀏覽器自動搬到 table 外的既有作法，
+                                 避免包一層 <tr class="d-none">：那層 display:none 的祖先會讓 Bootstrap 開啟 modal 時
+                                 一併被蓋掉、永遠打不開） -->
+                            <div class="modal fade" id="editComputerModal_@user.ApplicationUser.Id" tabindex="-1" role="dialog" aria-labelledby="editComputerModalLabel_@user.ApplicationUser.Id" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <form asp-action="Edit" method="post">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="editComputerModalLabel_@user.ApplicationUser.Id">編輯用戶資料</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <input type="hidden" name="ApplicationUser.Id" value="@user.ApplicationUser.Id" />
+
+                                                    <label for="editUserName_@user.ApplicationUser.Id" class="cip-required">使用者名稱</label>
+                                                    <input class="form-control" id="editUserName_@user.ApplicationUser.Id" name="ApplicationUser.UserName" value="@user.ApplicationUser.UserName" required />
+
+                                                    <label for="editPassword_@user.ApplicationUser.Id">密碼（留白表示不變更）</label>
+                                                    <input class="form-control" id="editPassword_@user.ApplicationUser.Id" name="Password" type="password" />
+
+                                                    <label for="editUserLimitData_@user.ApplicationUser.Id">使用期限</label>
+                                                    <input type="date" class="form-control" id="editUserLimitData_@user.ApplicationUser.Id" name="ApplicationUser.UserLimitData" value="@user.ApplicationUser.UserLimitData?.ToString("yyyy-MM-dd")" />
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                                <input type="submit" value="儲存" class="btn btn-primary" />
+                                            </div>
                                         </div>
-                                    }
-
-                                    <div class="form-group">
-                                        <input type="hidden" name="ApplicationUser.Id" value="@user.ApplicationUser.Id" />
-
-                                        <label for="editUserName_@user.ApplicationUser.Id">使用者名稱：</label>
-                                        <input class="form-control" id="editUserName_@user.ApplicationUser.Id" name="ApplicationUser.UserName" value="@user.ApplicationUser.UserName" required />
-
-                                        <label for="editPassword_@user.ApplicationUser.Id">密碼：</label>
-                                        <input class="form-control" id="editPassword_@user.ApplicationUser.Id" name="Password" type="password" />
-
-                                        <label for="editUserLimitData_@user.ApplicationUser.Id">使用期限：</label>
-                                        <input type="date" class="form-control" id="editUserLimitData_@user.ApplicationUser.Id" name="ApplicationUser.UserLimitData" value="@user.ApplicationUser.UserLimitData?.ToString("yyyy-MM-dd")" />
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                                    <input type="submit" value="儲存" class="btn btn-primary" />
+                                        @Html.AntiForgeryToken()
+                                    </form>
                                 </div>
                             </div>
-                            @Html.AntiForgeryToken()
-                        </form>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="table-phone-w1024">
+        <div class="container">
+            @foreach (var user in users)
+            {
+                if (user.ApplicationUser == null) { continue; }
+                var isAdmin = adminUserIds.Contains(user.ApplicationUser.Id);
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            @user.ApplicationUser.UserName
+                        </h5>
+                        <p class="card-text">
+                            <strong>公司名稱:</strong> @(user.Company?.Name ?? "尚未創建公司資料")
+                        </p>
+                        @if (user.Company != null)
+                        {
+                            <p class="card-text">
+                                <strong>聯絡人:</strong> @user.Company.ContactName
+                            </p>
+                            <p class="card-text">
+                                <strong>電話號碼:</strong> @user.Company.Phone
+                            </p>
+                            <p class="card-text">
+                                <strong>電子郵件:</strong> @user.Company.Email
+                            </p>
+                        }
+                        <p class="card-text">
+                            <strong>初始註冊帳號:</strong> @user.ApplicationUser.Email
+                        </p>
+                        <p class="card-text">
+                            <strong>使用期限:</strong> @(user.ApplicationUser.UserLimitData.HasValue ? user.ApplicationUser.UserLimitData.Value.ToString("yyyy-MM-dd") : "未設定")
+                        </p>
+                        <div class="d-flex">
+                            @if (!isAdmin)
+                            {
+                                <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#editPhoneModal_@user.ApplicationUser.Id">編輯</button>
+                                <form method="post" asp-action="Delete" asp-route-id="@user.ApplicationUser.Id" class="d-inline" data-cip-confirm="確定要刪除此帳號嗎？刪除後可重新申請，但目前的登入資料將永久移除。">
+                                    <button type="submit" class="btn btn-danger">刪除</button>
+                                </form>
+                            }
+                        </div>
                     </div>
+
+                    @if (!isAdmin)
+                    {
+                        <!-- 編輯用戶資料的模態框 -->
+                        <div class="modal fade" id="editPhoneModal_@user.ApplicationUser.Id" tabindex="-1" role="dialog" aria-labelledby="editPhoneModalLabel_@user.ApplicationUser.Id" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <form asp-action="Edit" method="post">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editPhoneModalLabel_@user.ApplicationUser.Id">編輯用戶資料</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <input type="hidden" name="ApplicationUser.Id" value="@user.ApplicationUser.Id" />
+
+                                                <label for="editUserName_@user.ApplicationUser.Id" class="cip-required">使用者名稱</label>
+                                                <input class="form-control" id="editUserName_@user.ApplicationUser.Id" name="ApplicationUser.UserName" value="@user.ApplicationUser.UserName" required />
+
+                                                <label for="editPassword_@user.ApplicationUser.Id">密碼（留白表示不變更）</label>
+                                                <input class="form-control" id="editPassword_@user.ApplicationUser.Id" name="Password" type="password" />
+
+                                                <label for="editUserLimitData_@user.ApplicationUser.Id">使用期限</label>
+                                                <input type="date" class="form-control" id="editUserLimitData_@user.ApplicationUser.Id" name="ApplicationUser.UserLimitData" value="@user.ApplicationUser.UserLimitData?.ToString("yyyy-MM-dd")" />
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                            <input type="submit" value="儲存" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                    @Html.AntiForgeryToken()
+                                </form>
+                            </div>
+                        </div>
+                    }
                 </div>
             }
-        </tbody>
-    </table>
-</div>
-<div class="table-phone-w1024">
-    <div class="container">
-        @foreach (var user in Model)
-        {
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        @user.ApplicationUser.UserName
-                    </h5>
-                    <p class="card-text">
-                        <strong>公司名稱:</strong> @(user.Company?.Name ?? "尚未創建公司資料")
-                    </p>
-                    @if (user.Company != null)
-                    {
-                        <p class="card-text">
-                            <strong>聯絡人:</strong> @user.Company.ContactName
-                        </p>
-                        <p class="card-text">
-                            <strong>電話號碼:</strong> @user.Company.Phone
-                        </p>
-                        <p class="card-text">
-                            <strong>電子郵件:</strong> @user.Company.Email
-                        </p>
-                    }
-                    <p class="card-text">
-                        <strong>初始註冊帳號:</strong> @user.ApplicationUser.Email
-                    </p>
-                    <p class="card-text">
-                        <strong>使用期限:</strong> @(user.ApplicationUser.UserLimitData.HasValue ? user.ApplicationUser.UserLimitData.Value.ToString("yyyy-MM-dd") : "未設定")
-                    </p>
-                    <div class="d-flex">
-                        @if (user.ApplicationUser.UserName != "Admin")
-                        {
-                            <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#editPhoneModal_@user.ApplicationUser.Id">編輯</button>
-                            <form method="post" asp-action="Delete" asp-route-id="@user.ApplicationUser.Id" onsubmit="return confirm('注意 此操作極度危險 確定要刪除嗎？');" class="d-inline">
-                                <button type="submit" class="btn btn-danger">刪除</button>
-                            </form>
-                        }
-                    </div>
-                </div>
-
-                <!-- 編輯用戶資料的模態框 -->
-                <div class="modal fade" id="editPhoneModal_@user.ApplicationUser.Id" tabindex="-1" role="dialog" aria-labelledby="editPhoneModalLabel_@user.ApplicationUser.Id" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <form asp-action="Edit" method="post">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editPhoneModalLabel_@user.ApplicationUser.Id">編輯用戶資料</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    @if (ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
-                                    {
-                                        <div class="alert alert-danger">
-                                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                                            {
-                                                <p>@error.ErrorMessage</p>
-                                            }
-                                        </div>
-                                    }
-
-                                    <div class="form-group">
-                                        <input type="hidden" name="ApplicationUser.Id" value="@user.ApplicationUser.Id" />
-
-                                        <label for="editUserName_@user.ApplicationUser.Id">使用者名稱：</label>
-                                        <input class="form-control" id="editUserName_@user.ApplicationUser.Id" name="ApplicationUser.UserName" value="@user.ApplicationUser.UserName" required />
-
-                                        <label for="editPassword_@user.ApplicationUser.Id">密碼：</label>
-                                        <input class="form-control" id="editPassword_@user.ApplicationUser.Id" name="Password" type="password" />
-
-                                        <label for="editUserLimitData_@user.ApplicationUser.Id">使用期限：</label>
-                                        <input type="date" class="form-control" id="editUserLimitData_@user.ApplicationUser.Id" name="ApplicationUser.UserLimitData" value="@user.ApplicationUser.UserLimitData?.ToString("yyyy-MM-dd")" />
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                                    <input type="submit" value="儲存" class="btn btn-primary" />
-                                </div>
-                            </div>
-                            @Html.AntiForgeryToken()
-                        </form>
-                    </div>
-                </div>
-            </div>
-        }
+        </div>
     </div>
-</div>
+}
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // 獲取今天的日期
@@ -252,6 +302,6 @@
 
     function searchByRole(role) {
         // 使用 JavaScript 發送請求以過濾角色
-        window.location.href = '@Url.Action("SearchByRole", "User")' + '?role=' + role;
+        window.location.href = '@Url.Action("SearchByRole", "User")' + '?role=' + encodeURIComponent(role);
     }
 </script>

@@ -6,22 +6,6 @@
     <UserSecretsId>aspnet-Carbon_inventory_platform-f19a92ee-d2ab-4dcf-b9e2-42c55370b2e7</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Models\NewFolder1\**" />
-    <Compile Remove="Models\NewFolder\**" />
-    <Compile Remove="Views\Area\**" />
-    <Compile Remove="wwwroot\images\NewFolder\**" />
-    <Content Remove="Models\NewFolder1\**" />
-    <Content Remove="Models\NewFolder\**" />
-    <Content Remove="Views\Area\**" />
-    <Content Remove="wwwroot\images\NewFolder\**" />
-    <EmbeddedResource Remove="Models\NewFolder1\**" />
-    <EmbeddedResource Remove="Models\NewFolder\**" />
-    <EmbeddedResource Remove="Views\Area\**" />
-    <EmbeddedResource Remove="wwwroot\images\NewFolder\**" />
-    <None Remove="Models\NewFolder1\**" />
-    <None Remove="Models\NewFolder\**" />
-    <None Remove="Views\Area\**" />
-    <None Remove="wwwroot\images\NewFolder\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DocX" Version="3.0.0" />

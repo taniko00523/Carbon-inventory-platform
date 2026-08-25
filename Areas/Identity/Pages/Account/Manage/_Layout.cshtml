@@ -1,11 +1,16 @@
 ﻿@{
+    // 原本沒有對應的 Manage/_ViewStart.cshtml，這個共用版面從未真正被套用，
+    // 導致「公司資訊/報告資料/密碼修改」側邊導覽選單永遠不會出現；
+    // 現在 Manage/_ViewStart.cshtml 會指定套用此版面。
+    // 而且原本 fallback 的 "/Areas/Identity/Pages/_Layout.cshtml" 根本不存在，
+    // 一旦真的被套用就會丟例外變成 500，改成套用網站真正的共用版面。
     if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
     {
         Layout = parentLayout.ToString();
     }
     else
     {
-        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+        Layout = "/Views/Shared/_Layout.cshtml";
     }
 }
 

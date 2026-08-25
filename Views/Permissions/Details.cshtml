@@ -1,13 +1,13 @@
 ﻿@model Carbon_inventory_platform.Models.Permission
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "權限詳細資料";
 }
 
-<h1>Details</h1>
+<h1>權限詳細資料</h1>
 
 <div>
-    <h4>Permission</h4>
+    <h4>權限</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -44,17 +44,17 @@
             @Html.DisplayNameFor(model => model.Function)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Function.Id)
+            @Model?.Function?.CName
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.FunctionAction)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FunctionAction.Id)
+            @Model?.FunctionAction?.CName
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">編輯</a> |
+    <a asp-action="Index">回列表</a>
 </div>

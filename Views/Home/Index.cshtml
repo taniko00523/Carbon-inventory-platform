@@ -1,58 +1,120 @@
-﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
+@using Carbon_inventory_platform.Models
 @inject SignInManager<ApplicationUser> SignInManager
 @{
     ViewData["Title"] = "首頁";
+    var isAdmin = User.IsInRole("Admin") || User.IsInRole("SuperAdmin");
 }
-<div class="px-4 pt-5 my-5 text-center border-bottom">
-    <h1 class="display-4 fw-bold mb-4">碳盤查平台</h1>
-    <div class="col-lg-8 mx-auto">
-        <p class="lead mb-4">
-            現今溫室氣體盤查工具大多都缺乏統一及完整性的盤查方式，造成整體盤查困難且準確率欠佳，故開發此平台。協助中小企業向淨零邁出一步。
+
+<section class="cip-hero">
+    <h1>碳盤查平台</h1>
+    <p class="cip-hero-lead">
+        現今溫室氣體盤查工具大多缺乏統一及完整性的盤查方式，造成整體盤查困難且準確率欠佳，
+        故開發此平台，協助中小企業向淨零邁出一步。
+    </p>
+
+    <div class="d-flex gap-2 justify-content-center flex-wrap">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            @if (isAdmin)
+            {
+                <a class="btn btn-primary btn-lg" asp-controller="Companies" asp-action="Index">開始盤查</a>
+            }
+            else
+            {
+                <a class="btn btn-primary btn-lg" asp-controller="Areas" asp-action="Index">開始盤查</a>
+            }
+        }
+        else
+        {
+            <a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login">登入開始盤查</a>
+        }
+    </div>
+
+    @* 原本這裡嵌入一張 photo.stust.edu.tw 的外部圖片，網址帶有會過期的
+       SynoToken，一旦失效首頁就是一個破圖。改用自繪的 SVG，不依賴外部資源。 *@
+    <svg class="cip-hero-art" viewBox="0 0 640 240" role="img"
+         aria-label="以柱狀圖與趨勢線呈現逐年下降的溫室氣體排放量示意圖">
+        <defs>
+            <linearGradient id="cipBar" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="var(--cip-brand-400)" />
+                <stop offset="100%" stop-color="var(--cip-brand-600)" />
+            </linearGradient>
+        </defs>
+
+        <line x1="56" y1="200" x2="600" y2="200" stroke="var(--cip-border-strong)" stroke-width="1.5" />
+
+        <g fill="url(#cipBar)" opacity="0.92">
+            <rect x="84"  y="60"  width="46" height="140" rx="6" />
+            <rect x="160" y="82"  width="46" height="118" rx="6" />
+            <rect x="236" y="98"  width="46" height="102" rx="6" />
+            <rect x="312" y="122" width="46" height="78"  rx="6" />
+            <rect x="388" y="146" width="46" height="54"  rx="6" />
+            <rect x="464" y="164" width="46" height="36"  rx="6" />
+        </g>
+
+        <polyline points="107,60 183,82 259,98 335,122 411,146 487,164"
+                  fill="none" stroke="var(--cip-scope1)" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round" />
+
+        <g fill="var(--cip-scope1)">
+            <circle cx="107" cy="60" r="4" />
+            <circle cx="183" cy="82" r="4" />
+            <circle cx="259" cy="98" r="4" />
+            <circle cx="335" cy="122" r="4" />
+            <circle cx="411" cy="146" r="4" />
+            <circle cx="487" cy="164" r="4" />
+        </g>
+
+        <g transform="translate(536, 84)" fill="none" stroke="var(--cip-brand-500)"
+           stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M28 6c0 15-11 26-26 26C2 17 13 6 28 6z" />
+            <path d="M2 32C10 24 18 18 28 12" />
+        </g>
+
+        <g fill="var(--cip-text-faint)" font-size="12" text-anchor="middle"
+           font-family="var(--cip-font-sans)">
+            <text x="107" y="220">基準年</text>
+            <text x="183" y="220">+1</text>
+            <text x="259" y="220">+2</text>
+            <text x="335" y="220">+3</text>
+            <text x="411" y="220">+4</text>
+            <text x="487" y="220">+5</text>
+        </g>
+    </svg>
+</section>
+
+<div class="cip-feature-grid">
+    <article class="cip-section">
+        <h2 class="cip-section-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V8l6-4 6 4v13" /><path d="M15 21V12h6v9" /></svg>
+            組織邊界與盤查年度
+        </h2>
+        <p class="mb-0 text-muted">
+            以公司、廠區、盤查年度三層結構管理組織邊界，可設定基準年、AR 版本，
+            並上傳組織架構圖、地理位置圖與廠區配置圖。
         </p>
+    </article>
 
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
-            @if (SignInManager.IsSignedIn(User))
-            {
-                @if (User.IsInRole("Admin"))
-                {
-                    <a type="button" class="btn btn-primary btn-lg px-4 me-sm-3" asp-controller="Companies" asp-action="Index">開始盤查</a>
-                }
-                else // 用戶登入
-                {
-                    <a type="button" class="btn btn-primary btn-lg px-4 me-sm-3" asp-controller="Areas" asp-action="Index">開始盤查</a>
-                }
-            }
-            else // 無登入
-            {
-                <a type="button" class="btn btn-primary btn-lg px-4 me-sm-3" asp-area="Identity" asp-page="/Account/Login">開始盤查</a>
-            }
-        </div>
-    </div>
-    <div class="overflow-hidden mb-4" style="max-height: 100vh;">
-        <div class="container px-5">
-            <img src="https://photo.stust.edu.tw/photo/webapi/thumb.php?api=SYNO.PhotoStation.Thumb&method=get&version=1&size=large&id=photo_e58d97e887bae6a0a1e699af2fe5bbbae7af892f57e6a39f2de7a385e7a4a1e9a4a8_312d312e6a7067&rotate_version=0&thumb_sig=2f766f6c756d65312f70686f746f2fe58d97e887bae6a0a1e699af2fe5bbbae7af892f57e6a39f2de7a385e7a4a1e9a4a82f312d312e6a7067&mtime=1657848847&SynoToken=dde4e51f0f8b7d806bedcf859d2554f3"
-                 class="img-fluid border rounded-3 shadow-lg mb-4"
-                 loading="lazy"
-                 style="transition: transform 0.3s ease-in-out;" />
-        </div>
-    </div>
+    <article class="cip-section">
+        <h2 class="cip-section-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="8" ry="3" /><path d="M4 6v6c0 1.66 3.58 3 8 3s8-1.34 8-3V6" /><path d="M4 12v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" /></svg>
+            排放源與活動數據
+        </h2>
+        <p class="mb-0 text-muted">
+            內建環境部公告的排放係數與 GWP 值，依原燃物料自動帶入各溫室氣體係數，
+            並支援 Excel 批次匯入排放源清單。
+        </p>
+    </article>
+
+    <article class="cip-section">
+        <h2 class="cip-section-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></svg>
+            統計與報告書
+        </h2>
+        <p class="mb-0 text-muted">
+            自動計算類別一、類別二排放當量、不確定性與數據品質等級，
+            並可輸出 ISO、環境部與工業局格式的盤查報告書。
+        </p>
+    </article>
 </div>
-
-<style>
-    .btn-primary {
-        transition: background-color 0.3s, transform 0.3s;
-    }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-
-    .img-fluid {
-        transition: transform 0.3s ease-in-out;
-    }
-
-        .img-fluid:hover {
-            transform: scale(1.1);
-        }
-</style>

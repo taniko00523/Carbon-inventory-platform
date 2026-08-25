@@ -1,12 +1,10 @@
 ﻿using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using NuGet.DependencyResolver;
-using System.Reflection.Emit;
 
 namespace Carbon_inventory_platform.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -35,68 +33,112 @@ namespace Carbon_inventory_platform.Data
         {
             base.OnModelCreating(builder);
 
+            // ---- 關聯設定 ----------------------------------------------------
+            // 原本這裡是一連串沒有指定反向導覽或外鍵的 HasOne/HasMany，
+            // 等於什麼都沒設定（EF 會自行猜測），其中掛在「集合導覽」上的
+            // [ForeignKey] 還讓 EF 額外生出中介表與影子外鍵欄位。
+            // 現在每一個關聯都明確指定反向端、外鍵與刪除行為。
+
             builder.Entity<Company>(entity =>
             {
-                entity.HasMany(e => e.Areas);
+                // 刪除登入帳號時只把 UserId 設為 null，保留盤查資料。
+                entity.HasOne(e => e.User)
+                      .WithMany()
+                      .HasForeignKey(e => e.UserId)
+                      .OnDelete(DeleteBehavior.SetNull);
+                entity.HasMany(e => e.Areas)
+                      .WithOne(a => a.Company!)
+                      .HasForeignKey(a => a.CompanyId)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasIndex(e => e.UserId);
             });
 
             builder.Entity<Area>(entity =>
             {
-                entity.HasOne(e => e.Company);
-                entity.HasOne(e => e.Analysis);
-                entity.HasMany(e => e.Devices);
-            });
-
-            builder.Entity<Analysis>(entity =>
-            {
-                entity.HasOne(e => e.Area);
+                entity.HasOne(e => e.Analysis)
+                      .WithOne(a => a.Area!)
+                      .HasForeignKey<Analysis>(a => a.AreaId)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasMany(e => e.Devices)
+                      .WithOne(d => d.Area!)
+                      .HasForeignKey(d => d.AreaId)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasIndex(e => new { e.CompanyId, e.isDeleted });
             });
 
             builder.Entity<Device>(entity =>
             {
-                entity.HasOne(e => e.Area);
-                entity.HasMany(e => e.GHGs);
-                entity.HasMany(e => e.ActivityDatas);
-            });
-
-            builder.Entity<ActivityData>(entity =>
-            {
-                entity.HasOne(e => e.Device);
-            });
-
-            builder.Entity<GHG>(entity =>
-            {
-                entity.HasOne(e => e.Device);
+                entity.HasMany(e => e.GHGs)
+                      .WithOne(g => g.Device!)
+                      .HasForeignKey(g => g.DeviceId)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasMany(e => e.ActivityDatas)
+                      .WithOne(a => a.Device!)
+                      .HasForeignKey(a => a.DeviceId)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasIndex(e => new { e.AreaId, e.isDeleted });
             });
 
             builder.Entity<GWP>(entity =>
             {
-                //entity.HasOne(e => e.GWPVersion);
+                // GWP 版本以 ARVersion 欄位表示，不另建 GWPVersion 資料表。
+                // （原本 builder.Entity<GWPVersion>() 會生出一張沒有 DbSet 的
+                //  GWPVersions 表和一個影子外鍵，且欄位名稱與 Migration 不一致，
+                //  導致所有 GWPs 查詢在執行期拋 SqlException。）
+                entity.HasIndex(e => new { e.Name, e.ARVersion });
             });
 
-            builder.Entity<GWPVersion>(entity =>
+            builder.Entity<Material>(entity =>
             {
-                entity.HasMany(e => e.GWPs);
+                // 排放係數查詢的複合條件，建索引避免每次都全表掃描。
+                entity.HasIndex(e => new { e.Name, e.Scope, e.EmissionPattern, e.Year });
             });
 
             builder.Entity<RolePermission>(entity =>
             {
-                entity.HasMany(e => e.Permissions);
-                entity.HasMany(e => e.Roles);
+                entity.HasOne(e => e.Role)
+                      .WithMany(r => r.RolePermissions)
+                      .HasForeignKey(e => e.RoleId)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.Permission)
+                      .WithMany(p => p.RolePermissions)
+                      .HasForeignKey(e => e.PermissionId)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasIndex(e => new { e.RoleId, e.PermissionId }).IsUnique();
             });
 
             builder.Entity<UserPermission>(entity =>
             {
-                entity.HasMany(e => e.Permissions);
-                entity.HasMany(e => e.Users);
+                entity.HasOne(e => e.User)
+                      .WithMany(u => u.UserPermissions)
+                      .HasForeignKey(e => e.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.Permission)
+                      .WithMany(p => p.UserPermissions)
+                      .HasForeignKey(e => e.PermissionId)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasIndex(e => new { e.UserId, e.PermissionId }).IsUnique();
             });
 
             builder.Entity<Permission>(entity =>
             {
-                entity.HasMany(e => e.RolePermissions);
-                entity.HasOne(e => e.Function);
-                entity.HasOne(e => e.FunctionAction);
+                entity.HasOne(e => e.Function)
+                      .WithMany()
+                      .HasForeignKey(e => e.FunctionId)
+                      .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.FunctionAction)
+                      .WithMany()
+                      .HasForeignKey(e => e.FunctionActionId)
+                      .OnDelete(DeleteBehavior.Restrict);
+                // 只對「未刪除」的權限唯一，否則軟刪除過的組合會永遠無法重建。
+                entity.HasIndex(e => new { e.FunctionId, e.FunctionActionId })
+                      .IsUnique()
+                      .HasFilter("[IsDeleted] = 0");
             });
+
+            builder.Entity<Function>().HasIndex(e => e.Name).IsUnique();
+            builder.Entity<FunctionAction>().HasIndex(e => e.Name).IsUnique();
+
             DataSeed(builder);
         }
         private void DataSeed(ModelBuilder builder)
@@ -230,7 +272,7 @@ new GWP { Id = 23, Name = "HFC-236fa", Num = 8690, ARVersion = 6 }
                 new DeviceData { Id = 18, Name = "電力", Scope = "類別二", EmissionPattern = "外購電力", Material = "外購電力", Device_Correction = 1, Data_Correction = 1, unit = "度" },
                 new DeviceData { Id = 19, Name = "乙炔", Scope = "類別一", EmissionPattern = "製程", Material = "乙炔", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                 new DeviceData { Id = 20, Name = "焊條", Scope = "類別一", EmissionPattern = "製程", Material = "焊條", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
-                 new DeviceData { Id = 21, Name = "工業冷藏、冷凍", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
+                 // Id 21 與 Id 7 完全重複，會讓排放源名稱下拉出現兩個「工業冷藏、冷凍」，已移除。
                   new DeviceData { Id = 22, Name = "商用冰箱", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                    new DeviceData { Id = 23, Name = "中、大型冰箱", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },
                     new DeviceData { Id = 24, Name = "低溫冷凍車", Scope = "類別一", EmissionPattern = "逸散", Material = "R-134A", Device_Correction = 3, Data_Correction = 3, unit = "公斤" },

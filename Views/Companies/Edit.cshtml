@@ -8,7 +8,9 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        @* 原本沒有寫 method="post"，表單預設會用 GET 送出，打到的是沒有寫入邏輯的 GET Edit(Guid id)，
+           導致這個表單看起來按了儲存，實際上完全沒有把任何欄位存進資料庫。 *@
+        <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="UserId" />

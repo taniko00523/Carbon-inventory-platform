@@ -1,11 +1,25 @@
-﻿@{
-    ViewData["Title"] = "訂閱已過期";
+@{
+    ViewData["Title"] = "使用期限已到期";
 }
 
-<h2>@ViewData["Title"]</h2>
-
-<div class="container">
-@*     <p>您的訂閱已經過期或即將過期。請前往下面的連結以進行續費：</p> *@
-
-@*     <a href="/RenewSubscription">點擊這裡進行續費</a>*@
+@* 這個畫面原本存在但沒有任何程式導向它 —— CheckSubscriptionData 過去是導向
+   /Home/Index，而 HomeController 本身也掛著同一個 Filter，形成無限重導。
+   Filter 已改為導向這裡，因此這頁需要真正說明狀況並提供出路。 *@
+<div class="cip-empty cip-section">
+    <div class="cip-empty-icon" aria-hidden="true">⏳</div>
+    <p class="cip-empty-title">您的帳號使用期限已到期</p>
+    <p>
+        目前無法存取盤查資料。已建立的公司、廠區與排放源資料都完整保留，
+        期限延長後即可繼續使用。
+    </p>
+    <p class="text-muted">
+        請與系統管理員聯絡以延長使用期限，或使用頁尾的「回報問題」與我們聯繫。
+    </p>
+    <div class="d-flex gap-2 justify-content-center flex-wrap">
+        <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">回到首頁</a>
+        <form asp-area="Identity" asp-page="/Account/Logout"
+              asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+            <button type="submit" class="btn btn-secondary">登出</button>
+        </form>
+    </div>
 </div>

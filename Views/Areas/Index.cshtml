@@ -121,7 +121,9 @@
                         <a class="btn btn-info" asp-controller="Areas" asp-action="Analyses" asp-route-id="@item.Id">設定</a>
                     </td>
                     <td>
-                        <a class="btn btn-primary" asp-action="CopyArea" asp-route-id="@item.Id">複製</a>
+                        <form method="post" asp-action="CopyArea" asp-route-id="@item.Id" onsubmit="return confirm('確定要複製這個廠區嗎？');" class="d-inline">
+                            <button type="submit" class="btn btn-primary">複製</button>
+                        </form>
                         @if (item.Name != "")
                         {
                             <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.Id">修改</a>
@@ -196,7 +198,9 @@
                         }
                     </p>
                     <div class="btn-group" role="group">
-                        <a class="btn btn-primary" asp-action="CopyArea" asp-route-id="@item.Id">複製</a>
+                        <form method="post" asp-action="CopyArea" asp-route-id="@item.Id" onsubmit="return confirm('確定要複製這個廠區嗎？');" class="d-inline">
+                            <button type="submit" class="btn btn-primary">複製</button>
+                        </form>
                         @if (!string.IsNullOrEmpty(item.Name))
                         {
                             <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.Id">修改</a>

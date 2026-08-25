@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carbon_inventory_platform.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241014093029_InitialCreate")]
+    [Migration("20260824150646_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,25 +20,10 @@ namespace Carbon_inventory_platform.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("ApplicationRoleRolePermission", b =>
-                {
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RolesId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("RoleId", "RolesId");
-
-                    b.HasIndex("RolesId");
-
-                    b.ToTable("ApplicationRoleRolePermission");
-                });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.ActivityData", b =>
                 {
@@ -627,6 +612,101 @@ namespace Carbon_inventory_platform.Migrations
                     b.ToTable("Analyses");
                 });
 
+            modelBuilder.Entity("Carbon_inventory_platform.Models.ApplicationRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UserLimitData")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
                 {
                     b.Property<Guid>("Id")
@@ -642,7 +722,7 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("All")
-                        .HasColumnType("decimal(18, 3)");
+                        .HasColumnType("decimal(18, 4)");
 
                     b.Property<bool>("BaseYear")
                         .HasColumnType("bit");
@@ -780,7 +860,8 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("all_Grade")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<float>("avg_Grade")
                         .HasColumnType("real");
@@ -877,7 +958,7 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyId", "isDeleted");
 
                     b.ToTable("Areas");
                 });
@@ -955,7 +1036,6 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<byte>("isDeleted")
@@ -978,23 +1058,28 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("EmissionPattern")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Material")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Scope")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
 
@@ -1150,7 +1235,8 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("Material")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
@@ -1173,7 +1259,8 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Scope")
                         .IsRequired()
@@ -1211,7 +1298,7 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AreaId");
+                    b.HasIndex("AreaId", "isDeleted");
 
                     b.ToTable("Devices");
                 });
@@ -1237,7 +1324,8 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("Material")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1251,7 +1339,8 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("unit")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
 
@@ -1480,17 +1569,6 @@ namespace Carbon_inventory_platform.Migrations
                         },
                         new
                         {
-                            Id = 21,
-                            Data_Correction = 3,
-                            Device_Correction = 3,
-                            EmissionPattern = "逸散",
-                            Material = "R-134A",
-                            Name = "工業冷藏、冷凍",
-                            Scope = "類別一",
-                            unit = "公斤"
-                        },
-                        new
-                        {
                             Id = 22,
                             Data_Correction = 3,
                             Device_Correction = 3,
@@ -1570,15 +1648,18 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Message")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -1595,7 +1676,8 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("CName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("Class")
                         .HasColumnType("int");
@@ -1611,7 +1693,8 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Sort")
                         .HasColumnType("int");
@@ -1620,6 +1703,9 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Functions");
                 });
@@ -1634,16 +1720,21 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("CName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<byte>("IsDefault")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("FunctionActions");
                 });
@@ -1676,14 +1767,15 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("decimal(18, 10)");
 
                     b.Property<decimal>("GWP")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18, 10)");
 
                     b.Property<DateTime?>("ModifiedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<decimal>("all_ULL")
                         .HasColumnType("decimal(18, 10)");
@@ -1712,22 +1804,21 @@ namespace Carbon_inventory_platform.Migrations
                     b.Property<int>("ARVersion")
                         .HasColumnType("int");
 
-                    b.Property<int?>("GWPVersionVersion")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<decimal>("Num")
                         .HasColumnType("decimal(18, 10)");
 
                     b.Property<string>("Source")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GWPVersionVersion");
+                    b.HasIndex("Name", "ARVersion");
 
                     b.ToTable("GWPs");
 
@@ -1918,22 +2009,6 @@ namespace Carbon_inventory_platform.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Carbon_inventory_platform.Models.GWPVersion", b =>
-                {
-                    b.Property<int>("Version")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Version"));
-
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
-                    b.HasKey("Version");
-
-                    b.ToTable("GWPVersions");
-                });
-
             modelBuilder.Entity("Carbon_inventory_platform.Models.Material", b =>
                 {
                     b.Property<int>("Id")
@@ -2038,6 +2113,8 @@ namespace Carbon_inventory_platform.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name", "Scope", "EmissionPattern", "Year");
 
                     b.ToTable("Materials");
 
@@ -4745,18 +4822,16 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PermissionId")
-                        .HasColumnType("int");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FunctionActionId");
 
-                    b.HasIndex("FunctionId");
-
-                    b.HasIndex("PermissionId");
+                    b.HasIndex("FunctionId", "FunctionActionId")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("Permissions");
                 });
@@ -4774,9 +4849,14 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PermissionId");
+
+                    b.HasIndex("RoleId", "PermissionId")
+                        .IsUnique();
 
                     b.ToTable("RolePermissions");
                 });
@@ -4794,47 +4874,16 @@ namespace Carbon_inventory_platform.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserPermissions");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("nvarchar(21)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                    b.HasIndex("PermissionId");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.HasIndex("UserId", "PermissionId")
+                        .IsUnique();
 
-                    b.HasDiscriminator().HasValue("IdentityRole");
-
-                    b.UseTphMappingStrategy();
+                    b.ToTable("UserPermissions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -4860,80 +4909,6 @@ namespace Carbon_inventory_platform.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("nvarchar(21)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator().HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -5021,58 +4996,6 @@ namespace Carbon_inventory_platform.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("PermissionRolePermission", b =>
-                {
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PermissionsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PermissionId", "PermissionsId");
-
-                    b.HasIndex("PermissionsId");
-
-                    b.ToTable("PermissionRolePermission");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.ApplicationRole", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
-
-                    b.HasDiscriminator().HasValue("ApplicationRole");
-                });
-
-            modelBuilder.Entity("Carbon_inventory_platform.Models.ApplicationUser", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UserLimitData")
-                        .HasColumnType("datetime2");
-
-                    b.HasIndex("UserId");
-
-                    b.HasDiscriminator().HasValue("ApplicationUser");
-                });
-
-            modelBuilder.Entity("ApplicationRoleRolePermission", b =>
-                {
-                    b.HasOne("Carbon_inventory_platform.Models.RolePermission", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Carbon_inventory_platform.Models.ApplicationRole", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Carbon_inventory_platform.Models.ActivityData", b =>
                 {
                     b.HasOne("Carbon_inventory_platform.Models.Device", "Device")
@@ -5111,8 +5034,7 @@ namespace Carbon_inventory_platform.Migrations
                     b.HasOne("Carbon_inventory_platform.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("User");
                 });
@@ -5139,41 +5061,66 @@ namespace Carbon_inventory_platform.Migrations
                     b.Navigation("Device");
                 });
 
-            modelBuilder.Entity("Carbon_inventory_platform.Models.GWP", b =>
-                {
-                    b.HasOne("Carbon_inventory_platform.Models.GWPVersion", "GWPVersion")
-                        .WithMany("GWPs")
-                        .HasForeignKey("GWPVersionVersion");
-
-                    b.Navigation("GWPVersion");
-                });
-
             modelBuilder.Entity("Carbon_inventory_platform.Models.Permission", b =>
                 {
                     b.HasOne("Carbon_inventory_platform.Models.FunctionAction", "FunctionAction")
                         .WithMany()
                         .HasForeignKey("FunctionActionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Carbon_inventory_platform.Models.Function", "Function")
                         .WithMany()
                         .HasForeignKey("FunctionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("Carbon_inventory_platform.Models.UserPermission", null)
-                        .WithMany("Permissions")
-                        .HasForeignKey("PermissionId");
 
                     b.Navigation("Function");
 
                     b.Navigation("FunctionAction");
                 });
 
+            modelBuilder.Entity("Carbon_inventory_platform.Models.RolePermission", b =>
+                {
+                    b.HasOne("Carbon_inventory_platform.Models.Permission", "Permission")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Carbon_inventory_platform.Models.ApplicationRole", "Role")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Carbon_inventory_platform.Models.UserPermission", b =>
+                {
+                    b.HasOne("Carbon_inventory_platform.Models.Permission", "Permission")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Carbon_inventory_platform.Models.ApplicationUser", "User")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Carbon_inventory_platform.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -5182,7 +5129,7 @@ namespace Carbon_inventory_platform.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Carbon_inventory_platform.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -5191,7 +5138,7 @@ namespace Carbon_inventory_platform.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Carbon_inventory_platform.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -5200,13 +5147,13 @@ namespace Carbon_inventory_platform.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Carbon_inventory_platform.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Carbon_inventory_platform.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -5215,33 +5162,21 @@ namespace Carbon_inventory_platform.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Carbon_inventory_platform.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PermissionRolePermission", b =>
+            modelBuilder.Entity("Carbon_inventory_platform.Models.ApplicationRole", b =>
                 {
-                    b.HasOne("Carbon_inventory_platform.Models.RolePermission", null)
-                        .WithMany()
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Carbon_inventory_platform.Models.Permission", null)
-                        .WithMany()
-                        .HasForeignKey("PermissionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("RolePermissions");
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("Carbon_inventory_platform.Models.UserPermission", null)
-                        .WithMany("Users")
-                        .HasForeignKey("UserId");
+                    b.Navigation("UserPermissions");
                 });
 
             modelBuilder.Entity("Carbon_inventory_platform.Models.Area", b =>
@@ -5263,16 +5198,11 @@ namespace Carbon_inventory_platform.Migrations
                     b.Navigation("GHGs");
                 });
 
-            modelBuilder.Entity("Carbon_inventory_platform.Models.GWPVersion", b =>
+            modelBuilder.Entity("Carbon_inventory_platform.Models.Permission", b =>
                 {
-                    b.Navigation("GWPs");
-                });
+                    b.Navigation("RolePermissions");
 
-            modelBuilder.Entity("Carbon_inventory_platform.Models.UserPermission", b =>
-                {
-                    b.Navigation("Permissions");
-
-                    b.Navigation("Users");
+                    b.Navigation("UserPermissions");
                 });
 #pragma warning restore 612, 618
         }

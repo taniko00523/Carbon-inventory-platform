@@ -3,6 +3,7 @@ using Carbon_inventory_platform.Filters;
 using Carbon_inventory_platform.Models;
 using Carbon_inventory_platform.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,9 +20,46 @@ namespace Carbon_inventory_platform.Controllers
     public class DevicesController : CountController
     {
         private readonly ApplicationDbContext _context;
-        public DevicesController(ApplicationDbContext context) : base(context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        public DevicesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment hostingEnvironment) : base(context)
         {
             _context = context;
+            _userManager = userManager;
+            _hostingEnvironment = hostingEnvironment;
+        }
+
+        /// <summary>
+        /// 原本每個 action 都直接相信網址（或表單）上的 AreaId／設備 Id，只要換一個 Guid，
+        /// 任何登入者都能讀取、修改、刪除別家公司的排放源，會導致跨公司資料外洩與破壞。
+        /// 這裡統一判斷這個盤查邊界是否屬於登入者的公司（管理員不受限）。
+        /// </summary>
+        private async Task<bool> CanAccessAreaAsync(Guid areaId)
+        {
+            if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+            {
+                return true;
+            }
+            string? userId = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return false;
+            }
+            var companyIds = _context.Companies.Where(c => c.UserId == userId).Select(c => c.Id);
+            return await _context.Areas.AnyAsync(a => a.Id == areaId && companyIds.Contains(a.CompanyId));
+        }
+
+        /// <summary>
+        /// 取出設備並確認它所屬的盤查邊界是登入者的（找不到回傳 null，不屬於自己回傳 false）。
+        /// </summary>
+        private async Task<(Device? Device, bool Allowed)> FindOwnedDeviceAsync(Guid id)
+        {
+            var device = await _context.Devices.FirstOrDefaultAsync(x => x.Id == id);
+            if (device == null)
+            {
+                return (null, false);
+            }
+            return (device, await CanAccessAreaAsync(device.AreaId));
         }
 
         public async Task<IActionResult> Index(Guid Id)
@@ -30,7 +68,13 @@ namespace Carbon_inventory_platform.Controllers
             var AreaData = await _context.Areas.Where(x => x.Id == Id && x.isDeleted == 0).Include(x => x.Company).FirstOrDefaultAsync();
             if (AreaData == null)
             {
-                return View();
+                // 原本回傳沒有 Model 的 View()，而 Index.cshtml 是 @model IEnumerable<Device> 並直接呼叫
+                // Model.Count()，會導致 NullReferenceException（GET /Devices 一律 500）。
+                return NotFound("找不到此盤查邊界");
+            }
+            if (!await CanAccessAreaAsync(Id))
+            {
+                return Forbid();
             }
             TempData["areaName"] = AreaData.Name;
             if (AreaData.Company != null)
@@ -67,6 +111,11 @@ namespace Carbon_inventory_platform.Controllers
         {
             if (ModelState.IsValid)
             {
+                // 原本直接相信表單 POST 進來的 AreaId，會導致使用者把排放源新增到別家公司的盤查邊界。
+                if (!await CanAccessAreaAsync(device.AreaId))
+                {
+                    return Forbid();
+                }
                 var deviceId = Guid.NewGuid();
                 var toCreate = new Device
                 {
@@ -152,6 +201,11 @@ namespace Carbon_inventory_platform.Controllers
             {
                 return NotFound();
             }
+            // 原本沒有檢查設備歸屬，任何登入者只要給別家公司的設備 Id 就能複製其排放源資料。
+            if (!await CanAccessAreaAsync(device.AreaId))
+            {
+                return Forbid();
+            }
             Guid newDeviceId = Guid.NewGuid();
             Guid areaId = device.AreaId;
             Device newDevice = CopyDevice(device, areaId, newDeviceId);
@@ -172,8 +226,13 @@ namespace Carbon_inventory_platform.Controllers
             return RedirectToAction("Index", "Devices", new { id = areaId });
         }
         [HttpGet]
-        public JsonResult GetDeviceLevelAndCorrection(string selectedName, Guid id)
+        public async Task<JsonResult> GetDeviceLevelAndCorrection(string selectedName, Guid id)
         {
+            // 原本沒有檢查設備歸屬，任何登入者只要換一個 Guid 就能讀到別家公司的活動數據總量。
+            if (!await CanAccessAreaAsync(await _context.Devices.Where(x => x.Id == id).Select(x => x.AreaId).FirstOrDefaultAsync()))
+            {
+                return Json(null);
+            }
             var deviceData = _context.deviceDatas
        .Where(x => x.Name == selectedName)
        .FirstOrDefault();
@@ -214,21 +273,32 @@ namespace Carbon_inventory_platform.Controllers
             return Json(deviceData);
         }
         [HttpGet]
-        public JsonResult GetDeviceData(Guid id)
+        public async Task<JsonResult> GetDeviceData(Guid id)
         {
-            var deviceData = _context.Devices
+            var deviceData = await _context.Devices
                .Where(x => x.Id == id)
-               .FirstOrDefault();
+               .FirstOrDefaultAsync();
+            // 原本把整筆設備實體直接回傳，且沒有檢查歸屬，會導致別家公司的排放源資料被讀走。
+            if (deviceData == null || !await CanAccessAreaAsync(deviceData.AreaId))
+            {
+                return Json(null);
+            }
             return Json(deviceData);
         }
         [HttpGet]
-        public JsonResult GetMaterialsAndGWPNames(string emissionPattern)
+        public JsonResult GetMaterialsAndGWPNames(string emissionPattern, Guid? areaId = null)
         {
             List<object> gwpNames = new List<object>();
             List<object> materials = new List<object>();
             List<string> excludedOptions = new List<string>();
-            Guid areaId = (Guid)TempData.Peek("areaId");
-            var arVersion = _context.Areas.Where(x => x.Id == areaId).Select(x => x.ARVersion).FirstOrDefault();
+            // 原本 (Guid)TempData.Peek("areaId")，TempData 經 Cookie 序列化後 Guid 會變回 string，
+            // 直接 unbox 會丟 InvalidCastException，會導致原燃物料清單永遠載不出來、無法新增排放源。
+            Guid currentAreaId = areaId ?? Guid.Empty;
+            if (currentAreaId == Guid.Empty)
+            {
+                Guid.TryParse(TempData.Peek("areaId")?.ToString(), out currentAreaId);
+            }
+            var arVersion = _context.Areas.Where(x => x.Id == currentAreaId).Select(x => x.ARVersion).FirstOrDefault();
             if (emissionPattern == "逸散")
             {
                 excludedOptions = new List<string> {
@@ -299,6 +369,16 @@ namespace Carbon_inventory_platform.Controllers
             }
 
             var device = await _context.Devices.FindAsync(id);
+            // 原本 device 的 null 檢查寫在整個 ViewModel 組好之後（下面），實際上一開始就會
+            // NullReferenceException；另外原本也沒檢查設備歸屬，別家公司的排放源可被讀取修改。
+            if (device == null)
+            {
+                return NotFound();
+            }
+            if (!await CanAccessAreaAsync(device.AreaId))
+            {
+                return Forbid();
+            }
             var GHGs = await _context.GHGs.Where(x => x.DeviceId == id).ToListAsync();
             var deviceViewModel = new DeviceViewModel
             {
@@ -359,12 +439,6 @@ namespace Carbon_inventory_platform.Controllers
                 deviceViewModel.SF6CEF = SF6.CEF;
             }
 
-
-
-            if (device == null)
-            {
-                return NotFound();
-            }
             var deviceDatas = await _context.deviceDatas.ToListAsync();
             ViewData["name"] = new SelectList(deviceDatas, "Name", "Name");
             ViewData["Scope"] = new SelectList(new List<string> { "類別一", "類別二", "類別三", "類別四", "類別五", "類別六" });
@@ -385,10 +459,23 @@ namespace Carbon_inventory_platform.Controllers
                 try
                 {
                     var deviceUpdate = await _context.Devices.FindAsync(id);
+                    if (deviceUpdate == null)
+                    {
+                        return NotFound();
+                    }
+                    // 原本沒有檢查設備歸屬，別家公司的排放源可被任意修改；
+                    // 而且原本會把表單 POST 進來的 AreaId 寫回實體（deviceUpdate.AreaId = device.AreaId），
+                    // 會導致排放源被搬到別家公司的盤查邊界。一律沿用資料庫既有的邊界。
+                    if (!await CanAccessAreaAsync(deviceUpdate.AreaId))
+                    {
+                        return Forbid();
+                    }
+                    device.AreaId = deviceUpdate.AreaId;
                     var ghgUpdate = await _context.GHGs.Where(x => x.DeviceId == device.Id).ToListAsync();
 
+                    // 原本第二個條件寫成 device.OtherName != device.OtherName（自己比自己），永遠為 false。
                     bool changeName = deviceUpdate.Name != device.Name ||
-                                        device.OtherName != device.OtherName; //換排放源
+                                        deviceUpdate.OtherName != device.OtherName; //換排放源
                     bool changeMaterial = deviceUpdate.Material != device.Material ||  //換物料
                                             deviceUpdate.EmissionPattern != device.EmissionPattern;
                     bool changeIsComstomCEF = deviceUpdate.Customize != device.Customize; //換排放係數
@@ -396,7 +483,6 @@ namespace Carbon_inventory_platform.Controllers
 
                     if (deviceUpdate != null)
                     {
-                        deviceUpdate.AreaId = device.AreaId;
                         deviceUpdate.AssetNo = device.AssetNo;
                         deviceUpdate.Name = device.Name;
                         deviceUpdate.OtherName = device.OtherName;
@@ -559,6 +645,15 @@ namespace Carbon_inventory_platform.Controllers
                 return Problem("沒有找到資料");
             }
             var toDeleteDevice = await _context.Devices.FindAsync(id);
+            // 原本沒有檢查設備歸屬，任何登入者只要給別家公司的設備 Id 就能刪除其排放源並改掉排放總量。
+            if (toDeleteDevice == null)
+            {
+                return NotFound();
+            }
+            if (!await CanAccessAreaAsync(toDeleteDevice.AreaId))
+            {
+                return Forbid();
+            }
             if (toDeleteDevice != null)
             {
                 var emission = await _context.Areas.FindAsync(toDeleteDevice.AreaId);
@@ -599,7 +694,13 @@ namespace Carbon_inventory_platform.Controllers
             var device = await _context.Devices.FindAsync(id);
             if (device == null)
             {
-                return View();
+                // 原本回傳沒有 Model 的 View()，AddActivityData.cshtml 第一行就用 @Model.Device.Name，
+                // 會導致 NullReferenceException（500）而不是「找不到排放源」。
+                return NotFound("找不到此排放源");
+            }
+            if (!await CanAccessAreaAsync(device.AreaId))
+            {
+                return Forbid();
             }
             var activityData = await _context.ActivityDatas.Where(x => x.DeviceId == id).ToListAsync();
             if (activityData == null || activityData.Count == 0)
@@ -646,12 +747,18 @@ namespace Carbon_inventory_platform.Controllers
             var device = activityData.Device;
             if (device == null)
             {
-                return View();
+                // 原本回傳沒有 Model 的 View()，View 內直接用 @Model.Device.Name，會導致 500。
+                return BadRequest("表單資料不完整");
             }
             var Device = await _context.Devices.FindAsync(id);
             if (Device == null)
             {
-                return View();
+                return NotFound("找不到此排放源");
+            }
+            // 原本沒有檢查設備歸屬，別家公司的活動數據可被覆寫。
+            if (!await CanAccessAreaAsync(Device.AreaId))
+            {
+                return Forbid();
             }
 
             foreach (var data in activityData.ActivityDataList)
@@ -659,7 +766,13 @@ namespace Carbon_inventory_platform.Controllers
 
 
                 // 查找資料庫中是否已經存在該ActivityData
-                var existingData = await _context.ActivityDatas.FirstOrDefaultAsync(x => x.id == data.id);
+                // 原本只用主鍵查詢（x.id == data.id），ActivityData.id 是連號的 int，
+                // 任何人只要改表單裡的 id 就能覆寫別家公司的活動數據，因此加上 DeviceId 限制。
+                var existingData = await _context.ActivityDatas.FirstOrDefaultAsync(x => x.id == data.id && x.DeviceId == Device.Id);
+                if (data.id != 0 && existingData == null)
+                {
+                    return Forbid();
+                }
 
                 if (existingData != null)
                 {
@@ -676,7 +789,8 @@ namespace Carbon_inventory_platform.Controllers
                     var toCreate = new ActivityData
                     {
                         //id = maxId + 1,
-                        DeviceId = device.Id,
+                        // 原本用表單 POST 進來的 device.Id，會導致活動數據被寫到別人的排放源上。
+                        DeviceId = Device.Id,
                         Num = data.Num,
                         Time = data.Time,
                         remark = data.remark,
@@ -685,9 +799,12 @@ namespace Carbon_inventory_platform.Controllers
                 }
             }
             Device.Unit = device.Unit;
-            Device.Data_Correction = device.Data_Correction;
-            Device.Device_Correction = device.Device_Correction;
-            Device.Grade = device.CEF_Correction * device.Data_Correction * device.Device_Correction;
+            // 原本用表單 POST 進來的 device.CEF_Correction 計算 Grade，但表單沒有這個欄位，
+            // model binding 會得到 0，會導致數據等級評分永遠是 0（清冊等級與分級統計全錯）。
+            // 改用資料庫既有的排放係數誤差等級，並在表單沒帶到等級時沿用既有值。
+            Device.Data_Correction = device.Data_Correction > 0 ? device.Data_Correction : Device.Data_Correction;
+            Device.Device_Correction = device.Device_Correction > 0 ? device.Device_Correction : Device.Device_Correction;
+            Device.Grade = Device.CEF_Correction * Device.Data_Correction * Device.Device_Correction;
             Device.Source = device.Source;
             await _context.SaveChangesAsync();
 
@@ -720,6 +837,16 @@ namespace Carbon_inventory_platform.Controllers
 
         public async Task<IActionResult> Default(Guid id)
         {
+            // 原本沒有檢查邊界歸屬，任何登入者都能把整份預設排放源塞進別家公司的盤查邊界。
+            var targetArea = await _context.Areas.FirstOrDefaultAsync(x => x.Id == id);
+            if (targetArea == null)
+            {
+                return NotFound("找不到此盤查邊界");
+            }
+            if (!await CanAccessAreaAsync(id))
+            {
+                return Forbid();
+            }
             var defaultDevices = await _context.defaultDevices.ToListAsync();
             foreach (var defaultDevice in defaultDevices)
             {
@@ -740,8 +867,8 @@ namespace Carbon_inventory_platform.Controllers
                 };
                 await _context.Devices.AddAsync(device);
                 await _context.SaveChangesAsync();
-                var area = _context.Areas.FirstOrDefault(x => x.Id == id);
-                await GHGCheckAsync(device, Name, Material, Scope, EmissionPattern, area.Year, area.ARVersion);
+                // 原本每一筆預設排放源都重新查一次 Area 且沒有 null 檢查，改用上面已確認過的邊界。
+                await GHGCheckAsync(device, Name, Material, Scope, EmissionPattern, targetArea.Year, targetArea.ARVersion);
             }
 
             var areaId = TempData.Peek("SelectedAreaId") as Guid?;
@@ -836,6 +963,13 @@ namespace Carbon_inventory_platform.Controllers
                 return BadRequest("無效的文件");
             }
 
+            // 原本沒有檢查這個盤查邊界是否屬於登入者的公司，任何登入者只要換一個 Guid
+            // 就能用匯入功能覆寫（並清空）別家公司的排放源清單。
+            if (!await CanAccessAreaAsync(id))
+            {
+                return Forbid();
+            }
+
             IWorkbook workbook;
             using (var stream = file.OpenReadStream()) // 使用IFormFile提供的流
             {
@@ -843,103 +977,136 @@ namespace Carbon_inventory_platform.Controllers
             }
 
             // 抓取工作表
-            ISheet deviesDataSheet = workbook.GetSheetAt(workbook.GetSheetIndex("排放源資料"));
-
-            if (deviesDataSheet == null)
+            int sheetIndex = workbook.GetSheetIndex("排放源資料");
+            if (sheetIndex < 0)
             {
-                return BadRequest("無法找到'排放源資料'工作表");
+                return BadRequest("無法找到「排放源資料」工作表");
             }
+            ISheet deviesDataSheet = workbook.GetSheetAt(sheetIndex);
 
             // 獲取首行作為欄位名稱，並獲取每列的索引
             var headerRow = deviesDataSheet.GetRow(1);
+            if (headerRow == null)
+            {
+                return BadRequest("找不到標題列，請確認範本格式");
+            }
             var columnIndexes = GetColumnIndexes(headerRow);
             var area = await _context.Areas.Where(x => x.Id == id).FirstOrDefaultAsync();
             if (area == null)
             {
                 return NotFound();
             }
-            var devices = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0).ToListAsync();
-            foreach (var item in devices)
-            {
-                item.isDeleted = 1;
-                _context.Devices.Update(item);
-            }
 
-            // 從第三行開始，解析每一行數據
-            for (int i = 2; i <= deviesDataSheet.LastRowNum; i++)
+            // 原本先把既有排放源全部軟刪除、存檔，再開始逐列解析；只要中途拋出未被
+            // 逐列 catch 吃掉的例外（例如檔案格式錯誤、找不到必要欄位），既有資料
+            // 就已經被清空且無法復原。改成整段包在交易裡，失敗就回復到匯入前的狀態。
+            int imported = 0;
+            int skipped = 0;
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                var row = deviesDataSheet.GetRow(i);
-                Guid deviceId = Guid.NewGuid();
-                var a = row.GetCell(columnIndexes["活動數據誤差等級"]);
-                try
+                var devices = await _context.Devices.Where(x => x.AreaId == id && x.isDeleted == 0).ToListAsync();
+                foreach (var item in devices)
                 {
-                    var device = new Device
+                    item.isDeleted = 1;
+                }
+
+                // 從第三行開始，解析每一行數據
+                for (int i = 2; i <= deviesDataSheet.LastRowNum; i++)
+                {
+                    var row = deviesDataSheet.GetRow(i);
+                    if (row == null)
                     {
-                        Scope = GetCellStringValue(row, columnIndexes, "類別", true),
-                        EmissionPattern = GetCellStringValue(row, columnIndexes, "排放型式", true),
-                        Name = GetCellStringValue(row, columnIndexes, "排放源名稱", true),
-                        Material = GetCellStringValue(row, columnIndexes, "原燃物料", true),
-                        Unit = GetCellStringValue(row, columnIndexes, "活動數據單位", true),
-                        Source = GetCellStringValue(row, columnIndexes, "數據來源"),
-                        Data_Correction = (int)GetCellNumValue(row, columnIndexes, "活動數據誤差等級"),
-                        Device_Correction = (int)GetCellNumValue(row, columnIndexes, "儀器校正等級"),
-                        Id = deviceId,
-                        AreaId = id,
-                        isDeleted = 0
-                    };
-                    _context.Devices.Add(device);
-
-                    var activityData = new ActivityData
-                    {
-                        DeviceId = deviceId,
-                        Num = (decimal)GetCellNumValue(row, columnIndexes, "活動數據")
-                    };
-                    _context.ActivityDatas.Add(activityData);
-                    await _context.SaveChangesAsync();
-
-                    decimal CO2CEF = (decimal)GetCellNumValue(row, columnIndexes, "CO2");
-                    decimal CH4CEF = (decimal)GetCellNumValue(row, columnIndexes, "CH4");
-                    decimal N2OCEF = (decimal)GetCellNumValue(row, columnIndexes, "N2O");
-                    decimal HFCSCEF = (decimal)GetCellNumValue(row, columnIndexes, "HFCS");
-                    decimal PFCSCEF = (decimal)GetCellNumValue(row, columnIndexes, "PFCS");
-                    decimal SF6CEF = (decimal)GetCellNumValue(row, columnIndexes, "SF6");
-                    decimal NF3CEF = (decimal)GetCellNumValue(row, columnIndexes, "NF3");
-
-                    bool Default = true;
-
-                    // 使用一個方法來處理 CEF 插入，避免重複程式碼
-                    void AddCEFIfNotZero(string gasName, decimal cefValue)
-                    {
-                        if (cefValue != 0)
-                        {
-                            CEFAddAsync(device, gasName, cefValue);
-                            Default = false;
-                        }
+                        continue;
                     }
-
-                    // 檢查並插入各氣體的 CEF
-                    AddCEFIfNotZero("CO2", CO2CEF);
-                    AddCEFIfNotZero("CH4", CH4CEF);
-                    AddCEFIfNotZero("N2O", N2OCEF);
-                    AddCEFIfNotZero("HFCS", HFCSCEF);
-                    AddCEFIfNotZero("PFCS", PFCSCEF);
-                    AddCEFIfNotZero("SF6", SF6CEF);
-                    AddCEFIfNotZero("NF3", NF3CEF);
-
-                    // 如果都為零，則執行 GHGCheckAsync
-                    if (Default)
+                    Guid deviceId = Guid.NewGuid();
+                    try
                     {
-                        await GHGCheckAsync(device, device.Name, device.Material, device.Scope, device.EmissionPattern, area.Year, area.ARVersion);
+                        var device = new Device
+                        {
+                            Scope = GetCellStringValue(row, columnIndexes, "類別", true),
+                            EmissionPattern = GetCellStringValue(row, columnIndexes, "排放型式", true),
+                            Name = GetCellStringValue(row, columnIndexes, "排放源名稱", true),
+                            Material = GetCellStringValue(row, columnIndexes, "原燃物料", true),
+                            Unit = GetCellStringValue(row, columnIndexes, "活動數據單位", true),
+                            Source = GetCellStringValue(row, columnIndexes, "數據來源"),
+                            Data_Correction = (int)GetCellNumValue(row, columnIndexes, "活動數據誤差等級"),
+                            Device_Correction = (int)GetCellNumValue(row, columnIndexes, "儀器校正等級"),
+                            Id = deviceId,
+                            AreaId = id,
+                            isDeleted = 0
+                        };
+                        _context.Devices.Add(device);
+
+                        var activityData = new ActivityData
+                        {
+                            DeviceId = deviceId,
+                            Num = (decimal)GetCellNumValue(row, columnIndexes, "活動數據")
+                        };
+                        _context.ActivityDatas.Add(activityData);
+                        await _context.SaveChangesAsync();
+
+                        decimal CO2CEF = (decimal)GetCellNumValue(row, columnIndexes, "CO2");
+                        decimal CH4CEF = (decimal)GetCellNumValue(row, columnIndexes, "CH4");
+                        decimal N2OCEF = (decimal)GetCellNumValue(row, columnIndexes, "N2O");
+                        decimal HFCSCEF = (decimal)GetCellNumValue(row, columnIndexes, "HFCS");
+                        decimal PFCSCEF = (decimal)GetCellNumValue(row, columnIndexes, "PFCS");
+                        decimal SF6CEF = (decimal)GetCellNumValue(row, columnIndexes, "SF6");
+                        decimal NF3CEF = (decimal)GetCellNumValue(row, columnIndexes, "NF3");
+
+                        bool isDefault = true;
+
+                        // 原本這個區域函式是同步的 void，內部呼叫 CEFAddAsync(...) 卻沒有 await
+                        // （編譯器原本在此處回報 CS4014）：呼叫會在背景繼續執行，
+                        // 與後面的 SaveChangesAsync 在同一個 DbContext 上並發存取而互相干擾。
+                        // 改成 async Task 並且逐一 await，插入順序與交易範圍才會正確。
+                        async Task AddCEFIfNotZeroAsync(string gasName, decimal cefValue)
+                        {
+                            if (cefValue != 0)
+                            {
+                                await CEFAddAsync(device, gasName, cefValue);
+                                isDefault = false;
+                            }
+                        }
+
+                        // 檢查並插入各氣體的 CEF
+                        await AddCEFIfNotZeroAsync("CO2", CO2CEF);
+                        await AddCEFIfNotZeroAsync("CH4", CH4CEF);
+                        await AddCEFIfNotZeroAsync("N2O", N2OCEF);
+                        await AddCEFIfNotZeroAsync("HFCS", HFCSCEF);
+                        await AddCEFIfNotZeroAsync("PFCS", PFCSCEF);
+                        await AddCEFIfNotZeroAsync("SF6", SF6CEF);
+                        await AddCEFIfNotZeroAsync("NF3", NF3CEF);
+
+                        // 如果都為零，則執行 GHGCheckAsync
+                        if (isDefault)
+                        {
+                            await GHGCheckAsync(device, device.Name, device.Material, device.Scope, device.EmissionPattern, area.Year, area.ARVersion);
+                        }
+
+                        // 原本匯入完全沒有呼叫排放量計算，匯入的排放源會停在 0 排放量，
+                        // 直到使用者手動觸發一次重新計算才會有數字。
+                        await CountEmissionData(deviceId);
+                        imported++;
+                    }
+                    catch (Exception ex)
+                    {
+                        WarnMissingFactor($"匯入排放源第 {i + 1} 列失敗，已略過：{ex.Message}");
+                        skipped++;
                     }
                 }
-                catch
-                {
-                    continue;
-                }               
+
+                await _context.SaveChangesAsync();
+                await CountEmissionAsync(id);
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return Problem($"匯入失敗，資料已還原為匯入前的狀態：{ex.Message}");
             }
 
-            await _context.SaveChangesAsync();
-            return Ok("匯入成功");
+            return Ok($"匯入成功，共 {imported} 筆，略過 {skipped} 筆。");
         }
         private double GetCellNumValue(IRow row, Dictionary<string, int> columnIndexes, string columnName, bool required = false)
         {

@@ -110,7 +110,8 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account.Manage
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    // 原本是英文錯誤訊息，介面其餘部分都是繁體中文。
+                    StatusMessage = "更新電話號碼時發生未預期的錯誤。";
                     return RedirectToPage();
                 }
             }

@@ -1,0 +1,7 @@
+@{
+    // 原本這個資料夾沒有自己的 _ViewStart.cshtml，會直接繼承上層
+    // Areas/Identity/Pages/_ViewStart.cshtml 的設定（網站共用版面），
+    // 導致 Manage/_Layout.cshtml（含 _ManageNav 側邊導覽）從未被套用，
+    // 使用者進到「公司資訊/報告資料/密碼修改」等頁面時完全看不到彼此的連結。
+    Layout = "/Areas/Identity/Pages/Account/Manage/_Layout.cshtml";
+}

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
 此檔案由您的 Web 專案發佈/封裝處理序使用。您可以藉由編輯此 MSBuild 檔案，
 自訂此處理序的行為。若要深入了解，請前往 https://go.microsoft.com/fwlink/?LinkID=208121。 
@@ -12,7 +12,7 @@
   </PropertyGroup>
   <ItemGroup>
     <DestinationConnectionStrings Include="DefaultConnection">
-      <Value>Server=tcp:cip.database.windows.net,1433%3bInitial Catalog=Carbon inventory platform%3bPersist Security Info=False%3bUser ID=RCLab1234%3bPassword=RCStust1234%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+      <Value>Server=tcp:cip.database.windows.net,1433%3bInitial Catalog=Carbon inventory platform%3bPersist Security Info=False%3bUser ID=__SET_IN_AZURE__%3bPassword=__SET_IN_AZURE__%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
     </DestinationConnectionStrings>
   </ItemGroup>
 </Project>

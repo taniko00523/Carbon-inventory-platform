@@ -1,11 +1,13 @@
 ﻿using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Filters;
 using Carbon_inventory_platform.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Carbon_inventory_platform.Controllers
 {
+    [AllowAnonymous]
     [CheckSubscriptionData]
     public class HomeController : Controller
     {

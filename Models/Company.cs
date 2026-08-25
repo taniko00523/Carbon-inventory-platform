@@ -9,7 +9,9 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "ID")]
         public Guid Id { get; set; }
 
-        public string UserId { get; set; } // 外來鍵屬性
+        // 可為 null：刪除登入帳號時只切斷關聯，保留盤查資料（法規需要留存），
+        // 同時避免 MVC 把 User 導覽屬性視為必填而讓表單永遠驗證失敗。
+        public string? UserId { get; set; } // 外來鍵屬性
 
         [MaxLength(100)]
         [Display(Name = "公司名稱")]
@@ -81,7 +83,7 @@ namespace Carbon_inventory_platform.Models
 
         //Navigation導覽屬性
         [ForeignKey("UserId")]
-        public ApplicationUser User { get; set; } // 外來鍵導覽屬性
+        public ApplicationUser? User { get; set; } // 外來鍵導覽屬性
         public ICollection<Area> Areas { get; set; }
         public Company()
         {

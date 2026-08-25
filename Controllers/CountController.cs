@@ -2,6 +2,7 @@
 using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -13,86 +14,79 @@ namespace Carbon_inventory_platform.Controllers
             _context = context;
         }
 
+        // 找不到GWP或排放係數時原本完全沒有任何提示，排放量會靜靜地變成0，這裡至少寫一筆警告到記錄檔。
+        // 不改建構子(三個子控制器都繼承本類別)，直接向請求範圍要 ILogger，取不到就跳過。
+        // protected: 讓 Devices/Emission/Areas 三個子類別也能記錄「係數缺漏」的警告。
+        protected void WarnMissingFactor(string message)
+        {
+            var logger = HttpContext?.RequestServices?.GetService(typeof(ILogger<CountController>)) as ILogger<CountController>;
+            logger?.LogWarning("{Message}", message);
+        }
+
         public static decimal DecimalSqrt(decimal value) //用牛頓法逼近Decimal的平方根
         {
-            int iterations = 20;
             if (value < 0)
             {
                 throw new ArgumentException("不能計算負數的平方根");
             }
-
-            decimal guess = value / 2;
-            for (int i = 0; i < iterations; i++)
+            // 原本固定只跑20次牛頓法且起始值為 value/2，大數值(廠區不確定性平方和常達1e12以上)還沒收斂就回傳，會導致95%信賴區間被高估；
+            // 而且 value == 0 時 guess 也是0，value / guess 會丟出 DivideByZeroException。
+            if (value == 0)
             {
-                guess = 0.5m * (guess + value / guess);
+                return 0;
+            }
+
+            decimal guess = (decimal)Math.Sqrt((double)value); //先用double開根號當起始值，收斂快很多
+            if (guess <= 0)
+            {
+                guess = value;
+            }
+
+            for (int i = 0; i < 100; i++) //逼近到收斂為止，並保留次數上限避免無窮迴圈
+            {
+                decimal next = 0.5m * (guess + value / guess);
+                if (Math.Abs(next - guess) <= 0.0000000001m)
+                {
+                    return next;
+                }
+                guess = next;
             }
 
             return guess;
         }
+        [NonAction]
         public decimal CalculateRoundDistance(decimal num1, decimal num2) // 計算兩數平方和的平方根，並四捨五入到小數點後5位
         {
-            if (num1 != 0 && num2 != 0)
+            // 原本只要其中一個參數為0就直接回傳0，但 sqrt(x²+0²) 應該是 |x|，
+            // 會導致大部分 Materials(DataUUL/DataULL 未填為0)的不確定性整個被歸零。
+            if (num1 == 0 && num2 == 0)
             {
-                decimal distance = DecimalSqrt(num1 * num1 + num2 * num2);
-                return Math.Round(distance, 5);
+                return 0;
             }
-            return 0;
+            decimal distance = DecimalSqrt(num1 * num1 + num2 * num2);
+            return Math.Round(distance, 5);
         }
+        [NonAction]
         public decimal Calculate95U(decimal GHG1, decimal GHG2, decimal GHG3, decimal GHG1UUL, decimal GHG2UUL, decimal GHG3UUL) //計算95%信賴區間 
         {
-            decimal count;
-            decimal allGHG;
+            // 原本整段合成邏輯都包在「第一個氣體的排放量與不確定性都不為0」的條件裡，
+            // 只要CO2排放量或其不確定性為0(很常見)就直接回傳0，會導致後面CH4/N2O的不確定性被整個丟掉。
+            // 改成直接對三個氣體做「排放量×不確定性」的平方和開根號，再除以總排放量(單一氣體的結果與原本相同)。
+            decimal count1 = GHG1 * GHG1UUL;
+            decimal count2 = GHG2 * GHG2UUL;
+            decimal count3 = GHG3 * GHG3UUL;
 
-            if (GHG1 != 0 && GHG1UUL != 0)
+            decimal count = DecimalSqrt((count1 * count1) + (count2 * count2) + (count3 * count3));
+            decimal allGHG = GHG1 + GHG2 + GHG3;
+
+            if (allGHG == 0)
             {
-                if (GHG2 != 0 && GHG2UUL != 0)
-                {
-                    if (GHG3 != 0 && GHG3UUL != 0)
-                    {
-                        count = DecimalSqrt((GHG1 * GHG1UUL * GHG1 * GHG1UUL) + (GHG2 * GHG2UUL * GHG2 * GHG2UUL) + (GHG3 * GHG3UUL * GHG3 * GHG3UUL));
-                        allGHG = GHG1 + GHG2 + GHG3;
-
-                        if (allGHG != 0)
-                        {
-                            return count / allGHG;
-                        }
-
-                    }
-                    count = DecimalSqrt((GHG1 * GHG1UUL * GHG1 * GHG1UUL) + (GHG2 * GHG2UUL * GHG2 * GHG2UUL));
-                    allGHG = GHG1 + GHG2;
-
-                    if (allGHG != 0)
-                    {
-                        return count / allGHG;
-                    }
-                }
-                else if (GHG3 != 0 && GHG3UUL != 0)
-                {
-                    if (GHG2 != 0 && GHG2UUL != 0)
-                    {
-                        count = DecimalSqrt((GHG1 * GHG1UUL * GHG1 * GHG1UUL) + (GHG2 * GHG2UUL * GHG2 * GHG2UUL) + (GHG3 * GHG3UUL * GHG3 * GHG3UUL));
-                        allGHG = GHG1 + GHG2 + GHG3;
-
-                        if (allGHG != 0)
-                        {
-                            return count / allGHG;
-                        }
-
-                    }
-                    count = DecimalSqrt((GHG1 * GHG1UUL * GHG1 * GHG1UUL) + (GHG3 * GHG3UUL * GHG3 * GHG3UUL));
-                    allGHG = GHG1 + GHG3;
-
-                    if (allGHG != 0)
-                    {
-                        return count / allGHG;
-                    }
-                }
-
-                return GHG1UUL;
+                return 0;
             }
 
-            return 0;
+            return count / allGHG;
         }
+        [NonAction]
         public async Task<bool> CEFAddAsync(Device device, string GHG, decimal? CEF) //自訂排碳係數
         {
             int ARVersion = await _context.Areas.Where(x => x.Id == device.AreaId).Select(x => x.ARVersion).FirstOrDefaultAsync();
@@ -113,7 +107,8 @@ namespace Carbon_inventory_platform.Controllers
                     decimal hfcsGWP = 0;
                     for (int i = ARVersion; i > 0; i--) // 找HFCS的GWP，如果沒有找到該版本的GWP則降版本
                     {
-                        hfcsGWP = GWP.Where(x => x.Name == device.Material && x.ARVersion == ARVersion).Select(x => x.Num).FirstOrDefault();
+                        // 原本條件寫 x.ARVersion == ARVersion，每一圈都查同一個版本，會導致降版本的備援機制完全沒作用(GWP留在0)。
+                        hfcsGWP = GWP.Where(x => x.Name == device.Material && x.ARVersion == i).Select(x => x.Num).FirstOrDefault();
                         if (hfcsGWP != 0)
                         {
                             break;
@@ -149,6 +144,10 @@ namespace Carbon_inventory_platform.Controllers
                 {
                     toCreate.GWP = GWP.Where(x => x.Name == GHG && x.ARVersion == ARVersion).Select(x => x.Num).FirstOrDefault();
                 }
+                if (toCreate.GWP == 0) // 查不到GWP時原本就靜靜地存成0，整個氣體的排放量會變成0而且畫面上完全看不出來，至少留下警告紀錄。
+                {
+                    WarnMissingFactor($"找不到 {GHG} 在 AR{ARVersion} 的 GWP 值(排放源:{device.Name}、物質:{device.Material})，排放量會被算成0。");
+                }
                 toCreate.CreateTime = DateTime.Now;
                 device.CEF_Correction = 1;//輸入?
                 _context.Add(toCreate);
@@ -158,6 +157,7 @@ namespace Carbon_inventory_platform.Controllers
 
             return true;
         }
+        [NonAction]
         public async Task<GHG?> GHGCheckAsync(Device device, string deviceName, string material, string scope, string emisspatern, int year, int ARVersion) //設定資料庫排碳係數及GWP
         {
             var GWP = await _context.GWPs.ToListAsync();
@@ -183,7 +183,7 @@ namespace Carbon_inventory_platform.Controllers
                         toCreateCO2.all_UUL = CalculateRoundDistance(Material.CO2UUL, Material.DataUUL);
                         toCreateCO2.all_ULL = CalculateRoundDistance(Material.CO2ULL, Material.DataULL);
                         toCreateCO2.CreateTime = DateTime.Now;
-                        _context.AddRange(toCreateCO2);
+                        _context.Add(toCreateCO2); // 原本用 AddRange 傳單一實體，和其他氣體的寫法不一致，改回 Add。
                         device.CEF_Correction = Material.CEF_Correction;
                         device.data_UUL = Material.DataUUL;
                         device.data_ULL = Material.DataULL;
@@ -363,7 +363,22 @@ namespace Carbon_inventory_platform.Controllers
                         toCreatePFCS.CEF = otherMaterial.PFCSCEF;
                         toCreatePFCS.CEF_UUL = otherMaterial.PFCSUUL;
                         toCreatePFCS.CEF_ULL = otherMaterial.PFCSULL;
-                        toCreatePFCS.GWP = GWP.Where(x => x.Name == material).Select(x => x.Num).FirstOrDefault();
+                        // 原本這裡完全沒有過濾AR版本，會拿到資料庫先回傳的任一版本GWP，和其他氣體的查法不一致。
+                        decimal pfcsGWP = 0;
+                        for (int i = ARVersion; i > 0; i--) // 找PFCS的GWP，如果沒有找到該版本的GWP則降版本
+                        {
+                            pfcsGWP = GWP.Where(x => x.Name == material && x.ARVersion == i).Select(x => x.Num).FirstOrDefault();
+                            if (pfcsGWP != 0)
+                            {
+                                break;
+                            }
+
+                        }
+                        if (pfcsGWP == 0) //連舊版本都沒有的話，維持原本「不分版本取一筆」的行為，避免比原本更容易變成0
+                        {
+                            pfcsGWP = GWP.Where(x => x.Name == material).Select(x => x.Num).FirstOrDefault();
+                        }
+                        toCreatePFCS.GWP = pfcsGWP;
                         toCreatePFCS.all_UUL = CalculateRoundDistance(otherMaterial.PFCSUUL, otherMaterial.DataUUL);
                         toCreatePFCS.all_ULL = CalculateRoundDistance(otherMaterial.PFCSULL, otherMaterial.DataULL);
                         toCreatePFCS.CreateTime = DateTime.Now;
@@ -381,6 +396,7 @@ namespace Carbon_inventory_platform.Controllers
 
             return null;
         }
+        [NonAction]
         public Device CopyDevice(Device device, Guid areaId, Guid NewDeivceId)
         {
             var newDevice = new Device
@@ -414,11 +430,12 @@ namespace Carbon_inventory_platform.Controllers
             };
             return newDevice;
         }
+        [NonAction]
         public GHG CopyGHG(GHG ghg, Guid newDeviceId)
         {
             var newGHG = new GHG
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid(), // 原本 new Guid() 等於 Guid.Empty(全0)，複製有兩種以上氣體的排放源或複製年度時會違反主鍵而整批存檔失敗。
                 DeviceId = newDeviceId,
                 Name = ghg.Name,
                 GWP = ghg.GWP,
@@ -433,6 +450,7 @@ namespace Carbon_inventory_platform.Controllers
             };
             return newGHG;
         }
+        [NonAction]
         public ActivityData CopyActivityData(ActivityData activityData, Guid newDeviceId)
         {
             var newActivityData = new ActivityData
@@ -444,6 +462,7 @@ namespace Carbon_inventory_platform.Controllers
             };
             return newActivityData;
         }
+        [NonAction]
         public async Task CountEmissionData(Guid? id)
         {
             var activityDatas = await _context.ActivityDatas.Where(x => x.DeviceId == id).ToListAsync();
@@ -451,7 +470,12 @@ namespace Carbon_inventory_platform.Controllers
 
 
             var Device = await _context.Devices.Where(x => x.Id == id).Include(x => x.Area).FirstOrDefaultAsync();
-            var GHG = await _context.GHGs.Where(x => x.DeviceId == id).ToListAsync(); //抓出需要算排放量的排放源中的溫室氣體
+            if (Device == null) // 原本下一行就直接用 Device.AreaId，設備不存在時會丟 NullReferenceException(下面才檢查null已經來不及)。
+            {
+                return;
+            }
+            var GHG = await _context.GHGs.Where(x => x.DeviceId == id)
+                                    .OrderBy(x => x.CreateTime).ThenBy(x => x.Name).ToListAsync(); //抓出需要算排放量的排放源中的溫室氣體(固定排序，前三種氣體才會配對不確定性)
             var emission = await _context.Areas.FindAsync(Device.AreaId);
             decimal all_Emission = 0,
                 GHG1 = 0, GHG2 = 0, GHG3 = 0,
@@ -464,7 +488,7 @@ namespace Carbon_inventory_platform.Controllers
                 int i = 1;
                 foreach (var item in GHG)
                 {
-                    if (item.Device.Material == "廢水處理")
+                    if (Device.Material == "廢水處理") // 原本用 item.Device.Material，靠變更追蹤補導覽屬性，沒載到時會丟 NullReferenceException。
                     {
                         item.Emission = item.CEF * Num * item.GWP;
                     }
@@ -473,25 +497,28 @@ namespace Carbon_inventory_platform.Controllers
                         item.Emission = item.CEF * Num / 1000 * item.GWP;
                     }
 
+                    if (item.GWP == 0 || item.CEF == 0) // 少了GWP或排放係數，排放量會靜靜算成0，至少留下警告紀錄。
+                    {
+                        WarnMissingFactor($"排放源 {Device.Name} 的 {item.Name} GWP={item.GWP}、排放係數={item.CEF}，排放量會被算成0。");
+                    }
+
                     item.ModifiedTime = DateTime.Now;
+                    all_Emission += item.Emission; // 原本只有 i==1~3 才累加，第4~7種氣體(HFCS/PFCS/SF6/NF3)的排放量算出來卻沒進設備總量。
                     if (i == 1)
                     {
                         GHG1 += item.Emission;
-                        all_Emission += item.Emission;
                         GHG1ULL += item.all_ULL * 100;
                         GHG1UUL += item.all_UUL * 100;
                     }
                     if (i == 2)
                     {
                         GHG2 += item.Emission;
-                        all_Emission += item.Emission;
                         GHG2ULL += item.all_ULL * 100;
                         GHG2UUL += item.all_UUL * 100;
                     }
                     if (i == 3)
                     {
                         GHG3 += item.Emission;
-                        all_Emission += item.Emission;
                         GHG3ULL += item.all_ULL * 100;
                         GHG3UUL += item.all_UUL * 100;
                     }
@@ -500,7 +527,15 @@ namespace Carbon_inventory_platform.Controllers
                 decimal Device_allUUL = Calculate95U(GHG1, GHG2, GHG3, GHG1UUL, GHG2UUL, GHG3UUL);
                 decimal Device_allULL = Calculate95U(GHG1, GHG2, GHG3, GHG1ULL, GHG2ULL, GHG3ULL);
                 Device.Emissions = all_Emission;
-                emission.All += all_Emission;
+                if (emission != null)
+                {
+                    // 原本是 emission.All += all_Emission;，每次重算都把這台設備的排放量整份再加一次，
+                    // 會導致廠區總量(Area.All)每存一次活動數據就往上虛增，改成重新彙總廠區內所有未刪除設備。
+                    decimal otherEmissions = await _context.Devices
+                                                    .Where(x => x.AreaId == emission.Id && x.isDeleted == 0 && x.Id != Device.Id)
+                                                    .SumAsync(x => (decimal?)x.Emissions) ?? 0;
+                    emission.All = otherEmissions + all_Emission;
+                }
                 Device.all_UUL = Device_allUUL;
                 Device.all_ULL = Device_allULL;
                 Device.ModifiedTime = DateTime.Now;
@@ -511,6 +546,7 @@ namespace Carbon_inventory_platform.Controllers
 
             }
         }
+        [NonAction]
         public async Task<bool> CountEmissionAsync(Guid? id)
         {
             // 合并数据库查询
@@ -578,7 +614,8 @@ namespace Carbon_inventory_platform.Controllers
                     case "外購電力": sumElectricity += device.Emissions; break;
                 }
 
-                if (device.Grade < 10 && device.Grade > 0) no1Grade++;
+                // 原本第一級多了 device.Grade > 0 的條件，等級為0(修正係數沒填)的設備會被算進第二級，與下方 all_Grade 的分級方式不一致。
+                if (device.Grade < 10) no1Grade++;
                 else if (device.Grade < 19) no2Grade++;
                 else no3Grade++;
 
@@ -597,14 +634,19 @@ namespace Carbon_inventory_platform.Controllers
             decimal HFCS = sum1_HFCS + sum2_HFCS;
             decimal PFCS = sum1_PFCS + sum2_PFCS;
             decimal SF6 = sum1_SF6 + sum2_SF6;
-            decimal NF3 = sum1_NF3 + sum2_SF6;
+            decimal NF3 = sum1_NF3 + sum2_NF3; // 原本寫 sum1_NF3 + sum2_SF6，會導致廠區NF3總量混入類別二的SF6，且類別二的NF3被漏掉。
 
             sumScope1 = sum1_CO2 + sum1_CH4 + sum1_N2O + sum1_HFCS + sum1_PFCS + sum1_NF3 + sum1_SF6;
             sumScope2 = sum2_CO2 + sum2_CH4 + sum2_N2O + sum2_HFCS + sum2_PFCS + sum2_NF3 + sum2_SF6;
 
-            foreach (var device in areaData.Devices)
+            // 原本沒有防呆就直接除以 sumAll，廠區內設備排放量全為0(剛建立、還沒填活動數據)時
+            // decimal 的 0/0 會丟出 DivideByZeroException，會導致排放量頁面、圖表與所有報告書下載全部500。
+            if (sumAll != 0)
             {
-                avgGrade += (float)Math.Round((float)(Math.Round(device.Emissions / sumAll, 4) * device.Grade), 2);
+                foreach (var device in areaData.Devices)
+                {
+                    avgGrade += (float)Math.Round((float)(Math.Round(device.Emissions / sumAll, 4) * device.Grade), 2);
+                }
             }
 
             if (sumUncertainty != 0)
@@ -613,20 +655,19 @@ namespace Carbon_inventory_platform.Controllers
                 all_ULL = DecimalSqrt(allCountULL) / sumUncertainty;
             }
 
-            bool sumMatch = areaData.All != Math.Round(sumAll, 3);
-            bool uncertaintyMatch = areaData.ULL != Math.Round(all_ULL, 2);
+            // 原本只有「總量」或「ULL」有變才會呼叫 UpdateEmissionData(而且變數名叫 sumMatch 其實存的是不相等)，
+            // 設備改類別、改排放型式或一增一減時總量不變，會導致各氣體/範疇/型式/等級等四十幾個分項欄位留著舊資料。
+            // 改成每次都重算，再交給 EF 的變更追蹤決定要不要真的寫回資料庫。
+            UpdateEmissionData(areaData, sum1_CO2, sum1_CH4, sum1_N2O, sum1_HFCS, sum1_PFCS, sum1_SF6, sum1_NF3,
+                sum2_CO2, sum2_CH4, sum2_N2O, sum2_HFCS, sum2_PFCS, sum2_SF6, sum2_NF3,
+                CO2, CH4, N2O, HFCS, PFCS, SF6, NF3,
+                sumScope1, sumScope2, sumAll,
+                sumHardlyMove, sumMove, sumEscape, sumProcess,
+                all_UUL, all_ULL, sumUncertainty,
+                no1Grade, no2Grade, no3Grade, avgGrade);
 
-            if (sumMatch || uncertaintyMatch)
+            if (_context.ChangeTracker.HasChanges())
             {
-                // 更新資料庫中的資料
-                UpdateEmissionData(areaData, sum1_CO2, sum1_CH4, sum1_N2O, sum1_HFCS, sum1_PFCS, sum1_SF6, sum1_NF3,
-                    sum2_CO2, sum2_CH4, sum2_N2O, sum2_HFCS, sum2_PFCS, sum2_SF6, sum2_NF3,
-                    CO2, CH4, N2O, HFCS, PFCS, SF6, NF3,
-                    sumScope1, sumScope2, sumAll,
-                    sumHardlyMove, sumMove, sumEscape, sumProcess,
-                    all_UUL, all_ULL, sumUncertainty,
-                    no1Grade, no2Grade, no3Grade, avgGrade);
-
                 await _context.SaveChangesAsync();
             }
 
@@ -736,7 +777,8 @@ namespace Carbon_inventory_platform.Controllers
             areaData.no3_Grade = no3Grade;
             areaData.avg_Grade = avgGrade;
             areaData.all_Grade = avgGrade < 10 ? "第一級" : (avgGrade < 19 ? "第二級" : "第三級");
-            areaData.percentage_CalAll = (sumUncertainty / sumAll * 100);
+            // 原本這行的除法寫在 if (sumAll != 0) 之外，sumAll 為0時會丟出 DivideByZeroException。
+            areaData.percentage_CalAll = sumAll != 0 ? (sumUncertainty / sumAll * 100) : 0;
             areaData.ULL = all_ULL;
             areaData.UUL = all_UUL;
         }

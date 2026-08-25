@@ -196,7 +196,8 @@ namespace Carbon_inventory_platform.Models
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Scope2 { get; set; } = 0;
 
-        [Column(TypeName = "decimal(18, 3)")]
+        // 加總來源是 decimal(18,4)，這裡原本只有 3 位小數，會在存檔時被截掉。
+        [Column(TypeName = "decimal(18, 4)")]
         [Display(Name = "總排放量")]
         public decimal All { get; set; } = 0;
         [Display(Name = "有進行定量分析的排放源總量")]
@@ -209,6 +210,7 @@ namespace Carbon_inventory_platform.Models
         public int no2_Grade { get; set; } = 0;
         public int no3_Grade { get; set; } = 0;
         public float avg_Grade { get; set; } = 0;
+        [MaxLength(10)]
         public string all_Grade { get; set; } = "";
         [Column(TypeName = "decimal(18, 2)")]
         public decimal ULL { get; set; } = 0;

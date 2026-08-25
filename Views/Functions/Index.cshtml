@@ -1,14 +1,15 @@
 ﻿@model IEnumerable<Carbon_inventory_platform.Models.Function>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "系統功能列表";
 }
 
-<h1>Index</h1>
+<h1>系統功能列表</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">新增系統功能</a>
 </p>
+<div class="cip-table-wrap">
 <table class="table">
     <thead>
         <tr>
@@ -67,11 +68,12 @@
                 @Html.DisplayFor(modelItem => item.Class)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">編輯</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">詳細資料</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">刪除</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+</div>

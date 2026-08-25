@@ -36,6 +36,7 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "排放型式")]
         public required string EmissionPattern { get; set; } = "";
 
+        [MaxLength(20)]
         [Display(Name = "原燃物料")]
         public required string Material { get; set; } = "";
 
@@ -43,6 +44,7 @@ namespace Carbon_inventory_platform.Models
         public bool Customize { get; set; } = false;
 
         // 不一定有的基本資料：
+        [MaxLength(200)]
         [Display(Name = "標註")]
         public string? Remark { get; set; }
 

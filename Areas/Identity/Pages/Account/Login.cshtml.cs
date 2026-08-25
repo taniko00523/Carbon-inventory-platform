@@ -18,6 +18,7 @@ using Carbon_inventory_platform.Models;
 
 namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -116,8 +117,9 @@ namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                // Program.cs 已設定 5 次失敗鎖定 5 分鐘，這裡必須傳 true 才會生效。
+                // 原本是 false，等於鎖定設定完全沒有作用，可以無限次嘗試密碼。
+                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");

@@ -1,32 +1,44 @@
-﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
+@using Carbon_inventory_platform.Models
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul class="navbar-nav">
+@{
+    var name = User.Identity?.Name ?? "";
+    var initial = string.IsNullOrWhiteSpace(name) ? "?" : name.Substring(0, 1).ToUpperInvariant();
+    var isAdmin = User.IsInRole("Admin") || User.IsInRole("SuperAdmin");
+}
+
+<ul class="navbar-nav align-items-center flex-row gap-1">
     @if (SignInManager.IsSignedIn(User))
     {
-        @if (User.IsInRole("Admin"))
-        {
-            <li class="nav-item">
-                <span class="nav-link text-dark" >你好，管理員</span>
-            </li>
-        }
-        else
-        {
-            <li class="nav-item">
-                <a class="nav-link text-dark" title="資料維護" asp-area="Identity" asp-page="/Account/Manage/Index">你好，@User.Identity?.Name!</a>
-            </li>
-        }
         <li class="nav-item">
-            <form class="nav-item form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="btn btn-outline-secondary">登出</button>
+            @* 管理員原本只顯示「你好，管理員」的死文字，連不到資料維護頁；
+               一般使用者則永遠看不到自己的帳號名稱以外的資訊。
+               現在兩者都連到帳號管理，並顯示實際登入的帳號。 *@
+            <a class="cip-user text-decoration-none" asp-area="Identity" asp-page="/Account/Manage/Index"
+               title="帳號與公司資料維護">
+                <span class="cip-user-avatar" aria-hidden="true">@initial</span>
+                <span>
+                    @name
+                    @if (isAdmin)
+                    {
+                        <span class="cip-badge cip-badge-neutral ms-1">管理員</span>
+                    }
+                </span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <form asp-area="Identity" asp-page="/Account/Logout"
+                  asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                <button type="submit" class="btn btn-sm btn-outline-secondary">登出</button>
             </form>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">登入</a>
+            <a class="btn btn-sm btn-primary" asp-area="Identity" asp-page="/Account/Login">登入</a>
         </li>
     }
 </ul>

@@ -20,7 +20,7 @@
     </form>
 </div>
 
-<div class="table-computer-w1024">
+<div class="table-computer-w1024 cip-table-wrap">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -46,7 +46,9 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</td>
+                    @* 原本直接用 item.ApplicationUser.UserName，公司的登入帳號被刪除、只留下公司資料時
+                       （UserId 可為 null 的軟刪除設計）ApplicationUser 會是 null，導致整頁 500。 *@
+                    <td>@(item.ApplicationUser?.UserName ?? "(帳號已刪除)")</td>
                     @if (item.Company != null)
                     {
                         <td>@Html.DisplayFor(modelItem => item.Company.Name)</td>
@@ -163,7 +165,7 @@
     {
         <div class="card mb-3">
             <div class="card-body">
-                <h5 class="card-title">@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</h5>
+                <h5 class="card-title">@(item.ApplicationUser?.UserName ?? "(帳號已刪除)")</h5>
                 @if (item.Company != null)
                 {
                     <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.Name):</strong> @Html.DisplayFor(modelItem => item.Company.Name)</p>

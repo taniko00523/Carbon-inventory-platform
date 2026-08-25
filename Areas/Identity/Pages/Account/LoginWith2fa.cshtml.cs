@@ -15,6 +15,7 @@ using Carbon_inventory_platform.Models;
 
 namespace Carbon_inventory_platform.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class LoginWith2faModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;

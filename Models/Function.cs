@@ -7,8 +7,10 @@ namespace Carbon_inventory_platform.Models
     {
         public int Id { get; set; }
         [Display(Name = "Controller名稱")]
+        [MaxLength(100)]
         public string Name { get; set; } = string.Empty;
         [Display(Name = "Controller中文名稱")]
+        [MaxLength(100)]
         public string CName { get; set; } = string.Empty;
         [Display(Name = "選單的階層")]
         public int? FLevel { get; set; }  // 選單的階層-主選單為1，第二層選單為2

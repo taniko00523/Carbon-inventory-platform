@@ -80,8 +80,10 @@
                 type: 'GET',
                 data: { selectedName: selectedName, id: id },  // 替換為實際的 device id
                 success: function (data) {
-                    // 添加條件判斷
-                    if (data.num == 0) {
+                    // 原本沒有檢查 data 是否為 null，但這支 API 在找不到設備或沒有權限存取時
+                    // 會回傳 200 + null（而不是錯誤狀態碼），直接讀 data.num 會丟出 JS 例外，
+                    // 讓後續的下拉選單初始化整個中斷且畫面上完全沒有提示。
+                    if (data && data.num == 0) {
                         // 更新 levelDropdown 和 correctionDropdown
                         $('#levelDropdown').val(data.level);
                         $('#correctionDropdown').val(data.correction);
