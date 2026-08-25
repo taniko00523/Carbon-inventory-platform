@@ -21,36 +21,18 @@ namespace Carbon_inventory_platform.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
-        public EmissionController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager) : base(context)
+        private readonly Services.CompanyOwnershipService _ownership;
+        public EmissionController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, Services.CompanyOwnershipService ownership) : base(context)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _userManager = userManager;
+            _ownership = ownership;
         }
 
-        // 原本報表/圖表動作只用 Area Id 查詢，任何登入者拿到別家公司的 Area Id 就能取得對方完整盤查資料，會導致跨公司資料外洩。
-        private async Task<bool> CanAccessAreaAsync(Guid? areaId)
-        {
-            if (areaId == null || areaId == Guid.Empty)
-            {
-                return false;
-            }
-            if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin")) //管理者可檢視所有公司
-            {
-                return true;
-            }
-            string? userId = _userManager.GetUserId(User);
-            if (string.IsNullOrEmpty(userId))
-            {
-                return false;
-            }
-            var companyIds = await _context.Companies
-                                           .Where(c => c.UserId == userId)
-                                           .Select(c => c.Id)
-                                           .ToListAsync();
-            return await _context.Areas // isDeleted 由全域查詢過濾器處理
-                                 .AnyAsync(a => a.Id == areaId && companyIds.Contains(a.CompanyId));
-        }
+        // 原本報表/圖表動作只用 Area Id 查詢，任何登入者拿到別家公司的 Area Id 就能取得對方完整盤查資料，
+        // 會導致跨公司資料外洩。統一改為呼叫共用的 CompanyOwnershipService（與 AreasController／DevicesController 共用同一份邏輯）。
+        private Task<bool> CanAccessAreaAsync(Guid? areaId) => _ownership.CanAccessAreaAsync(User, areaId);
 
         // 原本檔名直接串接使用者可編輯的公司/廠區名稱且未過濾路徑字元，會導致寫檔跳出輸出資料夾，或名稱含 / : 等字元時直接 500。
         private static string BuildReportFileName(int year, string companyName, string? areaName)

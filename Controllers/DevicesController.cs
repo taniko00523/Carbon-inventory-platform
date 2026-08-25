@@ -22,11 +22,13 @@ namespace Carbon_inventory_platform.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _hostingEnvironment;
-        public DevicesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment hostingEnvironment) : base(context)
+        private readonly Carbon_inventory_platform.Services.CompanyOwnershipService _ownership;
+        public DevicesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment hostingEnvironment, Carbon_inventory_platform.Services.CompanyOwnershipService ownership) : base(context)
         {
             _context = context;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
+            _ownership = ownership;
         }
 
         /// <summary>
@@ -34,20 +36,8 @@ namespace Carbon_inventory_platform.Controllers
         /// 任何登入者都能讀取、修改、刪除別家公司的排放源，會導致跨公司資料外洩與破壞。
         /// 這裡統一判斷這個盤查邊界是否屬於登入者的公司（管理員不受限）。
         /// </summary>
-        private async Task<bool> CanAccessAreaAsync(Guid areaId)
-        {
-            if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
-            {
-                return true;
-            }
-            string? userId = _userManager.GetUserId(User);
-            if (string.IsNullOrEmpty(userId))
-            {
-                return false;
-            }
-            var companyIds = _context.Companies.Where(c => c.UserId == userId).Select(c => c.Id);
-            return await _context.Areas.AnyAsync(a => a.Id == areaId && companyIds.Contains(a.CompanyId));
-        }
+        // 統一改為呼叫共用的 CompanyOwnershipService（與 AreasController／EmissionController 共用同一份邏輯）。
+        private Task<bool> CanAccessAreaAsync(Guid areaId) => _ownership.CanAccessAreaAsync(User, areaId);
 
         /// <summary>
         /// 取出設備並確認它所屬的盤查邊界是登入者的（找不到回傳 null，不屬於自己回傳 false）。

@@ -1,4 +1,5 @@
 ﻿using Carbon_inventory_platform.Data;
+using Carbon_inventory_platform.Filters;
 using Carbon_inventory_platform.Models;
 using Carbon_inventory_platform.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -45,6 +46,10 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddScoped<RolePermissionService>();
+builder.Services.AddScoped<CompanyOwnershipService>();
+// PermissionFilterAttribute 建構子依賴 UserManager/RoleManager/RolePermissionService，
+// 必須透過 [ServiceFilter(typeof(PermissionFilterAttribute))] 由 DI 容器建立，故需在此註冊。
+builder.Services.AddScoped<PermissionFilterAttribute>();
 builder.Services.AddHttpClient();
 
 builder.Services.Configure<IdentityOptions>(options =>

@@ -44,6 +44,19 @@ namespace Carbon_inventory_platform.Data
             ("Delete",  "刪除", 0),
         };
 
+        /// <summary>
+        /// 少數畫面的實際 Action 名稱跟標準 CRUD 五動作不一樣（例如 GWPController 的新增動作
+        /// 叫 Add 不是 Create），這裡個別補上「畫面 + 專屬動作」的權限，不放進上面的標準網格，
+        /// 避免其他 14 個畫面也一起長出用不到的「Add」選項。
+        /// </summary>
+        private static readonly (string FunctionName, string ActionName, string ActionCName)[] ExtraActions =
+        {
+            // CName 特意跟標準網格的「新增」做出區別（標準網格是給 Create 動作用的，
+            // 但 GWPController 沒有 Create 這個 action，只有 Add，兩者不能共用同一個顯示名稱，
+            // 否則角色權限總覽的下拉選單會出現兩個看起來一樣但實際指向不同動作的選項）。
+            ("GWP", "Add", "新增(Add)"),
+        };
+
         public static async Task SeedAsync(IServiceProvider services, IConfiguration configuration, ILogger logger)
         {
             var context = services.GetRequiredService<ApplicationDbContext>();
@@ -52,6 +65,7 @@ namespace Carbon_inventory_platform.Data
 
             await SeedRolesAsync(roleManager, logger);
             await SeedReferenceDataAsync(context, logger);
+            await SeedExtraPermissionsAsync(context, logger);
             await SeedAdminAsync(userManager, configuration, logger);
             await GrantAdminAllPermissionsAsync(context, roleManager, logger);
         }
@@ -155,6 +169,68 @@ namespace Carbon_inventory_platform.Data
                 context.Permissions.AddRange(newPermissions);
                 await context.SaveChangesAsync();
                 logger.LogInformation("已新增 {Count} 筆權限定義", newPermissions.Count);
+            }
+        }
+
+        private static async Task SeedExtraPermissionsAsync(ApplicationDbContext context, ILogger logger)
+        {
+            if (ExtraActions.Length == 0)
+            {
+                return;
+            }
+
+            var existingActionNames = await context.FunctionActions.Select(a => a.Name).ToListAsync();
+            var newActions = ExtraActions
+                .Select(e => e.ActionName)
+                .Distinct()
+                .Where(name => !existingActionNames.Contains(name))
+                .Select(name => new FunctionAction
+                {
+                    Name = name,
+                    CName = ExtraActions.First(e => e.ActionName == name).ActionCName,
+                    IsDefault = 0,
+                })
+                .ToList();
+
+            if (newActions.Count > 0)
+            {
+                context.FunctionActions.AddRange(newActions);
+                await context.SaveChangesAsync();
+                logger.LogInformation("已新增 {Count} 個專屬功能動作", newActions.Count);
+            }
+
+            var functionIds = await context.Functions.ToDictionaryAsync(f => f.Name, f => f);
+            var actionIdsByName = await context.FunctionActions.ToDictionaryAsync(a => a.Name, a => a);
+            var existingPairs = (await context.Permissions
+                .Select(p => new { p.FunctionId, p.FunctionActionId })
+                .ToListAsync())
+                .Select(p => (p.FunctionId, p.FunctionActionId))
+                .ToHashSet();
+
+            var newPermissions = new List<Permission>();
+            foreach (var (functionName, actionName, actionCName) in ExtraActions)
+            {
+                if (!functionIds.TryGetValue(functionName, out var function) ||
+                    !actionIdsByName.TryGetValue(actionName, out var action) ||
+                    existingPairs.Contains((function.Id, action.Id)))
+                {
+                    continue;
+                }
+
+                newPermissions.Add(new Permission
+                {
+                    Name = $"{function.CName}-{actionCName}",
+                    FunctionId = function.Id,
+                    FunctionActionId = action.Id,
+                    CreateTime = DateTime.Now,
+                });
+            }
+
+            if (newPermissions.Count > 0)
+            {
+                context.Permissions.AddRange(newPermissions);
+                await context.SaveChangesAsync();
+                logger.LogInformation("已新增 {Count} 筆專屬動作的權限定義", newPermissions.Count);
             }
         }
 

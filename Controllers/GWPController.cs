@@ -1,4 +1,5 @@
 ﻿using Carbon_inventory_platform.Data;
+using Carbon_inventory_platform.Filters;
 using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Carbon_inventory_platform.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    // 原本寫死 [Authorize(Roles = "Admin")]，改用權限表驅動：PermissionFilterAttribute
+    // 內部已有「Admin 一律放行」的判斷，因此行為預設不變，但之後可透過角色權限總覽
+    // 開放給其他角色。新增動作叫 Add（不是標準的 Create），對應的權限已在 DbSeeder 額外補上。
+    [Authorize]
+    [ServiceFilter(typeof(PermissionFilterAttribute))]
     public class GWPController : Controller
     {
         private readonly ApplicationDbContext _context;

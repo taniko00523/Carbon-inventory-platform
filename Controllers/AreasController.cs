@@ -16,46 +16,24 @@ namespace Carbon_inventory_platform.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
-        public AreasController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager) : base(context)
+        private readonly Services.CompanyOwnershipService _ownership;
+        public AreasController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, Services.CompanyOwnershipService ownership) : base(context)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _userManager = userManager;
+            _ownership = ownership;
 
         }
 
         #region 權限與驗證共用方法
         // 原本每個 Action 都只用網址上的 Guid 找資料，完全沒有比對資料屬於哪一個登入者，
         // 會導致任何登入者只要拿到別家公司的 Guid，就能讀取、修改、複製、刪除別人的邊界資料。
+        // 原本這裡自己重寫一份擁有權檢查，跟 DevicesController／EmissionController 的版本不一致
+        // （只放行 Admin、只認得使用者第一個查到的公司），統一改為呼叫共用的 CompanyOwnershipService。
         [NonAction]
-        private async Task<Guid?> GetCallerCompanyIdAsync() //取得登入者自己的公司
-        {
-            string? userId = _userManager.GetUserId(User);
-            if (string.IsNullOrEmpty(userId))
-            {
-                return null;
-            }
-            // isDeleted == 0 已由 ApplicationDbContext 的全域查詢過濾器處理，不需要重複寫。
-            return await _context.Companies
-                         .Where(x => x.UserId == userId)
-                         .Select(x => (Guid?)x.Id)
-                         .FirstOrDefaultAsync();
-        }
-
-        [NonAction]
-        private async Task<bool> CanAccessCompanyAsync(Guid? companyId) //管理員可以看全部，其他人只能看自己的公司
-        {
-            if (companyId == null || companyId == Guid.Empty)
-            {
-                return false;
-            }
-            if (User.IsInRole("Admin"))
-            {
-                return true;
-            }
-            var ownCompanyId = await GetCallerCompanyIdAsync();
-            return ownCompanyId != null && ownCompanyId == companyId;
-        }
+        private Task<bool> CanAccessCompanyAsync(Guid? companyId) //管理員可以看全部，其他人只能看自己名下的公司
+            => _ownership.CanAccessCompanyAsync(User, companyId);
 
         [NonAction]
         private async Task<Area?> FindOwnedAreaAsync(Guid id, bool includeCompany = false) //取廠區並確認擁有權
