@@ -67,6 +67,8 @@ builder.Services.AddScoped<RolePermissionService>();
 builder.Services.AddScoped<CompanyOwnershipService>();
 builder.Services.AddScoped<AreaTrendService>();
 builder.Services.AddScoped<AreaLockService>();
+// A8：三份報告書的共用產生流程（原本是 EmissionController 裡三段各約 450 行的重複程式碼）。
+builder.Services.AddScoped<GhgReportBuilder>();
 // PermissionFilterAttribute 建構子依賴 UserManager/RoleManager/RolePermissionService，
 // 必須透過 [ServiceFilter(typeof(PermissionFilterAttribute))] 由 DI 容器建立，故需在此註冊。
 builder.Services.AddScoped<PermissionFilterAttribute>();
