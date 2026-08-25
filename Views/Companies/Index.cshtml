@@ -1,199 +1,139 @@
-﻿@model IEnumerable<Carbon_inventory_platform.ViewModel.CompanyUserViewModel>
+@model IEnumerable<Carbon_inventory_platform.ViewModel.CompanyUserViewModel>
 @{
     ViewData["Title"] = "公司總覽";
-}
-<style>
-    /*  th {
-                max-width: 100px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            } */
-</style>
 
-<div class="d-flex justify-content-between align-items-center">
-    <h1>@ViewData["Title"]</h1>
-    <!-- 搜尋表單 -->
-    <form asp-action="Index" method="get" class="d-flex align-items-center">
-        <input type="text" name="searchTerm" value="@ViewData["SearchTerm"]" class="form-control mr-2" placeholder="搜尋公司名稱" />
-        <button style="width:70px" type="submit" class="btn btn-primary">搜尋</button>
+    // 原本這裡是 8 個獨立欄位，每個只顯示「V」或空白，代表公司簡介/前言/報告用途…
+    // 是否已填寫，資訊密度很低又佔掉一大片橫向空間。改成單一「填寫進度」欄位。
+    // 這 8 個欄位同時也是報告書會用到的內容，所以用同一份清單驅動兩份渲染邏輯。
+    (string Label, Func<Carbon_inventory_platform.Models.Company, bool> Filled)[] reportFields =
+    {
+        ("公司簡介", c => !string.IsNullOrEmpty(c.CompanyInformation)),
+        ("前言", c => !string.IsNullOrEmpty(c.ReportOpening)),
+        ("報告用途", c => !string.IsNullOrEmpty(c.ReportingPurposes)),
+        ("組織邊界", c => !string.IsNullOrEmpty(c.AddressInformation)),
+        ("報告邊界", c => !string.IsNullOrEmpty(c.ReportingInformation)),
+        ("溫室氣體", c => !string.IsNullOrEmpty(c.GHGInformation)),
+        ("直接溫室氣體", c => !string.IsNullOrEmpty(c.Scope1Information)),
+        ("間接溫室氣體", c => !string.IsNullOrEmpty(c.Scope2Information)),
+    };
+}
+
+<div class="cip-page-head">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <form asp-action="Index" method="get" class="d-flex align-items-center gap-2">
+        <input type="text" name="searchTerm" value="@ViewData["SearchTerm"]" class="form-control" placeholder="搜尋公司名稱" />
+        <button type="submit" class="btn btn-primary">搜尋</button>
     </form>
 </div>
 
-<div class="table-computer-w1024 cip-table-wrap">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>使用者名稱</th>
-                <th>@Html.DisplayNameFor(model => model.Company.Name)</th>
-                <th style="width:5%">@Html.DisplayNameFor(model => model.Company.EnglishName)</th>
-                <th style="width:3%">@Html.DisplayNameFor(model => model.Company.ContactName)</th>
-                <th>@Html.DisplayNameFor(model => model.Company.Email)</th>
-                <th>@Html.DisplayNameFor(model => model.Company.Phone)</th>
-                <th>@Html.DisplayNameFor(model => model.Company.CompanyInformation)</th>
-                <th>@Html.DisplayNameFor(model => model.Company.ReportOpening)</th>
-                <th>@Html.DisplayNameFor(model => model.Company.ReportingPurposes)</th>
-                <th>@Html.DisplayNameFor(model => model.Company.AddressInformation)</th>
-                <th>@Html.DisplayNameFor(model => model.Company.ReportingInformation)</th>
-                <th>@Html.DisplayNameFor(model => model.Company.GHGInformation)</th>
-                <th>@Html.DisplayNameFor(model => model.Company.Scope1Information)</th>
-                <th>@Html.DisplayNameFor(model => model.Company.Scope2Information)</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+@if (!Model.Any())
+{
+    <div class="cip-empty cip-section">
+        <div class="cip-empty-icon" aria-hidden="true">🏢</div>
+        <p class="cip-empty-title">目前沒有符合條件的公司</p>
+        <p>用戶登入後系統會自動建立一筆公司資料，或試試清空搜尋條件。</p>
+    </div>
+}
+else
+{
+    <div class="table-computer-w1024 cip-table-wrap">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    @* 原本直接用 item.ApplicationUser.UserName，公司的登入帳號被刪除、只留下公司資料時
-                       （UserId 可為 null 的軟刪除設計）ApplicationUser 會是 null，導致整頁 500。 *@
-                    <td>@(item.ApplicationUser?.UserName ?? "(帳號已刪除)")</td>
+                    <th>使用者名稱</th>
+                    <th>@Html.DisplayNameFor(model => model.Company.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Company.EnglishName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Company.ContactName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Company.Email)</th>
+                    <th>@Html.DisplayNameFor(model => model.Company.Phone)</th>
+                    <th>報告書內容填寫進度</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @* 原本直接用 item.ApplicationUser.UserName，公司的登入帳號被刪除、只留下公司資料時
+                           （UserId 可為 null 的軟刪除設計）ApplicationUser 會是 null，導致整頁 500。 *@
+                        <td>@(item.ApplicationUser?.UserName ?? "(帳號已刪除)")</td>
+                        @if (item.Company != null)
+                        {
+                            var filledCount = reportFields.Count(f => f.Filled(item.Company));
+                            var complete = filledCount == reportFields.Length;
+                            <td>@Html.DisplayFor(modelItem => item.Company.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Company.EnglishName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Company.ContactName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Company.Email)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Company.Phone)</td>
+                            <td>
+                                <span class="cip-progress-chip" data-complete="@complete.ToString().ToLowerInvariant()"
+                                      title="@string.Join("、", reportFields.Where(f => !f.Filled(item.Company)).Select(f => f.Label))">
+                                    <span class="cip-progress-chip-dot" aria-hidden="true"></span>
+                                    @filledCount / @reportFields.Length 已填寫
+                                </span>
+                            </td>
+                            <td>
+                                @if (item.Company.ModifiedTime != null)
+                                {
+                                    <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Company.Id">修改</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Company.Id">填寫</a>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-info" asp-area="" asp-controller="Areas" asp-action="Index" asp-route-id="@item.Company.Id">邊界資料</a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td colspan="8">尚未創建公司資料</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="table-phone-w1024">
+        @foreach (var item in Model)
+        {
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@(item.ApplicationUser?.UserName ?? "(帳號已刪除)")</h5>
                     @if (item.Company != null)
                     {
-                        <td>@Html.DisplayFor(modelItem => item.Company.Name)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Company.EnglishName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Company.ContactName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Company.Email)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Company.Phone)</td>
-                        <td>
-                            @if (item.Company.CompanyInformation != null)
-                            {
-                                <p>V</p>
-                            }
-                            else
-                            {
-                                <p></p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.Company.ReportOpening != null)
-                            {
-                                <p>V</p>
-                            }
-                            else
-                            {
-                                <p></p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.Company.ReportingPurposes != null)
-                            {
-                                <p>V</p>
-                            }
-                            else
-                            {
-                                <p></p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.Company.AddressInformation != null)
-                            {
-                                <p>V</p>
-                            }
-                            else
-                            {
-                                <p></p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.Company.ReportingInformation != null)
-                            {
-                                <p>V</p>
-                            }
-                            else
-                            {
-                                <p></p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.Company.GHGInformation != null)
-                            {
-                                <p>V</p>
-                            }
-                            else
-                            {
-                                <p></p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.Company.Scope1Information != null)
-                            {
-                                <p>V</p>
-                            }
-                            else
-                            {
-                                <p></p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.Company.Scope2Information != null)
-                            {
-                                <p>V</p>
-                            }
-                            else
-                            {
-                                <p></p>
-                            }
-                        </td>
-                        <td>
-                            @if (item.Company.ModifiedTime != null)
-                            {
-                                <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.Company.Id">修改</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Company.Id">填寫</a>
-                            }
-                        </td>
-                        <td>
-                            <a class="btn btn-info" asp-area="" asp-controller="Areas" asp-action="Index" asp-route-id="@item.Company.Id">邊界資料</a>
-                        </td>
+                        var filledCount = reportFields.Count(f => f.Filled(item.Company));
+                        var complete = filledCount == reportFields.Length;
+                        <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.Name):</strong> @Html.DisplayFor(modelItem => item.Company.Name)</p>
+                        <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.EnglishName):</strong> @Html.DisplayFor(modelItem => item.Company.EnglishName)</p>
+                        <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.ContactName):</strong> @Html.DisplayFor(modelItem => item.Company.ContactName)</p>
+                        <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.Email):</strong> @Html.DisplayFor(modelItem => item.Company.Email)</p>
+                        <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.Phone):</strong> @Html.DisplayFor(modelItem => item.Company.Phone)</p>
+                        <p class="card-text">
+                            <strong>報告書內容填寫進度：</strong>
+                            <span class="cip-progress-chip" data-complete="@complete.ToString().ToLowerInvariant()">
+                                <span class="cip-progress-chip-dot" aria-hidden="true"></span>
+                                @filledCount / @reportFields.Length 已填寫
+                            </span>
+                        </p>
+                        <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Company.Id">@((item.Company.ModifiedTime != null) ? "修改" : "填寫")</a>
+                        <a class="btn btn-sm btn-info" asp-area="" asp-controller="Areas" asp-action="Index" asp-route-id="@item.Company.Id">邊界資料</a>
                     }
                     else
                     {
-                        <td colspan="15">尚未創建公司資料</td>
+                        <p class="card-text">尚未創建公司資料</p>
                     }
-                </tr>
-            }
-        </tbody>
-    </table>
-
-</div>
-<div class="table-phone-w1024">
-    @foreach (var item in Model)
-    {
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">@(item.ApplicationUser?.UserName ?? "(帳號已刪除)")</h5>
-                @if (item.Company != null)
-                {
-                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.Name):</strong> @Html.DisplayFor(modelItem => item.Company.Name)</p>
-                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.EnglishName):</strong> @Html.DisplayFor(modelItem => item.Company.EnglishName)</p>
-                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.ContactName):</strong> @Html.DisplayFor(modelItem => item.Company.ContactName)</p>
-                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.Email):</strong> @Html.DisplayFor(modelItem => item.Company.Email)</p>
-                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.Phone):</strong> @Html.DisplayFor(modelItem => item.Company.Phone)</p>
-                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.CompanyInformation):</strong> @(item.Company.CompanyInformation != null ? "已填寫" : "")</p>
-                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.ReportOpening):</strong> @(item.Company.ReportOpening != null ? "已填寫" : "")</p>
-                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.ReportingPurposes):</strong> @(item.Company.ReportingPurposes != null ? "已填寫" : "")</p>
-                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.AddressInformation):</strong> @(item.Company.AddressInformation != null ? "已填寫" : "")</p>
-                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.ReportingInformation):</strong> @(item.Company.ReportingInformation != null ? "已填寫" : "")</p>
-                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.GHGInformation):</strong> @(item.Company.GHGInformation != null ? "已填寫" : "")</p>
-                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.Scope1Information):</strong> @(item.Company.Scope1Information != null ? "已填寫" : "")</p>
-                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Company.Scope2Information):</strong> @(item.Company.Scope2Information != null ? "已填寫" : "")</p>
-                    <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.Company.Id">@((item.Company.ModifiedTime != null) ? "修改" : "填寫")</a>
-                    <a class="btn btn-info" asp-area="" asp-controller="Areas" asp-action="Index" asp-route-id="@item.Company.Id">邊界資料</a>
-                }
-                else
-                {
-                    <p class="card-text">尚未創建公司資料</p>
-                }
+                </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
+}
 
-<!-- 分頁控制 -->
 @if (ViewData["TotalPages"] != null)
 {
     int totalPages = (int)ViewData["TotalPages"];

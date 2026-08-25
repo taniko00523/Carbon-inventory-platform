@@ -4,91 +4,125 @@
     ViewData["Title"] = "排放源資料新增";
 }
 
-<h1>新增</h1>
-<h4>@ViewData["Title"]</h4>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@* 原本表單塞進 col-md-4，自訂排放係數又另外開一個 col-md-4，中間留了 1/3 頁面完全空白；
+   自訂排放係數的 7 個欄位也沒有 form-group 包住，擠成一團沒有間距。
+   這裡改成單欄寬版排版，自訂排放係數獨立成一個區塊、用兩欄網格排列。
+   注意：以下所有 id 都被 <script> 直接操作，只能調整外層排版，不能更動 id/asp-for。 *@
+<div class="cip-page-head">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div class="cip-page-actions">
+        <a class="btn btn-outline-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
+    </div>
+</div>
+
 <form asp-action="Create" id="DeviceCreate">
-    <div class="row">
-        <div class="col-md-4">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="AreaId" value="@TempData.Peek("areaId")" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label><span style="color:red">*</span>
-                <div class="d-flex align-items-center">
-                    <input asp-for="Name" class="form-control mr-2" list="NameList" placeholder="排放源名稱" />
-                    (<input asp-for="NameRemark" class="form-control" placeholder="備註 可不填" />)
-                </div>
-                <datalist id="NameList">
-                    @foreach (var item in (SelectList)ViewData["name"])
-                    {
-                        <option value="@item.Text"></option>
-                    }
-                </datalist>
-                <span asp-validation-for="Name" class="text-danger"></span>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="AreaId" value="@TempData.Peek("areaId")" />
+
+    <section class="cip-section">
+        <h2 class="cip-section-title">排放源資料</h2>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label cip-required"></label>
+            <div class="d-flex align-items-center gap-2">
+                <input asp-for="Name" class="form-control" list="NameList" placeholder="排放源名稱" />
+                <input asp-for="NameRemark" class="form-control" placeholder="備註 可不填" />
             </div>
+            <datalist id="NameList">
+                @foreach (var item in (SelectList)ViewData["name"])
+                {
+                    <option value="@item.Text"></option>
+                }
+            </datalist>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="cip-form-grid">
             <div class="form-group">
-                <label asp-for="Scope" class="control-label"></label><span style="color:red">*</span>
+                <label asp-for="Scope" class="control-label cip-required"></label>
                 <select asp-for="Scope" class="form-control" id="scopeDropdown" asp-items="ViewBag.Scope">
                     <option value="" disabled selected>請選擇類別</option>
                 </select>
                 <span asp-validation-for="Scope" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EmissionPattern" class="control-label"></label><span style="color:red">*</span>
+                <label asp-for="EmissionPattern" class="control-label cip-required"></label>
                 <select asp-for="EmissionPattern" class="form-control" id="emissionDropdown">
                     <option value="" disabled selected>請先選擇類別</option>
                 </select>
                 <span asp-validation-for="EmissionPattern" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Material" class="control-label"></label><span style="color:red">*</span>
-                @Html.TextBoxFor(x => x.Material, new { @list = "MaterialList", @class = "form-control", @placeholder = "輸入或者選擇原燃物料選項" })
-                <datalist id="MaterialList"></datalist>
-                <span asp-validation-for="Material" id="lbMaterial" class="text-danger"></span>
-            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Material" class="control-label cip-required"></label>
+            @Html.TextBoxFor(x => x.Material, new { @list = "MaterialList", @class = "form-control", @placeholder = "輸入或者選擇原燃物料選項" })
+            <datalist id="MaterialList"></datalist>
+            <span asp-validation-for="Material" id="lbMaterial" class="text-danger"></span>
+        </div>
+        <div class="cip-form-grid">
             <div class="form-group">
                 <label asp-for="AssetNo" class="control-label"></label>
                 <input asp-for="AssetNo" class="form-control" />
                 <span asp-validation-for="AssetNo" class="text-danger"></span>
-            </div><div class="form-group">
+            </div>
+            <div class="form-group">
                 <label asp-for="Provess" class="control-label"></label>
                 <input asp-for="Provess" class="form-control" />
                 <span asp-validation-for="Provess" class="text-danger"></span>
             </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" value="true" id="CEFCustomize">
-                <input asp-for="Customize" type="hidden" value="false" id="CEFCustomizeHidden">
-                <label asp-for="Customize" class="form-check-label" for="flexCheckChecked"></label>
-            </div>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" value="true" id="CEFCustomize">
+            <input asp-for="Customize" type="hidden" value="false" id="CEFCustomizeHidden">
+            @* 原本 for="flexCheckChecked" 指向一個畫面上根本不存在的 id，點文字完全沒反應。 *@
+            <label asp-for="Customize" class="form-check-label" for="CEFCustomize"></label>
+        </div>
+    </section>
 
+    <section class="cip-section" id="CEF" style="display:none;">
+        <h2 class="cip-section-title">自訂排放係數</h2>
+        <div class="cip-form-grid">
             <div class="form-group">
-                <a class="btn btn-primary" onclick="Save();">新增</a>|
-                <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
+                <label asp-for="CO2CEF" class="control-label"></label>
+                <input asp-for="CO2CEF" class="form-control cef-input" id="CO2CEF" type="number" step="0.0000000001" />
+            </div>
+            <div class="form-group">
+                <label asp-for="CH4CEF" class="control-label"></label>
+                <input asp-for="CH4CEF" class="form-control cef-input" id="CH4CEF" type="number" step="0.0000000001" />
+            </div>
+            <div class="form-group">
+                <label asp-for="N2OCEF" class="control-label"></label>
+                <input asp-for="N2OCEF" class="form-control cef-input" id="N2OCEF" type="number" step="0.0000000001" />
+            </div>
+            <div class="form-group">
+                <label asp-for="HFCSCEF" class="control-label"></label>
+                <input asp-for="HFCSCEF" class="form-control cef-input" id="HFCSCEF" type="number" step="0.0000000001" />
+            </div>
+            <div class="form-group">
+                <label asp-for="PFCSCEF" class="control-label"></label>
+                <input asp-for="PFCSCEF" class="form-control cef-input" id="PFCSCEF" type="number" step="0.0000000001" />
+            </div>
+            <div class="form-group">
+                <label asp-for="SF6CEF" class="control-label"></label>
+                <input asp-for="SF6CEF" class="form-control cef-input" id="SF6CEF" type="number" step="0.0000000001" />
+            </div>
+            <div class="form-group">
+                <label asp-for="NF3CEF" class="control-label"></label>
+                <input asp-for="NF3CEF" class="form-control cef-input" id="NF3CEF" type="number" step="0.0000000001" />
             </div>
         </div>
+    </section>
 
-        <div class="col-md-4" id="CEF" style="display:none;">
-            <label asp-for="CO2CEF" class="control-label"></label>
-            <input asp-for="CO2CEF" class="form-control cef-input" id="CO2CEF" type="number" step="0.0000000001" />
-            <label asp-for="CH4CEF" class="control-label"></label>
-            <input asp-for="CH4CEF" class="form-control cef-input" id="CH4CEF" type="number" step="0.0000000001" />
-            <label asp-for="N2OCEF" class="control-label"></label>
-            <input asp-for="N2OCEF" class="form-control cef-input" id="N2OCEF" type="number" step="0.0000000001" />
-            <label asp-for="HFCSCEF" class="control-label"></label>
-            <input asp-for="HFCSCEF" class="form-control cef-input" id="HFCSCEF" type="number" step="0.0000000001" />
-            <label asp-for="PFCSCEF" class="control-label"></label>
-            <input asp-for="PFCSCEF" class="form-control cef-input" id="PFCSCEF" type="number" step="0.0000000001" />
-            <label asp-for="SF6CEF" class="control-label"></label>
-            <input asp-for="SF6CEF" class="form-control cef-input" id="SF6CEF" type="number" step="0.0000000001" />
-            <label asp-for="NF3CEF" class="control-label"></label>
-            <input asp-for="NF3CEF" class="form-control cef-input" id="NF3CEF" type="number" step="0.0000000001" />
-        </div>
+    <div class="cip-form-actions">
+        <button type="button" class="btn btn-primary" onclick="Save();">新增</button>
+        <a class="btn btn-outline-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">取消</a>
     </div>
 </form>
 
 @section scripts
 {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @* layout 已經在 @@RenderSectionAsync("Scripts") 之前載入本機的 jQuery，
+       這裡原本還從 CDN 重複載入兩次（這裡跟檔案最上方各一次），改為完全移除。 *@
     <script>
         function Save() {
             var pos = 0;

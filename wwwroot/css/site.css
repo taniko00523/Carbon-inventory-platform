@@ -799,6 +799,81 @@ label {
 .cip-badge-warning { color: var(--cip-warning); background-color: var(--cip-warning-bg); }
 .cip-badge-danger { color: var(--cip-danger); background-color: var(--cip-danger-bg); }
 
+/* 一組小徽章並排（例如一台設備涉及的多種溫室氣體），取代逐一欄位的 Y/空白表格 */
+.cip-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+    align-items: center;
+}
+
+/* 填寫完整度：清單頁用來取代一排各自獨立的「是/否」欄位 */
+.cip-progress-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .18rem .55rem .18rem .4rem;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    background-color: var(--cip-surface-3);
+    color: var(--cip-text-muted);
+}
+
+.cip-progress-chip[data-complete="true"] {
+    background-color: var(--cip-success-bg);
+    color: var(--cip-success);
+}
+
+.cip-progress-chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+    flex: 0 0 auto;
+}
+
+/* 分類色條：取代整列染色，只在列的左緣給一條色條當分類線索 */
+.cip-row-accent {
+    border-left: 4px solid var(--accent-color, var(--cip-border-strong));
+}
+
+.cip-row-accent > td:first-child {
+    border-left: none;
+}
+
+/* 表格內縮圖（廠區照片等），取代原本沒有樣式的裸 <img> */
+.cip-thumb {
+    display: inline-block;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--cip-radius-sm);
+    border: 1px solid var(--cip-border);
+    object-fit: cover;
+    cursor: zoom-in;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.cip-thumb:hover {
+    transform: scale(1.08);
+    box-shadow: var(--cip-shadow);
+}
+
+.cip-thumb-empty {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--cip-radius-sm);
+    border: 1px dashed var(--cip-border-strong);
+    color: var(--cip-text-faint);
+    font-size: .7rem;
+    text-align: center;
+    line-height: 1.2;
+}
+
 /* ---------- 10. 空狀態與提示 --------------------------------------------- */
 
 .cip-empty {

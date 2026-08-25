@@ -1,101 +1,112 @@
-﻿@model Carbon_inventory_platform.Models.Company
+@model Carbon_inventory_platform.Models.Company
 
 @{
     ViewData["Title"] = "公司資料維護";
 }
 
-<h1>@ViewData["Title"]</h1>
+@* 原本整個表單塞進 col-md-4（螢幕寬度的 1/3），13 個欄位裡有 8 個是 6 列高的大段文字框，
+   造成表單又窄又長，要一直往下捲動才能填完。改成寬版排版：
+   基本資料用兩欄小表單，報告書內容另外分區、全寬顯示，文字框比較好編輯。 *@
+<div class="cip-page-head">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+        <p class="cip-page-sub">這裡的內容會用於自動產生溫室氣體盤查報告書。</p>
+    </div>
+    <div class="cip-page-actions">
+        <a class="btn btn-outline-secondary" asp-controller="Companies" asp-action="Index">返回公司總覽</a>
+    </div>
+</div>
 
-<div class="row">
-    <div class="col-md-4">
-        @* 原本沒有寫 method="post"，表單預設會用 GET 送出，打到的是沒有寫入邏輯的 GET Edit(Guid id)，
-           導致這個表單看起來按了儲存，實際上完全沒有把任何欄位存進資料庫。 *@
-        <form asp-action="Edit" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="UserId" />
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    @* 原本這裡還有 EasyName / EasyEnglishName 兩個用 style="display:none" 藏起來的欄位。
+       Controller 的 Edit 動作永遠是用 RemoveSuffixes(Name) / RemoveENSuffixes(EnglishName)
+       重新算出這兩個值，完全不理會表單送出的內容，所以這兩個欄位不管填什麼都沒有作用，直接移除。 *@
+    <input type="hidden" asp-for="UserId" />
+
+    <section class="cip-section">
+        <h2 class="cip-section-title">基本資料</h2>
+        <div class="cip-form-grid">
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label cip-required"></label>
                 <input asp-for="Name" placeholder="請填寫公司名稱" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group" style="display:none">
-                <label asp-for="EasyName" class="control-label"></label>
-                <input asp-for="EasyName"  class="form-control" />
-                <span asp-validation-for="EasyName" class="text-danger"></span>
-            </div>
             <div class="form-group">
-                <label asp-for="EnglishName" class="control-label"></label>
+                <label asp-for="EnglishName" class="control-label cip-required"></label>
                 <input asp-for="EnglishName" placeholder="請填寫公司英文名稱" class="form-control" />
                 <span asp-validation-for="EnglishName" class="text-danger"></span>
             </div>
-            <div class="form-group" style="display:none">
-                <label asp-for="EasyEnglishName" class="control-label"></label>
-                <input asp-for="EasyEnglishName" class="form-control" />
-                <span asp-validation-for="EasyEnglishName" class="text-danger"></span>
-            </div>
             <div class="form-group">
-                <label asp-for="ReportOpening" class="control-label"></label>
-                <textarea asp-for="ReportOpening" placeholder="請填寫前言" class="form-control" rows="6"></textarea>
-                <span asp-validation-for="ReportOpening" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CompanyInformation" class="control-label"></label>
-                <textarea asp-for="CompanyInformation" placeholder="請填寫公司簡介" class="form-control" rows="6"></textarea>
-                <span asp-validation-for="CompanyInformation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReportingPurposes" class="control-label"></label>
-                <textarea asp-for="ReportingPurposes" placeholder="請填寫預期用途" class="form-control" rows="6"></textarea>
-                <span asp-validation-for="ReportingPurposes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AddressInformation" class="control-label"></label>
-                <textarea asp-for="AddressInformation" placeholder="本次組織邊界之設定，乃參考ISO/CNS 14064-1與環保署溫室氣體盤查指引..." class="form-control" rows="6"></textarea>
-                <span asp-validation-for="AddressInformation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReportingInformation" class="control-label"></label>
-                <textarea asp-for="ReportingInformation" placeholder="本公司之營運邊界包含直接(類別1)、能源間接(類別2) …….。" class="form-control" rows="6"></textarea>
-                <span asp-validation-for="ReportingInformation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="GHGInformation" class="control-label"></label>
-                <textarea asp-for="GHGInformation" placeholder="請填寫溫室氣體排放類型與排放量說明" class="form-control" rows="6"></textarea>
-                <span asp-validation-for="GHGInformation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Scope1Information" class="control-label"></label>
-                <textarea asp-for="Scope1Information" placeholder="請填寫直接溫室氣體排放說明" class="form-control" rows="6"></textarea>
-                <span asp-validation-for="Scope1Information" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Scope2Information" class="control-label"></label>
-                <textarea asp-for="Scope2Information" placeholder="請填寫能源間接溫室氣體排放說明" class="form-control" rows="6"></textarea>
-                <span asp-validation-for="Scope2Information" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ContactName" class="control-label"></label>
+                <label asp-for="ContactName" class="control-label cip-required"></label>
                 <input asp-for="ContactName" placeholder="請填寫聯絡人名稱" class="form-control" />
                 <span asp-validation-for="ContactName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label cip-required"></label>
                 <input asp-for="Email" placeholder="請填寫聯絡人Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
+                <label asp-for="Phone" class="control-label cip-required"></label>
                 <input asp-for="Phone" placeholder="請填寫聯絡人手機號碼" class="form-control" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
+        </div>
+    </section>
+
+    <section class="cip-section">
+        <h2 class="cip-section-title">報告書內容設定</h2>
+        <div class="form-group">
+            <label asp-for="ReportOpening" class="control-label"></label>
+            <textarea asp-for="ReportOpening" placeholder="請填寫前言" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="ReportOpening" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CompanyInformation" class="control-label"></label>
+            <textarea asp-for="CompanyInformation" placeholder="請填寫公司簡介" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="CompanyInformation" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ReportingPurposes" class="control-label"></label>
+            <textarea asp-for="ReportingPurposes" placeholder="請填寫預期用途" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="ReportingPurposes" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="AddressInformation" class="control-label"></label>
+            <textarea asp-for="AddressInformation" placeholder="本次組織邊界之設定，乃參考ISO/CNS 14064-1與環保署溫室氣體盤查指引..." class="form-control" rows="4"></textarea>
+            <span asp-validation-for="AddressInformation" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ReportingInformation" class="control-label"></label>
+            <textarea asp-for="ReportingInformation" placeholder="本公司之營運邊界包含直接(類別1)、能源間接(類別2) …….。" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="ReportingInformation" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="GHGInformation" class="control-label"></label>
+            <textarea asp-for="GHGInformation" placeholder="請填寫溫室氣體排放類型與排放量說明" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="GHGInformation" class="text-danger"></span>
+        </div>
+        <div class="cip-form-grid">
             <div class="form-group">
-                <input type="submit" value="儲存" class="btn btn-primary" />|
-                <a class="btn btn-secondary" asp-controller="Companies" asp-action="Index">返回</a>
+                <label asp-for="Scope1Information" class="control-label"></label>
+                <textarea asp-for="Scope1Information" placeholder="請填寫直接溫室氣體排放說明" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Scope1Information" class="text-danger"></span>
             </div>
-        </form>
+            <div class="form-group">
+                <label asp-for="Scope2Information" class="control-label"></label>
+                <textarea asp-for="Scope2Information" placeholder="請填寫能源間接溫室氣體排放說明" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Scope2Information" class="text-danger"></span>
+            </div>
+        </div>
+    </section>
+
+    <div class="cip-form-actions">
+        <button type="submit" class="btn btn-primary">儲存</button>
+        <a class="btn btn-outline-secondary" asp-controller="Companies" asp-action="Index">取消</a>
     </div>
-</div>
+</form>
 
 @section Scripts {
     @{

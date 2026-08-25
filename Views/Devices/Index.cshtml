@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "排放源資料";
 }
-<div class="row">
-    <div class="col">
+<div class="cip-page-head">
+    <div>
         <h1>@ViewData["Title"]</h1>
         @{
             // 原本用 TempData.Peek("areaName") != "" 跟字串比較，Peek 回傳 object，
@@ -13,114 +13,84 @@
         }
         @if (!string.IsNullOrEmpty(areaName))
         {
-            <h3>@TempData.Peek("companyName")-@areaName-@TempData.Peek("year")盤查年度</h3>
+            <p class="cip-page-sub">@TempData.Peek("companyName")-@areaName-@TempData.Peek("year")盤查年度</p>
         }
         else
         {
-            <h3>@TempData.Peek("companyName")-@TempData.Peek("year")盤查年度</h3>
+            <p class="cip-page-sub">@TempData.Peek("companyName")-@TempData.Peek("year")盤查年度</p>
         }
-        @* 原本這組「新增設備」按鈕與匯入表單在桌機版、手機版各寫了一份，且 id/name 完全相同，
-           手機版的 input 永遠抓不到（document.getElementById 只會抓到第一份），造成手機版匯入功能失效；
-           桌機版也可能被瀏覽器誤判成同一份表單。這裡合併成單一一份，不需要依斷點各放一份。 *@
-        <div class="d-flex justify-content-between flex-wrap">
-            <div class="mr-auto">
-                <a class="btn btn-primary" asp-action="Create">新增設備</a>
-                <form id="uploadForm" enctype="multipart/form-data" style="display: inline-block; width:500px">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" id="areaId" value="@TempData.Peek("areaId")" />
-                    <input class="form-control" type="file" id="excelFile" name="file" accept=".xlsx, .xls" style="width:50%; display:inline-block;" />
-                    <button class="btn btn-primary" type="submit">匯入</button>
-                </form>
-            </div>
-            <div class="table-computer-w1024">
-                <div>
-                    @if (Model.Count() < 1)
-                    {
-                        <a class="btn btn-primary" asp-action="Default" asp-route-id="@TempData.Peek("areaId")">導入預設</a>
-                        <a href="@Url.Action("DownloadSampleFile", "Devices")" class="btn btn-primary">下載範例檔</a>
-                    }
-                    else
-                    {
-                        @if (Model.Any(x => x.Area.All != 0))
-                        {
-                            <a class="btn btn-warning" asp-controller="Emission" asp-action="Chart" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
-                        }
-                        else
-                        {
-                            <a class="btn btn-warning" onclick="showAlert('尚未設定活動數據！\r\n請先設定活動數據！');">排放量圖表</a>
-                        }
-                        @if (Model.Any(x => x.Area.All != 0))
-                        {
-                            <a class="btn btn-warning" asp-controller="Emission" asp-action="MOEReport" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
-                        }
-                        else
-                        {
-                            <a class="btn btn-warning" onclick="showAlert('尚未設定公司資料！\r\n請先至右上角點擊使用者名稱設定公司資料！');" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
-                        }
-                        @if (User.IsInRole("User"))
-                        {
-                            <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
-                        }
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <a class="btn btn-warning" asp-controller="Emission" asp-action="ISOReport" asp-route-id="@TempData.Peek("areaId")">ISO版報告書下載</a>
-                            <a class="btn btn-warning" asp-controller="Emission" asp-action="IISReport" asp-route-id="@TempData.Peek("areaId")">資策會版報告書下載</a>
-                            <a class="btn btn-warning" asp-controller="Devices" asp-action="DeviceExcel" asp-route-id="@TempData.Peek("areaId")">清冊匯出</a>
-                            <a class="btn btn-warning" asp-controller="Devices" asp-action="ExportDeviceExcel" asp-route-id="@TempData.Peek("areaId")">排放源資料匯出</a>
-                            <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
-                        }
-                    }
-                </div>
-            </div>
-            <div class="table-phone-w1024">
-                <div>
-                    @if (Model.Count() < 1)
-                    {
-                        <a class="btn btn-primary" asp-action="Default" asp-route-id="@TempData.Peek("areaId")">導入預設</a>
-                        <a href="@Url.Action("DownloadSampleFile", "Devices")" class="btn btn-primary">下載範例檔</a>
-                    }
-                    else
-                    {
-                        @if (Model.Any(x => x.Area.All != 0))
-                        {
-                            <a class="btn btn-warning" asp-controller="Emission" asp-action="Chart" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
-                        }
-                        else
-                        {
-                            <a class="btn btn-warning" onclick="showAlert('尚未設定活動數據！\r\n請先設定活動數據！');">總排放量</a>
-                        }
-                        @if (Model.Any(x => x.Area.All != 0))
-                        {
-                            <a class="btn btn-warning" asp-controller="Emission" asp-action="MOEReport" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
-                        }
-                        else
-                        {
-                            <a class="btn btn-warning" onclick="showAlert('尚未設定公司資料！\r\n請先至右上角點擊使用者名稱設定公司資料！');" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
-                        }
-                        @if (User.IsInRole("User"))
-                        {
-                            <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
-                        }
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <a class="btn btn-warning" asp-controller="Emission" asp-action="IISReport" asp-route-id="@TempData.Peek("areaId")">資策會版報告書下載</a>
-                            <a class="btn btn-warning" asp-controller="Devices" asp-action="DeviceExcel" asp-route-id="@TempData.Peek("areaId")">清冊匯出</a>
-                            <a class="btn btn-warning" asp-controller="Devices" asp-action="ExportDeviceExcel" asp-route-id="@TempData.Peek("areaId")">排放源資料匯出</a>
-                            <a class="btn btn-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
-                        }
-                    }
-                </div>
-            </div>
-        </div>
-
-
-        @* 原本用 <h7 style="color:red">（h7 不是合法的 HTML 標籤，且顏色是內嵌樣式），
-           改用 Bootstrap 既有的 .text-danger，與本頁其他錯誤訊息一致。 *@
-        <p class="text-danger">@TempData["Error"]</p>
     </div>
 </div>
 
-<div class="table-computer-w1024">
+<section class="cip-section">
+    @* 原本這組「新增設備」按鈕與匯入表單在桌機版、手機版各寫了一份，且 id/name 完全相同，
+       手機版的 input 永遠抓不到（document.getElementById 只會抓到第一份），造成手機版匯入功能失效；
+       桌機版也可能被瀏覽器誤判成同一份表單。這裡合併成單一一份，不需要依斷點各放一份。 *@
+    <div class="d-flex justify-content-between flex-wrap gap-2">
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <a class="btn btn-primary" asp-action="Create">新增設備</a>
+            <form id="uploadForm" enctype="multipart/form-data" class="d-flex align-items-center gap-2">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="areaId" value="@TempData.Peek("areaId")" />
+                <input class="form-control" type="file" id="excelFile" name="file" accept=".xlsx, .xls" style="max-width:280px;" />
+                <button class="btn btn-primary" type="submit">匯入</button>
+            </form>
+        </div>
+            @* 原本這組操作按鈕在桌機版、手機版各寫了一份（只有部分文字不同），完全是同一組按鈕，
+               沒有理由要維護兩份。按鈕本身沒有 id，用 flex-wrap 就能同時支援兩種螢幕寬度，合併成一份。 *@
+            <div class="cip-page-actions flex-wrap">
+                @if (Model.Count() < 1)
+                {
+                    <a class="btn btn-primary" asp-action="Default" asp-route-id="@TempData.Peek("areaId")">導入預設</a>
+                    <a href="@Url.Action("DownloadSampleFile", "Devices")" class="btn btn-primary">下載範例檔</a>
+                }
+                else
+                {
+                    @if (Model.Any(x => x.Area.All != 0))
+                    {
+                        <a class="btn btn-warning" asp-controller="Emission" asp-action="Chart" asp-route-id="@TempData.Peek("areaId")">總排放量</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-warning" onclick="showAlert('尚未設定活動數據！\r\n請先設定活動數據！');">總排放量</a>
+                    }
+                    @if (Model.Any(x => x.Area.All != 0))
+                    {
+                        <a class="btn btn-warning" asp-controller="Emission" asp-action="MOEReport" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-warning" onclick="showAlert('尚未設定公司資料！\r\n請先至右上角點擊使用者名稱設定公司資料！');" asp-route-id="@TempData.Peek("areaId")">報告書下載</a>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-warning" asp-controller="Emission" asp-action="ISOReport" asp-route-id="@TempData.Peek("areaId")">ISO版報告書下載</a>
+                        <a class="btn btn-warning" asp-controller="Emission" asp-action="IISReport" asp-route-id="@TempData.Peek("areaId")">資策會版報告書下載</a>
+                        <a class="btn btn-warning" asp-controller="Devices" asp-action="DeviceExcel" asp-route-id="@TempData.Peek("areaId")">清冊匯出</a>
+                        <a class="btn btn-warning" asp-controller="Devices" asp-action="ExportDeviceExcel" asp-route-id="@TempData.Peek("areaId")">排放源資料匯出</a>
+                    }
+                    @if (User.IsInRole("User"))
+                    {
+                        <a class="btn btn-outline-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-outline-secondary" asp-controller="Areas" asp-action="Index" asp-route-id="@TempData.Peek("companyId")">返回</a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    @* 原本用 <h7 style="color:red">（h7 不是合法的 HTML 標籤，且顏色是內嵌樣式），
+       改用 Bootstrap 既有的 .text-danger，與本頁其他錯誤訊息一致。 *@
+    @if (!string.IsNullOrEmpty(TempData["Error"] as string))
+    {
+        <p class="text-danger mt-2 mb-0">@TempData["Error"]</p>
+    }
+</section>
+
+<div class="table-computer-w1024 cip-table-wrap">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -142,26 +112,10 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Material)
                 </th>
+                @* 原本這裡是 CO₂/CH₄/N₂O/HFCₛ/PFCₛ/SF₆/NF₃ 七個獨立欄位，每欄只顯示「Y」或空白——
+                   一台設備通常只涉及 1~3 種氣體，其餘 4~6 欄幾乎都是空的。改成一欄徽章，只列出真正有的氣體。 *@
                 <th>
-                    CO₂
-                </th>
-                <th>
-                    CH₄
-                </th>
-                <th>
-                    N₂O
-                </th>
-                <th>
-                    HFCₛ
-                </th>
-                <th>
-                    PFCₛ
-                </th>
-                <th>
-                    SF₆
-                </th>
-                <th>
-                    NF₃
+                    溫室氣體
                 </th>
                 <th>
                     活動數據
@@ -188,12 +142,23 @@
                 case 4: EmissPattern = "外購電力"; style = "primary"; break;
                 case 5: isOtherPattern = true; style = "info"; break;
             }
+            // 原本每一列整列染上 Bootstrap 的情境背景色（六種高飽和顏色同時出現在同一張表格），
+            // 視覺很吵而且文字對比不一定夠。改成只在列的左緣給一條分類色條，資訊量不變但乾淨許多。
+            string accentVar = style switch
+            {
+                "warning" => "var(--cip-warning)",
+                "secondary" => "var(--cip-border-strong)",
+                "success" => "var(--cip-success)",
+                "danger" => "var(--cip-danger)",
+                "primary" => "var(--cip-brand-500)",
+                _ => "var(--cip-info)",
+            };
             <tbody>
                 @foreach (var item in Model)
                 {
                     if ((!isOtherPattern && item.EmissionPattern == EmissPattern) || (isOtherPattern && item.EmissionPattern != "固定" && item.EmissionPattern != "移動" && item.EmissionPattern != "逸散" && item.EmissionPattern != "製程" && item.EmissionPattern != "外購電力"))
                     {
-                        <tr class="table-@style">
+                        <tr class="cip-row-accent" style="--accent-color: @accentVar">
                             @*
                 <td>
                 @Html.DisplayFor(modelItem => item.AssetNo)
@@ -220,51 +185,20 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Material)
                             </td>
-                            @if (item.GHGs != null)
-                            {
-                                <td>
-                                    @if (item.GHGs.Where(x => x.Name == "CO2").FirstOrDefault() != null)
-                                    {
-                                        <p>Y</p>
-                                    }
-                                </td>
-                                <td>
-                                    @if (item.GHGs.Where(x => x.Name == "CH4").FirstOrDefault() != null)
-                                    {
-                                        <p>Y</p>
-                                    }
-                                </td>
-                                <td>
-                                    @if (item.GHGs.Where(x => x.Name == "N2O").FirstOrDefault() != null)
-                                    {
-                                        <p>Y</p>
-                                    }
-                                </td>
-                                <td>
-                                    @if (item.GHGs.Where(x => x.Name == "HFCS").FirstOrDefault() != null)
-                                    {
-                                        <p>Y</p>
-                                    }
-                                </td>
-                                <td>
-                                    @if (item.GHGs.Where(x => x.Name == "PFCS").FirstOrDefault() != null)
-                                    {
-                                        <p>Y</p>
-                                    }
-                                </td>
-                                <td>
-                                    @if (item.GHGs.Where(x => x.Name == "SF6").FirstOrDefault() != null)
-                                    {
-                                        <p>Y</p>
-                                    }
-                                </td>
-                                <td>
-                                    @if (item.GHGs.Where(x => x.Name == "NF3").FirstOrDefault() != null)
-                                    {
-                                        <p>Y</p>
-                                    }
-                                </td>
-                            }
+                            <td>
+                                @if (item.GHGs != null)
+                                {
+                                    <div class="cip-badge-row">
+                                        @foreach (var gasLabel in new[] { ("CO2", "CO₂"), ("CH4", "CH₄"), ("N2O", "N₂O"), ("HFCS", "HFCₛ"), ("PFCS", "PFCₛ"), ("SF6", "SF₆"), ("NF3", "NF₃") })
+                                        {
+                                            if (item.GHGs.Any(x => x.Name == gasLabel.Item1))
+                                            {
+                                                <span class="cip-badge cip-badge-neutral">@gasLabel.Item2</span>
+                                            }
+                                        }
+                                    </div>
+                                }
+                            </td>
                             <td>
                                 @if (item.ActivityDatas.Count != 0)
                                 {
@@ -309,8 +243,8 @@
                                     <p>未填寫</p>
                                 }
                             </td>
-                            <td>
-                                <p>@item.Emissions.ToString("N4") 噸CO₂e<p />
+                            <td class="cip-num">
+                                @item.Emissions.ToString("N4") 噸CO₂e
                             </td>
                             <td>
                                 @if (item.ActivityDatas.Count != 0)
@@ -356,13 +290,23 @@
             case 4: EmissPattern = "外購電力"; style = "primary"; break;
             case 5: isOtherPattern = true; style = "info"; break;
         }
+        // 手機卡片沿用桌機表格同一套配色邏輯，但改用邊框色而非整張卡片染色。
+        string accentVar = style switch
+        {
+            "warning" => "var(--cip-warning)",
+            "secondary" => "var(--cip-border-strong)",
+            "success" => "var(--cip-success)",
+            "danger" => "var(--cip-danger)",
+            "primary" => "var(--cip-brand-500)",
+            _ => "var(--cip-info)",
+        };
 
         <div class="mb-3">
             @foreach (var item in Model)
             {
                 if ((!isOtherPattern && item.EmissionPattern == EmissPattern) || (isOtherPattern && item.EmissionPattern != "固定" && item.EmissionPattern != "移動" && item.EmissionPattern != "逸散" && item.EmissionPattern != "製程" && item.EmissionPattern != "外購電力"))
                 {
-                    <div class="card border-@style mb-3">
+                    <div class="card mb-3" style="border-left: 4px solid @accentVar">
                         <div class="card-body">
                             <h5 class="card-title">
                                 @if (User.IsInRole("Admin"))
@@ -378,13 +322,22 @@
                             <p class="card-text"><strong>@Html.DisplayNameFor(model => model.EmissionPattern):</strong> @Html.DisplayFor(modelItem => item.EmissionPattern)</p>
                             <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Material):</strong> @Html.DisplayFor(modelItem => item.Material)</p>
 
-                            <p class="card-text"><strong>CO₂:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "CO2") ? "Y" : "")</p>
-                            <p class="card-text"><strong>CH₄:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "CH4") ? "Y" : "")</p>
-                            <p class="card-text"><strong>N₂O:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "N2O") ? "Y" : "")</p>
-                            <p class="card-text"><strong>HFCₛ:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "HFCS") ? "Y" : "")</p>
-                            <p class="card-text"><strong>PFCₛ:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "PFCS") ? "Y" : "")</p>
-                            <p class="card-text"><strong>SF₆:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "SF6") ? "Y" : "")</p>
-                            <p class="card-text"><strong>NF₃:</strong> @(item.GHGs != null && item.GHGs.Any(x => x.Name == "NF3") ? "Y" : "")</p>
+                            @* 原本這裡是七行各自獨立的「CO₂: Y」「CH₄:」……逐一列出，改成一行徽章。 *@
+                            <p class="card-text">
+                                <strong>溫室氣體：</strong>
+                                @if (item.GHGs != null)
+                                {
+                                    <span class="cip-badge-row" style="display:inline-flex">
+                                        @foreach (var gasLabel in new[] { ("CO2", "CO₂"), ("CH4", "CH₄"), ("N2O", "N₂O"), ("HFCS", "HFCₛ"), ("PFCS", "PFCₛ"), ("SF6", "SF₆"), ("NF3", "NF₃") })
+                                        {
+                                            if (item.GHGs.Any(x => x.Name == gasLabel.Item1))
+                                            {
+                                                <span class="cip-badge cip-badge-neutral">@gasLabel.Item2</span>
+                                            }
+                                        }
+                                    </span>
+                                }
+                            </p>
                             @if (item.ActivityDatas.Count != 0)
                             {
                                 string displayUnit;

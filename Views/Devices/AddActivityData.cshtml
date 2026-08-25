@@ -4,28 +4,35 @@
     ViewData["Title"] = "活動數據設定";
 }
 
-<h1>@ViewData["Title"]</h1>
+@* 原本表單塞進 col-md-4；另外 Device.Name（隱藏）與 Device.Source（可見）兩個輸入框
+   共用同一個 id="nameInput"，是不合法的重複 id，只是恰好排在前面的隱藏欄位先被抓到
+   才「看起來」沒事。這裡把 Source 的 id 改掉，並移除重複的 CDN jQuery 載入。 *@
+<div class="cip-page-head">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+        <p class="cip-page-sub">@Model.Device.Name ・ @Model.Device.Material</p>
+    </div>
+    <div class="cip-page-actions">
+        <a class="btn btn-outline-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
+    </div>
+</div>
 
-<h4>@Model.Device.Name</h4>
-<h4>@Model.Device.Material</h4>
-
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="AddActivityData">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group" style="display:none">
-                <input asp-for="Device.Name" id="nameInput" class="form-control" />
-                <span asp-validation-for="Device.Name" class="text-danger"></span>
-            </div>
-            <div id="activityDataFields">
-                @* 初始的ActivityData欄位 *@
-                <div class="activity-data">
-                    <input asp-for="ActivityDataList[0].id" type="hidden"></input>
-                    <label asp-for="ActivityDataList[0].Num"></label>
-                    <input asp-for="ActivityDataList[0].Num" type="number" class="form-control" step="any">
-               </div>
-            </div>
+<section class="cip-section">
+    <form asp-action="AddActivityData">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group" style="display:none">
+            <input asp-for="Device.Name" id="nameInput" class="form-control" />
+            <span asp-validation-for="Device.Name" class="text-danger"></span>
+        </div>
+        <div id="activityDataFields" class="form-group">
+            @* 初始的ActivityData欄位 *@
+            <div class="activity-data">
+                <input asp-for="ActivityDataList[0].id" type="hidden"></input>
+                <label asp-for="ActivityDataList[0].Num" class="control-label"></label>
+                <input asp-for="ActivityDataList[0].Num" type="number" class="form-control" step="any">
+           </div>
+        </div>
+        <div class="cip-form-grid">
             <div class="form-group">
                 <label asp-for="Device.Unit" class="control-label"></label>
                 <select asp-for="Device.Unit" class="form-control" id="unitDropdown" asp-items="ViewBag.Unit"></select>
@@ -33,19 +40,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="Device.Source" class="control-label"></label>
-                <input asp-for="Device.Source" id="nameInput" class="form-control" />
+                <input asp-for="Device.Source" id="sourceInput" class="form-control" />
                 <span asp-validation-for="Device.Source" class="text-danger"></span>
             </div>
-            @* <div class="form-group">
-            <label asp-for="Source" class="control-label"></label>
-            <select asp-for="Source" class="form-control" asp-items="ViewBag.Source"></select>
-            <span asp-validation-for="Source" class="text-danger"></span>
-            </div> *@
-            @*  <div class="form-group">
-            <label asp-for="Dept" class="control-label"></label>
-            <input asp-for="Dept" class="form-control" />
-            <span asp-validation-for="Dept" class="text-danger"></span>
-            </div> *@
             <div class="form-group">
                 <label asp-for="Device.Data_Correction" class="control-label"></label>
                 <select asp-for="Device.Data_Correction" class="form-control" id="levelDropdown" asp-items="ViewBag.DataCorrections"></select>
@@ -56,18 +53,18 @@
                 <select asp-for="Device.Device_Correction" class="form-control" id="correctionDropdown" asp-items="ViewBag.DeviceCorrection"></select>
                 <span asp-validation-for="Device.Device_Correction" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="Device.Id" id="id" />
-                <input type="submit" value="確認" class="btn btn-primary" />|
-                <a class="btn btn-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">返回</a>
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
+        <input type="hidden" asp-for="Device.Id" id="id" />
+        <div class="cip-form-actions">
+            <button type="submit" class="btn btn-primary">確認</button>
+            <a class="btn btn-outline-secondary" asp-controller="Devices" asp-action="Index" asp-route-id="@TempData.Peek("areaId")">取消</a>
+        </div>
+    </form>
+</section>
 
 @section scripts
 {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @* layout 已經載入本機 jQuery，這裡原本重複載入的 CDN 版本已移除。 *@
     <script>
         $(document).ready(function () {
             // 獲取 nameDropdown 的值
