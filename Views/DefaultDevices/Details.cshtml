@@ -1,48 +1,30 @@
-﻿@model Carbon_inventory_platform.Models.DefaultDevices
+@model Carbon_inventory_platform.Models.DefaultDevices
 
 @{
-    ViewData["Title"] = "預設裝置詳細資料";
+    ViewData["Title"] = "預設排放源詳細資料";
 }
 
-<h1>預設裝置詳細資料</h1>
+<div class="cip-page-head">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div class="cip-page-actions">
+        <a class="btn btn-success" asp-action="Edit" asp-route-id="@Model?.Id">編輯</a>
+        <a class="btn btn-outline-secondary" asp-action="Index">返回</a>
+    </div>
+</div>
 
-<div>
-    <h4>預設裝置</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Material)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Material)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Scope)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Scope)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EmissionPattern)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EmissionPattern)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Type)
-        </dd>
+<section class="cip-section">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Material)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Material)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Scope)</dt>
+        <dd class="col-sm-9"><span class="cip-badge cip-badge-neutral">@Model?.Scope</span></dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.EmissionPattern)</dt>
+        <dd class="col-sm-9"><span class="cip-badge cip-badge-neutral">@Model?.EmissionPattern</span></dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Type)</dt>
+        <dd class="col-sm-9 mb-0">@Html.DisplayFor(model => model.Type)</dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">編輯</a> |
-    <a asp-action="Index">回列表</a>
-</div>
+</section>

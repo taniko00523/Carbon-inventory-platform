@@ -1,42 +1,73 @@
-﻿@model IEnumerable<Carbon_inventory_platform.Models.GWP>
+@model IEnumerable<Carbon_inventory_platform.Models.GWP>
 @{
-    int searchARVersion = ViewBag.SearchARVersion != null ? (int)ViewBag.SearchARVersion : 0;
     ViewData["Title"] = "GWP總覽";
+    int? searchARVersion = ViewBag.SearchARVersion as int?;
+    var availableVersions = (ViewBag.AvailableVersions as List<int>) ?? new List<int>();
 }
 
-<h2>@ViewData["Title"]</h2>
-@* 新增/編輯失敗時原本會找不到檢視而 500，現在改由 Controller 帶回錯誤訊息顯示在這裡。 *@
+@* 原本一定要先手動輸入 AR 版本才會顯示資料（沒有預設值、也不知道有哪些版本可選），
+   查不到資料時 Model 是 null，畫面上一個裸的 <td> 直接放在 <tbody> 外面（不是合法 HTML，
+   只是瀏覽器自動修正才沒壞掉）。也原本每一列各自帶一個編輯用的 modal，23 筆資料就是 23 個
+   幾乎一樣的 modal 塞進 DOM。改成：進來預設選最新版本、既有版本列成頁籤快速切換、
+   編輯共用同一個 modal（用 JS 帶入該列資料），空狀態改用 cip-empty。 *@
+<div class="cip-page-head">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+        <p class="cip-page-sub">各溫室氣體的全球暖化潛勢（Global Warming Potential），依 AR 版本分開管理。</p>
+    </div>
+    <div class="cip-page-actions">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddModal" @(searchARVersion == null ? "disabled" : null)>新增</button>
+    </div>
+</div>
+
 @if (TempData["GWPError"] != null)
 {
-    <div class="alert alert-danger" role="alert">@TempData["GWPError"]</div>
-}
-<form asp-action="Index" id="SelectGWPForm">
-    <div class="row">
-        <div class="form-inline col-sm-3">
-            <label>輸入AR版本:</label>
-            <input name="year" type="number" class="form-control" value="@searchARVersion" />
-            <button type="submit" class="btn btn-primary mt-2">查詢</button>
-        </div>
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        @TempData["GWPError"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-</form>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddModal" @(ViewBag.SearchARVersion != null ? "" : "disabled")>新增</button>
+}
 
+<div class="cip-section d-flex flex-wrap gap-3 align-items-end">
+    @if (availableVersions.Count > 0)
+    {
+        <div>
+            <div class="form-label mb-1">選擇 AR 版本</div>
+            <div class="d-flex flex-wrap gap-2" role="tablist" aria-label="選擇 AR 版本">
+                @foreach (var v in availableVersions)
+                {
+                    var isActive = v == searchARVersion;
+                    <a class="btn @(isActive ? "btn-primary" : "btn-outline-primary")"
+                       asp-action="Index" asp-route-year="@v"
+                       aria-current="@(isActive ? "true" : null)">AR@(v)</a>
+                }
+            </div>
+        </div>
+    }
+    <form asp-action="Index" method="get" class="d-flex align-items-end gap-2">
+        <div>
+            <label class="form-label" for="year">或輸入其他 AR 版本</label>
+            <input id="year" name="year" type="number" class="form-control" value="@searchARVersion" placeholder="例如 7" />
+        </div>
+        <button type="submit" class="btn btn-outline-secondary">查詢</button>
+    </form>
+</div>
 
-<!-- 新增用戶資料的模態框 -->
+<!-- 新增 GWP 資料的模態框 -->
 <div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="AddModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form asp-action="Add" method="post">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="AddModalLabel">新增GWP資料</h5>
+                    <h5 class="modal-title" id="AddModalLabel">新增 GWP 資料（AR@searchARVersion）</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="GWP_Name">GWP名稱：</label>
+                        <label for="GWP_Name" class="cip-required">GWP名稱：</label>
                         <input class="form-control" id="GWP_Name" name="Name" required />
 
-                        <label for="GWP_Num">GWP值：</label>
+                        <label for="GWP_Num" class="cip-required">GWP值：</label>
                         @* 原本是純文字輸入框，打字打成非數字會讓 Model 綁定失敗。 *@
                         <input class="form-control" id="GWP_Num" name="Num" type="number" step="any" min="0" required />
 
@@ -53,68 +84,97 @@
     </div>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>GWP名稱</th>
-            <th>GWP值</th>
-            <th>操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null)
-        {
-            @foreach (var gwp in Model)
-            {
-                <tr>
-                    <td>@gwp.Name</td>
-                    <td>@gwp.Num.ToString("F2")</td>
-                    <td>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal_@gwp.Id">編輯</button>
-                        <form method="post" asp-action="Delete" asp-route-id="@gwp.Id" asp-route-searchARVersion="@searchARVersion" onsubmit="return confirm('確定要刪除嗎？');">
-                            <button type="submit" class="btn btn-danger">刪除</button>
-                        </form>
-                    </td>
-                </tr>
-                <!-- 編輯用戶資料的模態框 -->
-                <div class="modal fade" id="editModal_@gwp.Id" tabindex="-1" role="dialog" aria-labelledby="editModalLabel_@gwp.Id" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <form asp-action="Edit" method="post" id="editUserForm_@gwp.Id">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editModalLabel_@gwp.Id">編輯GWP資料</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <input type="hidden" name="Id" value="@gwp.Id" />
+<!-- 編輯 GWP 資料的模態框：所有列共用同一個，開啟時用 JS 帶入該列的資料。 -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="EditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="Edit" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EditModalLabel">編輯 GWP 資料</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="hidden" name="Id" id="EditGWP_Id" />
 
-                                        <label for="editGWP_Name_@gwp.Id">GWP名稱：</label>
-                                        <input class="form-control" id="editGWP_Name_@gwp.Id" name="Name" value="@gwp.Name" required />
+                        <label for="EditGWP_Name" class="cip-required">GWP名稱：</label>
+                        <input class="form-control" id="EditGWP_Name" name="Name" required />
 
-                                        <label for="editGWP_Num_@gwp.Id">GWP值：</label>
-                                        <input class="form-control" id="editGWP_Num_@gwp.Id" name="Num" type="number" step="any" min="0" value="@gwp.Num" required />
+                        <label for="EditGWP_Num" class="cip-required">GWP值：</label>
+                        <input class="form-control" id="EditGWP_Num" name="Num" type="number" step="any" min="0" required />
 
-                                        <input type="hidden" name="searchARVersion" value="@searchARVersion" />
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="row">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                                        <input type="submit" value="儲存" class="btn btn-primary" />
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                            @Html.AntiForgeryToken()
-                        </form>
+                        <input type="hidden" name="searchARVersion" value="@searchARVersion" />
                     </div>
                 </div>
-            }
-        }
-        else
-        {
-        <td colspan="3">請輸入AR版本</td>
-        }
-    </tbody>
-</table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <input type="submit" value="儲存" class="btn btn-primary" />
+                </div>
+            </div>
+            @Html.AntiForgeryToken()
+        </form>
+    </div>
+</div>
+
+@if (searchARVersion == null)
+{
+    <div class="cip-empty cip-section">
+        <div class="cip-empty-icon" aria-hidden="true">🌡️</div>
+        <p class="cip-empty-title">目前系統裡沒有任何 GWP 資料</p>
+        <p>請在上方輸入一個 AR 版本後新增。</p>
+    </div>
+}
+else if (!Model.Any())
+{
+    <div class="cip-empty cip-section">
+        <div class="cip-empty-icon" aria-hidden="true">🌡️</div>
+        <p class="cip-empty-title">AR@(searchARVersion) 目前還沒有任何 GWP 資料</p>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddModal">新增第一筆</button>
+    </div>
+}
+else
+{
+    <div class="cip-table-wrap">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>GWP名稱</th>
+                    <th>GWP值</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var gwp in Model)
+                {
+                    <tr>
+                        <td>@gwp.Name</td>
+                        <td class="cip-num">@gwp.Num.ToString("N4")</td>
+                        <td class="cip-table-actions">
+                            <button type="button" class="btn btn-sm btn-success cip-gwp-edit-btn"
+                                    data-id="@gwp.Id" data-name="@gwp.Name" data-num="@gwp.Num"
+                                    data-bs-toggle="modal" data-bs-target="#EditModal">編輯</button>
+                            <form method="post" asp-action="Delete" asp-route-id="@gwp.Id" asp-route-searchARVersion="@searchARVersion"
+                                  class="d-inline" data-cip-confirm="確定要刪除 GWP「@gwp.Name」嗎？">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
+                                @Html.AntiForgeryToken()
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<script>
+    (function () {
+        // 編輯只有一個共用 modal，按下某一列的「編輯」時，把該列的資料寫進 modal 欄位。
+        document.querySelectorAll('.cip-gwp-edit-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.getElementById('EditGWP_Id').value = btn.getAttribute('data-id');
+                document.getElementById('EditGWP_Name').value = btn.getAttribute('data-name');
+                document.getElementById('EditGWP_Num').value = btn.getAttribute('data-num');
+            });
+        });
+    })();
+</script>

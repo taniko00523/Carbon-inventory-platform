@@ -39,6 +39,10 @@ namespace Carbon_inventory_platform.Data
             // 角色/使用者權限矩陣勾選畫面改成整批寫入 RolePermission／UserPermission，
             // 兩者都是敏感的授權變更，跟 RolePermission 一樣值得留稽核紀錄。
             typeof(UserPermission),
+            // 原本跟 Material／GWP 一樣是共用主檔（會影響計算結果與下拉選單），
+            // 卻沒被列進稽核清單，改壞了排放係數/GWP名稱對不上也查不出是誰、何時改的。
+            typeof(DefaultDevices),
+            typeof(DeviceData),
         };
 
         public DbSet<Company> Companies { get; set; } = null!;

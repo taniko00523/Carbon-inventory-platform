@@ -123,12 +123,28 @@ public class AuditTrailTests
         using var testDb = new TestDb();
         var context = testDb.CreateNew();
 
-        // DeviceData 不在 plan.md B4 列出的優先記錄清單裡。
-        context.deviceDatas.Add(new DeviceData { Name = "測試設備", Scope = "類別一", EmissionPattern = "固定", Material = "柴油" });
+        // Feedback 是使用者意見回報，不是會影響計算結果或授權的共用主檔，不需要留稽核紀錄。
+        context.Feedbacks.Add(new Feedback { UserName = "測試", Email = "test@example.com", Message = "測試訊息" });
         await context.SaveChangesAsync();
 
         var count = await testDb.CreateNew().AuditLogs.CountAsync();
         Assert.Equal(0, count);
+    }
+
+    [Fact]
+    public async Task 新增一筆DeviceData_會產生稽核紀錄()
+    {
+        using var testDb = new TestDb();
+        var context = testDb.CreateNew();
+
+        // DefaultDevices／DeviceData 原本跟 Material／GWP 一樣是共用主檔（會影響計算結果與下拉選單），
+        // 卻沒被列進稽核清單，改壞了排放係數/GWP名稱對不上也查不出是誰、何時改的。
+        context.deviceDatas.Add(new DeviceData { Id = 502, Name = "測試設備", Scope = "類別一", EmissionPattern = "固定", Material = "柴油" });
+        await context.SaveChangesAsync();
+
+        var count = await testDb.CreateNew().AuditLogs
+            .CountAsync(a => a.EntityName == "DeviceData" && a.EntityId == "502" && a.Action == "Create");
+        Assert.Equal(1, count);
     }
 
     [Fact]

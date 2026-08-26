@@ -20,6 +20,7 @@ namespace Carbon_inventory_platform.Controllers
         public static readonly string[] AuditedEntityNames =
         {
             "Material", "GWP", "Device", "ActivityData", "Area", "Company", "RolePermission", "UserPermission",
+            "DefaultDevices", "DeviceData",
         };
 
         private readonly ApplicationDbContext _context;

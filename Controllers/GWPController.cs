@@ -1,4 +1,4 @@
-﻿using Carbon_inventory_platform.Data;
+using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Filters;
 using Carbon_inventory_platform.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -24,33 +24,56 @@ namespace Carbon_inventory_platform.Controllers
             _cache = cache;
         }
 
-        public async Task<IActionResult> Index(int year)
+        // GET: GWP?year=6
+        // 原本一定要先手動輸入 AR 版本才會顯示任何資料，剛進來的畫面永遠是空的，
+        // 也沒有列出目前到底有哪些版本可以選。改成預設選最新（數字最大）的既有版本，
+        // 並把所有既有版本列成快速切換的頁籤。
+        public async Task<IActionResult> Index(int? year)
         {
-            if (year != 0)
+            var availableVersions = await _context.GWPs
+                .AsNoTracking()
+                .Select(g => g.ARVersion)
+                .Distinct()
+                .OrderByDescending(v => v)
+                .ToListAsync();
+
+            int? selectedVersion = year ?? availableVersions.FirstOrDefault();
+            if (selectedVersion == 0 && availableVersions.Count == 0)
             {
-                ViewBag.SearchARVersion = year;
-                var gwps = await _context.GWPs.AsNoTracking().Where(x => x.ARVersion == year).ToListAsync();
-                return gwps != null ? View(gwps) : Problem("沒有找到資料表");
+                selectedVersion = null; // 完全沒有任何 GWP 資料，不預設任何版本。
             }
-            return View();
+
+            ViewBag.AvailableVersions = availableVersions;
+            ViewBag.SearchARVersion = selectedVersion;
+
+            if (selectedVersion == null)
+            {
+                return View(new List<GWP>());
+            }
+
+            var gwps = await _context.GWPs.AsNoTracking().Where(x => x.ARVersion == selectedVersion).OrderBy(x => x.Name).ToListAsync();
+            return View(gwps);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(GWP model, int searchARVersion)
         {
+            model.ARVersion = searchARVersion;
+            await ValidateNotDuplicateAsync(model, excludeId: 0);
+
             if (ModelState.IsValid)
             {
-                model.ARVersion = searchARVersion;
                 _context.Add(model);
                 await _context.SaveChangesAsync();
                 _cache.Remove(CountController.GwpCacheKey); // A3：GWP 改了要讓計算引擎的快取立即失效。
+                TempData["StatusMessage"] = $"已新增 GWP「{model.Name}」。";
                 return RedirectToAction(nameof(Index), new { year = searchARVersion });
             }
             // 原本驗證失敗時 return View(model)，但 Views/GWP 底下只有 Index.cshtml，
             // 會拋 InvalidOperationException（找不到 Add 檢視）而變成 500。
             // 新增/編輯是 Index 頁裡的模態框，所以改為帶著錯誤訊息回到 Index。
-            TempData["GWPError"] = "資料格式錯誤，GWP值請輸入數字。";
+            TempData["GWPError"] = string.Join(" ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
             return RedirectToAction(nameof(Index), new { year = searchARVersion });
         }
 
@@ -58,6 +81,9 @@ namespace Carbon_inventory_platform.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(GWP model, int searchARVersion)
         {
+            model.ARVersion = searchARVersion;
+            await ValidateNotDuplicateAsync(model, excludeId: model.Id);
+
             if (ModelState.IsValid)
             {
                 // 原本直接 _context.Update(model)，但模態框只送出 Id/Name/Num，
@@ -73,10 +99,11 @@ namespace Carbon_inventory_platform.Controllers
                 gwpToUpdate.ARVersion = searchARVersion;
                 await _context.SaveChangesAsync();
                 _cache.Remove(CountController.GwpCacheKey); // A3：GWP 改了要讓計算引擎的快取立即失效。
+                TempData["StatusMessage"] = $"已更新 GWP「{model.Name}」。";
                 return RedirectToAction(nameof(Index), new { year = searchARVersion });
             }
             // 同 Add：Views/GWP 沒有 Edit.cshtml，原本的 return View(model) 是保證的 500。
-            TempData["GWPError"] = "資料格式錯誤，GWP值請輸入數字。";
+            TempData["GWPError"] = string.Join(" ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
             return RedirectToAction(nameof(Index), new { year = searchARVersion });
         }
 
@@ -92,9 +119,27 @@ namespace Carbon_inventory_platform.Controllers
                 _context.GWPs.Remove(gwp);
                 await _context.SaveChangesAsync();
                 _cache.Remove(CountController.GwpCacheKey); // A3：GWP 改了要讓計算引擎的快取立即失效。
+                TempData["StatusMessage"] = $"已刪除 GWP「{gwp.Name}」。";
             }
 
             return RedirectToAction(nameof(Index), new { year = searchARVersion });
+        }
+
+        /// <summary>
+        /// (Name, ARVersion) 原本只有非唯一索引（純粹為了查詢效能），沒有唯一性約束。
+        /// CountController.CEFAddAsync 用同一組條件查 HFCS 的 GWP 值時，重複資料一樣會讓
+        /// .FirstOrDefault() 取到哪一筆變成不確定，改為新增/編輯時就擋下重複組合。
+        /// </summary>
+        private async Task ValidateNotDuplicateAsync(GWP model, int excludeId)
+        {
+            var duplicated = await _context.GWPs.AnyAsync(g =>
+                g.Id != excludeId
+                && g.Name == model.Name
+                && g.ARVersion == model.ARVersion);
+            if (duplicated)
+            {
+                ModelState.AddModelError(string.Empty, $"AR{model.ARVersion} 已經有名稱「{model.Name}」的 GWP 資料，請確認是否要編輯既有資料，而不是新增重複的一筆。");
+            }
         }
     }
 }

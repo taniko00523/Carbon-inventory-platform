@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Filters;
 using Carbon_inventory_platform.Models;
+using Carbon_inventory_platform.Services;
 
 namespace Carbon_inventory_platform.Controllers
 {
@@ -19,17 +20,33 @@ namespace Carbon_inventory_platform.Controllers
     [ServiceFilter(typeof(PermissionFilterAttribute))]
     public class DefaultDevicesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private const int PageSize = 20; // 跟 Materials/Permissions 一致，避免筆數變多後一次全部渲染拖慢畫面。
 
-        public DefaultDevicesController(ApplicationDbContext context)
+        private readonly ApplicationDbContext _context;
+        private readonly MaterialCatalogService _materialCatalog;
+
+        public DefaultDevicesController(ApplicationDbContext context, MaterialCatalogService materialCatalog)
         {
             _context = context;
+            _materialCatalog = materialCatalog;
         }
 
         // GET: DefaultDevices
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? keyword, int pageNumber = 1)
         {
-            return View(await _context.defaultDevices.ToListAsync());
+            // 原本沒有 AsNoTracking，也沒有搜尋/分頁——筆數變多之後，找一筆預設排放源只能整頁往下翻。
+            var query = _context.defaultDevices.AsNoTracking().OrderBy(d => d.Id).AsQueryable();
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                query = query.Where(d => d.Name.Contains(keyword) || d.Material.Contains(keyword));
+            }
+
+            var paged = await ViewModel.PagedResult<DefaultDevices>.CreateAsync(query, pageNumber, PageSize);
+            ViewData["PageNumber"] = paged.PageNumber;
+            ViewData["TotalPages"] = paged.TotalPages;
+            ViewData["Keyword"] = keyword;
+            ViewData["TotalCount"] = paged.TotalCount;
+            return View(paged.Items);
         }
 
         // GET: DefaultDevices/Details/5
@@ -41,6 +58,7 @@ namespace Carbon_inventory_platform.Controllers
             }
 
             var defaultDevices = await _context.defaultDevices
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (defaultDevices == null)
             {
@@ -72,6 +90,7 @@ namespace Carbon_inventory_platform.Controllers
             {
                 _context.Add(defaultDevices);
                 await _context.SaveChangesAsync();
+                TempData["StatusMessage"] = $"已新增預設排放源「{defaultDevices.Name}」。";
                 return RedirectToAction(nameof(Index));
             }
             await PopulateMaterialSelectListsAsync(defaultDevices.Material, defaultDevices.Scope, defaultDevices.EmissionPattern);
@@ -127,31 +146,16 @@ namespace Carbon_inventory_platform.Controllers
                         throw;
                     }
                 }
+                TempData["StatusMessage"] = $"已更新預設排放源「{defaultDevices.Name}」。";
                 return RedirectToAction(nameof(Index));
             }
             await PopulateMaterialSelectListsAsync(defaultDevices.Material, defaultDevices.Scope, defaultDevices.EmissionPattern);
             return View(defaultDevices);
         }
 
-        // GET: DefaultDevices/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var defaultDevices = await _context.defaultDevices
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (defaultDevices == null)
-            {
-                return NotFound();
-            }
-
-            return View(defaultDevices);
-        }
-
         // POST: DefaultDevices/Delete/5
+        // 原本刪除要先進一個確認頁（GET Delete → 按確認 → POST），改成跟 Devices/Areas 一樣，
+        // 直接在清單頁用 data-cip-confirm 二次確認後送出，不需要多一次頁面切換。
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -160,9 +164,10 @@ namespace Carbon_inventory_platform.Controllers
             if (defaultDevices != null)
             {
                 _context.defaultDevices.Remove(defaultDevices);
+                await _context.SaveChangesAsync();
+                TempData["StatusMessage"] = $"已刪除預設排放源「{defaultDevices.Name}」。";
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -173,44 +178,26 @@ namespace Carbon_inventory_platform.Controllers
 
         /// <summary>
         /// 原燃物料 / 類別 / 排放型式原本是純文字輸入框，打錯字不會有任何提示，
-        /// 之後用這台預設裝置產生的排放資料就會靜靜地對不到係數。改為由現有資料產生下拉選單，
-        /// 作法與 DeviceDatasController 的 PopulateMaterialSelectListsAsync 相同。
+        /// 之後用這台預設裝置產生的排放資料就會靜靜地對不到係數。改為由現有資料產生下拉選單。
         /// </summary>
         private async Task PopulateMaterialSelectListsAsync(string? selectedMaterial, string? selectedScope, string? selectedEmissionPattern)
         {
-            ViewData["MaterialList"] = new SelectList(await GetMaterialNamesAsync(), selectedMaterial);
-
-            var scopes = await _context.Materials
-                .AsNoTracking()
-                .Select(m => m.Scope)
-                .Distinct()
-                .OrderBy(s => s)
-                .ToListAsync();
-            ViewData["ScopeList"] = new SelectList(scopes, selectedScope);
-
-            var emissionPatterns = await _context.Materials
-                .AsNoTracking()
-                .Select(m => m.EmissionPattern)
-                .Distinct()
-                .OrderBy(e => e)
-                .ToListAsync();
-            ViewData["EmissionPatternList"] = new SelectList(emissionPatterns, selectedEmissionPattern);
+            ViewData["MaterialList"] = new SelectList(await _materialCatalog.GetMaterialNamesAsync(), selectedMaterial);
+            ViewData["ScopeList"] = new SelectList(await _materialCatalog.GetScopesAsync(), selectedScope);
+            ViewData["EmissionPatternList"] = new SelectList(await _materialCatalog.GetEmissionPatternsAsync(), selectedEmissionPattern);
         }
 
-        private async Task<List<string>> GetMaterialNamesAsync()
-        {
-            var fromMaterials = await _context.Materials.AsNoTracking().Select(m => m.Name).Distinct().ToListAsync();
-            var fromGwps = await _context.GWPs.AsNoTracking().Select(g => g.Name).Distinct().ToListAsync();
-            return fromMaterials.Union(fromGwps).OrderBy(n => n).ToList();
-        }
-
-        /// <summary>伺服器端也要擋，避免有人繞過下拉選單直接送出不存在的原燃物料。</summary>
+        /// <summary>
+        /// 伺服器端也要擋，避免有人繞過下拉選單直接送出不存在的原燃物料/類別/排放型式。
+        /// 原本只驗證了 Material，Scope／EmissionPattern 雖然畫面上是下拉選單，
+        /// 但直接組 POST 還是能送出任意字串。
+        /// </summary>
         private async Task ValidateMaterialAsync(DefaultDevices defaultDevices)
         {
-            var names = await GetMaterialNamesAsync();
-            if (!names.Contains(defaultDevices.Material))
+            var result = await _materialCatalog.ValidateAsync(defaultDevices.Material, defaultDevices.Scope, defaultDevices.EmissionPattern);
+            foreach (var (field, message) in result.Errors)
             {
-                ModelState.AddModelError(nameof(DefaultDevices.Material), "原燃物料必須是排放係數表或 GWP 表中已存在的名稱，請重新選擇。");
+                ModelState.AddModelError(field, message);
             }
         }
     }

@@ -9,15 +9,15 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "ID")]
         public int Id { get; set; }
 
-        [MaxLength(20)]
+        [StringLength(20)]
         [Display(Name = "原燃物料或產品")]
         public string Name { get; set; } = "";
 
-        [MaxLength(10)]
+        [StringLength(10)]
         [Display(Name = "類別")]
         public string Scope { get; set; } = "";
 
-        [MaxLength(10)]
+        [StringLength(10)]
         [Display(Name = "排放型式")]
         public string EmissionPattern { get; set; } = "";
 
@@ -102,7 +102,9 @@ namespace Carbon_inventory_platform.Models
         public decimal NF3ULL { get; set; } = 0;
 
         [Column(TypeName = "decimal(18, 10)")]
-        [Display(Name = "N2O不確定性95%信賴區間上限")]
+        // 原本這裡誤標成「N2O不確定性95%信賴區間上限」，畫面上會顯示成錯誤的欄位名稱
+        // （Index 表頭、Create/Edit/Details 的欄位標籤都是靠這個 DisplayName 產生）。
+        [Display(Name = "SF6不確定性95%信賴區間上限")]
         public decimal SF6UUL { get; set; } = 0;
 
         [Display(Name = "排放係數誤差等級")]
@@ -123,7 +125,7 @@ namespace Carbon_inventory_platform.Models
         [Display(Name = "年份")]
         public int Year { get; set; }
 
-        [MaxLength(10)]
+        [StringLength(10)]
         [Display(Name = "單位")]
         public string Unit { get; set; } = "";
     }

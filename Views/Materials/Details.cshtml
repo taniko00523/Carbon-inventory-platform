@@ -1,192 +1,109 @@
-﻿@model Carbon_inventory_platform.Models.Material
+@model Carbon_inventory_platform.Models.Material
 
 @{
     ViewData["Title"] = "排放係數詳細資料";
 }
 
-<h1>排放係數詳細資料</h1>
+@* 原本 29 個欄位攤成一路 dt/dd，SF6/NF3 的順序還兜錯（NF3UUL 夾在 SF6ULL 跟 NF3CEF 中間，
+   SF6UUL 又被丟到 NF3ULL 後面，畫面上看不出哪個數字屬於哪個氣體）。
+   改成每種氣體一個區塊，CEF／下限／上限固定放在一起，順序目視就能核對。 *@
+<div class="cip-page-head">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div class="cip-page-actions">
+        <a class="btn btn-success" asp-action="Edit" asp-route-id="@Model?.Id">編輯</a>
+        <a class="btn btn-outline-secondary" asp-action="Index">返回</a>
+    </div>
+</div>
 
-<div>
-    <h4>原燃物料</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Scope)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Scope)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EmissionPattern)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EmissionPattern)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CO2CEF)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CO2CEF)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CO2ULL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CO2ULL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CO2UUL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CO2UUL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CH4CEF)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CH4CEF)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CH4ULL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CH4ULL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CH4UUL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CH4UUL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.N2OCEF)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.N2OCEF)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.N2OULL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.N2OULL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.N2OUUL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.N2OUUL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HFCSCEF)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HFCSCEF)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HFCSULL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HFCSULL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HFCSUUL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HFCSUUL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PFCSCEF)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PFCSCEF)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PFCSULL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PFCSULL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PFCSUUL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PFCSUUL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SF6CEF)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SF6CEF)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SF6ULL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SF6ULL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NF3UUL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NF3UUL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NF3CEF)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NF3CEF)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NF3ULL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NF3ULL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SF6UUL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SF6UUL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CEF_Correction)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CEF_Correction)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataUUL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataUUL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataULL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataULL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Year)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Year)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Unit)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Unit)
-        </dd>
+<section class="cip-section">
+    <h2 class="cip-section-title">基本資料</h2>
+    <dl class="row mb-0">
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Scope)</dt>
+        <dd class="col-sm-9"><span class="cip-badge cip-badge-neutral">@Model?.Scope</span></dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.EmissionPattern)</dt>
+        <dd class="col-sm-9"><span class="cip-badge cip-badge-neutral">@Model?.EmissionPattern</span></dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Year)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Year)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Unit)</dt>
+        <dd class="col-sm-9 mb-0">@Html.DisplayFor(model => model.Unit)</dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">編輯</a> |
-    <a asp-action="Index">回列表</a>
-</div>
+</section>
+
+<section class="cip-section">
+    <h2 class="cip-section-title">CO2</h2>
+    <div class="cip-form-grid">
+        <div><strong>@Html.DisplayNameFor(model => model.CO2CEF)：</strong>@Html.DisplayFor(model => model.CO2CEF)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.CO2ULL)：</strong>@Html.DisplayFor(model => model.CO2ULL)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.CO2UUL)：</strong>@Html.DisplayFor(model => model.CO2UUL)</div>
+    </div>
+</section>
+
+<section class="cip-section">
+    <h2 class="cip-section-title">CH4</h2>
+    <div class="cip-form-grid">
+        <div><strong>@Html.DisplayNameFor(model => model.CH4CEF)：</strong>@Html.DisplayFor(model => model.CH4CEF)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.CH4ULL)：</strong>@Html.DisplayFor(model => model.CH4ULL)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.CH4UUL)：</strong>@Html.DisplayFor(model => model.CH4UUL)</div>
+    </div>
+</section>
+
+<section class="cip-section">
+    <h2 class="cip-section-title">N2O</h2>
+    <div class="cip-form-grid">
+        <div><strong>@Html.DisplayNameFor(model => model.N2OCEF)：</strong>@Html.DisplayFor(model => model.N2OCEF)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.N2OULL)：</strong>@Html.DisplayFor(model => model.N2OULL)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.N2OUUL)：</strong>@Html.DisplayFor(model => model.N2OUUL)</div>
+    </div>
+</section>
+
+<section class="cip-section">
+    <h2 class="cip-section-title">HFCS</h2>
+    <div class="cip-form-grid">
+        <div><strong>@Html.DisplayNameFor(model => model.HFCSCEF)：</strong>@Html.DisplayFor(model => model.HFCSCEF)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.HFCSULL)：</strong>@Html.DisplayFor(model => model.HFCSULL)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.HFCSUUL)：</strong>@Html.DisplayFor(model => model.HFCSUUL)</div>
+    </div>
+</section>
+
+<section class="cip-section">
+    <h2 class="cip-section-title">PFCS</h2>
+    <div class="cip-form-grid">
+        <div><strong>@Html.DisplayNameFor(model => model.PFCSCEF)：</strong>@Html.DisplayFor(model => model.PFCSCEF)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.PFCSULL)：</strong>@Html.DisplayFor(model => model.PFCSULL)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.PFCSUUL)：</strong>@Html.DisplayFor(model => model.PFCSUUL)</div>
+    </div>
+</section>
+
+<section class="cip-section">
+    <h2 class="cip-section-title">SF6</h2>
+    <div class="cip-form-grid">
+        <div><strong>@Html.DisplayNameFor(model => model.SF6CEF)：</strong>@Html.DisplayFor(model => model.SF6CEF)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.SF6ULL)：</strong>@Html.DisplayFor(model => model.SF6ULL)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.SF6UUL)：</strong>@Html.DisplayFor(model => model.SF6UUL)</div>
+    </div>
+</section>
+
+<section class="cip-section">
+    <h2 class="cip-section-title">NF3</h2>
+    <div class="cip-form-grid">
+        <div><strong>@Html.DisplayNameFor(model => model.NF3CEF)：</strong>@Html.DisplayFor(model => model.NF3CEF)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.NF3ULL)：</strong>@Html.DisplayFor(model => model.NF3ULL)</div>
+        <div><strong>@Html.DisplayNameFor(model => model.NF3UUL)：</strong>@Html.DisplayFor(model => model.NF3UUL)</div>
+    </div>
+</section>
+
+<section class="cip-section">
+    <h2 class="cip-section-title">資料品質</h2>
+    <dl class="row mb-0">
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CEF_Correction)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.CEF_Correction)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.DataUUL)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.DataUUL)</dd>
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.DataULL)</dt>
+        <dd class="col-sm-9 mb-0">@Html.DisplayFor(model => model.DataULL)</dd>
+    </dl>
+</section>

@@ -1,212 +1,133 @@
-﻿@model IEnumerable<Carbon_inventory_platform.Models.Material>
+@model IEnumerable<Carbon_inventory_platform.Models.Material>
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
-    ViewData["Title"] = "排放係數列表";
+    ViewData["Title"] = "排放係數設定";
+    var keyword = ViewData["Keyword"] as string;
+    var scope = ViewData["Scope"] as string;
+    var emissionPattern = ViewData["EmissionPattern"] as string;
+    var totalCount = ViewData["TotalCount"] as int?;
+    var hasFilter = !string.IsNullOrWhiteSpace(keyword) || !string.IsNullOrWhiteSpace(scope) || !string.IsNullOrWhiteSpace(emissionPattern);
+    var scopeList = (SelectList)ViewData["ScopeList"]!;
+    var emissionPatternList = (SelectList)ViewData["EmissionPatternList"]!;
 }
 
-<h1>排放係數列表</h1>
-
-<p>
-    <a asp-action="Create">新增排放係數</a>
-</p>
-<div class="cip-table-wrap">
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Scope)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmissionPattern)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CO2CEF)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CO2ULL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CO2UUL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CH4CEF)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CH4ULL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CH4UUL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.N2OCEF)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.N2OULL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.N2OUUL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HFCSCEF)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HFCSULL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HFCSUUL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PFCSCEF)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PFCSULL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PFCSUUL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SF6CEF)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SF6ULL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NF3UUL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NF3CEF)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NF3ULL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SF6UUL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CEF_Correction)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataUUL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataULL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Year)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Unit)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Scope)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmissionPattern)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CO2CEF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CO2ULL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CO2UUL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CH4CEF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CH4ULL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CH4UUL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.N2OCEF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.N2OULL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.N2OUUL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HFCSCEF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HFCSULL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HFCSUUL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PFCSCEF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PFCSULL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PFCSUUL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SF6CEF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SF6ULL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NF3UUL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NF3CEF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NF3ULL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SF6UUL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CEF_Correction)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataUUL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataULL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Unit)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">編輯</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">詳細資料</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">刪除</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+@* 原本這個清單把 CO2~NF3 共 21 個排放係數欄位全部攤成一張表，橫向要捲很遠才看得完，
+   而且大部分情況下只是要「找某個原燃物料」而已。改成清單只留識別欄位，
+   完整的 21 個係數／95% 信賴區間集中到「詳細資料」頁（見 Details.cshtml，已依氣體分區）。 *@
+<div class="cip-page-head">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+        <p class="cip-page-sub">共 @totalCount 筆。完整的排放係數與 95% 信賴區間請點「詳細資料」查看。</p>
+    </div>
+    <div class="cip-page-actions">
+        <a class="btn btn-primary" asp-action="Create">新增排放係數</a>
+    </div>
 </div>
+
+<form method="get" asp-action="Index" class="cip-section d-flex flex-wrap gap-2 align-items-end">
+    <div>
+        <label class="form-label" for="keyword">搜尋</label>
+        <input type="text" id="keyword" name="keyword" class="form-control" value="@keyword" placeholder="原燃物料或產品名稱" />
+    </div>
+    <div>
+        <label class="form-label" for="scope">類別</label>
+        <select id="scope" name="scope" class="form-select" asp-items="scopeList">
+            <option value="">全部</option>
+        </select>
+    </div>
+    <div>
+        <label class="form-label" for="emissionPattern">排放型式</label>
+        <select id="emissionPattern" name="emissionPattern" class="form-select" asp-items="emissionPatternList">
+            <option value="">全部</option>
+        </select>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">搜尋</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">清除</a>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="cip-empty cip-section">
+        <div class="cip-empty-icon" aria-hidden="true">🧪</div>
+        <p class="cip-empty-title">@(hasFilter ? "沒有符合搜尋條件的排放係數" : "目前沒有任何排放係數")</p>
+        @if (hasFilter)
+        {
+            <a class="btn btn-outline-secondary" asp-action="Index">清除搜尋</a>
+        }
+        else
+        {
+            <a class="btn btn-primary" asp-action="Create">新增排放係數</a>
+        }
+    </div>
+}
+else
+{
+    <div class="table-computer-w1024 cip-table-wrap">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Scope)</th>
+                    <th>@Html.DisplayNameFor(model => model.EmissionPattern)</th>
+                    <th>@Html.DisplayNameFor(model => model.Year)</th>
+                    <th>@Html.DisplayNameFor(model => model.Unit)</th>
+                    <th>@Html.DisplayNameFor(model => model.CEF_Correction)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td><span class="cip-badge cip-badge-neutral">@item.Scope</span></td>
+                        <td><span class="cip-badge cip-badge-neutral">@item.EmissionPattern</span></td>
+                        <td>@Html.DisplayFor(modelItem => item.Year)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Unit)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CEF_Correction)</td>
+                        <td class="cip-table-actions">
+                            <a class="btn btn-sm btn-outline-info" asp-action="Details" asp-route-id="@item.Id">詳細資料</a>
+                            <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">編輯</a>
+                            <form method="post" asp-action="Delete" asp-route-id="@item.Id" class="d-inline" data-cip-confirm="確定要刪除排放係數「@item.Name」嗎？">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
+                                @Html.AntiForgeryToken()
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="table-phone-w1024">
+        @foreach (var item in Model)
+        {
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Scope):</strong> <span class="cip-badge cip-badge-neutral">@item.Scope</span></p>
+                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.EmissionPattern):</strong> <span class="cip-badge cip-badge-neutral">@item.EmissionPattern</span></p>
+                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Year):</strong> @item.Year</p>
+                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Unit):</strong> @item.Unit</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a class="btn btn-sm btn-outline-info" asp-action="Details" asp-route-id="@item.Id">詳細資料</a>
+                        <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">編輯</a>
+                        <form method="post" asp-action="Delete" asp-route-id="@item.Id" class="d-inline" data-cip-confirm="確定要刪除排放係數「@item.Name」嗎？">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
+                            @Html.AntiForgeryToken()
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
 
 @await Html.PartialAsync("_Pagination", new Carbon_inventory_platform.ViewModel.PaginationViewModel
 {
     CurrentPage = (int)ViewData["PageNumber"]!,
     TotalPages = (int)ViewData["TotalPages"]!,
-    PageUrl = i => Url.Action("Index", new { pageNumber = i })!,
+    PageUrl = i => Url.Action("Index", new { keyword, scope, emissionPattern, pageNumber = i })!,
 })

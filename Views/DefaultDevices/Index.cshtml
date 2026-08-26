@@ -1,61 +1,110 @@
-﻿@model IEnumerable<Carbon_inventory_platform.Models.DefaultDevices>
+@model IEnumerable<Carbon_inventory_platform.Models.DefaultDevices>
 
 @{
-    ViewData["Title"] = "預設裝置列表";
+    ViewData["Title"] = "預設排放源";
+    var keyword = ViewData["Keyword"] as string;
+    var totalCount = ViewData["TotalCount"] as int?;
 }
 
-<h1>預設裝置列表</h1>
-
-<p>
-    <a asp-action="Create">新增預設裝置</a>
-</p>
-<div class="cip-table-wrap">
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Material)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Scope)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmissionPattern)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Material)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Scope)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmissionPattern)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">編輯</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">詳細資料</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">刪除</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="cip-page-head">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+        <p class="cip-page-sub">共 @totalCount 筆。用戶在「導入預設」時會從這份清單套用排放源，方便快速建立常見設備。</p>
+    </div>
+    <div class="cip-page-actions">
+        <a class="btn btn-primary" asp-action="Create">新增預設排放源</a>
+    </div>
 </div>
+
+<form method="get" asp-action="Index" class="cip-section d-flex flex-wrap gap-2 align-items-end">
+    <div>
+        <label class="form-label" for="keyword">搜尋</label>
+        <input type="text" id="keyword" name="keyword" class="form-control" value="@keyword" placeholder="排放源名稱或原燃物料" />
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">搜尋</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">清除</a>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="cip-empty cip-section">
+        <div class="cip-empty-icon" aria-hidden="true">🏭</div>
+        <p class="cip-empty-title">@(string.IsNullOrWhiteSpace(keyword) ? "目前沒有任何預設排放源" : "沒有符合搜尋條件的預設排放源")</p>
+        @if (string.IsNullOrWhiteSpace(keyword))
+        {
+            <a class="btn btn-primary" asp-action="Create">新增預設排放源</a>
+        }
+        else
+        {
+            <a class="btn btn-outline-secondary" asp-action="Index">清除搜尋</a>
+        }
+    </div>
+}
+else
+{
+    <div class="table-computer-w1024 cip-table-wrap">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Material)</th>
+                    <th>@Html.DisplayNameFor(model => model.Scope)</th>
+                    <th>@Html.DisplayNameFor(model => model.EmissionPattern)</th>
+                    <th>@Html.DisplayNameFor(model => model.Type)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Material)</td>
+                        <td><span class="cip-badge cip-badge-neutral">@item.Scope</span></td>
+                        <td><span class="cip-badge cip-badge-neutral">@item.EmissionPattern</span></td>
+                        <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                        <td class="cip-table-actions">
+                            <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">編輯</a>
+                            <a class="btn btn-sm btn-outline-info" asp-action="Details" asp-route-id="@item.Id">詳細資料</a>
+                            <form method="post" asp-action="Delete" asp-route-id="@item.Id" class="d-inline" data-cip-confirm="確定要刪除預設排放源「@item.Name」嗎？">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
+                                @Html.AntiForgeryToken()
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="table-phone-w1024">
+        @foreach (var item in Model)
+        {
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Material):</strong> @item.Material</p>
+                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Scope):</strong> <span class="cip-badge cip-badge-neutral">@item.Scope</span></p>
+                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.EmissionPattern):</strong> <span class="cip-badge cip-badge-neutral">@item.EmissionPattern</span></p>
+                    <p class="card-text"><strong>@Html.DisplayNameFor(model => model.Type):</strong> @item.Type</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">編輯</a>
+                        <a class="btn btn-sm btn-outline-info" asp-action="Details" asp-route-id="@item.Id">詳細資料</a>
+                        <form method="post" asp-action="Delete" asp-route-id="@item.Id" class="d-inline" data-cip-confirm="確定要刪除預設排放源「@item.Name」嗎？">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
+                            @Html.AntiForgeryToken()
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@await Html.PartialAsync("_Pagination", new Carbon_inventory_platform.ViewModel.PaginationViewModel
+{
+    CurrentPage = (int)ViewData["PageNumber"]!,
+    TotalPages = (int)ViewData["TotalPages"]!,
+    PageUrl = i => Url.Action("Index", new { keyword, pageNumber = i })!,
+})

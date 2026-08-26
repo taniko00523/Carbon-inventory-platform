@@ -1,64 +1,68 @@
-﻿@model Carbon_inventory_platform.Models.DeviceData
-@using Microsoft.AspNetCore.Mvc.Rendering
+@model Carbon_inventory_platform.Models.DeviceData
 
 @{
-    ViewData["Title"] = "編輯裝置資料";
+    ViewData["Title"] = "編輯排放源設定";
 }
 
-<h1>編輯裝置資料</h1>
+<div class="cip-page-head">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div class="cip-page-actions">
+        <a class="btn btn-outline-secondary" asp-action="Index">返回</a>
+    </div>
+</div>
 
-<h4>裝置資料</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <section class="cip-section">
+        <div class="form-group">
+            <label asp-for="Name" class="control-label cip-required"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="cip-form-grid">
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Scope" class="control-label"></label>
+                <label asp-for="Scope" class="control-label cip-required"></label>
                 <select asp-for="Scope" class="form-control" asp-items="ViewBag.ScopeList"></select>
                 <span asp-validation-for="Scope" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EmissionPattern" class="control-label"></label>
+                <label asp-for="EmissionPattern" class="control-label cip-required"></label>
                 <select asp-for="EmissionPattern" class="form-control" asp-items="ViewBag.EmissionPatternList"></select>
                 <span asp-validation-for="EmissionPattern" class="text-danger"></span>
             </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Material" class="control-label cip-required"></label>
+            <select asp-for="Material" class="form-control" asp-items="ViewBag.MaterialList"></select>
+            <span asp-validation-for="Material" class="text-danger"></span>
+        </div>
+        <div class="cip-form-grid">
             <div class="form-group">
-                <label asp-for="Material" class="control-label"></label>
-                <select asp-for="Material" class="form-control" asp-items="ViewBag.MaterialList"></select>
-                <span asp-validation-for="Material" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Data_Correction" class="control-label"></label>
-                <input asp-for="Data_Correction" class="form-control" />
+                <label asp-for="Data_Correction" class="control-label cip-required"></label>
+                <select asp-for="Data_Correction" class="form-control" asp-items="ViewBag.DataCorrectionList"></select>
                 <span asp-validation-for="Data_Correction" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Device_Correction" class="control-label"></label>
-                <input asp-for="Device_Correction" class="form-control" />
+                <label asp-for="Device_Correction" class="control-label cip-required"></label>
+                <select asp-for="Device_Correction" class="form-control" asp-items="ViewBag.DeviceCorrectionList"></select>
                 <span asp-validation-for="Device_Correction" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="unit" class="control-label"></label>
-                <input asp-for="unit" class="form-control" />
-                <span asp-validation-for="unit" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="儲存" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
+        <div class="form-group">
+            <label asp-for="unit" class="control-label cip-required"></label>
+            <input asp-for="unit" class="form-control" />
+            <span asp-validation-for="unit" class="text-danger"></span>
+        </div>
+    </section>
 
-<div>
-    <a asp-action="Index">回列表</a>
-</div>
+    <div class="cip-form-actions">
+        <button type="submit" class="btn btn-primary">儲存</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">取消</a>
+    </div>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
