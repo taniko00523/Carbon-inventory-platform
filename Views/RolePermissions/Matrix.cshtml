@@ -1,0 +1,137 @@
+@model Carbon_inventory_platform.ViewModel.PermissionMatrixViewModel
+@{
+    ViewData["Title"] = "角色權限設定";
+    var roles = ViewData["Roles"] as List<Carbon_inventory_platform.Models.ApplicationRole> ?? new();
+    var selectedRoleId = ViewData["SelectedRoleId"] as string;
+    var selectedRoleName = ViewData["SelectedRoleName"] as string;
+}
+
+<div class="cip-page-head">
+    <div>
+        <h1>角色權限設定</h1>
+        <p class="cip-page-sub">選擇角色後，勾選這個角色可以使用的畫面與動作，儲存後立即生效。</p>
+    </div>
+    <div class="cip-page-actions">
+        <a class="btn btn-outline-secondary" asp-action="Index">改用原始清單</a>
+    </div>
+</div>
+
+@if (roles.Count == 0)
+{
+    <div class="cip-empty cip-section">
+        <div class="cip-empty-icon" aria-hidden="true">🔒</div>
+        <p class="cip-empty-title">目前沒有可以設定的角色</p>
+        <p>Admin 角色不受權限表限制，永遠可以使用所有功能，因此不會列在這裡。</p>
+    </div>
+}
+else
+{
+    <div class="d-flex flex-wrap gap-2 mb-3" role="tablist" aria-label="選擇角色">
+        @foreach (var role in roles)
+        {
+            var isActive = role.Id == selectedRoleId;
+            <a class="btn @(isActive ? "btn-primary" : "btn-outline-primary")"
+               asp-action="Matrix" asp-route-roleId="@role.Id"
+               aria-current="@(isActive ? "true" : null)">@role.Name</a>
+        }
+    </div>
+
+    <p class="cip-page-sub">
+        Admin 角色一律可以使用所有功能，不受此處設定影響，所以不列在上面的角色清單中。
+    </p>
+
+    @if (Model.Rows.Count == 0)
+    {
+        <div class="cip-empty cip-section">
+            <div class="cip-empty-icon" aria-hidden="true">📋</div>
+            <p class="cip-empty-title">目前沒有任何畫面／動作可以設定</p>
+            <p>請先到「畫面總覽」「功能總覽」「權限總覽」建立權限定義。</p>
+        </div>
+    }
+    else
+    {
+        <form method="post" asp-action="Matrix" id="permissionMatrixForm">
+            <input type="hidden" name="roleId" value="@selectedRoleId" />
+            @* 畫面渲染當下的授權集合指紋，存檔時用來偵測「編輯過程中被別人改過」，見 PermissionMatrixService。 *@
+            <input type="hidden" name="expectedBaseline" value="@Model.EncodedBaseline" />
+            @Html.AntiForgeryToken()
+
+            <div class="cip-table-wrap">
+                <table class="table table-bordered cip-permission-matrix" id="permissionMatrixTable">
+                    <thead>
+                        <tr>
+                            <th style="min-width: 10rem;">畫面</th>
+                            @foreach (var col in Model.Columns)
+                            {
+                                <th class="text-center">
+                                    <div class="d-flex flex-column align-items-center gap-1">
+                                        <span>@col.CName</span>
+                                        <button type="button" class="btn btn-sm btn-link p-0 cip-col-toggle" data-col="@col.FunctionActionId" title="整欄全選／取消">全選</button>
+                                    </div>
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model.Rows)
+                        {
+                            <tr>
+                                <th scope="row" class="text-nowrap">
+                                    <div class="d-flex align-items-center justify-content-between gap-2">
+                                        <span>@row.CName</span>
+                                        <button type="button" class="btn btn-sm btn-link p-0 cip-row-toggle" data-row="@row.FunctionId" title="整列全選／取消">全選</button>
+                                    </div>
+                                </th>
+                                @for (var i = 0; i < row.Cells.Count; i++)
+                                {
+                                    var cell = row.Cells[i];
+                                    var columnId = Model.Columns[i].FunctionActionId;
+                                    <td class="text-center" data-row="@row.FunctionId">
+                                        @if (cell == null)
+                                        {
+                                            <span class="text-muted">—</span>
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="form-check-input cip-matrix-checkbox"
+                                                   name="checkedPermissionIds" value="@cell.PermissionId"
+                                                   checked="@(cell.Checked ? "checked" : null)"
+                                                   data-col="@columnId" />
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="submit" class="btn btn-primary">儲存「@selectedRoleName」的權限設定</button>
+        </form>
+    }
+}
+
+<script>
+    (function () {
+        // 整列／整欄快速勾選：純粹是操作上的捷徑，實際送出的仍然是每一格的 checkbox 狀態。
+        document.querySelectorAll('.cip-row-toggle').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var row = btn.getAttribute('data-row');
+                var boxes = document.querySelectorAll('td[data-row="' + row + '"] input.cip-matrix-checkbox');
+                if (boxes.length === 0) { return; }
+                var nextChecked = !boxes[0].checked;
+                boxes.forEach(function (box) { box.checked = nextChecked; });
+            });
+        });
+
+        document.querySelectorAll('.cip-col-toggle').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var col = btn.getAttribute('data-col');
+                var boxes = document.querySelectorAll('input.cip-matrix-checkbox[data-col="' + col + '"]');
+                if (boxes.length === 0) { return; }
+                var nextChecked = !boxes[0].checked;
+                boxes.forEach(function (box) { box.checked = nextChecked; });
+            });
+        });
+    })();
+</script>

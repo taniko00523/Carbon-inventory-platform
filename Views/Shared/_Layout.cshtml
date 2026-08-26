@@ -98,11 +98,16 @@
                                 <ul class="dropdown-menu" aria-labelledby="cipUserData">
                                     <li><a class="dropdown-item" asp-controller="User" asp-action="Index">用戶總覽</a></li>
                                     <li><hr class="dropdown-divider" /></li>
-                                    <li><a class="dropdown-item" asp-controller="Functions" asp-action="Index">畫面總覽</a></li>
-                                    <li><a class="dropdown-item" asp-controller="FunctionActions" asp-action="Index">功能動作總覽</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Permissions" asp-action="Index">權限總覽</a></li>
-                                    @* 原本選單沒有「角色權限總覽」，只能手動輸入網址才進得去 *@
-                                    <li><a class="dropdown-item" asp-controller="RolePermissions" asp-action="Index">角色權限總覽</a></li>
+                                    @* 畫面總覽／功能動作總覽／權限總覽從選單隱藏（應使用者要求）：這三個畫面的目錄
+                                       資料由 Data/DbSeeder.cs 開機時自動建立，不是靠管理員手動維護，日常不需要用到；
+                                       Controller 本身沒有拿掉（仍是 [Authorize(Roles="Admin")]），需要時可直接輸入
+                                       網址 /Functions、/FunctionActions、/Permissions 進入。角色權限矩陣／使用者
+                                       個別權限畫面是直接讀資料庫，不透過這裡的連結，不受影響。 *@
+                                    @* B1 階段 3／4：原本「角色權限總覽」是一次一筆的 CRUD 清單，且選單沒有連結，
+                                       只能手動輸入網址才進得去。現在改成矩陣勾選畫面為主要入口，並新增
+                                       使用者個別權限（UserPermission）的維護介面。 *@
+                                    <li><a class="dropdown-item" asp-controller="RolePermissions" asp-action="Matrix">角色權限設定</a></li>
+                                    <li><a class="dropdown-item" asp-controller="UserPermissions" asp-action="Matrix">使用者個別權限</a></li>
                                     <li><hr class="dropdown-divider" /></li>
                                     <li><a class="dropdown-item" asp-controller="AuditLogs" asp-action="Index">稽核軌跡</a></li>
                                     <li><a class="dropdown-item" asp-controller="Feedbacks" asp-action="Index">回報問題總覽</a></li>

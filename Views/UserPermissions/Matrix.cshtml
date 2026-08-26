@@ -1,0 +1,161 @@
+@model Carbon_inventory_platform.ViewModel.PermissionMatrixViewModel
+@{
+    ViewData["Title"] = "使用者個別權限";
+    var users = ViewData["Users"] as List<Carbon_inventory_platform.Models.ApplicationUser> ?? new();
+    var selectedUserId = ViewData["SelectedUserId"] as string;
+    var selectedUserName = ViewData["SelectedUserName"] as string;
+    var selectedUserRoles = ViewData["SelectedUserRoles"] as IList<string> ?? new List<string>();
+}
+
+<div class="cip-page-head">
+    <div>
+        <h1>使用者個別權限</h1>
+        <p class="cip-page-sub">在角色權限之外，額外授予某個使用者特定的畫面／動作。</p>
+    </div>
+</div>
+
+<div class="cip-section">
+    <form method="get" asp-action="Matrix" class="d-flex flex-wrap align-items-end gap-2">
+        <div class="form-group mb-0">
+            <label for="userId" class="form-label">選擇使用者</label>
+            <select name="userId" id="userId" class="form-select" onchange="this.form.submit()">
+                <option value="">請選擇使用者...</option>
+                @foreach (var u in users)
+                {
+                    <option value="@u.Id" selected="@(u.Id == selectedUserId ? "selected" : null)">@u.UserName</option>
+                }
+            </select>
+        </div>
+        <noscript><button type="submit" class="btn btn-outline-primary">切換</button></noscript>
+    </form>
+    @if (users.Count == 0)
+    {
+        <p class="cip-page-sub mt-2 mb-0">目前沒有可以設定的使用者。管理員帳號不受權限表限制，不會列在這裡。</p>
+    }
+</div>
+
+@if (string.IsNullOrEmpty(selectedUserId))
+{
+    <div class="cip-empty cip-section">
+        <div class="cip-empty-icon" aria-hidden="true">👤</div>
+        <p class="cip-empty-title">請先選擇一位使用者</p>
+        <p>選擇後可以看到這個使用者目前的角色權限，並勾選要額外授予的個別權限。</p>
+    </div>
+}
+else
+{
+    <p class="cip-page-sub">
+        <strong>@selectedUserName</strong> 目前的角色：
+        @if (selectedUserRoles.Count == 0)
+        {
+            <span class="text-muted">（沒有任何角色）</span>
+        }
+        else
+        {
+            @string.Join("、", selectedUserRoles)
+        }
+    </p>
+    <p class="cip-page-sub">
+        灰色勾選、無法點擊的格子代表這項權限已經由角色授予；如需調整請到「角色權限設定」。
+        這個畫面只能新增角色之外的額外授權，無法用來收回角色已授予的權限。
+    </p>
+
+    @if (Model.Rows.Count == 0)
+    {
+        <div class="cip-empty cip-section">
+            <div class="cip-empty-icon" aria-hidden="true">📋</div>
+            <p class="cip-empty-title">目前沒有任何畫面／動作可以設定</p>
+            <p>請先到「畫面總覽」「功能總覽」「權限總覽」建立權限定義。</p>
+        </div>
+    }
+    else
+    {
+        <form method="post" asp-action="Matrix" id="permissionMatrixForm">
+            <input type="hidden" name="userId" value="@selectedUserId" />
+            @* 畫面渲染當下的授權集合指紋，存檔時用來偵測「編輯過程中被別人改過」，見 PermissionMatrixService。 *@
+            <input type="hidden" name="expectedBaseline" value="@Model.EncodedBaseline" />
+            @Html.AntiForgeryToken()
+
+            <div class="cip-table-wrap">
+                <table class="table table-bordered cip-permission-matrix" id="permissionMatrixTable">
+                    <thead>
+                        <tr>
+                            <th style="min-width: 10rem;">畫面</th>
+                            @foreach (var col in Model.Columns)
+                            {
+                                <th class="text-center">
+                                    <div class="d-flex flex-column align-items-center gap-1">
+                                        <span>@col.CName</span>
+                                        <button type="button" class="btn btn-sm btn-link p-0 cip-col-toggle" data-col="@col.FunctionActionId" title="整欄全選／取消（不影響已鎖住的角色授權格）">全選</button>
+                                    </div>
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model.Rows)
+                        {
+                            <tr>
+                                <th scope="row" class="text-nowrap">
+                                    <div class="d-flex align-items-center justify-content-between gap-2">
+                                        <span>@row.CName</span>
+                                        <button type="button" class="btn btn-sm btn-link p-0 cip-row-toggle" data-row="@row.FunctionId" title="整列全選／取消（不影響已鎖住的角色授權格）">全選</button>
+                                    </div>
+                                </th>
+                                @for (var i = 0; i < row.Cells.Count; i++)
+                                {
+                                    var cell = row.Cells[i];
+                                    var columnId = Model.Columns[i].FunctionActionId;
+                                    <td class="text-center" data-row="@row.FunctionId">
+                                        @if (cell == null)
+                                        {
+                                            <span class="text-muted">—</span>
+                                        }
+                                        else if (cell.Locked)
+                                        {
+                                            <input type="checkbox" class="form-check-input" checked="checked" disabled title="已由角色授予，無法在此收回" />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="form-check-input cip-matrix-checkbox"
+                                                   name="checkedPermissionIds" value="@cell.PermissionId"
+                                                   checked="@(cell.Checked ? "checked" : null)"
+                                                   data-col="@columnId" />
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="submit" class="btn btn-primary">儲存「@selectedUserName」的個別權限設定</button>
+        </form>
+    }
+}
+
+<script>
+    (function () {
+        // 整列／整欄快速勾選：只作用在還能編輯的格子，鎖住的角色授權格不受影響。
+        document.querySelectorAll('.cip-row-toggle').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var row = btn.getAttribute('data-row');
+                var boxes = document.querySelectorAll('td[data-row="' + row + '"] input.cip-matrix-checkbox');
+                if (boxes.length === 0) { return; }
+                var nextChecked = !boxes[0].checked;
+                boxes.forEach(function (box) { box.checked = nextChecked; });
+            });
+        });
+
+        document.querySelectorAll('.cip-col-toggle').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var col = btn.getAttribute('data-col');
+                var boxes = document.querySelectorAll('input.cip-matrix-checkbox[data-col="' + col + '"]');
+                if (boxes.length === 0) { return; }
+                var nextChecked = !boxes[0].checked;
+                boxes.forEach(function (box) { box.checked = nextChecked; });
+            });
+        });
+    })();
+</script>

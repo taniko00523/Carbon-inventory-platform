@@ -8,17 +8,77 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Carbon_inventory_platform.Data;
 using Carbon_inventory_platform.Models;
+using Carbon_inventory_platform.Services;
+using Carbon_inventory_platform.ViewModel;
 
 namespace Carbon_inventory_platform.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class RolePermissionsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        // Admin 一律放行所有權限檢查（見 PermissionFilterAttribute），在這裡設定完全沒有效果，
+        // 列在矩陣的角色選單裡只會讓人誤以為勾選有作用，所以排除。
+        private const string AdminRoleName = "Admin";
 
-        public RolePermissionsController(ApplicationDbContext context)
+        private readonly ApplicationDbContext _context;
+        private readonly PermissionMatrixService _matrixService;
+
+        public RolePermissionsController(ApplicationDbContext context, PermissionMatrixService matrixService)
         {
             _context = context;
+            _matrixService = matrixService;
+        }
+
+        // GET: RolePermissions/Matrix?roleId=xxx
+        // B1 階段 3：一個角色一個畫面，列出每個畫面 × 動作勾選，取代下面一次一筆的 CRUD。
+        public async Task<IActionResult> Matrix(string? roleId)
+        {
+            var roles = await _context.Roles
+                .AsNoTracking()
+                .Where(r => r.Name != AdminRoleName)
+                .OrderBy(r => r.Name)
+                .ToListAsync();
+
+            if (roles.Count == 0)
+            {
+                ViewData["Roles"] = roles;
+                return View(new Carbon_inventory_platform.ViewModel.PermissionMatrixViewModel());
+            }
+
+            var selectedRole = roles.FirstOrDefault(r => r.Id == roleId) ?? roles[0];
+            ViewData["Roles"] = roles;
+            ViewData["SelectedRoleId"] = selectedRole.Id;
+            ViewData["SelectedRoleName"] = selectedRole.Name;
+
+            var matrix = await _matrixService.BuildRoleMatrixAsync(selectedRole.Id);
+            return View(matrix);
+        }
+
+        // POST: RolePermissions/Matrix
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Matrix(string roleId, List<int>? checkedPermissionIds, string? expectedBaseline)
+        {
+            var role = await _context.Roles.AsNoTracking().FirstOrDefaultAsync(r => r.Id == roleId);
+            if (role == null || role.Name == AdminRoleName)
+            {
+                return NotFound();
+            }
+
+            var result = await _matrixService.SaveRoleMatrixAsync(
+                roleId, checkedPermissionIds ?? new List<int>(), PermissionMatrixViewModel.DecodeExpectedBaseline(expectedBaseline));
+            if (result == PermissionMatrixSaveResult.Conflict)
+            {
+                // 存檔前有別的管理員也改過這個角色的權限，直接套用這次的勾選會悄悄蓋掉對方的異動，
+                // 所以拒絕存檔並請使用者重新整理後再試一次（重新整理會拿到最新狀態）。
+                // 用 TempData["ErrorMessage"]（不是 TempData["Error"]）：前者由 _Layout.cshtml 全域顯示，
+                // 後者目前只有 Views/Devices/Index.cshtml 自己會渲染，這個畫面沒有對應的顯示邏輯。
+                TempData["ErrorMessage"] = $"「{role.Name}」的權限設定在您編輯的同時被其他人修改過，為了避免覆蓋對方的異動，這次的儲存已被取消。請重新整理後再試一次。";
+                return RedirectToAction(nameof(Matrix), new { roleId });
+            }
+
+            TempData["StatusMessage"] = $"已更新「{role.Name}」角色的權限設定。";
+            return RedirectToAction(nameof(Matrix), new { roleId });
         }
 
         // GET: RolePermissions

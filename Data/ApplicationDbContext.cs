@@ -36,6 +36,9 @@ namespace Carbon_inventory_platform.Data
             typeof(Area),
             typeof(Company),
             typeof(RolePermission),
+            // 角色/使用者權限矩陣勾選畫面改成整批寫入 RolePermission／UserPermission，
+            // 兩者都是敏感的授權變更，跟 RolePermission 一樣值得留稽核紀錄。
+            typeof(UserPermission),
         };
 
         public DbSet<Company> Companies { get; set; } = null!;

@@ -19,7 +19,7 @@ namespace Carbon_inventory_platform.Controllers
         /// <summary>目前實際會被記錄的實體（見 ApplicationDbContext.AuditedEntityTypes），篩選下拉選單用。</summary>
         public static readonly string[] AuditedEntityNames =
         {
-            "Material", "GWP", "Device", "ActivityData", "Area", "Company", "RolePermission",
+            "Material", "GWP", "Device", "ActivityData", "Area", "Company", "RolePermission", "UserPermission",
         };
 
         private readonly ApplicationDbContext _context;
